@@ -2,7 +2,6 @@ import classNames from "classnames";
 import React, { Component, ReactNode } from "react";
 import { FormatHelper } from "../../../utils/formatHelper";
 import { ReactComponent as DropdownIcon } from "./../../../assets/dropdown-arrow.svg";
-import MigratedFund from "./MigratedFund";
 import { ReceiptMilestoneOptionProps } from "./ReceiptMilestoneOptionProps";
 import { ReceiptMilestoneOptionState } from "./ReceiptMilestoneOptionState";
 
@@ -61,9 +60,6 @@ class ReceiptMilestoneOption extends Component<ReceiptMilestoneOptionProps, Rece
                         <div className="card--value row">
                             {this.props.option.final ? "Yes" : "No"}
                         </div>
-                        {this.props.option.funds.map((fund, idx) => (
-                            <MigratedFund fund={fund} index={idx} key={idx} />
-                        ))}
                         <div className="card--label">
                             Input Transaction Milestone Id
                         </div>

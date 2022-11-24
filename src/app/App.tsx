@@ -29,27 +29,14 @@ import Header from "./components/layout/Header";
 import HealthIndicator from "./components/layout/HealthIndicator";
 import NavMenu from "./components/layout/NavMenu";
 import NavPanel from "./components/layout/NavPanel";
-import Explorer from "./routes/Explorer";
-import Address from "./routes/explorer/Address";
-import { AddressProps } from "./routes/explorer/AddressProps";
-import Block from "./routes/explorer/Block";
-import { BlockProps } from "./routes/explorer/BlockProps";
-import Milestone from "./routes/explorer/Milestone";
-import { MilestoneProps } from "./routes/explorer/MilestoneProps";
-import OutputRoute from "./routes/explorer/OutputRoute";
-import { OutputRouteProps } from "./routes/explorer/OutputRouteProps";
-import OutputsRoute from "./routes/explorer/OutputsRoute";
-import { OutputsRouteProps } from "./routes/explorer/OutputsRouteProps";
 import Home from "./routes/Home";
 import Login from "./routes/Login";
 import Peer from "./routes/Peer";
 import { PeerRouteProps } from "./routes/PeerRouteProps";
 import Peers from "./routes/Peers";
-import Plugins from "./routes/Plugins";
 import Search from "./routes/Search";
 import { SearchRouteProps } from "./routes/SearchRouteProps";
 import Unavailable from "./routes/Unavailable";
-import Visualizer from "./routes/Visualizer";
 
 /**
  * Main application class.
@@ -270,22 +257,6 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                 hidden: !this.state.isLoggedIn
             },
             {
-                label: "Explorer",
-                icon: <ExplorerIcon />,
-                route: "/explorer"
-            },
-            {
-                label: "Visualizer",
-                icon: <VisualizerIcon />,
-                route: "/visualizer"
-            },
-            {
-                label: "Plugins",
-                icon: <PluginsIcon />,
-                route: "/plugins",
-                hidden: !this.state.isLoggedIn
-            },
-            {
                 label: "Login",
                 icon: <PadlockIcon />,
                 route: "/login",
@@ -376,60 +347,6 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                                             key="peer"
                                         />
                                     ]}
-                                    {!this.state.isLoggedIn && (
-                                        <Route
-                                            path="/"
-                                            exact={true}
-                                            component={() => (<Explorer />)}
-                                        />
-                                    )}
-                                    <Route
-                                        path="/explorer"
-                                        exact={true}
-                                        component={() => (<Explorer />)}
-                                    />
-                                    <Route
-                                        path="/explorer/search/:query?"
-                                        component={(props: RouteComponentProps<SearchRouteProps>) =>
-                                            (<Search {...props} />)}
-                                    />
-                                    <Route
-                                        path="/explorer/unavailable"
-                                        component={(props: RouteComponentProps<never>) => (<Unavailable {...props} />)}
-                                    />
-                                    <Route
-                                        path="/explorer/block/:blockId"
-                                        component={(props: RouteComponentProps<BlockProps>) =>
-                                            (<Block {...props} />)}
-                                    />
-                                    <Route
-                                        path="/explorer/milestone/:milestoneIndex"
-                                        component={(props: RouteComponentProps<MilestoneProps>) =>
-                                            (<Milestone {...props} />)}
-                                    />
-                                    <Route
-                                        path="/explorer/address/:address"
-                                        component={(props: RouteComponentProps<AddressProps>) =>
-                                            (<Address {...props} />)}
-                                    />
-                                    <Route
-                                        path="/explorer/output/:outputId"
-                                        component={(props: RouteComponentProps<OutputRouteProps>) =>
-                                            (<OutputRoute {...props} />)}
-                                    />
-                                    <Route
-                                        path="/explorer/outputs/:tag"
-                                        component={(props: RouteComponentProps<OutputsRouteProps>) =>
-                                            (<OutputsRoute {...props} />)}
-                                    />
-                                    <Route
-                                        path="/visualizer"
-                                        component={(props: RouteComponentProps) => (<Visualizer {...props} />)}
-                                    />
-                                    <Route
-                                        path="/plugins"
-                                        component={() => (<Plugins />)}
-                                    />
                                     <Route
                                         path="/login"
                                         component={() => (<Login />)}
