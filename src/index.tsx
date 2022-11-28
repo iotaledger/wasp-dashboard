@@ -15,6 +15,7 @@ import { SessionStorageService } from "./services/sessionStorageService";
 import { SettingsService } from "./services/settingsService";
 import { TangleService } from "./services/tangleService";
 import { ThemeService } from "./services/themeService";
+import { WaspClientService } from "./services/waspClientService";
 import { WebSocketService } from "./services/webSocketService";
 import { BrandHelper } from "./utils/brandHelper";
 
@@ -75,6 +76,8 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
             webSocketService.resubscribe();
         }
     });
+
+    ServiceFactory.register("wasp-client", () => new WaspClientService());
 
     settingsService.initialize();
 

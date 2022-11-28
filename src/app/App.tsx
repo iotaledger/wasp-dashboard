@@ -20,6 +20,7 @@ import { EventAggregator } from "../services/eventAggregator";
 import { LocalStorageService } from "../services/localStorageService";
 import { MetricsService } from "../services/metricsService";
 import { ThemeService } from "../services/themeService";
+import { WaspClientService } from "../services/waspClientService";
 import { BrandHelper } from "../utils/brandHelper";
 import "./App.scss";
 import { AppState } from "./AppState";
@@ -51,6 +52,11 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
      * The auth service.
      */
     private readonly _authService: AuthService;
+
+    /**
+     * The wasp client service.
+     */
+    private readonly _waspClientService: WaspClientService;
 
     /**
      * The storage service.
@@ -117,11 +123,12 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
         this._authService = ServiceFactory.get<AuthService>("auth");
         this._metricsService = ServiceFactory.get<MetricsService>("metrics");
         this._storageService = ServiceFactory.get<LocalStorageService>("local-storage");
-
+        this._waspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
         this._lastStatus = 0;
 
         this.state = {
-            isLoggedIn: Boolean(this._authService.isLoggedIn()),
+            isLoggedIn: true, // For now, routes are unprotected.
+            // isLoggedIn: Boolean(this._authService.isLoggedIn()),
             theme: this._themeService.get(),
             online: false,
             syncHealth: false,
@@ -137,6 +144,18 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
     public async componentDidMount(): Promise<void> {
         super.componentDidMount();
 
+        try {
+            await this._waspClientService.node().getInfo();
+
+            this.setState({
+                online: true
+            });
+        } catch (ex) {
+            console.log(ex)
+            // Raise exception message to frontend
+        }
+
+        /*
         EventAggregator.subscribe("auth-state", "app", isLoggedIn => {
             this.setState({
                 isLoggedIn
@@ -145,12 +164,13 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                     this.validateTokenPeriodically();
                 }
             });
-        });
+        });*/
 
         EventAggregator.subscribe("theme", "app", theme => {
             this.setState({ theme });
         });
 
+        /*
         this._statusSubscription = this._metricsService.subscribe<INodeStatus>(
             WebSocketTopic.NodeStatus,
             data => {
@@ -193,8 +213,9 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                         this.setState({ syncHealth: data.isSynced });
                     }
                 }
-            });
+            });*/
 
+            /*
         this._statusTimer = setInterval(() => {
             if (Date.now() - this._lastStatus > 30000 && this.state.online) {
                 this.setState({
@@ -203,7 +224,7 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
 
                 EventAggregator.publish("online", false);
             }
-        }, 1000);
+        }, 1000);*/
     }
 
     /**
