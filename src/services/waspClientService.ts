@@ -15,11 +15,7 @@ export class WaspClientService {
     constructor() {
         const config: Configuration = new Configuration({
             // Add JWT Token here at some point (from authService)
-            // Make url configurable?
-            // Apply config to API services.
-
             basePath: Environment.WaspApiUrl
-
         });
 
         this._apiClients = {
