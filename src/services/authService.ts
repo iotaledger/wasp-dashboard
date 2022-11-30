@@ -1,3 +1,4 @@
+import { Environment } from "../environment";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { FetchHelper } from "../utils/fetchHelper";
 import { EventAggregator } from "./eventAggregator";
@@ -76,8 +77,8 @@ export class AuthService {
             }, {
                 jwt?: string;
             }>(
-                `${window.location.protocol}//${window.location.host}`,
-                "/dashboard/auth",
+                Environment.WaspApiUrl,
+                "/auth",
                 "post",
                 {
                     user,

@@ -1,3 +1,4 @@
+import { Environment } from "../environment";
 import { ChainsApi, Configuration, NodeApi, RequestsApi, UsersApi } from "./wasp_client";
 
 /**
@@ -14,10 +15,7 @@ export class WaspClientService {
     constructor() {
         const config: Configuration = new Configuration({
             // Add JWT Token here at some point (from authService)
-            // Make url configurable?
-            // Apply config to API services.
-
-            basePath: "http://localhost:9090"
+            basePath: Environment.WaspApiUrl
         });
 
         this._apiClients = {
