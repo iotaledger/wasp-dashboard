@@ -15,11 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
+  ContractCallViewRequest,
   JSONDict,
   OffLedgerRequest,
   ReceiptResponse,
 } from '../models';
 import {
+    ContractCallViewRequestFromJSON,
+    ContractCallViewRequestToJSON,
     JSONDictFromJSON,
     JSONDictToJSON,
     OffLedgerRequestFromJSON,
@@ -29,8 +32,7 @@ import {
 } from '../models';
 
 export interface CallViewRequest {
-    chainID: string;
-    body?: JSONDict;
+    contractCallViewRequest?: ContractCallViewRequest;
 }
 
 export interface GetReceiptRequest {
@@ -56,10 +58,6 @@ export class RequestsApi extends runtime.BaseAPI {
      * Call a view function on a contract by Hname
      */
     async callViewRaw(requestParameters: CallViewRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<JSONDict>> {
-        if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
-            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling callView.');
-        }
-
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -67,11 +65,11 @@ export class RequestsApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/v2/requests/callview`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/v2/requests/callview`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: JSONDictToJSON(requestParameters.body),
+            body: ContractCallViewRequestToJSON(requestParameters.contractCallViewRequest),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => JSONDictFromJSON(jsonValue));
@@ -80,7 +78,7 @@ export class RequestsApi extends runtime.BaseAPI {
     /**
      * Call a view function on a contract by Hname
      */
-    async callView(requestParameters: CallViewRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<JSONDict> {
+    async callView(requestParameters: CallViewRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<JSONDict> {
         const response = await this.callViewRaw(requestParameters, initOverrides);
         return await response.value();
     }

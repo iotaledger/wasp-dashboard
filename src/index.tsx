@@ -7,6 +7,7 @@ import { ServiceFactory } from "./factories/serviceFactory";
 import "./index.scss";
 import { IBrandConfiguration } from "./models/IBrandConfiguration";
 import { AuthService } from "./services/authService";
+import { ChainService } from "./services/chainService";
 import { EventAggregator } from "./services/eventAggregator";
 import { LocalStorageService } from "./services/localStorageService";
 import { MetricsService } from "./services/metricsService";
@@ -78,6 +79,7 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
     });
 
     ServiceFactory.register("wasp-client", () => new WaspClientService());
+    ServiceFactory.register("chain-service", () => new ChainService());
 
     settingsService.initialize();
 

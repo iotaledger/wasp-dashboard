@@ -16,6 +16,7 @@ import { IPublicNodeStatus } from "../models/websocket/IPublicNodeStatus";
 import { ISyncStatus } from "../models/websocket/ISyncStatus";
 import { WebSocketTopic } from "../models/websocket/webSocketTopic";
 import { AuthService } from "../services/authService";
+import { ChainService } from "../services/chainService";
 import { EventAggregator } from "../services/eventAggregator";
 import { LocalStorageService } from "../services/localStorageService";
 import { MetricsService } from "../services/metricsService";
@@ -67,6 +68,11 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
      * The metrics service.
      */
     private readonly _metricsService: MetricsService;
+
+    /**
+     * The chain service.
+     */
+    private readonly _chainService: ChainService;
 
     /**
      * The public node status subscription id.
@@ -124,6 +130,8 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
         this._metricsService = ServiceFactory.get<MetricsService>("metrics");
         this._storageService = ServiceFactory.get<LocalStorageService>("local-storage");
         this._waspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
+        this._chainService = ServiceFactory.get<ChainService>("chain-service");
+
         this._lastStatus = 0;
 
         this.state = {
@@ -145,7 +153,18 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
         super.componentDidMount();
 
         try {
-            await this._waspClientService.node().getInfo();
+            await this._waspClientService.node().getVersion();
+
+            this.setState({
+                online: true
+            });
+        } catch (ex) {
+            console.log(ex)
+            // Raise exception message to frontend
+        }
+
+        try {
+            await this._chainService.getAccounts("tst1pzzk4f663vj5k8uflssjlyrpef8360209djt5sgpyd5deufcnz2rxc56wwa");
 
             this.setState({
                 online: true

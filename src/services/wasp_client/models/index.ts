@@ -8,6 +8,7 @@ export * from './CommitteeInfoResponse';
 export * from './CommitteeNode';
 export * from './ConsensusPipeMetrics';
 export * from './ConsensusWorkflowStatus';
+export * from './ContractCallViewRequest';
 export * from './ContractInfoResponse';
 export * from './DKSharesInfo';
 export * from './DKSharesPostRequest';
