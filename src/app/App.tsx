@@ -3,22 +3,15 @@ import React, { ReactNode } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ReactComponent as ChainsIcon } from "../assets/chains.svg";
 import { ReactComponent as ConfigurationIcon } from "../assets/configuration.svg";
-import { ReactComponent as ExplorerIcon } from "../assets/explorer.svg";
 import { ReactComponent as HomeIcon } from "../assets/home.svg";
 import { ReactComponent as L1Icon } from "../assets/l1.svg";
 import { ReactComponent as MoonIcon } from "../assets/moon.svg";
 import { ReactComponent as PadlockUnlockedIcon } from "../assets/padlock-unlocked.svg";
 import { ReactComponent as PadlockIcon } from "../assets/padlock.svg";
 import { ReactComponent as PeersIcon } from "../assets/peers.svg";
-import { ReactComponent as PluginsIcon } from "../assets/plugins.svg";
 import { ReactComponent as SunIcon } from "../assets/sun.svg";
 import { ReactComponent as UsersIcon } from "../assets/users.svg";
-import { ReactComponent as VisualizerIcon } from "../assets/visualizer.svg";
 import { ServiceFactory } from "../factories/serviceFactory";
-import { INodeStatus } from "../models/websocket/INodeStatus";
-import { IPublicNodeStatus } from "../models/websocket/IPublicNodeStatus";
-import { ISyncStatus } from "../models/websocket/ISyncStatus";
-import { WebSocketTopic } from "../models/websocket/webSocketTopic";
 import { AuthService } from "../services/authService";
 import { EventAggregator } from "../services/eventAggregator";
 import { LocalStorageService } from "../services/localStorageService";
@@ -84,22 +77,22 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
     /**
      * The node alias.
      */
-    private _alias?: string;
+    private readonly _alias?: string;
 
     /**
      * The lastest milestone index.
      */
-    private _lmi?: string;
+    private readonly _lmi?: string;
 
     /**
      * The confirmed milestone index.
      */
-    private _cmi?: string;
+    private readonly _cmi?: string;
 
     /**
      * The time of the last status update.
      */
-    private _lastStatus: number;
+    private readonly _lastStatus: number;
 
     /**
      * The status timer.
@@ -149,7 +142,7 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                 online: true
             });
         } catch (ex) {
-            console.log(ex)
+            console.log(ex);
             // Raise exception message to frontend
         }
 
