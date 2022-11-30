@@ -20,29 +20,23 @@ import { exists, mapValues } from '../runtime';
  */
 export interface InfoResponse {
     /**
-     * 'hostname:port'; uniquely identifies the node
+     * The net id of the node
      * @type {string}
      * @memberof InfoResponse
      */
-    networkID?: string;
+    netID?: string;
     /**
-     * Nanomsg port that exposes publisher messages
-     * @type {number}
+     * The public key of the node
+     * @type {string}
      * @memberof InfoResponse
      */
-    publisherPort?: number;
+    publicKey?: string;
     /**
-     * Wasp version
+     * The version of the node
      * @type {string}
      * @memberof InfoResponse
      */
     version?: string;
-    /**
-     * Wasp version hash
-     * @type {string}
-     * @memberof InfoResponse
-     */
-    versionHash?: string;
 }
 
 /**
@@ -64,10 +58,9 @@ export function InfoResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'networkID': !exists(json, 'NetworkID') ? undefined : json['NetworkID'],
-        'publisherPort': !exists(json, 'PublisherPort') ? undefined : json['PublisherPort'],
+        'netID': !exists(json, 'NetID') ? undefined : json['NetID'],
+        'publicKey': !exists(json, 'PublicKey') ? undefined : json['PublicKey'],
         'version': !exists(json, 'Version') ? undefined : json['Version'],
-        'versionHash': !exists(json, 'VersionHash') ? undefined : json['VersionHash'],
     };
 }
 
@@ -80,10 +73,9 @@ export function InfoResponseToJSON(value?: InfoResponse | null): any {
     }
     return {
         
-        'NetworkID': value.networkID,
-        'PublisherPort': value.publisherPort,
+        'NetID': value.netID,
+        'PublicKey': value.publicKey,
         'Version': value.version,
-        'VersionHash': value.versionHash,
     };
 }
 
