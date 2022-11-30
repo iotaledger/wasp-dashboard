@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   DKSharesInfo,
   DKSharesPostRequest,
+  InfoResponse,
   PeeringNodeIdentityResponse,
   PeeringNodeStatusResponse,
   PeeringTrustRequest,
@@ -26,6 +27,8 @@ import {
     DKSharesInfoToJSON,
     DKSharesPostRequestFromJSON,
     DKSharesPostRequestToJSON,
+    InfoResponseFromJSON,
+    InfoResponseToJSON,
     PeeringNodeIdentityResponseFromJSON,
     PeeringNodeIdentityResponseToJSON,
     PeeringNodeStatusResponseFromJSON,
@@ -222,12 +225,16 @@ export class NodeApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns public information about this node.
+     * Returns private information about this node.
      */
-    async getInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InfoResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
 
         const response = await this.request({
             path: `/v2/node/info`,
@@ -236,14 +243,15 @@ export class NodeApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => InfoResponseFromJSON(jsonValue));
     }
 
     /**
-     * Returns public information about this node.
+     * Returns private information about this node.
      */
-    async getInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getInfoRaw(initOverrides);
+    async getInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InfoResponse> {
+        const response = await this.getInfoRaw(initOverrides);
+        return await response.value();
     }
 
     /**
@@ -303,6 +311,32 @@ export class NodeApi extends runtime.BaseAPI {
      */
     async getTrustedPeers(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PeeringNodeIdentityResponse>> {
         const response = await this.getTrustedPeersRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns the node version.
+     */
+    async getVersionRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/v2/node/version`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.TextApiResponse(response) as any;
+    }
+
+    /**
+     * Returns the node version.
+     */
+    async getVersion(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.getVersionRaw(initOverrides);
         return await response.value();
     }
 
