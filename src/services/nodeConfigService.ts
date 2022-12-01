@@ -1,6 +1,6 @@
 import { INodeInfoBaseToken } from "@iota/iota.js";
 import { ServiceFactory } from "../factories/serviceFactory";
-import { LocalStorageService } from "./localStorageService";
+import { SessionStorageService } from "./sessionStorageService";
 import { TangleService } from "./tangleService";
 
 /**
@@ -13,35 +13,35 @@ export class NodeConfigService {
     private _networkId: string;
 
     /**
-     * The network id.
+     * The version.
      */
     private _version?: string;
 
     /**
      * The public key.
      */
-     private _publicKey?: string;
+    private _publicKey?: string;
 
     /**
      * The base token.
      */
-     private _baseToken: INodeInfoBaseToken;
+    private readonly _baseToken: INodeInfoBaseToken;
 
     /**
      * The bech32 hrp.
      */
-    private _bech32Hrp: string;
+    private readonly _bech32Hrp: string;
 
     /**
      * The storage servie.
      */
-    private readonly _storageService: LocalStorageService;
+    private readonly _storageService: SessionStorageService;
 
     /**
      * Create a new instance of NodeConfigService.
      */
     constructor() {
-        this._storageService = ServiceFactory.get<LocalStorageService>("local-storage");
+        this._storageService = ServiceFactory.get<SessionStorageService>("local-storage");
         this._networkId = "";
         this._bech32Hrp = "iota";
         this._baseToken = {
@@ -50,7 +50,7 @@ export class NodeConfigService {
             unit: "i",
             decimals: 0,
             subunit: undefined,
-            useMetricPrefix: true
+            useMetricPrefix: true,
         };
     }
 
@@ -59,15 +59,23 @@ export class NodeConfigService {
      */
     public async initialize(): Promise<void> {
         this._networkId = this._storageService.load<string>("networkId");
+        this._publicKey = this._storageService.load<string>("publicKey");
+        this._version = this._storageService.load<string>("version");
 
-        if (!this._networkId || !this._version) {
+        if (!this._networkId || !this._version || !this._publicKey) {
             const tangleService = ServiceFactory.get<TangleService>("tangle");
 
             try {
                 const info = await tangleService.info();
-                if(info.netID) this.setNetworkId(info.netID);
-                if(info.version) this.setVersion(info.version);
-                if(info.publicKey) this.setPublicKey(info.publicKey);
+                if (info.netID) {
+                    this.setNetworkId(info.netID);
+                }
+                if (info.version) {
+                    this.setVersion(info.version);
+                }
+                if (info.publicKey) {
+                    this.setPublicKey(info.publicKey);
+                }
             } catch {}
         }
     }
@@ -84,7 +92,7 @@ export class NodeConfigService {
      * Get the current version.
      * @returns The current version.
      */
-     public getVersion(): string | undefined {
+    public getVersion(): string | undefined {
         return this._version;
     }
 
@@ -92,7 +100,7 @@ export class NodeConfigService {
      * Get the node base token.
      * @returns The node base token.
      */
-     public getBaseToken(): INodeInfoBaseToken {
+    public getBaseToken(): INodeInfoBaseToken {
         return this._baseToken;
     }
 
@@ -100,7 +108,7 @@ export class NodeConfigService {
      * Get the hrp for bech32 addresses.
      * @returns The bech32 hrp.
      */
-     public getBech32Hrp(): string {
+    public getBech32Hrp(): string {
         return this._bech32Hrp;
     }
 
@@ -108,7 +116,7 @@ export class NodeConfigService {
      * Get the public key.
      * @returns The public key.
      */
-     public getPublicKey(): string | undefined {
+    public getPublicKey(): string | undefined {
         return this._publicKey;
     }
 
@@ -125,15 +133,17 @@ export class NodeConfigService {
      * Set the version.
      * @param version The new version.
      */
-      public setVersion(version: string): void {
+    public setVersion(version: string): void {
         this._version = version;
+        this._storageService.save<string>("version", this._version);
     }
 
     /**
      * Set the public key.
      * @param publicKey The new public key.
      */
-     public setPublicKey(publicKey: string): void {
+    public setPublicKey(publicKey: string): void {
         this._publicKey = publicKey;
+        this._storageService.save<string>("publicKey", this._publicKey);
     }
 }
