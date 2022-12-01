@@ -9,7 +9,7 @@ import { Bech32AddressHelper } from "../utils/bech32AddressHelper";
 import { OutputsHelper } from "../utils/outputsHelper";
 import { SearchQuery, SearchQueryBuilder } from "../utils/searchQueryBuilder";
 import { AuthService } from "./authService";
-import { LocalStorageService } from "./localStorageService";
+import { SessionStorageService } from "./sessionStorageService";
 import { Configuration, InfoResponse, NodeApi } from "./wasp_client";
 /**
  * Service to handle api requests.
@@ -426,7 +426,7 @@ export class TangleService {
      * @returns The api client.
      */
      private buildApiClient(): NodeApi {
-        const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
+        const storageService = ServiceFactory.get<SessionStorageService>("local-storage");
         return new NodeApi(new Configuration({ basePath: Environment.WaspApiUrl, apiKey: storageService.load("dashboard-jwt")}));
     }
 

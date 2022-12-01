@@ -1,6 +1,6 @@
 import { INodeInfoBaseToken } from "@iota/iota.js";
 import { ServiceFactory } from "../factories/serviceFactory";
-import { LocalStorageService } from "./localStorageService";
+import { SessionStorageService } from "./sessionStorageService";
 import { TangleService } from "./tangleService";
 
 /**
@@ -35,13 +35,13 @@ export class NodeConfigService {
     /**
      * The storage servie.
      */
-    private readonly _storageService: LocalStorageService;
+    private readonly _storageService: SessionStorageService;
 
     /**
      * Create a new instance of NodeConfigService.
      */
     constructor() {
-        this._storageService = ServiceFactory.get<LocalStorageService>("local-storage");
+        this._storageService = ServiceFactory.get<SessionStorageService>("local-storage");
         this._networkId = "";
         this._bech32Hrp = "iota";
         this._baseToken = {
