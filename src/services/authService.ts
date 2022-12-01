@@ -27,7 +27,7 @@ export class AuthService {
         if (document.cookie) {
             const cookies = document.cookie.split(";");
 
-            const csrf = cookies.find(c => c.trim().startsWith("_csrf"));
+            const csrf = cookies.find((c) => c.trim().startsWith("_csrf"));
 
             if (csrf) {
                 const parts = csrf.split("=");
@@ -46,6 +46,8 @@ export class AuthService {
 
         const jwt = storageService.load<string>("dashboard-jwt");
 
+        this._jwt = jwt;
+
         if (jwt) {
             await this.login(undefined, undefined, jwt);
         }
@@ -58,10 +60,7 @@ export class AuthService {
      * @param jwt The jwt to login with.
      * @returns True if the login was successful.
      */
-    public async login(
-        user: string | undefined,
-        password: string | undefined,
-        jwt?: string): Promise<boolean> {
+    public async login(user: string | undefined, password: string | undefined, jwt?: string): Promise<boolean> {
         this.logout();
 
         try {
@@ -70,22 +69,26 @@ export class AuthService {
                 headers["X-CSRF-Token"] = this._csrf;
             }
 
-            const response = await FetchHelper.json<{
-                user?: string;
-                password?: string;
-                jwt?: string;
-            }, {
-                jwt?: string;
-            }>(
+            const response = await FetchHelper.json<
+                {
+                    user?: string;
+                    password?: string;
+                    jwt?: string;
+                },
+                {
+                    jwt?: string;
+                }
+            >(
                 Environment.WaspApiUrl,
                 "/auth",
                 "post",
                 {
                     user,
                     password,
-                    jwt
+                    jwt,
                 },
-                headers);
+                headers
+            );
 
             if (response.jwt) {
                 const storageService = ServiceFactory.get<LocalStorageService>("local-storage");

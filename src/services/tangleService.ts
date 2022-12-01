@@ -1,4 +1,19 @@
-import { Bech32Helper, ClientError, IClient, ITaggedDataPayload, IBlockMetadata, IMilestonePayload, IRoutesResponse, INodeInfo, IOutputResponse, ITransactionPayload, SingleNodeClient, IndexerPluginClient, ALIAS_ADDRESS_TYPE, NFT_ADDRESS_TYPE } from "@iota/iota.js";
+import {
+    Bech32Helper,
+    ClientError,
+    IClient,
+    ITaggedDataPayload,
+    IBlockMetadata,
+    IMilestonePayload,
+    IRoutesResponse,
+    IOutputResponse,
+    ITransactionPayload,
+    SingleNodeClient,
+    IndexerPluginClient,
+    ALIAS_ADDRESS_TYPE,
+    NFT_ADDRESS_TYPE,
+} from "@iota/iota.js";
+import { Environment } from "../environment";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { IAssociatedOutput } from "../models/tangle/IAssociatedOutputsResponse";
 import { ISearchRequest } from "../models/tangle/ISearchRequest";
@@ -7,6 +22,8 @@ import { Bech32AddressHelper } from "../utils/bech32AddressHelper";
 import { OutputsHelper } from "../utils/outputsHelper";
 import { SearchQuery, SearchQueryBuilder } from "../utils/searchQueryBuilder";
 import { AuthService } from "./authService";
+import { SessionStorageService } from "./sessionStorageService";
+import { Configuration, InfoResponse, NodeApi } from "./wasp_client";
 /**
  * Service to handle api requests.
  */
@@ -14,7 +31,7 @@ export class TangleService {
     /**
      * The node info.
      */
-    private _nodeInfo?: INodeInfo;
+    private _nodeInfo?: InfoResponse;
 
     /**
      * The auth service.
@@ -42,9 +59,9 @@ export class TangleService {
      * Get the node info.
      * @returns The node info.
      */
-    public async info(): Promise<INodeInfo> {
-        const client = this.buildClient();
-        this._nodeInfo = await client.info();
+    public async info(): Promise<InfoResponse> {
+        const client = this.buildApiClient();
+        this._nodeInfo = await client.getInfo();
         return this._nodeInfo;
     }
 
@@ -60,7 +77,7 @@ export class TangleService {
         if (!this._nodeInfo) {
             await this.info();
         }
-        const bech32HRP = this._nodeInfo ? this._nodeInfo.protocol.bech32Hrp : Bech32Helper.BECH32_DEFAULT_HRP_MAIN;
+        const bech32HRP = Bech32Helper.BECH32_DEFAULT_HRP_MAIN;
         const searchQuery: SearchQuery = new SearchQueryBuilder(request.query, bech32HRP).build();
 
         if (searchQuery.milestoneIndex) {
@@ -68,12 +85,12 @@ export class TangleService {
                 const milestone = await client.milestoneByIndex(searchQuery.milestoneIndex);
 
                 return {
-                    milestone
+                    milestone,
                 };
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true
+                        unavailable: true,
                     };
                 }
             }
@@ -84,12 +101,12 @@ export class TangleService {
                 const milestone = await client.milestoneById(searchQuery.milestoneId);
 
                 return {
-                    milestone
+                    milestone,
                 };
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true
+                        unavailable: true,
                     };
                 }
             }
@@ -101,13 +118,13 @@ export class TangleService {
 
                 if (Object.keys(block).length > 0) {
                     return {
-                        block
+                        block,
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true
+                        unavailable: true,
                     };
                 }
             }
@@ -117,13 +134,13 @@ export class TangleService {
 
                 if (Object.keys(block).length > 0) {
                     return {
-                        block
+                        block,
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true
+                        unavailable: true,
                     };
                 }
             }
@@ -133,12 +150,12 @@ export class TangleService {
             try {
                 return {
                     outputId: searchQuery.output,
-                    output: await client.output(searchQuery.output)
+                    output: await client.output(searchQuery.output),
                 };
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true
+                        unavailable: true,
                     };
                 }
             }
@@ -148,17 +165,20 @@ export class TangleService {
             try {
                 const aliasOutputs = await indexerPlugin.alias(searchQuery.aliasId);
                 if (aliasOutputs.items.length > 0) {
-                    const address = Bech32AddressHelper
-                                        .buildAddress(searchQuery.aliasId, bech32HRP, ALIAS_ADDRESS_TYPE);
+                    const address = Bech32AddressHelper.buildAddress(
+                        searchQuery.aliasId,
+                        bech32HRP,
+                        ALIAS_ADDRESS_TYPE
+                    );
                     return {
                         address,
-                        addressOutputIds: aliasOutputs.items
+                        addressOutputIds: aliasOutputs.items,
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true
+                        unavailable: true,
                     };
                 }
             }
@@ -168,17 +188,16 @@ export class TangleService {
             try {
                 const nftOutputs = await indexerPlugin.nft(searchQuery.nftId);
                 if (nftOutputs.items.length > 0) {
-                    const address = Bech32AddressHelper
-                                    .buildAddress(searchQuery.nftId, bech32HRP, NFT_ADDRESS_TYPE);
+                    const address = Bech32AddressHelper.buildAddress(searchQuery.nftId, bech32HRP, NFT_ADDRESS_TYPE);
                     return {
                         address,
-                        addressOutputIds: nftOutputs.items
+                        addressOutputIds: nftOutputs.items,
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true
+                        unavailable: true,
                     };
                 }
             }
@@ -189,13 +208,13 @@ export class TangleService {
                 const foundryOutputs = await indexerPlugin.foundry(searchQuery.foundryId);
                 if (foundryOutputs.items.length > 0) {
                     return {
-                        outputId: foundryOutputs.items[0]
+                        outputId: foundryOutputs.items[0],
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true
+                        unavailable: true,
                     };
                 }
             }
@@ -207,13 +226,13 @@ export class TangleService {
 
                 if (taggedOutputs.items.length > 0) {
                     return {
-                        outputs: taggedOutputs.items
+                        outputs: taggedOutputs.items,
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true
+                        unavailable: true,
                     };
                 }
             }
@@ -222,12 +241,12 @@ export class TangleService {
         if (searchQuery.address?.hexNoPrefix && searchQuery.address?.hexNoPrefix.length === 64) {
             try {
                 return {
-                    address: { ...searchQuery.address }
+                    address: { ...searchQuery.address },
                 };
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true
+                        unavailable: true,
                     };
                 }
             }
@@ -242,7 +261,8 @@ export class TangleService {
      * @returns The response data.
      */
     public async payload(
-        blockId: string): Promise<ITransactionPayload | ITaggedDataPayload | IMilestonePayload | undefined> {
+        blockId: string
+    ): Promise<ITransactionPayload | ITaggedDataPayload | IMilestonePayload | undefined> {
         try {
             const client = this.buildClient();
 
@@ -257,8 +277,7 @@ export class TangleService {
      * @param outputId The output to get the details for.
      * @returns The details response.
      */
-    public async outputDetails(
-        outputId: string): Promise<IOutputResponse | undefined> {
+    public async outputDetails(outputId: string): Promise<IOutputResponse | undefined> {
         try {
             const client = this.buildClient();
 
@@ -271,15 +290,14 @@ export class TangleService {
      * @param nftId The nft id to get the details for.
      * @returns The nft output response.
      */
-     public async nftDetails(
-        nftId: string): Promise<IOutputResponse & { outputId: string } | undefined> {
+    public async nftDetails(nftId: string): Promise<(IOutputResponse & { outputId: string }) | undefined> {
         try {
             const client = this.buildClient();
             const indexerPlugin = new IndexerPluginClient(client);
 
             const nftOutputs = await indexerPlugin.nft(nftId);
             if (nftOutputs.items.length > 0) {
-                return { ...await client.output(nftOutputs.items[0]), outputId: nftOutputs.items[0] };
+                return { ...(await client.output(nftOutputs.items[0])), outputId: nftOutputs.items[0] };
             }
         } catch {}
     }
@@ -289,15 +307,14 @@ export class TangleService {
      * @param aliasId The alias id to get the details for.
      * @returns The alias output response.
      */
-     public async aliasDetails(
-        aliasId: string): Promise<IOutputResponse & { outputId: string } | undefined> {
+    public async aliasDetails(aliasId: string): Promise<(IOutputResponse & { outputId: string }) | undefined> {
         try {
             const client = this.buildClient();
             const indexerPlugin = new IndexerPluginClient(client);
 
             const aliasOutputs = await indexerPlugin.alias(aliasId);
             if (aliasOutputs.items.length > 0) {
-                return { ...await client.output(aliasOutputs.items[0]), outputId: aliasOutputs.items[0] };
+                return { ...(await client.output(aliasOutputs.items[0])), outputId: aliasOutputs.items[0] };
             }
         } catch {}
     }
@@ -307,8 +324,7 @@ export class TangleService {
      * @param addressBech32 The address to get the outputs for.
      * @returns The associated outputs.
      */
-    public async getOutputsForAddress(
-        addressBech32: string): Promise<IAssociatedOutput[]> {
+    public async getOutputsForAddress(addressBech32: string): Promise<IAssociatedOutput[]> {
         let outputs: IAssociatedOutput[] = [];
 
         try {
@@ -326,8 +342,7 @@ export class TangleService {
      * @param tag The tag to get the outputs for.
      * @returns The associated outputs.
      */
-    public async getOutputsByTag(
-        tag: string): Promise<IAssociatedOutput[]> {
+    public async getOutputsByTag(tag: string): Promise<IAssociatedOutput[]> {
         let outputs: IAssociatedOutput[] = [];
 
         try {
@@ -345,8 +360,7 @@ export class TangleService {
      * @param milestoneIndex The miletsone to get the details for.
      * @returns The details response.
      */
-    public async milestoneDetails(
-        milestoneIndex: number): Promise<IMilestonePayload | undefined> {
+    public async milestoneDetails(milestoneIndex: number): Promise<IMilestonePayload | undefined> {
         try {
             const client = this.buildClient();
 
@@ -359,22 +373,25 @@ export class TangleService {
      * @param blockId The block if to get the metadata for.
      * @returns The details response.
      */
-    public async blockDetails(blockId: string): Promise<{
-        metadata?: IBlockMetadata;
-        unavailable?: boolean;
-    } | undefined> {
+    public async blockDetails(blockId: string): Promise<
+        | {
+              metadata?: IBlockMetadata;
+              unavailable?: boolean;
+          }
+        | undefined
+    > {
         try {
             const client = this.buildClient();
 
             const metadata = await client.blockMetadata(blockId);
 
             return {
-                metadata
+                metadata,
             };
         } catch (err) {
             if (err instanceof ClientError && this.checkForUnavailable(err)) {
                 return {
-                    unavailable: true
+                    unavailable: true,
                 };
             }
         }
@@ -401,7 +418,6 @@ export class TangleService {
         await client.peerDelete(peerId);
     }
 
-
     /**
      * Build a client with auth header.
      * @returns The client.
@@ -409,12 +425,21 @@ export class TangleService {
     private buildClient(): IClient {
         const headers = this._authService.buildAuthHeaders();
 
-        return new SingleNodeClient(
-            `${window.location.protocol}//${window.location.host}`,
-            {
-                basePath: "/dashboard/api/",
-                headers
-            });
+        return new SingleNodeClient(`${window.location.protocol}//${window.location.host}`, {
+            basePath: "/dashboard/api/",
+            headers,
+        });
+    }
+
+    /**
+     * Build an api client.
+     * @returns The api client.
+     */
+    private buildApiClient(): NodeApi {
+        const storageService = ServiceFactory.get<SessionStorageService>("local-storage");
+        return new NodeApi(
+            new Configuration({ basePath: Environment.WaspApiUrl, apiKey: storageService.load("dashboard-jwt") })
+        );
     }
 
     /**
