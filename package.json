@@ -79,7 +79,12 @@
         "@svgr/webpack": "^6.3.1"
     },
     "lint-staged": {
-        "*.js": "eslint --cache --fix",
-        "*.{tsx,ts,css}": "prettier --write"
+        "*.{js,ts,tsx}": [
+            "eslint --cache --fix",
+            "prettier --write"
+        ],
+        "*.{css}": [
+            "prettier --write"
+        ]
     }
 }
