@@ -13,9 +13,7 @@ export class LocalStorageService {
             try {
                 const json = window.localStorage.getItem(key);
 
-                if (json) {
-                    obj = JSON.parse(json);
-                }
+                obj = json;
             } catch {
                 // Nothing to do
             }

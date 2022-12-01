@@ -46,6 +46,8 @@ export class AuthService {
 
         const jwt = storageService.load<string>("dashboard-jwt");
 
+        this._jwt = jwt;
+
         if (jwt) {
             await this.login(undefined, undefined, jwt);
         }

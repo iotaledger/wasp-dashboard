@@ -76,6 +76,16 @@ class Home extends AsyncComponent<unknown, HomeState> {
     private readonly _networkId?: string;
 
     /**
+     * The current version.
+     */
+    private readonly _version?: string;
+
+    /**
+     * The public key.
+     */
+    private readonly _publicKey?: string;
+
+    /**
      * Create a new instance of Home.
      * @param props The props.
      */
@@ -88,12 +98,12 @@ class Home extends AsyncComponent<unknown, HomeState> {
 
         const nodeConfigService = ServiceFactory.get<NodeConfigService>("node-config");
         this._networkId = nodeConfigService.getNetworkId();
+        this._version = nodeConfigService.getVersion();
+        this._publicKey = nodeConfigService.getPublicKey();
 
         this.state = {
             nodeName: "",
             nodeId: "",
-            displayVersion: "",
-            displayLatestVersion: "",
             lmi: "-",
             cmi: "-",
             pruningIndex: "-",
@@ -267,18 +277,13 @@ class Home extends AsyncComponent<unknown, HomeState> {
                         <div className="banner row">
                             <div className="node-info">
                                 <div>
-                                    <h1>{this.state.blindMode ? "**********" : this.state.nodeName}</h1>
-                                    {this.state.nodeId && (
-                                        <p className="secondary margin-t-t word-break-all">
-                                            {this.state.blindMode ? "*********" : this.state.nodeId}
-                                        </p>
-                                    )}
+                                    <h3>{this.state.blindMode ? "**********" : this._publicKey}</h3>
                                 </div>
                                 <p className="secondary">
                                     {this._networkId}
                                 </p>
                                 <p className="secondary">
-                                    {this.state.displayVersion}{this.state.displayLatestVersion}
+                                    {this._version}
                                 </p>
                             </div>
                             <BannerCurve className="banner-curve" />
@@ -372,12 +377,6 @@ class Home extends AsyncComponent<unknown, HomeState> {
         if (this.state.version !== currentVersion ||
             this.state.latestVersion !== latestVersion) {
             const comparison = this.compareVersions(currentVersion, latestVersion);
-
-            this.setState({
-                version: currentVersion,
-                latestVersion,
-                displayVersion: currentVersion
-            });
 
             if (comparison < 0) {
                 this.setState({ displayLatestVersion: ` - a new version ${latestVersion} is available.` });

@@ -1,6 +1,6 @@
 import { INodeInfoBaseToken } from "@iota/iota.js";
 import { ServiceFactory } from "../factories/serviceFactory";
-import { SessionStorageService } from "./sessionStorageService";
+import { LocalStorageService } from "./localStorageService";
 import { TangleService } from "./tangleService";
 
 /**
@@ -13,27 +13,37 @@ export class NodeConfigService {
     private _networkId: string;
 
     /**
+     * The network id.
+     */
+    private _version?: string;
+
+    /**
+     * The public key.
+     */
+     private _publicKey?: string;
+
+    /**
+     * The base token.
+     */
+     private _baseToken: INodeInfoBaseToken;
+
+    /**
      * The bech32 hrp.
      */
     private _bech32Hrp: string;
 
     /**
-     * The bech32 hrp.
-     */
-    private _baseToken: INodeInfoBaseToken;
-
-    /**
      * The storage servie.
      */
-    private readonly _storageService: SessionStorageService;
+    private readonly _storageService: LocalStorageService;
 
     /**
      * Create a new instance of NodeConfigService.
      */
     constructor() {
-        this._storageService = ServiceFactory.get<SessionStorageService>("session-storage");
-        this._bech32Hrp = "iota";
+        this._storageService = ServiceFactory.get<LocalStorageService>("local-storage");
         this._networkId = "";
+        this._bech32Hrp = "iota";
         this._baseToken = {
             name: "IOTA",
             tickerSymbol: "MIOTA",
@@ -48,32 +58,22 @@ export class NodeConfigService {
      * Initialise NodeConfigService.
      */
     public async initialize(): Promise<void> {
-        this._bech32Hrp = this._storageService.load<string>("bech32Hrp");
         this._networkId = this._storageService.load<string>("networkId");
-        this._baseToken = this._storageService.load<INodeInfoBaseToken>("baseToken");
 
-        if (!this._bech32Hrp || !this._networkId || !this._baseToken) {
+        if (!this._networkId || !this._version) {
             const tangleService = ServiceFactory.get<TangleService>("tangle");
 
             try {
                 const info = await tangleService.info();
-                this.setBech32Hrp(info.protocol.bech32Hrp);
-                this.setNetworkId(info.protocol.networkName);
-                this.setBaseToken(info.baseToken);
+                if(info.netID) this.setNetworkId(info.netID);
+                if(info.version) this.setVersion(info.version);
+                if(info.publicKey) this.setPublicKey(info.publicKey);
             } catch {}
         }
     }
 
     /**
-     * Get the hrp for bech32 addresses.
-     * @returns The bech32 hrp.
-     */
-    public getBech32Hrp(): string {
-        return this._bech32Hrp;
-    }
-
-    /**
-     * Get the netwoork id.
+     * Get the network id.
      * @returns The network id.
      */
     public getNetworkId(): string {
@@ -81,25 +81,40 @@ export class NodeConfigService {
     }
 
     /**
+     * Get the current version.
+     * @returns The current version.
+     */
+     public getVersion(): string | undefined {
+        return this._version;
+    }
+
+    /**
      * Get the node base token.
      * @returns The node base token.
      */
-    public getBaseToken(): INodeInfoBaseToken {
+     public getBaseToken(): INodeInfoBaseToken {
         return this._baseToken;
     }
 
     /**
-     * Set the hrp for bech32 addresses.
-     * @param bech32Hrp The new blind mode.
+     * Get the hrp for bech32 addresses.
+     * @returns The bech32 hrp.
      */
-    public setBech32Hrp(bech32Hrp: string): void {
-        this._bech32Hrp = bech32Hrp;
-        this._storageService.save<string>("bech32Hrp", this._bech32Hrp);
+     public getBech32Hrp(): string {
+        return this._bech32Hrp;
+    }
+
+    /**
+     * Get the public key.
+     * @returns The public key.
+     */
+     public getPublicKey(): string | undefined {
+        return this._publicKey;
     }
 
     /**
      * Set the network id.
-     * @param networkId The new blind mode.
+     * @param networkId The new network id.
      */
     public setNetworkId(networkId: string): void {
         this._networkId = networkId;
@@ -107,11 +122,18 @@ export class NodeConfigService {
     }
 
     /**
-     * Set the base token.
-     * @param baseToken The new blind mode.
+     * Set the version.
+     * @param version The new version.
      */
-    public setBaseToken(baseToken: INodeInfoBaseToken): void {
-        this._baseToken = baseToken;
-        this._storageService.save("baseToken", this._baseToken);
+      public setVersion(version: string): void {
+        this._version = version;
+    }
+
+    /**
+     * Set the public key.
+     * @param publicKey The new public key.
+     */
+     public setPublicKey(publicKey: string): void {
+        this._publicKey = publicKey;
     }
 }
