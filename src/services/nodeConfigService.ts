@@ -1,7 +1,7 @@
-import { INodeInfoBaseToken } from '@iota/iota.js';
-import { ServiceFactory } from '../factories/serviceFactory';
-import { SessionStorageService } from './sessionStorageService';
-import { TangleService } from './tangleService';
+import { INodeInfoBaseToken } from "@iota/iota.js";
+import { ServiceFactory } from "../factories/serviceFactory";
+import { SessionStorageService } from "./sessionStorageService";
+import { TangleService } from "./tangleService";
 
 /**
  * Service to handle getting confiuration from the node.
@@ -41,13 +41,13 @@ export class NodeConfigService {
      * Create a new instance of NodeConfigService.
      */
     constructor() {
-        this._storageService = ServiceFactory.get<SessionStorageService>('local-storage');
-        this._networkId = '';
-        this._bech32Hrp = 'iota';
+        this._storageService = ServiceFactory.get<SessionStorageService>("local-storage");
+        this._networkId = "";
+        this._bech32Hrp = "iota";
         this._baseToken = {
-            name: 'IOTA',
-            tickerSymbol: 'MIOTA',
-            unit: 'i',
+            name: "IOTA",
+            tickerSymbol: "MIOTA",
+            unit: "i",
             decimals: 0,
             subunit: undefined,
             useMetricPrefix: true,
@@ -58,12 +58,12 @@ export class NodeConfigService {
      * Initialise NodeConfigService.
      */
     public async initialize(): Promise<void> {
-        this._networkId = this._storageService.load<string>('networkId');
-        this._publicKey = this._storageService.load<string>('publicKey');
-        this._version = this._storageService.load<string>('version');
+        this._networkId = this._storageService.load<string>("networkId");
+        this._publicKey = this._storageService.load<string>("publicKey");
+        this._version = this._storageService.load<string>("version");
 
         if (!this._networkId || !this._version || !this._publicKey) {
-            const tangleService = ServiceFactory.get<TangleService>('tangle');
+            const tangleService = ServiceFactory.get<TangleService>("tangle");
 
             try {
                 const info = await tangleService.info();
@@ -126,7 +126,7 @@ export class NodeConfigService {
      */
     public setNetworkId(networkId: string): void {
         this._networkId = networkId;
-        this._storageService.save<string>('networkId', this._networkId);
+        this._storageService.save<string>("networkId", this._networkId);
     }
 
     /**
@@ -135,7 +135,7 @@ export class NodeConfigService {
      */
     public setVersion(version: string): void {
         this._version = version;
-        this._storageService.save<string>('version', this._version);
+        this._storageService.save<string>("version", this._version);
     }
 
     /**
@@ -144,6 +144,6 @@ export class NodeConfigService {
      */
     public setPublicKey(publicKey: string): void {
         this._publicKey = publicKey;
-        this._storageService.save<string>('publicKey', this._publicKey);
+        this._storageService.save<string>("publicKey", this._publicKey);
     }
 }

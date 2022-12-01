@@ -12,18 +12,18 @@ import {
     IndexerPluginClient,
     ALIAS_ADDRESS_TYPE,
     NFT_ADDRESS_TYPE,
-} from '@iota/iota.js';
-import { Environment } from '../environment';
-import { ServiceFactory } from '../factories/serviceFactory';
-import { IAssociatedOutput } from '../models/tangle/IAssociatedOutputsResponse';
-import { ISearchRequest } from '../models/tangle/ISearchRequest';
-import { ISearchResponse } from '../models/tangle/ISearchResponse';
-import { Bech32AddressHelper } from '../utils/bech32AddressHelper';
-import { OutputsHelper } from '../utils/outputsHelper';
-import { SearchQuery, SearchQueryBuilder } from '../utils/searchQueryBuilder';
-import { AuthService } from './authService';
-import { SessionStorageService } from './sessionStorageService';
-import { Configuration, InfoResponse, NodeApi } from './wasp_client';
+} from "@iota/iota.js";
+import { Environment } from "../environment";
+import { ServiceFactory } from "../factories/serviceFactory";
+import { IAssociatedOutput } from "../models/tangle/IAssociatedOutputsResponse";
+import { ISearchRequest } from "../models/tangle/ISearchRequest";
+import { ISearchResponse } from "../models/tangle/ISearchResponse";
+import { Bech32AddressHelper } from "../utils/bech32AddressHelper";
+import { OutputsHelper } from "../utils/outputsHelper";
+import { SearchQuery, SearchQueryBuilder } from "../utils/searchQueryBuilder";
+import { AuthService } from "./authService";
+import { SessionStorageService } from "./sessionStorageService";
+import { Configuration, InfoResponse, NodeApi } from "./wasp_client";
 /**
  * Service to handle api requests.
  */
@@ -42,7 +42,7 @@ export class TangleService {
      * Create a new instance of TangleService.
      */
     constructor() {
-        this._authService = ServiceFactory.get<AuthService>('auth');
+        this._authService = ServiceFactory.get<AuthService>("auth");
     }
 
     /**
@@ -426,7 +426,7 @@ export class TangleService {
         const headers = this._authService.buildAuthHeaders();
 
         return new SingleNodeClient(`${window.location.protocol}//${window.location.host}`, {
-            basePath: '/dashboard/api/',
+            basePath: "/dashboard/api/",
             headers,
         });
     }
@@ -436,9 +436,9 @@ export class TangleService {
      * @returns The api client.
      */
     private buildApiClient(): NodeApi {
-        const storageService = ServiceFactory.get<SessionStorageService>('local-storage');
+        const storageService = ServiceFactory.get<SessionStorageService>("local-storage");
         return new NodeApi(
-            new Configuration({ basePath: Environment.WaspApiUrl, apiKey: storageService.load('dashboard-jwt') })
+            new Configuration({ basePath: Environment.WaspApiUrl, apiKey: storageService.load("dashboard-jwt") })
         );
     }
 

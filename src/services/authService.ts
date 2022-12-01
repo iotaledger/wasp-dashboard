@@ -1,8 +1,8 @@
-import { Environment } from '../environment';
-import { ServiceFactory } from '../factories/serviceFactory';
-import { FetchHelper } from '../utils/fetchHelper';
-import { EventAggregator } from './eventAggregator';
-import { LocalStorageService } from './localStorageService';
+import { Environment } from "../environment";
+import { ServiceFactory } from "../factories/serviceFactory";
+import { FetchHelper } from "../utils/fetchHelper";
+import { EventAggregator } from "./eventAggregator";
+import { LocalStorageService } from "./localStorageService";
 
 /**
  * Service to handle authentication.
@@ -25,12 +25,12 @@ export class AuthService {
         this._jwt = undefined;
 
         if (document.cookie) {
-            const cookies = document.cookie.split(';');
+            const cookies = document.cookie.split(";");
 
-            const csrf = cookies.find((c) => c.trim().startsWith('_csrf'));
+            const csrf = cookies.find((c) => c.trim().startsWith("_csrf"));
 
             if (csrf) {
-                const parts = csrf.split('=');
+                const parts = csrf.split("=");
                 if (parts.length === 2) {
                     this._csrf = parts[1];
                 }
@@ -42,9 +42,9 @@ export class AuthService {
      * Initialise service.
      */
     public async initialize(): Promise<void> {
-        const storageService = ServiceFactory.get<LocalStorageService>('local-storage');
+        const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
 
-        const jwt = storageService.load<string>('dashboard-jwt');
+        const jwt = storageService.load<string>("dashboard-jwt");
 
         this._jwt = jwt;
 
@@ -66,7 +66,7 @@ export class AuthService {
         try {
             const headers: Record<string, string> = {};
             if (this._csrf) {
-                headers['X-CSRF-Token'] = this._csrf;
+                headers["X-CSRF-Token"] = this._csrf;
             }
 
             const response = await FetchHelper.json<
@@ -80,8 +80,8 @@ export class AuthService {
                 }
             >(
                 Environment.WaspApiUrl,
-                '/auth',
-                'post',
+                "/auth",
+                "post",
                 {
                     user,
                     password,
@@ -91,10 +91,10 @@ export class AuthService {
             );
 
             if (response.jwt) {
-                const storageService = ServiceFactory.get<LocalStorageService>('local-storage');
+                const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
                 this._jwt = response.jwt;
-                storageService.save<string>('dashboard-jwt', this._jwt);
-                EventAggregator.publish('auth-state', true);
+                storageService.save<string>("dashboard-jwt", this._jwt);
+                EventAggregator.publish("auth-state", true);
             }
         } catch (err) {
             console.error(err);
@@ -108,10 +108,10 @@ export class AuthService {
      */
     public logout(): void {
         if (this._jwt) {
-            const storageService = ServiceFactory.get<LocalStorageService>('local-storage');
-            storageService.remove('dashboard-jwt');
+            const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
+            storageService.remove("dashboard-jwt");
             this._jwt = undefined;
-            EventAggregator.publish('auth-state', false);
+            EventAggregator.publish("auth-state", false);
         }
     }
 
@@ -143,7 +143,7 @@ export class AuthService {
         }
         const csrf = this.csrf();
         if (csrf) {
-            headers['X-CSRF-Token'] = csrf;
+            headers["X-CSRF-Token"] = csrf;
         }
 
         return headers;
