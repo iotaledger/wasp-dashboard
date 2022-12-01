@@ -59,8 +59,10 @@ export class NodeConfigService {
      */
     public async initialize(): Promise<void> {
         this._networkId = this._storageService.load<string>("networkId");
+        this._publicKey = this._storageService.load<string>("publicKey");
+        this._version = this._storageService.load<string>("version");
 
-        if (!this._networkId || !this._version) {
+        if (!this._networkId || !this._version || !this._publicKey) {
             const tangleService = ServiceFactory.get<TangleService>("tangle");
 
             try {
@@ -127,6 +129,7 @@ export class NodeConfigService {
      */
       public setVersion(version: string): void {
         this._version = version;
+        this._storageService.save<string>("version", this._version);
     }
 
     /**
@@ -135,5 +138,6 @@ export class NodeConfigService {
      */
      public setPublicKey(publicKey: string): void {
         this._publicKey = publicKey;
+        this._storageService.save<string>("publicKey", this._publicKey);
     }
 }
