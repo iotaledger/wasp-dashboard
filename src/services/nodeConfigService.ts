@@ -13,7 +13,7 @@ export class NodeConfigService {
     private _networkId: string;
 
     /**
-     * The network id.
+     * The version.
      */
     private _version?: string;
 
