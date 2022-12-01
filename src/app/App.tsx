@@ -127,10 +127,10 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
         this._lastStatus = 0;
 
         this.state = {
-            isLoggedIn: true, // For now, routes are unprotected.
-            // isLoggedIn: Boolean(this._authService.isLoggedIn()),
+            //isLoggedIn: false, // For now, routes are unprotected.
+            isLoggedIn: Boolean(this._authService.isLoggedIn()),
             theme: this._themeService.get(),
-            online: false,
+            online: true,
             syncHealth: false,
             nodeHealth: false
         };
@@ -155,7 +155,7 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
             // Raise exception message to frontend
         }
 
-        /*
+        
         EventAggregator.subscribe("auth-state", "app", isLoggedIn => {
             this.setState({
                 isLoggedIn
@@ -164,7 +164,7 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                     this.validateTokenPeriodically();
                 }
             });
-        });*/
+        });
 
         EventAggregator.subscribe("theme", "app", theme => {
             this.setState({ theme });
@@ -348,7 +348,7 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                                     </div>
                                 </Breakpoint>
                                 <Switch>
-                                    {this.state.isLoggedIn && [
+                                    {this.state.isLoggedIn ? [
                                         <Route
                                             exact={true}
                                             path="/"
@@ -366,17 +366,20 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                                             component={(props: RouteComponentProps<PeerRouteProps>) =>
                                                 (<Peer {...props} />)}
                                             key="peer"
+                                        />,
+                                        <Route
+                                            path="/login"
+                                            component={() => (<Login />)}
+                                            key="login"
                                         />
-                                    ]}
-                                    <Route
-                                        path="/login"
-                                        component={() => (<Login />)}
-                                    />
-                                    <Route
-                                        exact={true}
-                                        path="*"
-                                        component={() => (<Redirect to="/" />)}
-                                    />
+                                    ] : (
+                                        <Route
+                                            exact={true}
+                                            path="*"
+                                            component={() => (<Login/>)}
+                                        />
+                                    )}
+                                    
                                 </Switch>
                             </React.Fragment>
                         )}

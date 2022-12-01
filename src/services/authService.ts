@@ -64,7 +64,7 @@ export class AuthService {
         user: string | undefined,
         password: string | undefined,
         jwt?: string): Promise<boolean> {
-        this.logout();
+        //this.logout();
 
         try {
             const headers: Record<string, string> = {};
@@ -73,7 +73,7 @@ export class AuthService {
             }
 
             const response = await FetchHelper.json<{
-                user?: string;
+                username?: string;
                 password?: string;
                 jwt?: string;
             }, {
@@ -83,7 +83,7 @@ export class AuthService {
                 "/auth",
                 "post",
                 {
-                    user,
+                    username: user,
                     password,
                     jwt
                 },
@@ -91,7 +91,7 @@ export class AuthService {
 
             if (response.jwt) {
                 const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
-                this._jwt = response.jwt;
+                this._jwt = `Bearer ${response.jwt}`;
                 storageService.save<string>("dashboard-jwt", this._jwt);
                 EventAggregator.publish("auth-state", true);
             }
