@@ -1,20 +1,17 @@
 import moment from "moment";
 import React, { ReactNode } from "react";
-import { Redirect, Route, RouteComponentProps, Switch, withRouter } from "react-router-dom";
-import { ReactComponent as ExplorerIcon } from "../assets/explorer.svg";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { ReactComponent as ChainsIcon } from "../assets/chains.svg";
+import { ReactComponent as ConfigurationIcon } from "../assets/configuration.svg";
 import { ReactComponent as HomeIcon } from "../assets/home.svg";
+import { ReactComponent as L1Icon } from "../assets/l1.svg";
 import { ReactComponent as MoonIcon } from "../assets/moon.svg";
 import { ReactComponent as PadlockUnlockedIcon } from "../assets/padlock-unlocked.svg";
 import { ReactComponent as PadlockIcon } from "../assets/padlock.svg";
 import { ReactComponent as PeersIcon } from "../assets/peers.svg";
-import { ReactComponent as PluginsIcon } from "../assets/plugins.svg";
 import { ReactComponent as SunIcon } from "../assets/sun.svg";
-import { ReactComponent as VisualizerIcon } from "../assets/visualizer.svg";
+import { ReactComponent as UsersIcon } from "../assets/users.svg";
 import { ServiceFactory } from "../factories/serviceFactory";
-import { INodeStatus } from "../models/websocket/INodeStatus";
-import { IPublicNodeStatus } from "../models/websocket/IPublicNodeStatus";
-import { ISyncStatus } from "../models/websocket/ISyncStatus";
-import { WebSocketTopic } from "../models/websocket/webSocketTopic";
 import { AuthService } from "../services/authService";
 import { ChainService } from "../services/chainService";
 import { EventAggregator } from "../services/eventAggregator";
@@ -31,14 +28,7 @@ import Header from "./components/layout/Header";
 import HealthIndicator from "./components/layout/HealthIndicator";
 import NavMenu from "./components/layout/NavMenu";
 import NavPanel from "./components/layout/NavPanel";
-import Home from "./routes/Home";
-import Login from "./routes/Login";
-import Peer from "./routes/Peer";
-import { PeerRouteProps } from "./routes/PeerRouteProps";
-import Peers from "./routes/Peers";
-import Search from "./routes/Search";
-import { SearchRouteProps } from "./routes/SearchRouteProps";
-import Unavailable from "./routes/Unavailable";
+import RoutesSwitcher from "./routes/RoutesSwitcher";
 
 /**
  * Main application class.
@@ -92,22 +82,22 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
     /**
      * The node alias.
      */
-    private _alias?: string;
+    private readonly _alias?: string;
 
     /**
      * The lastest milestone index.
      */
-    private _lmi?: string;
+    private readonly _lmi?: string;
 
     /**
      * The confirmed milestone index.
      */
-    private _cmi?: string;
+    private readonly _cmi?: string;
 
     /**
      * The time of the last status update.
      */
-    private _lastStatus: number;
+    private readonly _lastStatus: number;
 
     /**
      * The status timer.
@@ -135,12 +125,11 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
         this._lastStatus = 0;
 
         this.state = {
-            isLoggedIn: true, // For now, routes are unprotected.
-            // isLoggedIn: Boolean(this._authService.isLoggedIn()),
+            isLoggedIn: Boolean(this._authService.isLoggedIn()),
             theme: this._themeService.get(),
             online: false,
             syncHealth: false,
-            nodeHealth: false
+            nodeHealth: false,
         };
 
         this.updateTitle();
@@ -167,25 +156,27 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
             await this._chainService.getAccounts("tst1pzzk4f663vj5k8uflssjlyrpef8360209djt5sgpyd5deufcnz2rxc56wwa");
 
             this.setState({
-                online: true
+                online: true,
             });
         } catch (ex) {
-            console.log(ex)
+            console.log(ex);
             // Raise exception message to frontend
         }
 
-        /*
-        EventAggregator.subscribe("auth-state", "app", isLoggedIn => {
-            this.setState({
-                isLoggedIn
-            }, () => {
-                if (this.state.isLoggedIn) {
-                    this.validateTokenPeriodically();
+        EventAggregator.subscribe("auth-state", "app", (isLoggedIn) => {
+            this.setState(
+                {
+                    isLoggedIn,
+                },
+                () => {
+                    if (this.state.isLoggedIn) {
+                        this.validateTokenPeriodically();
+                    }
                 }
-            });
-        });*/
+            );
+        });
 
-        EventAggregator.subscribe("theme", "app", theme => {
+        EventAggregator.subscribe("theme", "app", (theme) => {
             this.setState({ theme });
         });
 
@@ -234,7 +225,7 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                 }
             });*/
 
-            /*
+        /*
         this._statusTimer = setInterval(() => {
             if (Date.now() - this._lastStatus > 30000 && this.state.online) {
                 this.setState({
@@ -288,26 +279,50 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                 label: "Home",
                 icon: <HomeIcon />,
                 route: "/",
-                hidden: !this.state.isLoggedIn
+                hidden: !this.state.isLoggedIn,
             },
             {
                 label: "Peers",
                 icon: <PeersIcon />,
                 route: "/peers",
-                hidden: !this.state.isLoggedIn
+                hidden: !this.state.isLoggedIn,
+            },
+            {
+                label: "Chains",
+                icon: <ChainsIcon />,
+                route: "/chains",
+                hidden: !this.state.isLoggedIn,
+            },
+            {
+                label: "Configuration",
+                icon: <ConfigurationIcon />,
+                route: "/configuration",
+                hidden: !this.state.isLoggedIn,
+            },
+            {
+                label: "L1",
+                icon: <L1Icon />,
+                route: "/l1",
+                hidden: !this.state.isLoggedIn,
+            },
+            {
+                label: "Users",
+                icon: <UsersIcon />,
+                route: "/users",
+                hidden: !this.state.isLoggedIn,
             },
             {
                 label: "Login",
                 icon: <PadlockIcon />,
                 route: "/login",
-                hidden: this.state.isLoggedIn
+                hidden: this.state.isLoggedIn,
             },
             {
                 label: "Logout",
                 icon: <PadlockUnlockedIcon />,
                 function: () => this._authService.logout(),
-                hidden: !this.state.isLoggedIn
-            }
+                hidden: !this.state.isLoggedIn,
+            },
         ];
 
         const endSections = [
@@ -315,14 +330,14 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                 label: "Light",
                 icon: <SunIcon />,
                 function: () => this._themeService.apply("light", true),
-                hidden: this.state.theme === "light"
+                hidden: this.state.theme === "light",
             },
             {
                 label: "Dark",
                 icon: <MoonIcon />,
                 function: () => this._themeService.apply("dark", true),
-                hidden: this.state.theme === "dark"
-            }
+                hidden: this.state.theme === "dark",
+            },
         ];
 
         return (
@@ -347,9 +362,7 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                         </Breakpoint>
                     </Header>
                     <div className="fill scroll-content">
-                        {!this.state.online && (
-                            <p className="padding-l">The node is offline or loading.</p>
-                        )}
+                        {!this.state.online && <p className="padding-l">The node is offline or loading.</p>}
                         {this.state.online && (
                             <React.Fragment>
                                 <Breakpoint size="tablet" aboveBelow="below">
@@ -366,37 +379,7 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                                         />
                                     </div>
                                 </Breakpoint>
-                                <Switch>
-                                    {this.state.isLoggedIn && [
-                                        <Route
-                                            exact={true}
-                                            path="/"
-                                            component={() => (<Home />)}
-                                            key="home"
-                                        />,
-                                        <Route
-                                            exact={true}
-                                            path="/peers"
-                                            component={() => (<Peers />)}
-                                            key="peers"
-                                        />,
-                                        <Route
-                                            path="/peers/:id"
-                                            component={(props: RouteComponentProps<PeerRouteProps>) =>
-                                                (<Peer {...props} />)}
-                                            key="peer"
-                                        />
-                                    ]}
-                                    <Route
-                                        path="/login"
-                                        component={() => (<Login />)}
-                                    />
-                                    <Route
-                                        exact={true}
-                                        path="*"
-                                        component={() => (<Redirect to="/" />)}
-                                    />
-                                </Switch>
+                                <RoutesSwitcher isLoggedIn={this.state.isLoggedIn} />
                             </React.Fragment>
                         )}
                     </div>

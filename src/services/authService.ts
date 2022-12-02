@@ -9,6 +9,11 @@ import { LocalStorageService } from "./localStorageService";
  */
 export class AuthService {
     /**
+     * The storage service.
+     */
+    private readonly _storageService: LocalStorageService;
+
+    /**
      * The jwt if authenticated.
      */
     private _jwt?: string;
@@ -23,11 +28,12 @@ export class AuthService {
      */
     constructor() {
         this._jwt = undefined;
+        this._storageService = ServiceFactory.get<LocalStorageService>("local-storage");
 
         if (document.cookie) {
             const cookies = document.cookie.split(";");
 
-            const csrf = cookies.find(c => c.trim().startsWith("_csrf"));
+            const csrf = cookies.find((c) => c.trim().startsWith("_csrf"));
 
             if (csrf) {
                 const parts = csrf.split("=");
@@ -42,26 +48,18 @@ export class AuthService {
      * Initialise service.
      */
     public async initialize(): Promise<void> {
-        const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
-
-        const jwt = storageService.load<string>("dashboard-jwt");
-
-        if (jwt) {
-            await this.login(undefined, undefined, jwt);
-        }
+        const jwt = this._storageService.load<string>("dashboard-jwt");
+        this._jwt = jwt;
     }
 
     /**
      * Try performing a login.
-     * @param user The username to login with.
+     * @param username The username to login with.
      * @param password The password to login with.
      * @param jwt The jwt to login with.
      * @returns True if the login was successful.
      */
-    public async login(
-        user: string | undefined,
-        password: string | undefined,
-        jwt?: string): Promise<boolean> {
+    public async login(username: string | undefined, password: string | undefined, jwt?: string): Promise<boolean> {
         this.logout();
 
         try {
@@ -70,27 +68,30 @@ export class AuthService {
                 headers["X-CSRF-Token"] = this._csrf;
             }
 
-            const response = await FetchHelper.json<{
-                user?: string;
-                password?: string;
-                jwt?: string;
-            }, {
-                jwt?: string;
-            }>(
+            const response = await FetchHelper.json<
+                {
+                    username?: string;
+                    password?: string;
+                    jwt?: string;
+                },
+                {
+                    jwt?: string;
+                }
+            >(
                 Environment.WaspApiUrl,
                 "/auth",
                 "post",
                 {
-                    user,
+                    username,
                     password,
-                    jwt
+                    jwt,
                 },
-                headers);
+                headers
+            );
 
             if (response.jwt) {
-                const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
-                this._jwt = response.jwt;
-                storageService.save<string>("dashboard-jwt", this._jwt);
+                this._jwt = `Bearer ${response.jwt}`;
+                this._storageService.save<string>("dashboard-jwt", this._jwt);
                 EventAggregator.publish("auth-state", true);
             }
         } catch (err) {
@@ -105,8 +106,7 @@ export class AuthService {
      */
     public logout(): void {
         if (this._jwt) {
-            const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
-            storageService.remove("dashboard-jwt");
+            this._storageService.remove("dashboard-jwt");
             this._jwt = undefined;
             EventAggregator.publish("auth-state", false);
         }
