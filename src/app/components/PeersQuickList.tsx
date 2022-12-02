@@ -33,20 +33,6 @@ function PeersQuickList(): JSX.Element {
     const waspClientService: WaspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
 
     /**
-     * The peer subscription id.
-     * @private
-     * @type {string}
-     */
-    let peerSubscription: string | undefined;
-
-    /**
-     * The sync status subscription id.
-     * @private
-     * @type {string}
-     */
-    let syncStatusSubscription: string | undefined;
-
-    /**
      * The component mounted.
      * @private
      * @returns {Promise<void>}
@@ -62,24 +48,6 @@ function PeersQuickList(): JSX.Element {
             }
         })();
     }, []);
-
-    /**
-     * The component will unmount.
-     * @private
-     * @returns {void}
-     */
-    React.useEffect(
-        () => () => {
-            if (peerSubscription) {
-                peerSubscription = undefined;
-            }
-
-            if (syncStatusSubscription) {
-                syncStatusSubscription = undefined;
-            }
-        },
-        []
-    );
 
     /**
      * The peers state.
