@@ -42,6 +42,8 @@ initServices()
 async function initServices(): Promise<IBrandConfiguration | undefined> {
     ServiceFactory.register("local-storage", () => new LocalStorageService());
     ServiceFactory.register("session-storage", () => new SessionStorageService());
+    ServiceFactory.register("wasp-client", () => new WaspClientService());
+
     const settingsService = new SettingsService();
     ServiceFactory.register("settings", () => settingsService);
 
@@ -74,8 +76,6 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
             webSocketService.resubscribe();
         }
     });
-
-    ServiceFactory.register("wasp-client", () => new WaspClientService());
 
     settingsService.initialize();
 

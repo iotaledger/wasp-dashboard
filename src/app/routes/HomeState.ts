@@ -1,19 +1,18 @@
-
 export interface HomeState {
-    /**
-     * The name or alias of the node.
-     */
-    nodeName?: string;
-
-    /**
-     * The node id.
-     */
-    nodeId?: string;
-
     /**
      * The version.
      */
     version?: string;
+
+    /**
+     * The Public Key.
+     */
+    publicKey?: string;
+
+    /**
+     * The network ID.
+     */
+    networkId?: string;
 
     /**
      * Latest version.

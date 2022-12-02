@@ -41,7 +41,7 @@ export class NodeConfigService {
      * Create a new instance of NodeConfigService.
      */
     constructor() {
-        this._storageService = ServiceFactory.get<SessionStorageService>("local-storage");
+        this._storageService = ServiceFactory.get<SessionStorageService>("session-storage");
         this._networkId = "";
         this._bech32Hrp = "iota";
         this._baseToken = {
@@ -63,10 +63,12 @@ export class NodeConfigService {
         this._version = this._storageService.load<string>("version");
 
         if (!this._networkId || !this._version || !this._publicKey) {
-            const waspClientService = ServiceFactory.get<WaspClientService>("tangle");
+            const waspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
+            waspClientService.initialize();
 
             try {
                 const info = await waspClientService.node().getInfo();
+
                 if (info.netID) {
                     this.setNetworkId(info.netID);
                 }
@@ -76,7 +78,9 @@ export class NodeConfigService {
                 if (info.publicKey) {
                     this.setPublicKey(info.publicKey);
                 }
-            } catch {}
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 
