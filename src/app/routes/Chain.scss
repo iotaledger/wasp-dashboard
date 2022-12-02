@@ -1,0 +1,118 @@
+@import '../../scss/card';
+@import '../../scss/fonts';
+@import '../../scss/media-queries';
+
+.peer {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding: 60px;
+
+  @include desktop-down {
+    padding: $spacing-small;
+  }
+
+  .content {
+    flex: 1;
+    max-width: $content-width-desktop;
+
+    .peer--icon-button {
+      border: 0;
+      outline: 0;
+      background: none;
+      color: var(--text-color-secondary);
+      cursor: pointer;
+
+      &:hover {
+        color: var(--accent-primary);
+      }
+    }
+
+    .banner {
+      .node-info {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: $spacing-small;
+
+        .block-button .block-button-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+      }
+
+      .health-indicators {
+        justify-content: space-around;
+        border-left: 1px solid var(--panel-border);
+
+        .child {
+          padding: 0 $spacing-small;
+        }
+
+        @include tablet-down-only {
+          justify-content: space-between;
+          margin: 0 $spacing-small;
+
+          .child {
+            padding: $spacing-small 0;
+          }
+        }
+
+        @include phone-down {
+          .child {
+            padding: $spacing-tiny $spacing-small;
+          }
+        }
+      }
+    }
+
+    .info {
+      @include tablet-down {
+        flex-direction: column;
+      }
+
+      .info-panel + .info-panel {
+        margin-left: $spacing-small;
+
+        @include tablet-down {
+          margin-top: $spacing-small;
+          margin-left: 0;
+        }
+      }
+    }
+
+    .blocks-graph-panel {
+      .graph {
+        padding: 24px;
+      }
+    }
+
+    .gossip {
+      padding: $spacing-small 0 0 $spacing-small;
+
+      .gossip-item {
+        width: 155px;
+        height: 75px;
+        margin-right: $spacing-small;
+
+        @include desktop-down {
+          width: 160px;
+        }
+
+        h4 {
+          min-height: 30px;
+        }
+
+        .gossip-value {
+          @include font-size(24px);
+
+          color: var(--text-color-primary);
+          font-family: $font-sans;
+          font-weight: bold;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}

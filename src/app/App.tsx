@@ -152,17 +152,6 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
             // Raise exception message to frontend
         }
 
-        try {
-            await this._chainService.getAccounts("tst1pzzk4f663vj5k8uflssjlyrpef8360209djt5sgpyd5deufcnz2rxc56wwa");
-
-            this.setState({
-                online: true,
-            });
-        } catch (ex) {
-            console.log(ex);
-            // Raise exception message to frontend
-        }
-
         EventAggregator.subscribe("auth-state", "app", (isLoggedIn) => {
             this.setState(
                 {

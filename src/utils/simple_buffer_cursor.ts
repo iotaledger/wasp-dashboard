@@ -1,4 +1,5 @@
-import { Buffer } from "node:buffer";
+// eslint-disable-next-line unicorn/prefer-node-protocol
+import { Buffer } from "buffer";
 
 export class SimpleBufferCursor {
   private _buffer: Buffer;
@@ -12,6 +13,11 @@ export class SimpleBufferCursor {
 
   public get buffer(): Buffer {
     return this._buffer;
+  }
+
+  public static fromUint8Array(array: Uint8Array) {
+    const buffer = Buffer.from(array);
+    return new SimpleBufferCursor(buffer);
   }
 
   public readIntBE(length: number): number {
@@ -40,6 +46,20 @@ export class SimpleBufferCursor {
     this._traverse += 2;
 
     return value;
+  }
+
+  public readByte(): number {
+    const singleByte = this._buffer[this._traverse];
+    this._traverse += 1;
+
+    return singleByte;
+  }
+
+  public readRemaining(): Uint8Array {
+    const subBuffer = this._buffer.subarray(this._traverse);
+    this._traverse += this._buffer.length;
+
+    return subBuffer;
   }
 
   public readBytes(length: number): Uint8Array {

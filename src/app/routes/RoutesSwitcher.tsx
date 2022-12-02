@@ -1,5 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import Chain from "./Chain";
+import { ChainRouteProps } from "./ChainRouteProps";
 import Home from "./Home";
 import Login from "./Login";
 import Peer from "./Peer";
@@ -25,6 +27,12 @@ function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
                         path="/peers/:peerId"
                         component={(props: PeerRouteProps) => <Peer {...props} />}
                         key="peer"
+                    />
+                    <Route
+                        exact={true}
+                        path="/chains/:chainId"
+                        component={(props: ChainRouteProps) => <Chain {...props} />}
+                        key="chain"
                     />
                     {/* <Route
                         exact={true}
