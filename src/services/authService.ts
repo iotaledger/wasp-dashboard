@@ -54,8 +54,7 @@ export class AuthService {
 
     /**
      * Try performing a login.
-     * @param user The username to login with.
-     * @param username
+     * @param username The username to login with.
      * @param password The password to login with.
      * @param jwt The jwt to login with.
      * @returns True if the login was successful.
