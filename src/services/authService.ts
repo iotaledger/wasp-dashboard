@@ -55,11 +55,12 @@ export class AuthService {
     /**
      * Try performing a login.
      * @param user The username to login with.
+     * @param username
      * @param password The password to login with.
      * @param jwt The jwt to login with.
      * @returns True if the login was successful.
      */
-    public async login(user: string | undefined, password: string | undefined, jwt?: string): Promise<boolean> {
+    public async login(username: string | undefined, password: string | undefined, jwt?: string): Promise<boolean> {
         this.logout();
 
         try {
@@ -82,7 +83,7 @@ export class AuthService {
                 "/auth",
                 "post",
                 {
-                    username: user,
+                    username,
                     password,
                     jwt,
                 },
