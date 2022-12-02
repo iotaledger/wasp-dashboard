@@ -436,7 +436,7 @@ export class TangleService {
      * @returns The api client.
      */
     private buildApiClient(): NodeApi {
-        const storageService = ServiceFactory.get<SessionStorageService>("local-storage");
+        const storageService = ServiceFactory.get<SessionStorageService>("session-storage");
         return new NodeApi(
             new Configuration({ basePath: Environment.WaspApiUrl, apiKey: storageService.load("dashboard-jwt") })
         );
