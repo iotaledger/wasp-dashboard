@@ -12,6 +12,7 @@ import { INodeStatus } from "../../models/websocket/INodeStatus";
 import { IPublicNodeStatus } from "../../models/websocket/IPublicNodeStatus";
 import { ISyncStatus } from "../../models/websocket/ISyncStatus";
 import { WebSocketTopic } from "../../models/websocket/webSocketTopic";
+import { AuthService } from "../../services/authService";
 import { EventAggregator } from "../../services/eventAggregator";
 import { MetricsService } from "../../services/metricsService";
 import { NodeConfigService } from "../../services/nodeConfigService";
@@ -46,6 +47,16 @@ class Home extends AsyncComponent<unknown, HomeState> {
     private readonly _settingsService: SettingsService;
 
     /**
+     * The node config service.
+     */
+    private readonly _nodeConfigService: NodeConfigService;
+
+    /**
+     * The auth service.
+     */
+    private readonly _authService: AuthService;
+
+    /**
      * The status subscription id.
      */
     private _nodeStatusSubscription?: string;
@@ -71,39 +82,19 @@ class Home extends AsyncComponent<unknown, HomeState> {
     private _databaseSizeSubscription?: string;
 
     /**
-     * The network id.
-     */
-    private readonly _networkId?: string;
-
-    /**
-     * The current version.
-     */
-    private readonly _version?: string;
-
-    /**
-     * The public key.
-     */
-    private readonly _publicKey?: string;
-
-    /**
      * Create a new instance of Home.
      * @param props The props.
      */
     constructor(props: unknown) {
         super(props);
 
+        this._authService = ServiceFactory.get<AuthService>("auth");
         this._metricsService = ServiceFactory.get<MetricsService>("metrics");
         this._themeService = ServiceFactory.get<ThemeService>("theme");
         this._settingsService = ServiceFactory.get<SettingsService>("settings");
-
-        const nodeConfigService = ServiceFactory.get<NodeConfigService>("node-config");
-        this._networkId = nodeConfigService.getNetworkId();
-        this._version = nodeConfigService.getVersion();
-        this._publicKey = nodeConfigService.getPublicKey();
+        this._nodeConfigService = ServiceFactory.get<NodeConfigService>("node-config");
 
         this.state = {
-            nodeName: "",
-            nodeId: "",
             lmi: "-",
             cmi: "-",
             pruningIndex: "-",
@@ -116,6 +107,9 @@ class Home extends AsyncComponent<unknown, HomeState> {
             bpsOutgoing: [],
             bannerSrc: "",
             blindMode: this._settingsService.getBlindMode(),
+            publicKey: "",
+            version: "",
+            networkId: "",
         };
     }
 
@@ -128,6 +122,19 @@ class Home extends AsyncComponent<unknown, HomeState> {
         this.setState({
             bannerSrc: await BrandHelper.getBanner(this._themeService.get()),
         });
+
+        if (this._authService.isLoggedIn()) {
+            this._nodeConfigService
+                .initialize()
+                .then(() => {
+                    this.setState({
+                        networkId: this._nodeConfigService.getNetworkId(),
+                        version: this._nodeConfigService.getVersion(),
+                        publicKey: this._nodeConfigService.getPublicKey(),
+                    });
+                })
+                .catch((e) => console.log(e));
+        }
 
         EventAggregator.subscribe("theme", "home", async (theme: string) => {
             this.setState({
@@ -152,18 +159,8 @@ class Home extends AsyncComponent<unknown, HomeState> {
             WebSocketTopic.NodeStatus,
             (data) => {
                 if (data) {
-                    const nodeName = data.nodeAlias ?? BrandHelper.getConfiguration().name;
-                    const nodeId = data.nodeId || "No node Id.";
                     const uptime = FormatHelper.duration(data.uptime);
                     const memory = FormatHelper.iSize(data.memUsage);
-
-                    if (nodeName !== this.state.nodeName) {
-                        this.setState({ nodeName });
-                    }
-
-                    if (nodeId !== this.state.nodeId) {
-                        this.setState({ nodeId });
-                    }
 
                     if (uptime !== this.state.uptime) {
                         this.setState({ uptime });
@@ -281,10 +278,10 @@ class Home extends AsyncComponent<unknown, HomeState> {
                         <div className="banner row">
                             <div className="node-info">
                                 <div>
-                                    <h3>{this.state.blindMode ? "**********" : this._publicKey}</h3>
+                                    <h3>{this.state.blindMode ? "**********" : this.state.publicKey}</h3>
                                 </div>
-                                <p className="secondary">{this._networkId}</p>
-                                <p className="secondary">{this._version}</p>
+                                <p className="secondary">{this.state.networkId}</p>
+                                <p className="secondary">{this.state.version}</p>
                             </div>
                             <BannerCurve className="banner-curve" />
                             <div className="banner-image">

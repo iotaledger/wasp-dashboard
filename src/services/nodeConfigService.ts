@@ -41,7 +41,7 @@ export class NodeConfigService {
      * Create a new instance of NodeConfigService.
      */
     constructor() {
-        this._storageService = ServiceFactory.get<SessionStorageService>("local-storage");
+        this._storageService = ServiceFactory.get<SessionStorageService>("session-storage");
         this._networkId = "";
         this._bech32Hrp = "iota";
         this._baseToken = {
