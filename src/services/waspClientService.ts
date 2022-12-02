@@ -1,4 +1,6 @@
 import { Environment } from "../environment";
+import { ServiceFactory } from "../factories/serviceFactory";
+import { SessionStorageService } from "./sessionStorageService";
 import { ChainsApi, Configuration, NodeApi, RequestsApi, UsersApi } from "./wasp_client";
 
 /**
@@ -13,16 +15,17 @@ export class WaspClientService {
     };
 
     constructor() {
+        const sessionStorage = ServiceFactory.get<SessionStorageService>("session-storage");
         const config: Configuration = new Configuration({
-            // Add JWT Token here at some point (from authService)
-            basePath: Environment.WaspApiUrl
+            apiKey: sessionStorage.load("dashboard-jwt"),
+            basePath: Environment.WaspApiUrl,
         });
 
         this._apiClients = {
             users: new UsersApi(config),
             chains: new ChainsApi(config),
             node: new NodeApi(config),
-            requests: new RequestsApi(config)
+            requests: new RequestsApi(config),
         };
     }
 

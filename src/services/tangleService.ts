@@ -13,7 +13,6 @@ import {
     ALIAS_ADDRESS_TYPE,
     NFT_ADDRESS_TYPE,
 } from "@iota/iota.js";
-import { Environment } from "../environment";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { IAssociatedOutput } from "../models/tangle/IAssociatedOutputsResponse";
 import { ISearchRequest } from "../models/tangle/ISearchRequest";
@@ -22,17 +21,11 @@ import { Bech32AddressHelper } from "../utils/bech32AddressHelper";
 import { OutputsHelper } from "../utils/outputsHelper";
 import { SearchQuery, SearchQueryBuilder } from "../utils/searchQueryBuilder";
 import { AuthService } from "./authService";
-import { SessionStorageService } from "./sessionStorageService";
-import { Configuration, InfoResponse, NodeApi } from "./wasp_client";
+
 /**
  * Service to handle api requests.
  */
 export class TangleService {
-    /**
-     * The node info.
-     */
-    private _nodeInfo?: InfoResponse;
-
     /**
      * The auth service.
      */
@@ -56,16 +49,6 @@ export class TangleService {
     }
 
     /**
-     * Get the node info.
-     * @returns The node info.
-     */
-    public async info(): Promise<InfoResponse> {
-        const client = this.buildApiClient();
-        this._nodeInfo = await client.getInfo();
-        return this._nodeInfo;
-    }
-
-    /**
      * Find item on the stardust network.
      * @param request The earch query
      * @returns The item found.
@@ -74,9 +57,6 @@ export class TangleService {
         const client = this.buildClient();
         const indexerPlugin = new IndexerPluginClient(client);
 
-        if (!this._nodeInfo) {
-            await this.info();
-        }
         const bech32HRP = Bech32Helper.BECH32_DEFAULT_HRP_MAIN;
         const searchQuery: SearchQuery = new SearchQueryBuilder(request.query, bech32HRP).build();
 
@@ -429,17 +409,6 @@ export class TangleService {
             basePath: "/dashboard/api/",
             headers,
         });
-    }
-
-    /**
-     * Build an api client.
-     * @returns The api client.
-     */
-    private buildApiClient(): NodeApi {
-        const storageService = ServiceFactory.get<SessionStorageService>("local-storage");
-        return new NodeApi(
-            new Configuration({ basePath: Environment.WaspApiUrl, apiKey: storageService.load("dashboard-jwt") })
-        );
     }
 
     /**
