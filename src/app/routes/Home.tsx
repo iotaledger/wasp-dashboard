@@ -82,24 +82,6 @@ class Home extends AsyncComponent<unknown, HomeState> {
     private _databaseSizeSubscription?: string;
 
     /**
-<<<<<<< HEAD
-=======
-     * The network id.
-     */
-    private readonly _networkId?: string;
-
-    /**
-     * The current version.
-     */
-    private readonly _version?: string;
-
-    /**
-     * The public key.
-     */
-    private readonly _publicKey?: string;
-
-    /**
->>>>>>> 86aa7abb52339da959f06742e5ab7d8e0ba08097
      * Create a new instance of Home.
      * @param props The props.
      */
