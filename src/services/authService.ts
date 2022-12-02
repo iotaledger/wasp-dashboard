@@ -2,16 +2,16 @@ import { Environment } from "../environment";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { FetchHelper } from "../utils/fetchHelper";
 import { EventAggregator } from "./eventAggregator";
-import { SessionStorageService } from "./sessionStorageService";
+import { LocalStorageService } from "./localStorageService";
 
 /**
  * Service to handle authentication.
  */
 export class AuthService {
     /**
-     * The session storage service.
+     * The storage service.
      */
-    private readonly _storageService: SessionStorageService;
+    private readonly _storageService: LocalStorageService;
 
     /**
      * The jwt if authenticated.
@@ -28,7 +28,7 @@ export class AuthService {
      */
     constructor() {
         this._jwt = undefined;
-        this._storageService = ServiceFactory.get<SessionStorageService>("session-storage");
+        this._storageService = ServiceFactory.get<LocalStorageService>("local-storage");
 
         if (document.cookie) {
             const cookies = document.cookie.split(";");
