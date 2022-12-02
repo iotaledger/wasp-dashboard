@@ -49,7 +49,6 @@ export class AuthService {
      */
     public async initialize(): Promise<void> {
         const jwt = this._storageService.load<string>("dashboard-jwt");
-
         this._jwt = jwt;
     }
 
