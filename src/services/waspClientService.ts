@@ -20,7 +20,6 @@ export class WaspClientService {
 
         EventAggregator.subscribe("auth-state", "waspClient", (isLoggedIn) => {
             if (isLoggedIn) {
-                console.log(isLoggedIn);
                 this.initialize();
             }
         });
