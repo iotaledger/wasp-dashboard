@@ -119,7 +119,7 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
         this.state = {
             isLoggedIn: Boolean(this._authService.isLoggedIn()),
             theme: this._themeService.get(),
-            online: true,
+            online: false,
             syncHealth: false,
             nodeHealth: false,
         };
