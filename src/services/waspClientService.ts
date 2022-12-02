@@ -1,5 +1,6 @@
 import { Environment } from "../environment";
 import { ServiceFactory } from "../factories/serviceFactory";
+import { EventAggregator } from "./eventAggregator";
 import { LocalStorageService } from "./localStorageService";
 import { ChainsApi, Configuration, NodeApi, RequestsApi, UsersApi } from "./wasp_client";
 
@@ -16,6 +17,13 @@ export class WaspClientService {
 
     constructor() {
         this.initialize();
+
+        EventAggregator.subscribe("auth-state", "waspClient", (isLoggedIn) => {
+            if (isLoggedIn) {
+                console.log(isLoggedIn);
+                this.initialize();
+            }
+        });
     }
 
     public initialize() {

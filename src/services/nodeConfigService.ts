@@ -64,7 +64,6 @@ export class NodeConfigService {
 
         if (!this._networkId || !this._version || !this._publicKey) {
             const waspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
-            waspClientService.initialize();
 
             try {
                 const info = await waspClientService.node().getInfo();
