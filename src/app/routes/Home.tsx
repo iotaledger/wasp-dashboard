@@ -23,7 +23,7 @@ import { FormatHelper } from "../../utils/formatHelper";
 import AsyncComponent from "../components/layout/AsyncComponent";
 import Graph from "../components/layout/Graph";
 import InfoPanel from "../components/layout/InfoPanel";
-import PeersSummaryPanel from "../components/tangle/PeersSummaryPanel";
+import PeersQuickList from "../components/PeersQuickList";
 import "./Home.scss";
 import { HomeState } from "./HomeState";
 
@@ -357,7 +357,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
                             </div>
                         </div>
                         <div className="card col peers-summary-col peers-summary-panel">
-                            <PeersSummaryPanel />
+                            <PeersQuickList />
                         </div>
                     </div>
                 </div>
