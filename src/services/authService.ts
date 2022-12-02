@@ -2,12 +2,17 @@ import { Environment } from "../environment";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { FetchHelper } from "../utils/fetchHelper";
 import { EventAggregator } from "./eventAggregator";
-import { LocalStorageService } from "./localStorageService";
+import { SessionStorageService } from "./sessionStorageService";
 
 /**
  * Service to handle authentication.
  */
 export class AuthService {
+    /**
+     * The session storage service.
+     */
+    private readonly _storageService: SessionStorageService;
+
     /**
      * The jwt if authenticated.
      */
@@ -23,6 +28,7 @@ export class AuthService {
      */
     constructor() {
         this._jwt = undefined;
+        this._storageService = ServiceFactory.get<SessionStorageService>("session-storage");
 
         if (document.cookie) {
             const cookies = document.cookie.split(";");
@@ -42,15 +48,9 @@ export class AuthService {
      * Initialise service.
      */
     public async initialize(): Promise<void> {
-        const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
-
-        const jwt = storageService.load<string>("dashboard-jwt");
+        const jwt = this._storageService.load<string>("dashboard-jwt");
 
         this._jwt = jwt;
-
-        if (jwt) {
-            await this.login(undefined, undefined, jwt);
-        }
     }
 
     /**
@@ -91,9 +91,8 @@ export class AuthService {
             );
 
             if (response.jwt) {
-                const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
                 this._jwt = `Bearer ${response.jwt}`;
-                storageService.save<string>("dashboard-jwt", this._jwt);
+                this._storageService.save<string>("dashboard-jwt", this._jwt);
                 EventAggregator.publish("auth-state", true);
             }
         } catch (err) {
@@ -108,8 +107,7 @@ export class AuthService {
      */
     public logout(): void {
         if (this._jwt) {
-            const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
-            storageService.remove("dashboard-jwt");
+            this._storageService.remove("dashboard-jwt");
             this._jwt = undefined;
             EventAggregator.publish("auth-state", false);
         }

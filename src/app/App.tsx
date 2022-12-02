@@ -14,8 +14,8 @@ import { ReactComponent as UsersIcon } from "../assets/users.svg";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { AuthService } from "../services/authService";
 import { EventAggregator } from "../services/eventAggregator";
-import { LocalStorageService } from "../services/localStorageService";
 import { MetricsService } from "../services/metricsService";
+import { SessionStorageService } from "../services/sessionStorageService";
 import { ThemeService } from "../services/themeService";
 import { WaspClientService } from "../services/waspClientService";
 import { BrandHelper } from "../utils/brandHelper";
@@ -51,7 +51,7 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
     /**
      * The storage service.
      */
-    private readonly _storageService: LocalStorageService;
+    private readonly _storageService: SessionStorageService;
 
     /**
      * The metrics service.
@@ -112,12 +112,11 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
         this._themeService = ServiceFactory.get<ThemeService>("theme");
         this._authService = ServiceFactory.get<AuthService>("auth");
         this._metricsService = ServiceFactory.get<MetricsService>("metrics");
-        this._storageService = ServiceFactory.get<LocalStorageService>("local-storage");
+        this._storageService = ServiceFactory.get<SessionStorageService>("session-storage");
         this._waspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
         this._lastStatus = 0;
 
         this.state = {
-            // isLoggedIn: false, // For now, routes are unprotected.
             isLoggedIn: Boolean(this._authService.isLoggedIn()),
             theme: this._themeService.get(),
             online: true,
