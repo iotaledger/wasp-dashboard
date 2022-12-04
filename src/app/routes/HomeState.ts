@@ -1,4 +1,3 @@
-
 export interface HomeState {
     /**
      * The version.
