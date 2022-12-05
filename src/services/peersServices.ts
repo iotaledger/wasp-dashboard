@@ -14,16 +14,16 @@ export class PeersService {
     private _peers: PeeringNodeStatusResponse[] = [];
 
     /**
-     * Pool Timeout Id
+     * Poll Timeout Id
      */
-    private _peerPoolId: NodeJS.Timeout | undefined;
+    private _peerPollId: NodeJS.Timeout | undefined;
 
     /**
-     * Method to initialize the pool.
+     * Method to initialize the poll.
      */
     public initialize(): void {
         this._peers = [];
-        this.initializePool();
+        this.initializePoll();
     }
 
     /**
@@ -39,10 +39,10 @@ export class PeersService {
     };
 
     /**
-     * Method to stop the pool.
+     * Method to stop the poll.
      */
-    public stopPool(): void {
-        clearInterval(this._peerPoolId);
+    public stopPoll(): void {
+        clearInterval(this._peerPollId);
     }
 
     /**
@@ -52,9 +52,9 @@ export class PeersService {
     public get: () => PeeringNodeStatusResponse[] = () => this._peers;
 
     /**
-     * Start the pool to fetch every 15s.
+     * Start the poll to fetch every 15s.
      */
-    private initializePool(): void {
-        this._peerPoolId = setInterval(this.fetchPeers, 15000);
+    private initializePoll(): void {
+        this._peerPollId = setInterval(this.fetchPeers, 15000);
     }
 }
