@@ -5,19 +5,17 @@ import { ReactComponent as EyeIcon } from "../../assets/eye.svg";
 import { ReactComponent as TrustedIcon } from "../../assets/health-good.svg";
 import { ReactComponent as NotTrustedIcon } from "../../assets/health-warning.svg";
 import { ServiceFactory } from "../../factories/serviceFactory";
+import { EventAggregator } from "../../services/eventAggregator";
+import { PeersService } from "../../services/peersServices";
 import { SettingsService } from "../../services/settingsService";
 import { PeeringNodeStatusResponse } from "../../services/wasp_client/models";
-import { WaspClientService } from "../../services/waspClientService";
 import "./PeersQuickList.scss";
 
 /**
  * Component which provides a list of peers.
- * @param props The props.
- * @param props.peers - The peers.
- * @param props.onPeerClick - The callback to invoke when a peer is clicked.
  * @returns The node to render.
  */
-function PeersQuickList(): JSX.Element {
+const PeersQuickList: React.FC = () => {
     /**
      * The settings service.
      * @private
@@ -26,11 +24,16 @@ function PeersQuickList(): JSX.Element {
     const settingsService: SettingsService = ServiceFactory.get<SettingsService>("settings");
 
     /**
-     * The waspClient service.
-     * @private
-     * @type {WaspClientService}
+     * The peers state.
      */
-    const waspClientService: WaspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
+    const [peersState, setPeersState] = React.useState<PeeringNodeStatusResponse[]>([]);
+
+    const peersService: PeersService = new PeersService();
+
+    /**
+     * The blind mode state.
+     */
+    const [blindMode, setBlindMode] = React.useState<boolean>(settingsService.getBlindMode());
 
     /**
      * The component mounted.
@@ -38,26 +41,9 @@ function PeersQuickList(): JSX.Element {
      * @returns {Promise<void>}
      */
     React.useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        (async () => {
-            try {
-                const peers = await waspClientService.node().getAllPeers();
-                handleData(peers);
-            } catch (ex) {
-                console.log(ex);
-            }
-        })();
+        peersService.fetchPeers().then(setPeersState).catch(console.error);
+        EventAggregator.subscribe("peers-state", "peers-quick-list", setPeersState);
     }, []);
-
-    /**
-     * The peers state.
-     */
-    const [peersState, setPeersState] = React.useState<PeeringNodeStatusResponse[]>([]);
-
-    /**
-     * The blind mode state.
-     */
-    const [blindMode, setBlindMode] = React.useState<boolean>(settingsService.getBlindMode());
 
     /**
      * Toggle the blind mode.
@@ -66,15 +52,6 @@ function PeersQuickList(): JSX.Element {
         const newBlindMode = !blindMode;
         setBlindMode(newBlindMode);
         settingsService.setBlindMode(newBlindMode);
-    };
-
-    /**
-     * Handle the peer data.
-     * @param peers The peers.
-     */
-    const handleData = (peers: PeeringNodeStatusResponse[]): void => {
-        const sortedPeers = peers;
-        setPeersState(sortedPeers);
     };
 
     /**
@@ -89,22 +66,24 @@ function PeersQuickList(): JSX.Element {
                     {blindMode ? <EyeIcon /> : <EyeClosedIcon />}
                 </button>
             </div>
-            {!peersState && <p>There are no peers.</p>}
-
-            {peersState?.map((p, idx) => (
-                <Link to={`/peers/${p.netID}`} key={idx} className="peers-summary--item">
-                    <div className="peer-health-icon">
-                        {p.isTrusted && <TrustedIcon />}
-                        {!p.isTrusted && <NotTrustedIcon />}
-                    </div>
-                    <div className="col">
-                        {p.publicKey && (
-                            <div className="peer-id">{blindMode ? "*".repeat(p.publicKey.length) : p.publicKey}</div>
-                        )}
-                    </div>
-                </Link>
-            ))}
+            {peersState.length === 0 ? (
+                <p>There are no peers.</p>
+            ) : (
+                peersState?.map((p, idx) => (
+                    <Link to={`/peers/${p.publicKey}`} key={idx} className="peers-summary--item">
+                        <div className="peer-health-icon">{p.isTrusted ? <TrustedIcon /> : <NotTrustedIcon />}</div>
+                        <div className="col">
+                            {p.publicKey && (
+                                <div className="peer-id">
+                                    {blindMode ? "*".repeat(p.publicKey.length) : p.publicKey}
+                                </div>
+                            )}
+                        </div>
+                    </Link>
+                ))
+            )}
         </div>
     );
-}
+};
+
 export default PeersQuickList;
