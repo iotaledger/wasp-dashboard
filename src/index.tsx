@@ -44,7 +44,6 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
     ServiceFactory.register("local-storage", () => new LocalStorageService());
     ServiceFactory.register("session-storage", () => new SessionStorageService());
     ServiceFactory.register("wasp-client", () => new WaspClientService());
-    ServiceFactory.register("peers-service", () => new WebSocketService());
 
     const settingsService = new SettingsService();
     ServiceFactory.register("settings", () => settingsService);
