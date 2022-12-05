@@ -54,14 +54,13 @@ export class PeersService {
     }
 
     /**
-     * Get the perrs.
+     * Get the peers.
      * @returns Array of peers.
      */
     public get: () => PeeringNodeStatusResponse[] = () => this._peers;
 
     /**
      * Fetch the peers.
-     * @returns {Promise<PeeringNodeStatusResponse[]>} An array of peers.
      */
     private readonly fetchPeers = async (): Promise<void> => {
         const waspClientService: WaspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
