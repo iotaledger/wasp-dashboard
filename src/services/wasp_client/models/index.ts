@@ -34,3 +34,4 @@ export * from './UpdateUserPasswordRequest';
 export * from './UpdateUserPermissionsRequest';
 export * from './User';
 export * from './WaitRequestProcessedParams';
+export * from './ConfigResponse';

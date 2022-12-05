@@ -35,8 +35,8 @@ import {
     PeeringNodeStatusResponseToJSON,
     PeeringTrustRequestFromJSON,
     PeeringTrustRequestToJSON,
+    ConfigResponse,
 } from '../models';
-import { ConfigResponse } from '../models/ConfigResponse';
 
 export interface DistrustPeerRequest {
     body: PeeringTrustRequest;

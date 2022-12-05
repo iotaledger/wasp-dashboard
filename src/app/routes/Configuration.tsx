@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Configuration.scss";
-import { ConfigResponse } from "../../services/wasp_client/models/ConfigResponse";
+import { ConfigResponse } from "../../services/wasp_client/models";
 import { WaspClientService } from "../../services/waspClientService";
 
 /**
