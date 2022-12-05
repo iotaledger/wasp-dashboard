@@ -26,8 +26,6 @@ export class PeersService {
         const authService = ServiceFactory.get<AuthService>("auth");
 
         if (authService.isLoggedIn()) {
-            // eslint-disable-next-line no-void
-            void this.fetchPeers();
             this.start();
         }
         EventAggregator.subscribe("auth-state", "peersService", (isLoggedIn) => {
@@ -50,6 +48,8 @@ export class PeersService {
      * Method to start the poll.
      */
     public start(): void {
+        // eslint-disable-next-line no-void
+        void this.fetchPeers();
         this._peerPollId = setInterval(this.fetchPeers, 15000);
     }
 
