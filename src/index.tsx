@@ -11,6 +11,7 @@ import { EventAggregator } from "./services/eventAggregator";
 import { LocalStorageService } from "./services/localStorageService";
 import { MetricsService } from "./services/metricsService";
 import { NodeConfigService } from "./services/nodeConfigService";
+import { PeersService } from "./services/peersServices";
 import { SessionStorageService } from "./services/sessionStorageService";
 import { SettingsService } from "./services/settingsService";
 import { ThemeService } from "./services/themeService";
@@ -65,6 +66,10 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
     const metricsService = new MetricsService();
     ServiceFactory.register("metrics", () => metricsService);
     metricsService.initialize();
+
+    const peersService = new PeersService();
+    ServiceFactory.register("peers-service", () => peersService);
+    peersService.initialize();
 
     EventAggregator.subscribe("auth-state", "init", async () => {
         webSocketService.resubscribe();
