@@ -13,28 +13,27 @@ import { MetricsService } from "./services/metricsService";
 import { NodeConfigService } from "./services/nodeConfigService";
 import { SessionStorageService } from "./services/sessionStorageService";
 import { SettingsService } from "./services/settingsService";
-import { TangleService } from "./services/tangleService";
 import { ThemeService } from "./services/themeService";
 import { WaspClientService } from "./services/waspClientService";
 import { WebSocketService } from "./services/webSocketService";
 import { BrandHelper } from "./utils/brandHelper";
 
 initServices()
-    .then(brandConfiguration => {
+    .then((brandConfiguration) => {
         /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
         const container = document.querySelector("#root")!;
         const root = createRoot(container);
         root.render(
-            !brandConfiguration
-                ? (<div>REACT_APP_BRAND_ID is not set</div>)
-                : (
-                    <BrowserRouter basename={process.env.PUBLIC_URL}>
-                        <App />
-                    </BrowserRouter>
-                )
+            !brandConfiguration ? (
+                <div>REACT_APP_BRAND_ID is not set</div>
+            ) : (
+                <BrowserRouter basename={process.env.PUBLIC_URL}>
+                    <App />
+                </BrowserRouter>
+            )
         );
     })
-    .catch(err => console.error(err));
+    .catch((err) => console.error(err));
 
 /**
  * Initialise the services.
@@ -43,6 +42,8 @@ initServices()
 async function initServices(): Promise<IBrandConfiguration | undefined> {
     ServiceFactory.register("local-storage", () => new LocalStorageService());
     ServiceFactory.register("session-storage", () => new SessionStorageService());
+    ServiceFactory.register("wasp-client", () => new WaspClientService());
+
     const settingsService = new SettingsService();
     ServiceFactory.register("settings", () => settingsService);
 
@@ -52,7 +53,6 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
 
     const webSocketService = new WebSocketService();
     ServiceFactory.register("web-socket", () => webSocketService);
-    ServiceFactory.register("tangle", () => new TangleService());
 
     const themeService = new ThemeService();
     themeService.initialize();
@@ -70,14 +70,12 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
         webSocketService.resubscribe();
     });
 
-    EventAggregator.subscribe("online", "init", async o => {
+    EventAggregator.subscribe("online", "init", async (o) => {
         if (o) {
             await nodeConfigService.initialize();
             webSocketService.resubscribe();
         }
     });
-
-    ServiceFactory.register("wasp-client", () => new WaspClientService());
 
     settingsService.initialize();
 

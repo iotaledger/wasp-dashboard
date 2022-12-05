@@ -1,7 +1,7 @@
 import { INodeInfoBaseToken } from "@iota/iota.js";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { SessionStorageService } from "./sessionStorageService";
-import { TangleService } from "./tangleService";
+import { WaspClientService } from "./waspClientService";
 
 /**
  * Service to handle getting confiuration from the node.
@@ -63,10 +63,11 @@ export class NodeConfigService {
         this._version = this._storageService.load<string>("version");
 
         if (!this._networkId || !this._version || !this._publicKey) {
-            const tangleService = ServiceFactory.get<TangleService>("tangle");
+            const waspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
 
             try {
-                const info = await tangleService.info();
+                const info = await waspClientService.node().getInfo();
+
                 if (info.netID) {
                     this.setNetworkId(info.netID);
                 }
@@ -76,7 +77,9 @@ export class NodeConfigService {
                 if (info.publicKey) {
                     this.setPublicKey(info.publicKey);
                 }
-            } catch {}
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 
