@@ -36,6 +36,7 @@ import {
     PeeringTrustRequestFromJSON,
     PeeringTrustRequestToJSON,
 } from '../models';
+import { ConfigResponse } from '../models/ConfigResponse';
 
 export interface DistrustPeerRequest {
     body: PeeringTrustRequest;
@@ -164,7 +165,7 @@ export class NodeApi extends runtime.BaseAPI {
     /**
      * Return the Wasp configuration
      */
-    async getConfigurationRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getConfigurationRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConfigResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -180,14 +181,15 @@ export class NodeApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response);
     }
 
     /**
      * Return the Wasp configuration
      */
-    async getConfiguration(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getConfigurationRaw(initOverrides);
+    async getConfiguration(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConfigResponse> {
+        const response = await this.getConfigurationRaw(initOverrides);
+        return await response.value();
     }
 
     /**
