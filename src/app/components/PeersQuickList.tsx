@@ -69,12 +69,12 @@ const PeersQuickList: React.FC = () => {
                     {blindMode ? <EyeIcon /> : <EyeClosedIcon />}
                 </button>
             </div>
-            {peersState.length === 0 ? (
+            {!peersState?.length ? (
                 <p>There are no peers.</p>
             ) : (
                 peersState?.map((p, idx) => (
                     <Link to={`/peers/${p.publicKey}`} key={idx} className="peers-summary--item">
-                        <div className="peer-health-icon">{p.isTrusted ? <TrustedIcon /> : <NotTrustedIcon />}</div>
+                        <div className="peer-health-icon">{p.isAlive ? <TrustedIcon /> : <NotTrustedIcon />}</div>
                         <div className="col">
                             {p.publicKey && (
                                 <div className="peer-id">
