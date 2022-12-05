@@ -19,6 +19,7 @@
     & dl {
       display: flex;
       flex-wrap: wrap;
+      color: var(--text-color-primary);
     }
     & dt {
       width: 33%;
