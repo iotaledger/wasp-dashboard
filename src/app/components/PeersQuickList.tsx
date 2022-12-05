@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { ReactComponent as EyeClosedIcon } from "../../assets/eye-closed.svg";
 import { ReactComponent as EyeIcon } from "../../assets/eye.svg";
 import { ReactComponent as TrustedIcon } from "../../assets/health-good.svg";
@@ -73,7 +72,7 @@ const PeersQuickList: React.FC = () => {
                 <p>There are no peers.</p>
             ) : (
                 peersState?.map((p, idx) => (
-                    <Link to={`/peers/${p.publicKey}`} key={idx} className="peers-summary--item">
+                    <div key={idx} className="peers-summary--item">
                         <div className="peer-health-icon">{p.isAlive ? <TrustedIcon /> : <NotTrustedIcon />}</div>
                         <div className="col">
                             {p.publicKey && (
@@ -82,7 +81,7 @@ const PeersQuickList: React.FC = () => {
                                 </div>
                             )}
                         </div>
-                    </Link>
+                    </div>
                 ))
             )}
         </div>
