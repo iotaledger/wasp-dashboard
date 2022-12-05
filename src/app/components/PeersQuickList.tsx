@@ -22,13 +22,12 @@ const PeersQuickList: React.FC = () => {
      * @type {SettingsService}
      */
     const settingsService: SettingsService = ServiceFactory.get<SettingsService>("settings");
+    const peersService: PeersService = ServiceFactory.get<PeersService>("peers-service");
 
     /**
      * The peers state.
      */
-    const [peersState, setPeersState] = React.useState<PeeringNodeStatusResponse[]>([]);
-
-    const peersService: PeersService = new PeersService();
+    const [peersState, setPeersState] = React.useState<PeeringNodeStatusResponse[]>(peersService.get());
 
     /**
      * The blind mode state.
@@ -37,11 +36,9 @@ const PeersQuickList: React.FC = () => {
 
     /**
      * The component mounted.
-     * @private
      * @returns {Promise<void>}
      */
     React.useEffect(() => {
-        peersService.fetchPeers().then(setPeersState).catch(console.error);
         EventAggregator.subscribe("peers-state", "peers-quick-list", setPeersState);
     }, []);
 
