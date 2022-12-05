@@ -1,4 +1,5 @@
 import { ServiceFactory } from "../factories/serviceFactory";
+import { AuthService } from "./authService";
 import { EventAggregator } from "./eventAggregator";
 import { PeeringNodeStatusResponse } from "./wasp_client";
 import { WaspClientService } from "./waspClientService";
@@ -22,9 +23,20 @@ export class PeersService {
      * Method to initialize the poll.
      */
     public initialize(): void {
-        // eslint-disable-next-line no-void
-        void this.fetchPeers();
-        this._peerPollId = setInterval(this.fetchPeers, 15000);
+        const authService = ServiceFactory.get<AuthService>("auth");
+
+        if (authService.isLoggedIn()) {
+            // eslint-disable-next-line no-void
+            void this.fetchPeers();
+            this.start();
+        }
+        EventAggregator.subscribe("auth-state", "peersService", (isLoggedIn) => {
+            if (isLoggedIn) {
+                this.start();
+            } else {
+                this.stop();
+            }
+        });
     }
 
     /**
@@ -32,6 +44,13 @@ export class PeersService {
      */
     public stop(): void {
         clearInterval(this._peerPollId);
+    }
+
+    /**
+     * Method to start the poll.
+     */
+    public start(): void {
+        this._peerPollId = setInterval(this.fetchPeers, 15000);
     }
 
     /**
