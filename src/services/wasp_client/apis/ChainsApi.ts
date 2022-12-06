@@ -32,6 +32,10 @@ export interface ActivateChainRequest {
     chainID: string;
 }
 
+export interface AttachToWebsocketRequest {
+    chainID: string;
+}
+
 export interface DeactivateChainRequest {
     chainID: string;
 }
@@ -48,18 +52,14 @@ export interface GetContractsRequest {
     chainID: string;
 }
 
-export interface V2ChainsChainIDEvmTxTxHashGetRequest {
+export interface GetRequestIDFromEVMTransactionIDRequest {
     chainID: string;
     txHash: string;
 }
 
-export interface V2ChainsChainIDStateStateKeyGetRequest {
+export interface GetStateValueRequest {
     chainID: string;
     stateKey: string;
-}
-
-export interface V2ChainsChainIDWsGetRequest {
-    chainID: string;
 }
 
 /**
@@ -98,6 +98,33 @@ export class ChainsApi extends runtime.BaseAPI {
      */
     async activateChain(requestParameters: ActivateChainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.activateChainRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async attachToWebsocketRaw(requestParameters: AttachToWebsocketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling attachToWebsocket.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/v2/chains/{chainID}/ws`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async attachToWebsocket(requestParameters: AttachToWebsocketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.attachToWebsocketRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -268,13 +295,13 @@ export class ChainsApi extends runtime.BaseAPI {
     /**
      * Get the ISC request ID for the given Ethereum transaction hash
      */
-    async v2ChainsChainIDEvmTxTxHashGetRaw(requestParameters: V2ChainsChainIDEvmTxTxHashGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async getRequestIDFromEVMTransactionIDRaw(requestParameters: GetRequestIDFromEVMTransactionIDRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
         if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
-            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling v2ChainsChainIDEvmTxTxHashGet.');
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling getRequestIDFromEVMTransactionID.');
         }
 
         if (requestParameters.txHash === null || requestParameters.txHash === undefined) {
-            throw new runtime.RequiredError('txHash','Required parameter requestParameters.txHash was null or undefined when calling v2ChainsChainIDEvmTxTxHashGet.');
+            throw new runtime.RequiredError('txHash','Required parameter requestParameters.txHash was null or undefined when calling getRequestIDFromEVMTransactionID.');
         }
 
         const queryParameters: any = {};
@@ -294,21 +321,21 @@ export class ChainsApi extends runtime.BaseAPI {
     /**
      * Get the ISC request ID for the given Ethereum transaction hash
      */
-    async v2ChainsChainIDEvmTxTxHashGet(requestParameters: V2ChainsChainIDEvmTxTxHashGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.v2ChainsChainIDEvmTxTxHashGetRaw(requestParameters, initOverrides);
+    async getRequestIDFromEVMTransactionID(requestParameters: GetRequestIDFromEVMTransactionIDRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.getRequestIDFromEVMTransactionIDRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Fetch the raw value associated with the given key in the chain state
      */
-    async v2ChainsChainIDStateStateKeyGetRaw(requestParameters: V2ChainsChainIDStateStateKeyGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+    async getStateValueRaw(requestParameters: GetStateValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
         if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
-            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling v2ChainsChainIDStateStateKeyGet.');
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling getStateValue.');
         }
 
         if (requestParameters.stateKey === null || requestParameters.stateKey === undefined) {
-            throw new runtime.RequiredError('stateKey','Required parameter requestParameters.stateKey was null or undefined when calling v2ChainsChainIDStateStateKeyGet.');
+            throw new runtime.RequiredError('stateKey','Required parameter requestParameters.stateKey was null or undefined when calling getStateValue.');
         }
 
         const queryParameters: any = {};
@@ -328,36 +355,9 @@ export class ChainsApi extends runtime.BaseAPI {
     /**
      * Fetch the raw value associated with the given key in the chain state
      */
-    async v2ChainsChainIDStateStateKeyGet(requestParameters: V2ChainsChainIDStateStateKeyGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
-        const response = await this.v2ChainsChainIDStateStateKeyGetRaw(requestParameters, initOverrides);
+    async getStateValue(requestParameters: GetStateValueRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getStateValueRaw(requestParameters, initOverrides);
         return await response.value();
-    }
-
-    /**
-     */
-    async v2ChainsChainIDWsGetRaw(requestParameters: V2ChainsChainIDWsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
-            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling v2ChainsChainIDWsGet.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/v2/chains/{chainID}/ws`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async v2ChainsChainIDWsGet(requestParameters: V2ChainsChainIDWsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.v2ChainsChainIDWsGetRaw(requestParameters, initOverrides);
     }
 
 }

@@ -26,6 +26,8 @@ import { AuthService } from "./authService";
  * Service to handle api requests.
  */
 export class TangleService {
+    public static readonly ServiceName = "TangleService";
+
     /**
      * The auth service.
      */
@@ -35,7 +37,7 @@ export class TangleService {
      * Create a new instance of TangleService.
      */
     constructor() {
-        this._authService = ServiceFactory.get<AuthService>("auth");
+        this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
     }
 
     /**
@@ -249,7 +251,7 @@ export class TangleService {
             const block = await client.block(blockId);
 
             return block?.payload;
-        } catch {}
+        } catch { }
     }
 
     /**
@@ -262,7 +264,7 @@ export class TangleService {
             const client = this.buildClient();
 
             return await client.output(outputId);
-        } catch {}
+        } catch { }
     }
 
     /**
@@ -279,7 +281,7 @@ export class TangleService {
             if (nftOutputs.items.length > 0) {
                 return { ...(await client.output(nftOutputs.items[0])), outputId: nftOutputs.items[0] };
             }
-        } catch {}
+        } catch { }
     }
 
     /**
@@ -296,7 +298,7 @@ export class TangleService {
             if (aliasOutputs.items.length > 0) {
                 return { ...(await client.output(aliasOutputs.items[0])), outputId: aliasOutputs.items[0] };
             }
-        } catch {}
+        } catch { }
     }
 
     /**
@@ -312,7 +314,7 @@ export class TangleService {
             const helper = new OutputsHelper(addressBech32, client);
             await helper.fetchAssociatedOutputs();
             outputs = helper.associatedOutputs;
-        } catch {}
+        } catch { }
 
         return outputs;
     }
@@ -330,7 +332,7 @@ export class TangleService {
             const helper = new OutputsHelper(tag, client);
             await helper.fetchOutputsByTag();
             outputs = helper.associatedOutputs;
-        } catch {}
+        } catch { }
 
         return outputs;
     }
@@ -345,7 +347,7 @@ export class TangleService {
             const client = this.buildClient();
 
             return await client.milestoneByIndex(milestoneIndex);
-        } catch {}
+        } catch { }
     }
 
     /**
@@ -355,9 +357,9 @@ export class TangleService {
      */
     public async blockDetails(blockId: string): Promise<
         | {
-              metadata?: IBlockMetadata;
-              unavailable?: boolean;
-          }
+            metadata?: IBlockMetadata;
+            unavailable?: boolean;
+        }
         | undefined
     > {
         try {

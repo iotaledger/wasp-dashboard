@@ -7,6 +7,8 @@ import { WebSocketService } from "../services/webSocketService";
  * Service to handle the websocket connection.
  */
 export class MetricsService {
+    public static readonly ServiceName = "MetricsService";
+
     /**
      * The web socket service.
      */
@@ -41,7 +43,7 @@ export class MetricsService {
      * Create a new instance of MetricsService.
      */
     constructor() {
-        this._webSocketService = ServiceFactory.get<WebSocketService>("web-socket");
+        this._webSocketService = ServiceFactory.get<WebSocketService>(WebSocketService.ServiceName);
         this._webSocketSubscriptions = [];
         this._subscriptions = {};
         this._cached = {};

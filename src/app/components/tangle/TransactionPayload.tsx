@@ -24,7 +24,7 @@ class TransactionPayload extends Component<TransactionPayloadProps, TransactionP
      */
     constructor(props: TransactionPayloadProps) {
         super(props);
-        this._tangleService = ServiceFactory.get<TangleService>("tangle");
+        this._tangleService = ServiceFactory.get<TangleService>(TangleService.ServiceName);
 
         const inputs = this.props.payload.essence.inputs
             .map((input, idx) => {

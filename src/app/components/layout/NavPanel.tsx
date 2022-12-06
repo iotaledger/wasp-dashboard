@@ -25,7 +25,7 @@ class NavPanel extends Component<RouteComponentProps & NavPanelProps, NavPanelSt
     constructor(props: RouteComponentProps & NavPanelProps) {
         super(props);
 
-        this._themeService = ServiceFactory.get<ThemeService>("theme");
+        this._themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
 
         this.state = {
             logoSrc: ""

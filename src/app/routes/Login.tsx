@@ -23,7 +23,7 @@ class Login extends AsyncComponent<unknown, LoginState> {
     constructor(props: unknown) {
         super(props);
 
-        this._authService = ServiceFactory.get<AuthService>("auth");
+        this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
 
         this.state = {
             user: "",

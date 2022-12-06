@@ -53,8 +53,8 @@ class Peers extends AsyncComponent<RouteComponentProps, PeersState> {
     constructor(props: RouteComponentProps) {
         super(props);
 
-        this._metricsService = ServiceFactory.get<MetricsService>("metrics");
-        this._settingsService = ServiceFactory.get<SettingsService>("settings");
+        this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
+        this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
 
         this.state = {
             peers: [],
@@ -450,7 +450,7 @@ class Peers extends AsyncComponent<RouteComponentProps, PeersState> {
             dialogStatus: this.state.dialogType === "add"
                 ? "Adding peer, please wait..." : "Promoting peer, please wait..."
         }, async () => {
-            const tangleService = ServiceFactory.get<TangleService>("tangle");
+            const tangleService = ServiceFactory.get<TangleService>(TangleService.ServiceName);
 
             try {
                 if (this.state.dialogType === "edit" && this.state.dialogPeerIdOriginal) {
@@ -489,7 +489,7 @@ class Peers extends AsyncComponent<RouteComponentProps, PeersState> {
             dialogStatus: "Deleting peer, please wait..."
         }, async () => {
             if (this.state.dialogPeerId) {
-                const tangleService = ServiceFactory.get<TangleService>("tangle");
+                const tangleService = ServiceFactory.get<TangleService>(TangleService.ServiceName);
 
                 try {
                     await tangleService.peerDelete(this.state.dialogPeerId);

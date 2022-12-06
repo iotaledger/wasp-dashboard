@@ -60,8 +60,8 @@ class Header extends AsyncComponent<RouteComponentProps & HeaderProps, HeaderSta
     constructor(props: RouteComponentProps & HeaderProps) {
         super(props);
 
-        this._metricsService = ServiceFactory.get<MetricsService>("metrics");
-        this._authService = ServiceFactory.get<AuthService>("auth");
+        this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
+        this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
 
         this.state = {
             syncHealth: false,

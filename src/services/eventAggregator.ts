@@ -2,6 +2,8 @@
  * Class to manage event aggregation.
  */
 export class EventAggregator {
+    public static readonly ServiceName = "EventAggregator";
+
     /**
      * The stored subscriptions.
      */

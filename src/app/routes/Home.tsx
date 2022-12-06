@@ -88,11 +88,11 @@ class Home extends AsyncComponent<unknown, HomeState> {
     constructor(props: unknown) {
         super(props);
 
-        this._authService = ServiceFactory.get<AuthService>("auth");
-        this._metricsService = ServiceFactory.get<MetricsService>("metrics");
-        this._themeService = ServiceFactory.get<ThemeService>("theme");
-        this._settingsService = ServiceFactory.get<SettingsService>("settings");
-        this._nodeConfigService = ServiceFactory.get<NodeConfigService>("node-config");
+        this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
+        this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
+        this._themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
+        this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
+        this._nodeConfigService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
 
         this.state = {
             lmi: "-",

@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Configuration.scss";
-import { ConfigResponse } from "../../services/wasp_client/models";
 import { WaspClientService } from "../../services/waspClientService";
+
+interface ConfigMap {
+    [key: string]: never;
+}
 
 /**
  * Configuration panel.
@@ -12,13 +15,16 @@ function Configuration() {
     /**
      * The configuration dump.
      */
-    const [config, setConfig] = useState<ConfigResponse | null>(null);
+    const [config, setConfig] = useState<ConfigMap | null>(null);
 
     React.useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         (async () => {
-            const waspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
-            const newConfig = await waspClientService.node().getConfiguration();
+            const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+            // The client generator does support an "any/dynamic" value and forces a string.
+            // The API will still return a dynamic value
+            // We therefore cast the map[string]string to map[string]never to make use of dynamic typing.
+            const newConfig = await waspClientService.node().getConfiguration() as ConfigMap;
             setConfig(newConfig);
         })();
     });

@@ -18,6 +18,7 @@ import type {
   DKSharesInfo,
   DKSharesPostRequest,
   InfoResponse,
+  NodeOwnerCertificateRequest,
   PeeringNodeIdentityResponse,
   PeeringNodeStatusResponse,
   PeeringTrustRequest,
@@ -29,17 +30,18 @@ import {
     DKSharesPostRequestToJSON,
     InfoResponseFromJSON,
     InfoResponseToJSON,
+    NodeOwnerCertificateRequestFromJSON,
+    NodeOwnerCertificateRequestToJSON,
     PeeringNodeIdentityResponseFromJSON,
     PeeringNodeIdentityResponseToJSON,
     PeeringNodeStatusResponseFromJSON,
     PeeringNodeStatusResponseToJSON,
     PeeringTrustRequestFromJSON,
     PeeringTrustRequestToJSON,
-    ConfigResponse,
 } from '../models';
 
 export interface DistrustPeerRequest {
-    body: PeeringTrustRequest;
+    peeringTrustRequest: PeeringTrustRequest;
 }
 
 export interface GenerateDKSRequest {
@@ -50,8 +52,12 @@ export interface GetDKSInfoRequest {
     sharedAddress: string;
 }
 
+export interface SetNodeOwnerRequest {
+    nodeOwnerCertificateRequest: NodeOwnerCertificateRequest;
+}
+
 export interface TrustPeerRequest {
-    body: PeeringTrustRequest;
+    peeringTrustRequest: PeeringTrustRequest;
 }
 
 /**
@@ -63,8 +69,8 @@ export class NodeApi extends runtime.BaseAPI {
      * Distrust a peering node
      */
     async distrustPeerRaw(requestParameters: DistrustPeerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.body === null || requestParameters.body === undefined) {
-            throw new runtime.RequiredError('body','Required parameter requestParameters.body was null or undefined when calling distrustPeer.');
+        if (requestParameters.peeringTrustRequest === null || requestParameters.peeringTrustRequest === undefined) {
+            throw new runtime.RequiredError('peeringTrustRequest','Required parameter requestParameters.peeringTrustRequest was null or undefined when calling distrustPeer.');
         }
 
         const queryParameters: any = {};
@@ -82,7 +88,7 @@ export class NodeApi extends runtime.BaseAPI {
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-            body: PeeringTrustRequestToJSON(requestParameters.body),
+            body: PeeringTrustRequestToJSON(requestParameters.peeringTrustRequest),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -165,7 +171,7 @@ export class NodeApi extends runtime.BaseAPI {
     /**
      * Return the Wasp configuration
      */
-    async getConfigurationRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ConfigResponse>> {
+    async getConfigurationRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<{ [key: string]: string; }>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -181,13 +187,13 @@ export class NodeApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response);
+        return new runtime.JSONApiResponse<any>(response);
     }
 
     /**
      * Return the Wasp configuration
      */
-    async getConfiguration(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConfigResponse> {
+    async getConfiguration(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: string; }> {
         const response = await this.getConfigurationRaw(initOverrides);
         return await response.value();
     }
@@ -343,6 +349,42 @@ export class NodeApi extends runtime.BaseAPI {
     }
 
     /**
+     * Sets the node owner
+     */
+    async setNodeOwnerRaw(requestParameters: SetNodeOwnerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.nodeOwnerCertificateRequest === null || requestParameters.nodeOwnerCertificateRequest === undefined) {
+            throw new runtime.RequiredError('nodeOwnerCertificateRequest','Required parameter requestParameters.nodeOwnerCertificateRequest was null or undefined when calling setNodeOwner.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/v2/node/owner/certificate`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: NodeOwnerCertificateRequestToJSON(requestParameters.nodeOwnerCertificateRequest),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Sets the node owner
+     */
+    async setNodeOwner(requestParameters: SetNodeOwnerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.setNodeOwnerRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Shut down the node
      */
     async shutdownNodeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -375,8 +417,8 @@ export class NodeApi extends runtime.BaseAPI {
      * Trust a peering node
      */
     async trustPeerRaw(requestParameters: TrustPeerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.body === null || requestParameters.body === undefined) {
-            throw new runtime.RequiredError('body','Required parameter requestParameters.body was null or undefined when calling trustPeer.');
+        if (requestParameters.peeringTrustRequest === null || requestParameters.peeringTrustRequest === undefined) {
+            throw new runtime.RequiredError('peeringTrustRequest','Required parameter requestParameters.peeringTrustRequest was null or undefined when calling trustPeer.');
         }
 
         const queryParameters: any = {};
@@ -394,7 +436,7 @@ export class NodeApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: PeeringTrustRequestToJSON(requestParameters.body),
+            body: PeeringTrustRequestToJSON(requestParameters.peeringTrustRequest),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);

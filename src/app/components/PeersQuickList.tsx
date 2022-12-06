@@ -20,14 +20,14 @@ const PeersQuickList: React.FC = () => {
      * @private
      * @type {SettingsService}
      */
-    const settingsService: SettingsService = ServiceFactory.get<SettingsService>("settings");
+    const settingsService: SettingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
 
     /**
      * The peers service.
      * @private
      * @type {PeersService}
      */
-    const peersService: PeersService = ServiceFactory.get<PeersService>("peers-service");
+    const peersService: PeersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
     /**
      * The peers state.
