@@ -28,7 +28,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => (
                     <span className="peer-health">
                         <div className="peer-health-icon">{peer.isAlive ? <TrustedIcon /> : <NotTrustedIcon />}</div>
                     </span>
-                    <div className="peer-id">
+                    <div className="peer-data">
                         <span>
                             {blindMode ? "*".repeat((peer.publicKey ?? "Unknown").length) : peer.publicKey ?? "Unknown"}
                         </span>

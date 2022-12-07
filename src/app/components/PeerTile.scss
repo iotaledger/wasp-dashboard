@@ -22,10 +22,10 @@
             margin-right: $spacing-small;
         }
 
-        .peer-id {
+        .peer-data {
             @include font-size(14px);
 
-            @media (min-width: 1340px) {
+            @media (max-width: 1340px) {
                 @include font-size(12px);
             }
 
