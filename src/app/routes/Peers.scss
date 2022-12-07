@@ -64,62 +64,6 @@
         flex-wrap: nowrap;
         justify-content: flex-start;
       }
-
-      .peers-panel--item {
-        width: calc($content-width-desktop / 2 - $spacing-small / 2);
-        margin-top: $spacing-small;
-        overflow: hidden;
-
-        @media (max-width: 1340px) {
-          width: 100%;
-        }
-
-        .card {
-          padding: $spacing-large;
-
-          .peer-health {
-            width: 16px;
-            height: 16px;
-            margin-right: $spacing-small;
-          }
-
-          .peer-id {
-            @include font-size(14px);
-
-            @media (min-width: 1340px) {
-              @include font-size(12px);
-            }
-
-            display: flex;
-            flex-direction: column;
-            color: var(--text-color-primary);
-            font-family: $font-sans;
-            font-weight: 500;
-          }
-
-          .graph {
-            margin-top: 24px;
-          }
-
-          .peer-actions {
-            justify-content: space-between;
-            margin-top: $spacing-small;
-
-            @media (max-width: 720px) {
-              flex-direction: column;
-
-              .card--action {
-                justify-content: center;
-              }
-
-              p {
-                display: flex;
-                justify-content: center;
-              }
-            }
-          }
-        }
-      }
     }
   }
 }
