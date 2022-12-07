@@ -175,7 +175,7 @@ const Peers: React.FC = () => {
                     </div>
                 </div>
                 <div className="peers-panel">
-                    {!peersList ? (
+                    {peersList.length === 0 ? (
                         <p className="margin-t-s">There are no peers.</p>
                     ) : (
                         <PeersList peers={peersList} blindMode={blindMode} detailedList />
