@@ -8,7 +8,6 @@ import { PeerActions } from "../../lib/interfaces";
 import { EventAggregator } from "../../services/eventAggregator";
 import { PeersService } from "../../services/peersService";
 import { SettingsService } from "../../services/settingsService";
-import { TangleService } from "../../services/tangleService";
 import { PeeringNodeStatusResponse } from "../../services/wasp_client";
 import { PeersList } from "../components";
 import Dialog from "../components/layout/Dialog";
@@ -85,87 +84,20 @@ const Peers: React.FC = () => {
     };
 
     /**
-     * Add a new peer.
-     */
-    async function peerConfigure(): Promise<void> {
-        setDialogState({
-            dialogBusy: true,
-            dialogStatus:
-                dialogState?.dialogType === "add" ? "Adding peer, please wait..." : "Promoting peer, please wait...",
-        });
-        await (async () => {
-            const tangleService = ServiceFactory.get<TangleService>("tangle");
-
-            try {
-                if (dialogState?.dialogType === "edit" && dialogState?.dialogPeerIdOriginal) {
-                    await tangleService.peerDelete(dialogState?.dialogPeerIdOriginal);
-                }
-                let addr = dialogState?.dialogPeerAddress;
-                if (addr === undefined || !dialogState?.dialogPeerAlias) {
-                    return;
-                }
-                if (!addr?.endsWith("/")) {
-                    addr += "/";
-                }
-                addr += `p2p/${dialogState?.dialogPeerId}`;
-                await tangleService.peerAdd(addr, dialogState.dialogPeerAlias);
-
-                setDialogState({
-                    dialogBusy: false,
-                    dialogStatus: "",
-                    dialogPeerId: undefined,
-                    dialogType: undefined,
-                });
-            } catch (error) {
-                if (error instanceof Error) {
-                    setDialogState({
-                        dialogBusy: false,
-                        dialogStatus: `Failed to ${dialogState?.dialogType} peer: ${error.message}`,
-                    });
-                }
-            }
-        })();
-    }
-
-    /**
-     * Delete the specified peer.
-     */
-    async function peerDelete(): Promise<void> {
-        setDialogState({
-            dialogBusy: true,
-            dialogStatus: "Deleting peer, please wait...",
-        });
-        await (async () => {
-            if (dialogState?.dialogPeerId) {
-                const tangleService = ServiceFactory.get<TangleService>("tangle");
-
-                try {
-                    await tangleService.peerDelete(dialogState?.dialogPeerId);
-
-                    setDialogState({
-                        dialogBusy: false,
-                        dialogStatus: "",
-                        dialogPeerId: undefined,
-                        dialogType: undefined,
-                    });
-                } catch (error) {
-                    if (error instanceof Error) {
-                        setDialogState({
-                            dialogBusy: false,
-                            dialogStatus: `Failed to delete peer: ${error.message}`,
-                        });
-                    }
-                }
-            }
-        })();
-    }
-
-    /**
      * Trust action in the peer list.
      * @param peer The peer to trust.
      */
     async function trustPeer(peer: PeeringNodeStatusResponse) {
         await peersService.trustPeer(peer);
+    }
+
+    /**
+     * Delete action in the peer list.
+     * Peer is not deleted, but marked as distrusted which disconnects it from the network.
+     * @param peer The peer to distrust.
+     */
+    async function deletePeer(peer: PeeringNodeStatusResponse) {
+        await peersService.distrustPeer(peer);
     }
 
     /**
@@ -175,7 +107,7 @@ const Peers: React.FC = () => {
     const PEER_ACTIONS: PeerActions = {
         trust: trustPeer,
         edit: () => {},
-        delete: () => {},
+        delete: deletePeer,
     };
 
     return (
@@ -213,7 +145,7 @@ const Peers: React.FC = () => {
                         actions={[
                             <button
                                 type="button"
-                                onClick={async () => (dialogState?.dialogIsEdit ? peerConfigure() : peerDelete())}
+                                // onClick={async () => (dialogState?.dialogIsEdit ? peerConfigure() : peerDelete())}
                                 key={0}
                                 disabled={
                                     dialogState?.dialogBusy ||
