@@ -1,5 +1,6 @@
 import React from "react";
 import { TrustedIcon, NotTrustedIcon } from "../../assets";
+import { PeerActions } from "../../lib/interfaces";
 import { PeeringNodeStatusResponse } from "../../services/wasp_client";
 import "./PeerTile.scss";
 
@@ -14,15 +15,16 @@ interface PeerTileProps {
      */
     blindMode: boolean;
     /**
-     * Show a detailed list with actions.
-     * @default false
+     * An object with the functions that will have the buttons of the peer.
+     * If not provided, the peer will be shown as a summary.
+     * @type {PeerActions}
      */
-    detailed?: boolean;
+    actions?: PeerActions;
 }
 
-const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => (
-    <div className={`peers-${detailed ? "panel" : "summary"}--item`}>
-        {detailed ? (
+const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, actions }) => (
+    <div className={`peers-${actions ? "panel" : "summary"}--item`}>
+        {actions ? (
             <div className="card col padding-m">
                 <div className="row middle">
                     <span className="peer-health">
@@ -36,6 +38,25 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => (
                             {blindMode ? "*".repeat((peer.netID ?? "Unknown").length) : peer.netID ?? "Unknown"}
                         </span>
                         <span className="margin-t-t">Relation: {peer.isTrusted ? "Known" : "Unknown"}</span>
+                    </div>
+                </div>
+                <div>
+                    <div className="peer-actions row">
+                        {!peer.isTrusted && (
+                            <button className="card--action" type="button" onClick={() => actions.trust(peer)}>
+                                Trust
+                            </button>
+                        )}
+                        <button className="card--action card--action" type="button" onClick={() => actions.edit(peer)}>
+                            Edit
+                        </button>
+                        <button
+                            className="card--action card--action-danger"
+                            type="button"
+                            onClick={() => actions.delete(peer)}
+                        >
+                            Delete
+                        </button>
                     </div>
                 </div>
             </div>
@@ -53,7 +74,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => (
 );
 
 PeerTile.defaultProps = {
-    detailed: false,
+    actions: undefined,
 };
 
 export default PeerTile;

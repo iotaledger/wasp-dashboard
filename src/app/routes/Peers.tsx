@@ -4,6 +4,7 @@ import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import { EyeClosedIcon, EyeIcon } from "../../assets";
 import { ServiceFactory } from "../../factories/serviceFactory";
+import { PeerActions } from "../../lib/interfaces";
 import { EventAggregator } from "../../services/eventAggregator";
 import { PeersService } from "../../services/peersService";
 import { SettingsService } from "../../services/settingsService";
@@ -159,6 +160,24 @@ const Peers: React.FC = () => {
         })();
     }
 
+    /**
+     * Trust action in the peer list.
+     * @param peer The peer to trust.
+     */
+    async function trustPeer(peer: PeeringNodeStatusResponse) {
+        await peersService.trustPeer(peer);
+    }
+
+    /**
+     * An object with the actions that will have the buttons of the peer list.
+     * @type {PeerActions}
+     */
+    const PEER_ACTIONS: PeerActions = {
+        trust: trustPeer,
+        edit: () => {},
+        delete: () => {},
+    };
+
     return (
         <div className="peers">
             <div className="content">
@@ -178,7 +197,7 @@ const Peers: React.FC = () => {
                     {peersList.length === 0 ? (
                         <p className="margin-t-s">There are no peers.</p>
                     ) : (
-                        <PeersList peers={peersList} blindMode={blindMode} detailedList />
+                        <PeersList peers={peersList} blindMode={blindMode} peerActions={PEER_ACTIONS} />
                     )}
                 </div>
                 {dialogState?.dialogType && (

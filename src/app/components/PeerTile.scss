@@ -41,8 +41,11 @@
         }
 
         .peer-actions {
-            justify-content: space-between;
             margin-top: $spacing-small;
+
+            & .card--action + .card--action {
+                margin-left: $spacing-small;
+            }
 
             @media (max-width: 720px) {
                 flex-direction: column;

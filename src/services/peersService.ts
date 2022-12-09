@@ -60,6 +60,28 @@ export class PeersService {
     public get: () => PeeringNodeStatusResponse[] = () => this._peers;
 
     /**
+     * Trust a peer and refetch the list of peers.
+     * @param peer The peer to trust.
+     */
+    public async trustPeer(peer: PeeringNodeStatusResponse): Promise<void> {
+        try {
+            const waspAPI: WaspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
+            const reqParams = { body: { publicKey: peer.publicKey, netID: peer.netID } };
+            const { raw } = await waspAPI.node().trustPeerRaw(reqParams);
+            if (raw.status !== 200) {
+                throw new Error("Failed to trust peer");
+            }
+
+            // refetch peers because the api response returns void.
+            await this.fetchPeers();
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error(`Failed to trust peer: ${err.message}`);
+            }
+        }
+    }
+
+    /**
      * Fetch the peers.
      */
     private readonly fetchPeers = async (): Promise<void> => {
