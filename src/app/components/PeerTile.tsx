@@ -42,21 +42,15 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, actions }) => (
                 </div>
                 <div>
                     <div className="peer-actions row">
-                        {!peer.isTrusted && (
-                            <button className="card--action" type="button" onClick={() => actions.trust(peer)}>
-                                Trust
+                        {peer.isTrusted && (
+                            <button
+                                className="card--action card--action-danger"
+                                type="button"
+                                onClick={() => actions.delete(peer)}
+                            >
+                                Delete
                             </button>
                         )}
-                        <button className="card--action card--action" type="button" onClick={() => actions.edit(peer)}>
-                            Edit
-                        </button>
-                        <button
-                            className="card--action card--action-danger"
-                            type="button"
-                            onClick={() => actions.delete(peer)}
-                        >
-                            Delete
-                        </button>
                     </div>
                 </div>
             </div>

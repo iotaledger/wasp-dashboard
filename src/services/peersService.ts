@@ -1,7 +1,7 @@
 import { ServiceFactory } from "../factories/serviceFactory";
 import { AuthService } from "./authService";
 import { EventAggregator } from "./eventAggregator";
-import { PeeringNodeStatusResponse } from "./wasp_client";
+import { PeeringNodeStatusResponse, PeeringTrustRequest } from "./wasp_client";
 import { WaspClientService } from "./waspClientService";
 
 /**
@@ -63,14 +63,10 @@ export class PeersService {
      * Trust a peer and refetch the list of peers.
      * @param peer The peer to trust.
      */
-    public async trustPeer(peer: PeeringNodeStatusResponse): Promise<void> {
+    public async trustPeer(peer: PeeringTrustRequest): Promise<void> {
         try {
             const waspAPI: WaspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
-            const reqParams = { body: { publicKey: peer.publicKey, netID: peer.netID } };
-            const { raw } = await waspAPI.node().trustPeerRaw(reqParams);
-            if (raw.status !== 200) {
-                throw new Error("Failed to trust peer");
-            }
+            await waspAPI.node().trustPeer({ body: peer });
 
             // refetch peers because the api response returns void.
             await this.fetchPeers();

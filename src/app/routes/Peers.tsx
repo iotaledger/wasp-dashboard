@@ -1,6 +1,5 @@
 import "./Peers.scss";
 
-import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import { EyeClosedIcon, EyeIcon } from "../../assets";
 import { ServiceFactory } from "../../factories/serviceFactory";
@@ -8,21 +7,21 @@ import { PeerActions } from "../../lib/interfaces";
 import { EventAggregator } from "../../services/eventAggregator";
 import { PeersService } from "../../services/peersService";
 import { SettingsService } from "../../services/settingsService";
-import { PeeringNodeStatusResponse } from "../../services/wasp_client";
-import { PeersList } from "../components";
-import Dialog from "../components/layout/Dialog";
-import Spinner from "../components/layout/Spinner";
+import { PeeringNodeStatusResponse, PeeringTrustRequest } from "../../services/wasp_client";
+import { PeersList, Dialog } from "../components";
 
 interface DialogState {
-    dialogStatus?: string;
-    dialogBusy?: boolean;
-    dialogIsEdit?: boolean;
-    dialogPeerAddress?: string;
-    dialogPeerAlias?: string;
-    dialogType?: string;
-    dialogPeerId?: string;
-    dialogPeerIdOriginal?: string;
+    show: boolean;
+    peerAddress: string;
+    peerId: string;
+    isBusy?: boolean;
 }
+
+const DIALOG_INITIAL_STATE: DialogState = {
+    show: false,
+    peerAddress: "",
+    peerId: "",
+};
 
 const Peers: React.FC = () => {
     /**
@@ -52,7 +51,7 @@ const Peers: React.FC = () => {
     /**
      * The dialog state.
      */
-    const [dialogState, setDialogState] = useState<DialogState>();
+    const [addPeerDialog, setAddPeerDialog] = useState<DialogState>(DIALOG_INITIAL_STATE);
 
     /**
      * The component mounted.
@@ -63,32 +62,40 @@ const Peers: React.FC = () => {
     }, []);
 
     /**
-     * Toggle the blind mode.
+     * An object with the actions that will have the buttons of the peer list.
+     * @type {PeerActions}
      */
-    const toggleBlindMode: () => void = () => {
-        const newBlindMode = !blindMode;
-        setBlindMode(newBlindMode);
-        settingsService.setBlindMode(newBlindMode);
-    };
-
-    const handleSetDialogState: () => void = () => {
-        setDialogState({
-            dialogType: "add",
-            dialogIsEdit: true,
-            dialogPeerId: "",
-            dialogPeerAddress: "",
-            dialogPeerAlias: "",
-            dialogStatus: "",
-            dialogBusy: false,
-        });
+    const PEER_ACTIONS: PeerActions = {
+        delete: deletePeer,
     };
 
     /**
-     * Trust action in the peer list.
-     * @param peer The peer to trust.
+     * Toggle the blind mode.
      */
-    async function trustPeer(peer: PeeringNodeStatusResponse) {
-        await peersService.trustPeer(peer);
+    function toggleBlindMode() {
+        const newBlindMode = !blindMode;
+        setBlindMode(newBlindMode);
+        settingsService.setBlindMode(newBlindMode);
+    }
+
+    /**
+     * Add new peer.
+     */
+    async function handleAddPeer() {
+        if (addPeerDialog.isBusy) {
+            return;
+        }
+        if (!addPeerDialog.peerAddress || !addPeerDialog.peerId) {
+            return;
+        }
+
+        const newPeer: PeeringTrustRequest = {
+            publicKey: addPeerDialog.peerAddress,
+            netID: addPeerDialog.peerId,
+        };
+        setAddPeerDialog({ show: true, peerAddress: "", peerId: "", isBusy: true });
+        await peersService.trustPeer(newPeer);
+        setAddPeerDialog(DIALOG_INITIAL_STATE);
     }
 
     /**
@@ -101,14 +108,12 @@ const Peers: React.FC = () => {
     }
 
     /**
-     * An object with the actions that will have the buttons of the peer list.
-     * @type {PeerActions}
+     * The dialog's input change event.
+     * @param e The event.
      */
-    const PEER_ACTIONS: PeerActions = {
-        trust: trustPeer,
-        edit: () => {},
-        delete: deletePeer,
-    };
+    function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setAddPeerDialog({ ...addPeerDialog, [e.target.name]: e.target.value });
+    }
 
     return (
         <div className="peers">
@@ -120,7 +125,11 @@ const Peers: React.FC = () => {
                             {blindMode ? <EyeIcon /> : <EyeClosedIcon />}
                         </button>
 
-                        <button type="button" className="add-button" onClick={handleSetDialogState}>
+                        <button
+                            type="button"
+                            className="add-button"
+                            onClick={() => setAddPeerDialog({ ...addPeerDialog, show: true })}
+                        >
                             Add Peer
                         </button>
                     </div>
@@ -132,91 +141,59 @@ const Peers: React.FC = () => {
                         <PeersList peers={peersList} blindMode={blindMode} peerActions={PEER_ACTIONS} />
                     )}
                 </div>
-                {dialogState?.dialogType && (
+                {addPeerDialog.show && (
                     <Dialog
-                        title={
-                            {
-                                add: "Add Peer",
-                                edit: "Edit Peer",
-                                promote: "Promote to Known",
-                                delete: "Delete Confirmation",
-                            }[dialogState.dialogType] ?? ""
-                        }
-                        actions={[
-                            <button
-                                type="button"
-                                // onClick={async () => (dialogState?.dialogIsEdit ? peerConfigure() : peerDelete())}
-                                key={0}
-                                disabled={
-                                    dialogState?.dialogBusy ||
-                                    (dialogState?.dialogIsEdit &&
-                                        (dialogState?.dialogPeerAddress?.trim().length === 0 ||
-                                            dialogState?.dialogPeerId?.trim().length === 0))
-                                }
-                            >
-                                {dialogState?.dialogIsEdit ? "OK" : "Yes"}
-                            </button>,
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    setDialogState({
-                                        dialogPeerId: undefined,
-                                        dialogPeerIdOriginal: undefined,
-                                        dialogType: undefined,
-                                    })
-                                }
-                                key={1}
-                                disabled={dialogState?.dialogBusy}
-                            >
-                                {dialogState?.dialogIsEdit ? "Cancel" : "No"}
-                            </button>,
-                        ]}
-                    >
-                        {dialogState?.dialogType === "delete" && (
-                            <p className="margin-b-l">Are you sure you want to delete the peer?</p>
-                        )}
-                        {dialogState?.dialogIsEdit && (
+                        onClose={() => setAddPeerDialog({ ...addPeerDialog, show: false })}
+                        title="Add Peer"
+                        actions={
                             <React.Fragment>
-                                <p>Please enter the details of the peer to {dialogState?.dialogType}.</p>
-                                <div className="dialog--label">Address</div>
-                                <div className="dialog--value">
-                                    <input
-                                        type="text"
-                                        className="input--stretch"
-                                        placeholder="e.g. /ip4/127.0.0.1/tcp/15600"
-                                        value={dialogState?.dialogPeerAddress}
-                                        disabled={dialogState?.dialogBusy}
-                                        onChange={(e) => setDialogState({ dialogPeerAddress: e.target.value })}
-                                    />
-                                </div>
-                                <div className="dialog--label">Id</div>
-                                <div className="dialog--value">
-                                    <input
-                                        type="text"
-                                        className="input--stretch"
-                                        placeholder="e.g. 12D3KooWC7uE9w3RN4Vh1FJAZa8SbE8yMWR6wCVBajcWpyWguV73"
-                                        value={dialogState?.dialogPeerId}
-                                        disabled={dialogState?.dialogBusy}
-                                        onChange={(e) => setDialogState({ dialogPeerId: e.target.value })}
-                                    />
-                                </div>
-                                <div className="dialog--label">Alias</div>
-                                <div className="dialog--value">
-                                    <input
-                                        type="text"
-                                        className="input--stretch"
-                                        placeholder="e.g. My Friend's Node"
-                                        value={dialogState?.dialogPeerAlias}
-                                        disabled={dialogState?.dialogBusy}
-                                        onChange={(e) => setDialogState({ dialogPeerAlias: e.target.value })}
-                                    />
-                                </div>
+                                <button
+                                    type="button"
+                                    className="button button--primary"
+                                    onClick={handleAddPeer}
+                                    disabled={addPeerDialog.isBusy}
+                                >
+                                    Add
+                                </button>
+                                <button
+                                    type="button"
+                                    className="button button--secondary"
+                                    onClick={() => setAddPeerDialog({ ...addPeerDialog, show: false })}
+                                >
+                                    Cancel
+                                </button>
                             </React.Fragment>
-                        )}
-                        {dialogState?.dialogBusy && <Spinner />}
-                        <p className={classNames("margin-t-l", { danger: !dialogState?.dialogBusy })}>
-                            {dialogState?.dialogStatus}
-                        </p>
+                        }
+                    >
+                        <React.Fragment>
+                            <p>Please enter the details of the peer to add.</p>
+                            <div className="dialog--label">Address</div>
+                            <div className="dialog--value">
+                                <input
+                                    type="text"
+                                    className="input--stretch"
+                                    placeholder="e.g. /ip4/127.0.0.1/tcp/15600"
+                                    name="peerAddress"
+                                    value={addPeerDialog.peerAddress}
+                                    disabled={addPeerDialog.isBusy}
+                                    onChange={(e) =>
+                                        setAddPeerDialog({ ...addPeerDialog, peerAddress: e.target.value })
+                                    }
+                                />
+                            </div>
+                            <div className="dialog--label">Id</div>
+                            <div className="dialog--value">
+                                <input
+                                    type="text"
+                                    className="input--stretch"
+                                    placeholder="e.g. 12D3KooWC7uE9w3RN4Vh1FJAZa8SbE8yMWR6wCVBajcWpyWguV73"
+                                    name="peerId"
+                                    value={addPeerDialog.peerId}
+                                    disabled={addPeerDialog.isBusy}
+                                    onChange={onChange}
+                                />
+                            </div>
+                        </React.Fragment>
                     </Dialog>
                 )}
             </div>
