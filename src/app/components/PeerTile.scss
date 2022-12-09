@@ -72,6 +72,7 @@
     overflow: hidden;
     border-radius: $spacing-small;
     background-color: var(--panel-background-highlight);
+    width: 100%;
 
     &:focus {
         border: 0;
