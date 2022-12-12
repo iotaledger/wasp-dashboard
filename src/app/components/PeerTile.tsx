@@ -39,9 +39,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, actions }) => (
                         </span>
                         <span className="margin-t-t">Relation: {peer.isTrusted ? "Known" : "Unknown"}</span>
                     </div>
-                </div>
-                <div>
-                    <div className="peer-actions row">
+                    <div className="peer-actions col">
                         {peer.isTrusted && (
                             <button
                                 className="card--action card--action-danger"

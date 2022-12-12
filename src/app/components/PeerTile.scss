@@ -41,10 +41,11 @@
         }
 
         .peer-actions {
-            margin-top: $spacing-small;
+            margin-left: auto;
+            margin-right: $spacing-small;
 
             & .card--action + .card--action {
-                margin-left: $spacing-small;
+                margin-top: $spacing-small;
             }
 
             @media (max-width: 720px) {
