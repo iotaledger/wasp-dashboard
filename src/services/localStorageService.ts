@@ -2,6 +2,8 @@
  * Class to use local storage.
  */
 export class LocalStorageService {
+    public static readonly ServiceName = "LocalStorageService";
+
     /**
      * Load an item from local storage.
      * @param key The key of the item to load.

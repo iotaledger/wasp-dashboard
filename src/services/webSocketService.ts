@@ -10,6 +10,8 @@ import { AuthService } from "./authService";
  * Service to handle the websocket connection.
  */
 export class WebSocketService {
+    public static readonly ServiceName = "WebSocketService";
+
     /**
      * Timer to retry failed connections.
      */
@@ -50,7 +52,7 @@ export class WebSocketService {
      * Create a new instance of WebSocketService.
      */
     constructor() {
-        this._authService = ServiceFactory.get<AuthService>("auth");
+        this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
 
         this._subscriptions = {};
         this._lastMessage = 0;
@@ -185,7 +187,7 @@ export class WebSocketService {
                 if (this._webSocket.readyState === WebSocket.OPEN) {
                     this._webSocket.close();
                 }
-            } catch {}
+            } catch { }
             this._webSocket = undefined;
         }
     }

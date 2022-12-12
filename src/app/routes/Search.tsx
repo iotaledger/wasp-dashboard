@@ -130,7 +130,7 @@ class Search extends AsyncComponent<RouteComponentProps<SearchRouteProps>, Searc
 
         if (query.length > 0) {
             this.setState({ statusBusy: true }, async () => {
-                const tangleService = ServiceFactory.get<TangleService>("tangle");
+                const tangleService = ServiceFactory.get<TangleService>(TangleService.ServiceName);
                 const response = await tangleService.search({ query });
 
                 let redirect = "";

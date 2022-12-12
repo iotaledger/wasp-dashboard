@@ -24,7 +24,7 @@ class BlockTangleState extends AsyncComponent<BlockTangleStateProps, BlockTangle
     constructor(props: BlockTangleStateProps) {
         super(props);
 
-        this._tangleService = ServiceFactory.get<TangleService>("tangle");
+        this._tangleService = ServiceFactory.get<TangleService>(TangleService.ServiceName);
 
         this.state = {};
     }

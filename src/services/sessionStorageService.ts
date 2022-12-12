@@ -1,7 +1,9 @@
 /**
  * Class to use session storage.
  */
- export class SessionStorageService {
+export class SessionStorageService {
+    public static readonly ServiceName = "SessionStorageService";
+
     /**
      * Load an item from session storage.
      * @param key The key of the item to load.

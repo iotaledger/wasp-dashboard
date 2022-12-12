@@ -46,8 +46,8 @@ class PeersSummaryPanel extends Component<unknown, PeersSummaryState> {
     constructor(props: unknown) {
         super(props);
 
-        this._metricsService = ServiceFactory.get<MetricsService>("metrics");
-        this._settingsService = ServiceFactory.get<SettingsService>("settings");
+        this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
+        this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
 
         this.state = {
             blindMode: this._settingsService.getBlindMode()

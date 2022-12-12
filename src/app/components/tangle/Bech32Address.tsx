@@ -22,7 +22,7 @@ class Bech32Address extends Component<Bech32AddressProps, Bech32AddressState> {
         super(props);
 
         if (this.props.address) {
-            const nodeConfigService = ServiceFactory.get<NodeConfigService>("node-config");
+            const nodeConfigService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
 
             const hash = this.props.address.type === ED25519_ADDRESS_TYPE
                         ? this.props.address?.pubKeyHash

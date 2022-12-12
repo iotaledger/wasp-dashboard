@@ -54,8 +54,8 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
     constructor(props: RouteComponentProps<PeerRouteProps>) {
         super(props);
 
-        this._metricsService = ServiceFactory.get<MetricsService>("metrics");
-        this._settingsService = ServiceFactory.get<SettingsService>("settings");
+        this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
+        this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
 
         this.state = {
             address: "",

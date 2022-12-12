@@ -32,17 +32,21 @@ import {
 } from '../models';
 
 export interface AddUserOperationRequest {
-    body: AddUserRequest;
+    addUserRequest: AddUserRequest;
 }
 
 export interface ChangeUserPasswordRequest {
     username: string;
-    body: UpdateUserPasswordRequest;
+    updateUserPasswordRequest: UpdateUserPasswordRequest;
 }
 
 export interface ChangeUserPermissionsRequest {
     username: string;
-    body: UpdateUserPermissionsRequest;
+    updateUserPermissionsRequest: UpdateUserPermissionsRequest;
+}
+
+export interface DeleteUserRequest {
+    username: string;
 }
 
 export interface GetUserRequest {
@@ -58,8 +62,8 @@ export class UsersApi extends runtime.BaseAPI {
      * Add a user
      */
     async addUserRaw(requestParameters: AddUserOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.body === null || requestParameters.body === undefined) {
-            throw new runtime.RequiredError('body','Required parameter requestParameters.body was null or undefined when calling addUser.');
+        if (requestParameters.addUserRequest === null || requestParameters.addUserRequest === undefined) {
+            throw new runtime.RequiredError('addUserRequest','Required parameter requestParameters.addUserRequest was null or undefined when calling addUser.');
         }
 
         const queryParameters: any = {};
@@ -77,7 +81,7 @@ export class UsersApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: AddUserRequestToJSON(requestParameters.body),
+            body: AddUserRequestToJSON(requestParameters.addUserRequest),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -98,8 +102,8 @@ export class UsersApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling changeUserPassword.');
         }
 
-        if (requestParameters.body === null || requestParameters.body === undefined) {
-            throw new runtime.RequiredError('body','Required parameter requestParameters.body was null or undefined when calling changeUserPassword.');
+        if (requestParameters.updateUserPasswordRequest === null || requestParameters.updateUserPasswordRequest === undefined) {
+            throw new runtime.RequiredError('updateUserPasswordRequest','Required parameter requestParameters.updateUserPasswordRequest was null or undefined when calling changeUserPassword.');
         }
 
         const queryParameters: any = {};
@@ -117,7 +121,7 @@ export class UsersApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateUserPasswordRequestToJSON(requestParameters.body),
+            body: UpdateUserPasswordRequestToJSON(requestParameters.updateUserPasswordRequest),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -138,8 +142,8 @@ export class UsersApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling changeUserPermissions.');
         }
 
-        if (requestParameters.body === null || requestParameters.body === undefined) {
-            throw new runtime.RequiredError('body','Required parameter requestParameters.body was null or undefined when calling changeUserPermissions.');
+        if (requestParameters.updateUserPermissionsRequest === null || requestParameters.updateUserPermissionsRequest === undefined) {
+            throw new runtime.RequiredError('updateUserPermissionsRequest','Required parameter requestParameters.updateUserPermissionsRequest was null or undefined when calling changeUserPermissions.');
         }
 
         const queryParameters: any = {};
@@ -157,7 +161,7 @@ export class UsersApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateUserPermissionsRequestToJSON(requestParameters.body),
+            body: UpdateUserPermissionsRequestToJSON(requestParameters.updateUserPermissionsRequest),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -168,6 +172,39 @@ export class UsersApi extends runtime.BaseAPI {
      */
     async changeUserPermissions(requestParameters: ChangeUserPermissionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.changeUserPermissionsRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Deletes a user
+     */
+    async deleteUserRaw(requestParameters: DeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.username === null || requestParameters.username === undefined) {
+            throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling deleteUser.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/v2/users/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Deletes a user
+     */
+    async deleteUser(requestParameters: DeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteUserRaw(requestParameters, initOverrides);
     }
 
     /**

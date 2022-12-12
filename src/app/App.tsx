@@ -109,11 +109,11 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
      */
     constructor(props: RouteComponentProps) {
         super(props);
-        this._themeService = ServiceFactory.get<ThemeService>("theme");
-        this._authService = ServiceFactory.get<AuthService>("auth");
-        this._metricsService = ServiceFactory.get<MetricsService>("metrics");
-        this._storageService = ServiceFactory.get<LocalStorageService>("local-storage");
-        this._waspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
+        this._themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
+        this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
+        this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
+        this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
+        this._waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
         this._lastStatus = 0;
 
         this.state = {

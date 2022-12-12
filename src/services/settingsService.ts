@@ -6,6 +6,8 @@ import { LocalStorageService } from "./localStorageService";
  * Class to use for storing settings.
  */
 export class SettingsService {
+    public static readonly ServiceName = "SettingsService";
+
     /**
      * The blind mode setting.
      */
@@ -20,7 +22,7 @@ export class SettingsService {
      * Create a new instance of SettingsService.
      */
     constructor() {
-        this._storageService = ServiceFactory.get<LocalStorageService>("local-storage");
+        this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
         this._blindMode = false;
     }
 
