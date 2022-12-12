@@ -6,6 +6,8 @@ import { LocalStorageService } from "./localStorageService";
  * Class the help with themes.
  */
 export class ThemeService {
+    public static readonly ServiceName = "ThemeService";
+
     /**
      * The theme.
      */
@@ -22,7 +24,7 @@ export class ThemeService {
      * Initialize the theme.
      */
     public initialize(): void {
-        const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
+        const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
 
         const theme = storageService.load<string>("theme");
 
@@ -60,7 +62,7 @@ export class ThemeService {
      * Save theme.
      */
     public save(): void {
-        const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
+        const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
         storageService.save("theme", this._theme);
     }
 }

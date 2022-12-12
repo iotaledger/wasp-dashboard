@@ -24,11 +24,11 @@ class NavMenu extends Component<RouteComponentProps & NavMenuProps, NavMenuState
     constructor(props: RouteComponentProps & NavMenuProps) {
         super(props);
 
-        this._themeService = ServiceFactory.get<ThemeService>("theme");
+        this._themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
 
         this.state = {
             logoSrc: "",
-            isOpen: false
+            isOpen: false,
         };
     }
 
@@ -37,12 +37,12 @@ class NavMenu extends Component<RouteComponentProps & NavMenuProps, NavMenuState
      */
     public async componentDidMount(): Promise<void> {
         this.setState({
-            logoSrc: await BrandHelper.getLogoNavigation(this._themeService.get())
+            logoSrc: await BrandHelper.getLogoNavigation(this._themeService.get()),
         });
 
         EventAggregator.subscribe("theme", "navmenu", async (theme: string) => {
             this.setState({
-                logoSrc: await BrandHelper.getLogoNavigation(theme)
+                logoSrc: await BrandHelper.getLogoNavigation(theme),
             });
         });
     }
@@ -60,21 +60,11 @@ class NavMenu extends Component<RouteComponentProps & NavMenuProps, NavMenuState
      */
     public render(): ReactNode {
         return (
-            <div
-                className="nav-menu"
-                onClick={() => this.state.isOpen && this.setState({ isOpen: false })}
-            >
-                <button
-                    type="button"
-                    onClick={() => this.setState({ isOpen: !this.state.isOpen })}
-                >
+            <div className="nav-menu" onClick={() => this.state.isOpen && this.setState({ isOpen: false })}>
+                <button type="button" onClick={() => this.setState({ isOpen: !this.state.isOpen })}>
                     <img src={this.state.logoSrc} className="logo" />
                 </button>
-                {this.state.isOpen && (
-                    <div className="popup-container">
-                        {this.props.children}
-                    </div>
-                )}
+                {this.state.isOpen && <div className="popup-container">{this.props.children}</div>}
             </div>
         );
     }

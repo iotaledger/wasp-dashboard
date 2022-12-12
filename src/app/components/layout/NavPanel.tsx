@@ -25,10 +25,10 @@ class NavPanel extends Component<RouteComponentProps & NavPanelProps, NavPanelSt
     constructor(props: RouteComponentProps & NavPanelProps) {
         super(props);
 
-        this._themeService = ServiceFactory.get<ThemeService>("theme");
+        this._themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
 
         this.state = {
-            logoSrc: ""
+            logoSrc: "",
         };
     }
 
@@ -37,12 +37,12 @@ class NavPanel extends Component<RouteComponentProps & NavPanelProps, NavPanelSt
      */
     public async componentDidMount(): Promise<void> {
         this.setState({
-            logoSrc: await BrandHelper.getLogoNavigation(this._themeService.get())
+            logoSrc: await BrandHelper.getLogoNavigation(this._themeService.get()),
         });
 
         EventAggregator.subscribe("theme", "navpanel", async (theme: string) => {
             this.setState({
-                logoSrc: await BrandHelper.getLogoNavigation(theme)
+                logoSrc: await BrandHelper.getLogoNavigation(theme),
             });
         });
     }
@@ -61,27 +61,21 @@ class NavPanel extends Component<RouteComponentProps & NavPanelProps, NavPanelSt
     public render(): ReactNode {
         return (
             <div className={classNames("nav-panel", { "full-width": this.props.fullWidth })}>
-                <Link
-                    to="/"
-                >
+                <Link to="/">
                     <img src={this.state.logoSrc} className="logo" />
                 </Link>
 
                 <div className="nav-panel-middle">
-                    {this.props.middle.map(b => (
+                    {this.props.middle.map((b) => (
                         <React.Fragment key={b.label}>
                             {!b.hidden && b.route && (
                                 <Link
                                     to={b.route}
-                                    className={classNames(
-                                        "nav-panel--button",
-                                        {
-                                            "nav-panel--button__selected":
-                                                (b.route.length > 1 &&
-                                                    this.props.location.pathname.startsWith(b.route)) ||
-                                                b.route === this.props.location.pathname
-                                        }
-                                    )}
+                                    className={classNames("nav-panel--button", {
+                                        "nav-panel--button__selected":
+                                            (b.route.length > 1 && this.props.location.pathname.startsWith(b.route)) ||
+                                            b.route === this.props.location.pathname,
+                                    })}
                                 >
                                     {b.icon}
                                     <span className="nav-panel-button-label">{b.label}</span>
@@ -91,9 +85,7 @@ class NavPanel extends Component<RouteComponentProps & NavPanelProps, NavPanelSt
                                 <button
                                     type="button"
                                     onClick={() => b.function?.()}
-                                    className={classNames(
-                                        "nav-panel--button"
-                                    )}
+                                    className={classNames("nav-panel--button")}
                                 >
                                     {b.icon}
                                     <span className="nav-panel-button-label">{b.label}</span>
@@ -104,20 +96,16 @@ class NavPanel extends Component<RouteComponentProps & NavPanelProps, NavPanelSt
                 </div>
 
                 <div className="nav-panel-end">
-                    {this.props.end.map(b => (
+                    {this.props.end.map((b) => (
                         <React.Fragment key={b.label}>
                             {!b.hidden && b.route && (
                                 <Link
                                     to={b.route}
-                                    className={classNames(
-                                        "nav-panel--button",
-                                        {
-                                            "nav-panel--button__selected":
-                                                (b.route.length > 1 &&
-                                                    this.props.location.pathname.startsWith(b.route)) ||
-                                                b.route === this.props.location.pathname
-                                        }
-                                    )}
+                                    className={classNames("nav-panel--button", {
+                                        "nav-panel--button__selected":
+                                            (b.route.length > 1 && this.props.location.pathname.startsWith(b.route)) ||
+                                            b.route === this.props.location.pathname,
+                                    })}
                                 >
                                     {b.icon}
                                     <span className="nav-panel-button-label">{b.label}</span>
@@ -127,9 +115,7 @@ class NavPanel extends Component<RouteComponentProps & NavPanelProps, NavPanelSt
                                 <button
                                     type="button"
                                     onClick={() => b.function?.()}
-                                    className={classNames(
-                                        "nav-panel--button"
-                                    )}
+                                    className={classNames("nav-panel--button")}
                                 >
                                     {b.icon}
                                     <span className="nav-panel-button-label">{b.label}</span>

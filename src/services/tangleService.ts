@@ -26,6 +26,8 @@ import { AuthService } from "./authService";
  * Service to handle api requests.
  */
 export class TangleService {
+    public static readonly ServiceName = "TangleService";
+
     /**
      * The auth service.
      */
@@ -35,7 +37,7 @@ export class TangleService {
      * Create a new instance of TangleService.
      */
     constructor() {
-        this._authService = ServiceFactory.get<AuthService>("auth");
+        this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
     }
 
     /**

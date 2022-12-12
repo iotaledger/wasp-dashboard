@@ -41,34 +41,34 @@ initServices()
  * @returns The brand configuration.
  */
 async function initServices(): Promise<IBrandConfiguration | undefined> {
-    ServiceFactory.register("local-storage", () => new LocalStorageService());
-    ServiceFactory.register("session-storage", () => new SessionStorageService());
-    ServiceFactory.register("wasp-client", () => new WaspClientService());
+    ServiceFactory.register(LocalStorageService.ServiceName, () => new LocalStorageService());
+    ServiceFactory.register(SessionStorageService.ServiceName, () => new SessionStorageService());
+    ServiceFactory.register(WaspClientService.ServiceName, () => new WaspClientService());
 
     const settingsService = new SettingsService();
-    ServiceFactory.register("settings", () => settingsService);
+    ServiceFactory.register(SettingsService.ServiceName, () => settingsService);
 
     const authService = new AuthService();
     await authService.initialize();
-    ServiceFactory.register("auth", () => authService);
+    ServiceFactory.register(AuthService.ServiceName, () => authService);
 
     const webSocketService = new WebSocketService();
-    ServiceFactory.register("web-socket", () => webSocketService);
+    ServiceFactory.register(WebSocketService.ServiceName, () => webSocketService);
 
     const themeService = new ThemeService();
     themeService.initialize();
-    ServiceFactory.register("theme", () => themeService);
+    ServiceFactory.register(ThemeService.ServiceName, () => themeService);
 
     const nodeConfigService = new NodeConfigService();
     await nodeConfigService.initialize();
-    ServiceFactory.register("node-config", () => nodeConfigService);
+    ServiceFactory.register(NodeConfigService.ServiceName, () => nodeConfigService);
 
     const metricsService = new MetricsService();
-    ServiceFactory.register("metrics", () => metricsService);
+    ServiceFactory.register(MetricsService.ServiceName, () => metricsService);
     metricsService.initialize();
 
     const peersService = new PeersService();
-    ServiceFactory.register("peers-service", () => peersService);
+    ServiceFactory.register(PeersService.ServiceName, () => peersService);
     peersService.initialize();
 
     EventAggregator.subscribe("auth-state", "init", async () => {

@@ -7,6 +7,8 @@ import { WaspClientService } from "./waspClientService";
  * Service to handle getting confiuration from the node.
  */
 export class NodeConfigService {
+    public static readonly ServiceName = "NodeConfigService";
+
     /**
      * The network id.
      */
@@ -41,7 +43,7 @@ export class NodeConfigService {
      * Create a new instance of NodeConfigService.
      */
     constructor() {
-        this._storageService = ServiceFactory.get<SessionStorageService>("session-storage");
+        this._storageService = ServiceFactory.get<SessionStorageService>(SessionStorageService.ServiceName);
         this._networkId = "";
         this._bech32Hrp = "iota";
         this._baseToken = {
@@ -63,7 +65,7 @@ export class NodeConfigService {
         this._version = this._storageService.load<string>("version");
 
         if (!this._networkId || !this._version || !this._publicKey) {
-            const waspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
+            const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
             try {
                 const info = await waspClientService.node().getInfo();

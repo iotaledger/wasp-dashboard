@@ -54,8 +54,8 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
     constructor(props: RouteComponentProps<PeerRouteProps>) {
         super(props);
 
-        this._metricsService = ServiceFactory.get<MetricsService>("metrics");
-        this._settingsService = ServiceFactory.get<SettingsService>("settings");
+        this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
+        this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
 
         this.state = {
             address: "",
@@ -71,7 +71,7 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
             sentBlocksDiff: [],
             relation: "-",
             lastUpdateTime: 0,
-            blindMode: this._settingsService.getBlindMode()
+            blindMode: this._settingsService.getBlindMode(),
         };
     }
 
@@ -84,7 +84,7 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
         this._peersSubscription = this._metricsService.subscribe<IPeer[]>(
             WebSocketTopic.PeerMetric,
             undefined,
-            allData => {
+            (allData) => {
                 let alias;
                 let address: string = "";
                 let isConnected = false;
@@ -104,7 +104,7 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
 
                 for (const allDataPeers of allData) {
                     if (allDataPeers) {
-                        const peer = allDataPeers.find(p => p.id === this.props.match.params.id);
+                        const peer = allDataPeers.find((p) => p.id === this.props.match.params.id);
                         const lmi = this.state.nodeLmi ?? 0;
 
                         if (peer) {
@@ -133,18 +133,10 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
                 }
 
                 for (let i = 1; i < newBlocksTotal.length; i++) {
-                    newBlocksDiff.push(
-                        Math.max(
-                            newBlocksTotal[i] - newBlocksTotal[i - 1]
-                            , 0)
-                    );
+                    newBlocksDiff.push(Math.max(newBlocksTotal[i] - newBlocksTotal[i - 1], 0));
                 }
                 for (let i = 1; i < sentBlocksTotal.length; i++) {
-                    sentBlocksDiff.push(
-                        Math.max(
-                            sentBlocksTotal[i] - sentBlocksTotal[i - 1]
-                            , 0)
-                    );
+                    sentBlocksDiff.push(Math.max(sentBlocksTotal[i] - sentBlocksTotal[i - 1], 0));
                 }
 
                 this.setState({
@@ -162,14 +154,14 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
                     sentBlocksDiff,
                     gossipMetrics,
                     relation,
-                    lastUpdateTime: Date.now()
+                    lastUpdateTime: Date.now(),
                 });
             }
         );
 
         this._syncStatusSubscription = this._metricsService.subscribe<ISyncStatus>(
             WebSocketTopic.SyncStatus,
-            data => {
+            (data) => {
                 if (data) {
                     const cmi = data.cmi;
                     const lmi = data.lmi;
@@ -212,18 +204,11 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
             <div className="peer">
                 <div className="content">
                     <div className="row middle spread margin-b-s">
-                        <Link
-                            to="/peers"
-                            className="row inline middle"
-                        >
+                        <Link to="/peers" className="row inline middle">
                             <ChevronLeftIcon className="secondary" />
                             <h3 className="secondary margin-l-s">Back to Peers</h3>
                         </Link>
-                        <button
-                            type="button"
-                            onClick={() => this.toggleBlindMode()}
-                            className="peer--icon-button"
-                        >
+                        <button type="button" onClick={() => this.toggleBlindMode()} className="peer--icon-button">
                             {this.state.blindMode ? <EyeIcon /> : <EyeClosedIcon />}
                         </button>
                     </div>
@@ -233,13 +218,16 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
                             <div className="node-info">
                                 {this.state.alias && (
                                     <React.Fragment>
-                                        <h2 className="word-break-all">{this.state.blindMode
-                                            ? "*".repeat(this.state.alias.length) : this.state.alias}
+                                        <h2 className="word-break-all">
+                                            {this.state.blindMode
+                                                ? "*".repeat(this.state.alias.length)
+                                                : this.state.alias}
                                         </h2>
                                         <span className="row bottom">
-                                            <p className="secondary margin-t-t">{this.state.blindMode
-                                                ? "*".repeat(this.props.match.params.id.length)
-                                                : this.props.match.params.id}
+                                            <p className="secondary margin-t-t">
+                                                {this.state.blindMode
+                                                    ? "*".repeat(this.props.match.params.id.length)
+                                                    : this.props.match.params.id}
                                             </p>
                                             <div className="margin-l-t">
                                                 <BlockButton
@@ -253,11 +241,10 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
                                 )}
                                 {!this.state.alias && (
                                     <span className="row bottom">
-                                        <h2 className="word-break-all">{
-                                            this.state.blindMode ?
-                                                "*".repeat(this.props.match.params.id.length) :
-                                                this.props.match.params.id
-                                            }
+                                        <h2 className="word-break-all">
+                                            {this.state.blindMode
+                                                ? "*".repeat(this.props.match.params.id.length)
+                                                : this.props.match.params.id}
                                         </h2>
                                         <div className="margin-l-t">
                                             <BlockButton
@@ -269,8 +256,10 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
                                     </span>
                                 )}
                                 <span className="row bottom">
-                                    <p className="secondary margin-t-t">{this.state.blindMode
-                                        ? "*".repeat(this.state.address.length) : this.state.address}
+                                    <p className="secondary margin-t-t">
+                                        {this.state.blindMode
+                                            ? "*".repeat(this.state.address.length)
+                                            : this.state.address}
                                     </p>
                                     {this.state.address.length > 0 && (
                                         <div className="margin-l-t">
@@ -293,30 +282,17 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
                                     Relation:&nbsp;
                                     {`${this.state.relation.slice(0, 1).toUpperCase()}${this.state.relation.slice(1)}`}
                                 </p>
-                                {this.state.nodeCmi &&
-                                Number(this.state.pruningIndex) > this.state.nodeCmi && (
+                                {this.state.nodeCmi && Number(this.state.pruningIndex) > this.state.nodeCmi && (
                                     <p className="secondary warning margin-t-t">
-                                        Warning:&nbsp; History of peer not sufficient to sync from.
-                                        Consider using a newer snapshot if all peers have the same status.
+                                        Warning:&nbsp; History of peer not sufficient to sync from. Consider using a
+                                        newer snapshot if all peers have the same status.
                                     </p>
                                 )}
                             </div>
                             <div className="health-indicators col tablet-down-only-row phone-down-column">
-                                <HealthIndicator
-                                    label="Connected"
-                                    healthy={this.state.isConnected}
-                                    className="child"
-                                />
-                                <HealthIndicator
-                                    label="Synced"
-                                    healthy={this.state.isSynced}
-                                    className="child"
-                                />
-                                <HealthIndicator
-                                    label="Peers"
-                                    healthy={this.state.hasPeers}
-                                    className="child"
-                                />
+                                <HealthIndicator label="Connected" healthy={this.state.isConnected} className="child" />
+                                <HealthIndicator label="Synced" healthy={this.state.isSynced} className="child" />
+                                <HealthIndicator label="Peers" healthy={this.state.hasPeers} className="child" />
                             </div>
                         </div>
                     </div>
@@ -352,40 +328,32 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
                                 {
                                     className: "bar-color-1",
                                     label: "Incoming",
-                                    values: this.state.newBlocksDiff
+                                    values: this.state.newBlocksDiff,
                                 },
                                 {
                                     className: "bar-color-2",
                                     label: "Outgoing",
-                                    values: this.state.sentBlocksDiff
-                                }
+                                    values: this.state.sentBlocksDiff,
+                                },
                             ]}
                         />
 
                         <div className="row wrap padding-s gossip">
                             <div className="gossip-item">
                                 <h4>Known Blocks</h4>
-                                <div className="gossip-value">
-                                    {this.state.gossipMetrics?.knownBlocks ?? "-"}
-                                </div>
+                                <div className="gossip-value">{this.state.gossipMetrics?.knownBlocks ?? "-"}</div>
                             </div>
                             <div className="gossip-item">
                                 <h4>New Blocks</h4>
-                                <div className="gossip-value">
-                                    {this.state.gossipMetrics?.newBlocks ?? "-"}
-                                </div>
+                                <div className="gossip-value">{this.state.gossipMetrics?.newBlocks ?? "-"}</div>
                             </div>
                             <div className="gossip-item">
                                 <h4>Received Blocks</h4>
-                                <div className="gossip-value">
-                                    {this.state.gossipMetrics?.receivedBlocks ?? "-"}
-                                </div>
+                                <div className="gossip-value">{this.state.gossipMetrics?.receivedBlocks ?? "-"}</div>
                             </div>
                             <div className="gossip-item">
                                 <h4>Sent Blocks</h4>
-                                <div className="gossip-value">
-                                    {this.state.gossipMetrics?.sentBlocks ?? "-"}
-                                </div>
+                                <div className="gossip-value">{this.state.gossipMetrics?.sentBlocks ?? "-"}</div>
                             </div>
                             <div className="gossip-item">
                                 <h4>Received Block Requests</h4>
@@ -395,11 +363,8 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
                             </div>
                             <div className="gossip-item">
                                 <h4>Sent Block Requests</h4>
-                                <div className="gossip-value">
-                                    {this.state.gossipMetrics?.sentBlockRequests ?? "-"}
-                                </div>
+                                <div className="gossip-value">{this.state.gossipMetrics?.sentBlockRequests ?? "-"}</div>
                             </div>
-
 
                             <div className="gossip-item">
                                 <h4>Received Heartbeats</h4>
@@ -409,9 +374,7 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
                             </div>
                             <div className="gossip-item">
                                 <h4>Sent Heartbeats</h4>
-                                <div className="gossip-value">
-                                    {this.state.gossipMetrics?.sentHeartbeats ?? "-"}
-                                </div>
+                                <div className="gossip-value">{this.state.gossipMetrics?.sentHeartbeats ?? "-"}</div>
                             </div>
                             <div className="gossip-item">
                                 <h4>Received Milestone Requests</h4>
@@ -427,9 +390,7 @@ class Peer extends AsyncComponent<RouteComponentProps<PeerRouteProps>, PeerState
                             </div>
                             <div className="gossip-item">
                                 <h4>Dropped Packets</h4>
-                                <div className="gossip-value">
-                                    {this.state.gossipMetrics?.droppedPackets ?? "-"}
-                                </div>
+                                <div className="gossip-value">{this.state.gossipMetrics?.droppedPackets ?? "-"}</div>
                             </div>
                         </div>
                     </div>

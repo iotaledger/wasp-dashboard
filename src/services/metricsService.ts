@@ -7,6 +7,8 @@ import { WebSocketService } from "../services/webSocketService";
  * Service to handle the websocket connection.
  */
 export class MetricsService {
+    public static readonly ServiceName = "MetricsService";
+
     /**
      * The web socket service.
      */
@@ -41,7 +43,7 @@ export class MetricsService {
      * Create a new instance of MetricsService.
      */
     constructor() {
-        this._webSocketService = ServiceFactory.get<WebSocketService>("web-socket");
+        this._webSocketService = ServiceFactory.get<WebSocketService>(WebSocketService.ServiceName);
         this._webSocketSubscriptions = [];
         this._subscriptions = {};
         this._cached = {};
@@ -59,17 +61,15 @@ export class MetricsService {
             { topic: WebSocketTopic.DBSizeMetric, isPublic: false },
             { topic: WebSocketTopic.PeerMetric, isPublic: false },
             { topic: WebSocketTopic.Milestone, isPublic: true },
-            { topic: WebSocketTopic.ConfirmedMsMetrics, isPublic: true }
+            { topic: WebSocketTopic.ConfirmedMsMetrics, isPublic: true },
         ];
 
         for (const t of topics) {
             this._webSocketSubscriptions.push(
-                this._webSocketService.subscribe(
-                    t.topic,
-                    !t.isPublic,
-                    data => {
-                        this.triggerCallbacks(t.topic, data);
-                    }));
+                this._webSocketService.subscribe(t.topic, !t.isPublic, (data) => {
+                    this.triggerCallbacks(t.topic, data);
+                })
+            );
         }
     }
 
@@ -92,7 +92,9 @@ export class MetricsService {
      */
     public subscribe<T>(
         topic: WebSocketTopic,
-        singleCallback?: (data: T) => void, multipleCallback?: (dataAll: T[]) => void): string {
+        singleCallback?: (data: T) => void,
+        multipleCallback?: (dataAll: T[]) => void
+    ): string {
         if (!this._subscriptions[topic]) {
             this._subscriptions[topic] = [];
         }
@@ -102,7 +104,7 @@ export class MetricsService {
         this._subscriptions[topic].push({
             subscriptionId,
             singleCallback,
-            multipleCallback
+            multipleCallback,
         });
 
         if (this._cached[topic] && this._cached[topic].length > 0) {
@@ -110,7 +112,7 @@ export class MetricsService {
                 multipleCallback(this._cached[topic] as T[]);
             }
             if (singleCallback) {
-                singleCallback((this._cached[topic][this._cached[topic].length - 1] as T));
+                singleCallback(this._cached[topic][this._cached[topic].length - 1] as T);
             }
         }
 
@@ -123,7 +125,7 @@ export class MetricsService {
      */
     public unsubscribe(subscriptionId: string): void {
         for (const topic of Object.keys(this._subscriptions).map(Number)) {
-            const subscriptionIdx = this._subscriptions[topic].findIndex(s => s.subscriptionId === subscriptionId);
+            const subscriptionIdx = this._subscriptions[topic].findIndex((s) => s.subscriptionId === subscriptionId);
             if (subscriptionIdx >= 0) {
                 this._subscriptions[topic].splice(subscriptionIdx, 1);
 
@@ -146,7 +148,7 @@ export class MetricsService {
         }
         if (topic === WebSocketTopic.DBSizeMetric || topic === WebSocketTopic.ConfirmedMsMetrics) {
             if (Array.isArray(data)) {
-                this._cached[topic].push(...data as unknown[]);
+                this._cached[topic].push(...(data as unknown[]));
             } else {
                 this._cached[topic].push(data);
             }
