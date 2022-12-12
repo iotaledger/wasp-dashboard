@@ -8,6 +8,8 @@ import { LocalStorageService } from "./localStorageService";
  * Service to handle authentication.
  */
 export class AuthService {
+    public static readonly ServiceName = "AuthService";
+
     /**
      * The storage service.
      */
@@ -28,7 +30,7 @@ export class AuthService {
      */
     constructor() {
         this._jwt = undefined;
-        this._storageService = ServiceFactory.get<LocalStorageService>("local-storage");
+        this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
 
         if (document.cookie) {
             const cookies = document.cookie.split(";");

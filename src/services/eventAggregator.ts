@@ -2,6 +2,8 @@
  * Class to manage event aggregation.
  */
 export class EventAggregator {
+    public static readonly ServiceName = "EventAggregator";
+
     /**
      * The stored subscriptions.
      */
@@ -22,7 +24,8 @@ export class EventAggregator {
         eventName: string,
         subscriberId: string,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        handler: (data: any) => void | Promise<void>): void {
+        handler: (data: any) => void | Promise<void>
+    ): void {
         EventAggregator._subscriptions[eventName] = EventAggregator._subscriptions[eventName] || {};
         EventAggregator._subscriptions[eventName][subscriberId] = handler;
     }
@@ -44,14 +47,12 @@ export class EventAggregator {
      * @param data The data to publish with the event.
      */
     public static publish(eventName: string, data?: unknown): void {
-        setTimeout(
-            () => {
-                if (EventAggregator._subscriptions[eventName]) {
-                    for (const subscriberId in EventAggregator._subscriptions[eventName]) {
-                        EventAggregator._subscriptions[eventName][subscriberId](data);
-                    }
+        setTimeout(() => {
+            if (EventAggregator._subscriptions[eventName]) {
+                for (const subscriberId in EventAggregator._subscriptions[eventName]) {
+                    EventAggregator._subscriptions[eventName][subscriberId](data);
                 }
-            },
-            0);
+            }
+        }, 0);
     }
 }

@@ -10,6 +10,8 @@ import { AuthService } from "./authService";
  * Service to handle the websocket connection.
  */
 export class WebSocketService {
+    public static readonly ServiceName = "WebSocketService";
+
     /**
      * Timer to retry failed connections.
      */
@@ -29,8 +31,7 @@ export class WebSocketService {
      * Subscribers to the messages.
      */
     private readonly _subscriptions: {
-        [topic: number]:
-        {
+        [topic: number]: {
             requiresAuth: boolean;
             isSubscribed: boolean;
             subs: {
@@ -50,7 +51,7 @@ export class WebSocketService {
      * Create a new instance of WebSocketService.
      */
     constructor() {
-        this._authService = ServiceFactory.get<AuthService>("auth");
+        this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
 
         this._subscriptions = {};
         this._lastMessage = 0;
@@ -68,7 +69,7 @@ export class WebSocketService {
             this._subscriptions[topic] = {
                 requiresAuth,
                 isSubscribed: false,
-                subs: []
+                subs: [],
             };
         }
 
@@ -76,7 +77,7 @@ export class WebSocketService {
 
         this._subscriptions[topic].subs.push({
             subscriptionId,
-            callback
+            callback,
         });
 
         if (this._webSocket && this._webSocket.readyState === WebSocket.OPEN) {
@@ -97,7 +98,9 @@ export class WebSocketService {
      */
     public unsubscribe(subscriptionId: string): void {
         for (const topic of Object.keys(this._subscriptions).map(Number)) {
-            const subscriptionIdx = this._subscriptions[topic].subs.findIndex(s => s.subscriptionId === subscriptionId);
+            const subscriptionIdx = this._subscriptions[topic].subs.findIndex(
+                (s) => s.subscriptionId === subscriptionId
+            );
             if (subscriptionIdx >= 0) {
                 this._subscriptions[topic].subs.splice(subscriptionIdx, 1);
 
@@ -163,11 +166,11 @@ export class WebSocketService {
             this.disconnectSocket();
         };
 
-        this._webSocket.onerror = err => {
+        this._webSocket.onerror = (err) => {
             console.error("Socket error", err);
         };
 
-        this._webSocket.onmessage = msg => {
+        this._webSocket.onmessage = (msg) => {
             this._lastMessage = Date.now();
             this.handleMessage(msg.data as string);
         };

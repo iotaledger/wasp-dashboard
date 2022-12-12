@@ -60,8 +60,8 @@ class Header extends AsyncComponent<RouteComponentProps & HeaderProps, HeaderSta
     constructor(props: RouteComponentProps & HeaderProps) {
         super(props);
 
-        this._metricsService = ServiceFactory.get<MetricsService>("metrics");
-        this._authService = ServiceFactory.get<AuthService>("auth");
+        this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
+        this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
 
         this.state = {
             syncHealth: false,
@@ -75,7 +75,7 @@ class Header extends AsyncComponent<RouteComponentProps & HeaderProps, HeaderSta
             dbTangleSizeFormatted: "-",
             dbTangleSize: [],
             isLoggedIn: Boolean(this._authService.isLoggedIn()),
-            online: false
+            online: false,
         };
     }
 
@@ -85,27 +85,27 @@ class Header extends AsyncComponent<RouteComponentProps & HeaderProps, HeaderSta
     public componentDidMount(): void {
         super.componentDidMount();
 
-        EventAggregator.subscribe("auth-state", "header", isLoggedIn => {
+        EventAggregator.subscribe("auth-state", "header", (isLoggedIn) => {
             this.setState({
-                isLoggedIn
+                isLoggedIn,
             });
         });
 
-        EventAggregator.subscribe("online", "header", online => {
+        EventAggregator.subscribe("online", "header", (online) => {
             if (online !== this.state.online) {
                 this.setState({
-                    online
+                    online,
                 });
             }
         });
 
         this._publicNodeStatusSubscription = this._metricsService.subscribe<IPublicNodeStatus>(
             WebSocketTopic.PublicNodeStatus,
-            data => {
+            (data) => {
                 if (data) {
                     if (!this.state.online) {
                         this.setState({
-                            online: true
+                            online: true,
                         });
                     }
                     if (data.isHealthy !== this.state.nodeHealth) {
@@ -115,11 +115,12 @@ class Header extends AsyncComponent<RouteComponentProps & HeaderProps, HeaderSta
                         this.setState({ syncHealth: data.isSynced });
                     }
                 }
-            });
+            }
+        );
 
         this._nodeStatusSubscription = this._metricsService.subscribe<INodeStatus>(
             WebSocketTopic.NodeStatus,
-            data => {
+            (data) => {
                 if (data) {
                     const memorySizeFormatted = FormatHelper.iSize(data.memUsage, 1);
 
@@ -128,17 +129,17 @@ class Header extends AsyncComponent<RouteComponentProps & HeaderProps, HeaderSta
                     }
                 }
             },
-            allData => {
-                const nonNull = allData.filter(d => d !== undefined && d !== null);
+            (allData) => {
+                const nonNull = allData.filter((d) => d !== undefined && d !== null);
                 this.setState({
-                    memorySize: nonNull
-                        .map(d => d.memUsage)
+                    memorySize: nonNull.map((d) => d.memUsage),
                 });
-            });
+            }
+        );
 
         this._databaseSizeSubscription = this._metricsService.subscribe<IDBSizeMetric>(
             WebSocketTopic.DBSizeMetric,
-            data => {
+            (data) => {
                 if (data) {
                     const dbLedgerSizeFormatted = FormatHelper.size(data.utxo);
 
@@ -153,23 +154,22 @@ class Header extends AsyncComponent<RouteComponentProps & HeaderProps, HeaderSta
                     }
                 }
             },
-            allData => {
-                const nonNull = allData.filter(d => d !== undefined && d !== null);
+            (allData) => {
+                const nonNull = allData.filter((d) => d !== undefined && d !== null);
 
-                const dbLedgerSizeValues = nonNull
-                    .map(d => d.utxo);
+                const dbLedgerSizeValues = nonNull.map((d) => d.utxo);
 
                 this.setState({ dbLedgerSize: dbLedgerSizeValues });
 
-                const dbTangleSizeValues = nonNull
-                    .map(d => d.tangle);
+                const dbTangleSizeValues = nonNull.map((d) => d.tangle);
 
                 this.setState({ dbTangleSize: dbTangleSizeValues });
-            });
+            }
+        );
 
         this._bpsMetricsSubscription = this._metricsService.subscribe<IBpsMetrics>(
             WebSocketTopic.BPSMetrics,
-            data => {
+            (data) => {
                 if (data) {
                     const bpsValues = this.state.bpsValues.slice(-40);
                     bpsValues.push(data.new);
@@ -181,7 +181,8 @@ class Header extends AsyncComponent<RouteComponentProps & HeaderProps, HeaderSta
                     }
                     this.setState({ bpsValues });
                 }
-            });
+            }
+        );
     }
 
     /**
@@ -227,20 +228,12 @@ class Header extends AsyncComponent<RouteComponentProps & HeaderProps, HeaderSta
                             {this.props.children}
                             <SearchInput
                                 compact={true}
-                                onSearch={query => this.props.history.push(`/explorer/search/${query}`)}
+                                onSearch={(query) => this.props.history.push(`/explorer/search/${query}`)}
                                 className="child child-fill"
                             />
                             <Breakpoint size="tablet" aboveBelow="above">
-                                <HealthIndicator
-                                    label="Health"
-                                    healthy={this.state.nodeHealth}
-                                    className="child"
-                                />
-                                <HealthIndicator
-                                    label="Sync"
-                                    healthy={this.state.syncHealth}
-                                    className="child"
-                                />
+                                <HealthIndicator label="Health" healthy={this.state.nodeHealth} className="child" />
+                                <HealthIndicator label="Sync" healthy={this.state.syncHealth} className="child" />
                             </Breakpoint>
                             <Breakpoint size="desktop" aboveBelow="above">
                                 <MicroGraph

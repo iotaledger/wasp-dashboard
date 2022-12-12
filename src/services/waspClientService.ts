@@ -8,6 +8,8 @@ import { ChainsApi, Configuration, NodeApi, RequestsApi, UsersApi } from "./wasp
  * Class to manage the wasp API.
  */
 export class WaspClientService {
+    public static readonly ServiceName = "WaspClientService";
+
     private _apiClients?: {
         users: UsersApi;
         node: NodeApi;
@@ -24,7 +26,7 @@ export class WaspClientService {
     }
 
     public initialize() {
-        const storageService = ServiceFactory.get<LocalStorageService>("local-storage");
+        const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
         const config: Configuration = new Configuration({
             apiKey: storageService.load("dashboard-jwt"),
             basePath: Environment.WaspApiUrl,

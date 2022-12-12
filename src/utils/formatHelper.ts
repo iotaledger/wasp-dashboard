@@ -24,7 +24,7 @@ export class FormatHelper {
      * Create a new instance FormatHelper.
      */
     private constructor() {
-        const nodeConfigService = ServiceFactory.get<NodeConfigService>("node-config");
+        const nodeConfigService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
         this._baseToken = nodeConfigService.getBaseToken();
     }
 
@@ -87,7 +87,7 @@ export class FormatHelper {
      * @param decimalPlaces The number of decimal places.
      * @returns The formatted string.
      */
-     public static iSize(bytes: number, decimalPlaces: number = 2): string {
+    public static iSize(bytes: number, decimalPlaces: number = 2): string {
         if (!bytes) {
             return "0 bytes";
         }
@@ -161,9 +161,7 @@ export class FormatHelper {
      * @returns The correct id.
      */
     public static resolveId(id: string, outputId: string): string {
-        return !HexHelper.toBigInt256(id).eq(bigInt.zero)
-            ? id
-            : TransactionHelper.resolveIdFromOutputId(outputId);
+        return !HexHelper.toBigInt256(id).eq(bigInt.zero) ? id : TransactionHelper.resolveIdFromOutputId(outputId);
     }
 
     /**
@@ -179,8 +177,8 @@ export class FormatHelper {
         }
         const baseTokeValue = value / Math.pow(10, this._baseToken.decimals);
         const amount = this._baseToken.useMetricPrefix
-                    ? UnitsHelper.formatBest(baseTokeValue)
-                    : `${Number.parseFloat(baseTokeValue.toFixed(decimalPlaces))} `;
+            ? UnitsHelper.formatBest(baseTokeValue)
+            : `${Number.parseFloat(baseTokeValue.toFixed(decimalPlaces))} `;
 
         return `${amount}${this._baseToken.unit}`;
     }

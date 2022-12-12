@@ -26,7 +26,7 @@ class Search extends AsyncComponent<RouteComponentProps<SearchRouteProps>, Searc
         this.state = {
             statusBusy: true,
             redirect: "",
-            error: ""
+            error: "",
         };
     }
 
@@ -55,71 +55,63 @@ class Search extends AsyncComponent<RouteComponentProps<SearchRouteProps>, Searc
     public render(): ReactNode {
         return this.state.redirect.length > 0 ? (
             <Redirect to={this.state.redirect} />
-        )
-            : (
-                <div className="search">
-                    <div className="content">
-                        <Link
-                            to="/explorer"
-                            className="row middle inline"
-                        >
-                            <ChevronLeftIcon className="secondary" />
-                            <h3 className="secondary margin-l-s">Back to Explorer</h3>
-                        </Link>
+        ) : (
+            <div className="search">
+                <div className="content">
+                    <Link to="/explorer" className="row middle inline">
+                        <ChevronLeftIcon className="secondary" />
+                        <h3 className="secondary margin-l-s">Back to Explorer</h3>
+                    </Link>
 
-                        <div className="card margin-t-m padding-l">
-                            <h2 className="margin-b-m">Search</h2>
-                            {this.state.statusBusy && (<Spinner />)}
-                            {!this.state.statusBusy && (
-                                <React.Fragment>
-                                    {this.state.error && (
-                                        <p className="danger">
-                                            {this.state.error}
-                                        </p>
-                                    )}
-                                    <br />
-                                    <p>Please try again with your query in one of the following formats:</p>
-                                    <br />
-                                    <ul>
-                                        <li>
-                                            <span>Blocks</span>
-                                            <span>64 Hex characters</span>
-                                        </li>
-                                        <li>
-                                            <span>Block using Transaction Id</span>
-                                            <span>64 Hex characters</span>
-                                        </li>
-                                        <li>
-                                            <span>Addresses</span>
-                                            <span>64 Hex characters or Bech32 Format</span>
-                                        </li>
-                                        <li>
-                                            <span>Nft/Alias Addresses</span>
-                                            <span>40 Hex characters or Bech32 Format</span>
-                                        </li>
-                                        <li>
-                                            <span>Outputs</span>
-                                            <span>68 Hex characters or tag</span>
-                                        </li>
-                                        <li>
-                                            <span>Foundry Id</span>
-                                            <span>52 Hex characters</span>
-                                        </li>
-                                        <li>
-                                            <span>Token Id</span>
-                                            <span>76 Hex characters</span>
-                                        </li>
-                                        <li>
-                                            <span>Milestone Index</span>
-                                            <span>Numeric</span>
-                                        </li>
-                                    </ul>
-                                </React.Fragment>
-                            )}
-                        </div>
+                    <div className="card margin-t-m padding-l">
+                        <h2 className="margin-b-m">Search</h2>
+                        {this.state.statusBusy && <Spinner />}
+                        {!this.state.statusBusy && (
+                            <React.Fragment>
+                                {this.state.error && <p className="danger">{this.state.error}</p>}
+                                <br />
+                                <p>Please try again with your query in one of the following formats:</p>
+                                <br />
+                                <ul>
+                                    <li>
+                                        <span>Blocks</span>
+                                        <span>64 Hex characters</span>
+                                    </li>
+                                    <li>
+                                        <span>Block using Transaction Id</span>
+                                        <span>64 Hex characters</span>
+                                    </li>
+                                    <li>
+                                        <span>Addresses</span>
+                                        <span>64 Hex characters or Bech32 Format</span>
+                                    </li>
+                                    <li>
+                                        <span>Nft/Alias Addresses</span>
+                                        <span>40 Hex characters or Bech32 Format</span>
+                                    </li>
+                                    <li>
+                                        <span>Outputs</span>
+                                        <span>68 Hex characters or tag</span>
+                                    </li>
+                                    <li>
+                                        <span>Foundry Id</span>
+                                        <span>52 Hex characters</span>
+                                    </li>
+                                    <li>
+                                        <span>Token Id</span>
+                                        <span>76 Hex characters</span>
+                                    </li>
+                                    <li>
+                                        <span>Milestone Index</span>
+                                        <span>Numeric</span>
+                                    </li>
+                                </ul>
+                            </React.Fragment>
+                        )}
                     </div>
                 </div>
-            );
+            </div>
+        );
     }
 
     /**
@@ -130,7 +122,7 @@ class Search extends AsyncComponent<RouteComponentProps<SearchRouteProps>, Searc
 
         if (query.length > 0) {
             this.setState({ statusBusy: true }, async () => {
-                const tangleService = ServiceFactory.get<TangleService>("tangle");
+                const tangleService = ServiceFactory.get<TangleService>(TangleService.ServiceName);
                 const response = await tangleService.search({ query });
 
                 let redirect = "";
@@ -178,13 +170,13 @@ class Search extends AsyncComponent<RouteComponentProps<SearchRouteProps>, Searc
                 this.setState({
                     error: redirect.length > 0 ? "" : "Nothing could be found for the search.",
                     statusBusy: false,
-                    redirect
+                    redirect,
                 });
             });
         } else {
             this.setState({
                 statusBusy: false,
-                error: "The search is empty."
+                error: "The search is empty.",
             });
         }
     }

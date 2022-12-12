@@ -8,6 +8,8 @@ import { WaspClientService } from "./waspClientService";
  * Class to manage peers.
  */
 export class PeersService {
+    public static readonly ServiceName = "PeersService";
+
     /**
      * The peers.
      * @type {PeeringNodeStatusResponse[]}
@@ -23,7 +25,7 @@ export class PeersService {
      * Method to initialize the poll.
      */
     public initialize(): void {
-        const authService = ServiceFactory.get<AuthService>("auth");
+        const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
 
         if (authService.isLoggedIn()) {
             this.start();
@@ -101,7 +103,10 @@ export class PeersService {
      * Fetch the peers.
      */
     private readonly fetchPeers = async (): Promise<void> => {
-        const waspClientService: WaspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
+        // eslint-disable-next-line max-len
+        const waspClientService: WaspClientService = ServiceFactory.get<WaspClientService>(
+            WaspClientService.ServiceName
+        );
         const peers = await waspClientService.node().getTrustedPeers();
         EventAggregator.publish("peers-state", peers);
         this._peers = peers;

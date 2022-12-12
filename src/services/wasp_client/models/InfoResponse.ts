@@ -13,12 +13,25 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { L1Params } from './L1Params';
+import {
+    L1ParamsFromJSON,
+    L1ParamsFromJSONTyped,
+    L1ParamsToJSON,
+} from './L1Params';
+
 /**
  * 
  * @export
  * @interface InfoResponse
  */
 export interface InfoResponse {
+    /**
+     * 
+     * @type {L1Params}
+     * @memberof InfoResponse
+     */
+    l1Params?: L1Params;
     /**
      * The net id of the node
      * @type {string}
@@ -58,6 +71,7 @@ export function InfoResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
+        'l1Params': !exists(json, 'L1Params') ? undefined : L1ParamsFromJSON(json['L1Params']),
         'netID': !exists(json, 'NetID') ? undefined : json['NetID'],
         'publicKey': !exists(json, 'PublicKey') ? undefined : json['PublicKey'],
         'version': !exists(json, 'Version') ? undefined : json['Version'],
@@ -73,6 +87,7 @@ export function InfoResponseToJSON(value?: InfoResponse | null): any {
     }
     return {
         
+        'L1Params': L1ParamsToJSON(value.l1Params),
         'NetID': value.netID,
         'PublicKey': value.publicKey,
         'Version': value.version,
