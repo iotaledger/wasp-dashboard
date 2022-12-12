@@ -68,7 +68,7 @@ export class PeersService {
     public async trustPeer(peer: PeeringTrustRequest): Promise<void> {
         try {
             const waspAPI: WaspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
-            await waspAPI.node().trustPeer({ body: peer });
+            await waspAPI.node().trustPeer({ peeringTrustRequest: peer });
 
             // refetch peers because the api response returns void.
             await this.fetchPeers();
@@ -87,7 +87,7 @@ export class PeersService {
     public async distrustPeer(peer: PeeringTrustRequest): Promise<void> {
         try {
             const waspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
-            const { raw } = await waspClientService.node().distrustPeerRaw({ body: peer });
+            const { raw } = await waspClientService.node().distrustPeerRaw({ peeringTrustRequest: peer });
             if (raw.status !== 200) {
                 throw new Error("Failed to distrust peer");
             }
