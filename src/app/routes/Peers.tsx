@@ -112,10 +112,7 @@ const Peers: React.FC = () => {
      * Add new peer.
      */
     async function handleAddPeer() {
-        if (peerDialog.isBusy) {
-            return;
-        }
-        if (!peerDialog.peerAddress || !peerDialog.peerId) {
+        if (!peerDialog.peerAddress || !peerDialog.peerId || peerDialog.isBusy) {
             return;
         }
 
@@ -132,10 +129,7 @@ const Peers: React.FC = () => {
      * Distrust a peer.
      */
     async function handleDeletePeer() {
-        if (peerDialog.isBusy) {
-            return;
-        }
-        if (peerDialog.peerAddress === "" || peerDialog.peerId === "") {
+        if (!peerDialog.peerAddress || !peerDialog.peerId || peerDialog.isBusy) {
             return;
         }
 
@@ -225,7 +219,7 @@ const Peers: React.FC = () => {
                                         name="peerAddress"
                                         value={peerDialog.peerAddress}
                                         disabled={peerDialog.isBusy}
-                                        onChange={(e) => setPeerDialog({ ...peerDialog, peerAddress: e.target.value })}
+                                        onChange={onChange}
                                     />
                                 </div>
                                 <div className="dialog--label">Id</div>
