@@ -64,7 +64,7 @@ export class PeersService {
      */
     private readonly fetchPeers = async (): Promise<void> => {
         const waspClientService: WaspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
-        const peers = await waspClientService.node().getAllPeers();
+        const peers = await waspClientService.node().getTrustedPeers();
         EventAggregator.publish("peers-state", peers);
         this._peers = peers;
     };
