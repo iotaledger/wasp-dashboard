@@ -10,12 +10,20 @@ import { SettingsService } from "../../services/settingsService";
 import { PeeringNodeStatusResponse, PeeringTrustRequest } from "../../services/wasp_client";
 import { PeersList, Dialog } from "../components";
 
-interface DialogState {
-    show: boolean;
+enum DialogType {
+    Add = "add",
+    Delete = "delete",
+}
+
+interface IDialogState {
     peerAddress: string;
     peerId: string;
     isBusy?: boolean;
 }
+
+type DialogState =
+    | (IDialogState & { show: false; type?: DialogType })
+    | (IDialogState & { show: true; type: DialogType });
 
 const DIALOG_INITIAL_STATE: DialogState = {
     show: false,
@@ -49,9 +57,17 @@ const Peers: React.FC = () => {
     const [blindMode, setBlindMode] = useState<boolean>(settingsService.getBlindMode());
 
     /**
-     * The dialog state.
+     * The state to handle "Add Peer" dialog.
      */
-    const [addPeerDialog, setAddPeerDialog] = useState<DialogState>(DIALOG_INITIAL_STATE);
+    const [peerDialog, setPeerDialog] = useState<DialogState>(DIALOG_INITIAL_STATE);
+
+    /**
+     * An object with the actions that will have the buttons of the peer list.
+     * @type {PeerActions}
+     */
+    const PEER_ACTIONS: PeerActions = {
+        delete: showDeleteConfirmation,
+    };
 
     /**
      * The component mounted.
@@ -60,14 +76,6 @@ const Peers: React.FC = () => {
     useEffect(() => {
         EventAggregator.subscribe("peers-state", "peers-quick-list", setPeersList);
     }, []);
-
-    /**
-     * An object with the actions that will have the buttons of the peer list.
-     * @type {PeerActions}
-     */
-    const PEER_ACTIONS: PeerActions = {
-        delete: deletePeer,
-    };
 
     /**
      * Toggle the blind mode.
@@ -79,32 +87,65 @@ const Peers: React.FC = () => {
     }
 
     /**
+     * Reset the dialog state.
+     */
+    function resetDialogState() {
+        setPeerDialog(DIALOG_INITIAL_STATE);
+    }
+
+    /**
+     * Function to handle "Delete" action in the peer list.
+     * @param peer The peer to distrust.
+     */
+    function showDeleteConfirmation(peer: PeeringNodeStatusResponse) {
+        if (peer.publicKey && peer.netID) {
+            setPeerDialog({
+                show: true,
+                type: DialogType.Delete,
+                peerAddress: peer.publicKey,
+                peerId: peer.netID,
+            });
+        }
+    }
+
+    /**
      * Add new peer.
      */
     async function handleAddPeer() {
-        if (addPeerDialog.isBusy) {
+        if (peerDialog.isBusy) {
             return;
         }
-        if (!addPeerDialog.peerAddress || !addPeerDialog.peerId) {
+        if (!peerDialog.peerAddress || !peerDialog.peerId) {
             return;
         }
 
         const newPeer: PeeringTrustRequest = {
-            publicKey: addPeerDialog.peerAddress,
-            netID: addPeerDialog.peerId,
+            publicKey: peerDialog.peerAddress,
+            netID: peerDialog.peerId,
         };
-        setAddPeerDialog({ show: true, peerAddress: "", peerId: "", isBusy: true });
+        setPeerDialog({ ...peerDialog, isBusy: true });
         await peersService.trustPeer(newPeer);
-        setAddPeerDialog(DIALOG_INITIAL_STATE);
+        resetDialogState();
     }
 
     /**
-     * Delete action in the peer list.
-     * Peer is not deleted, but marked as distrusted which disconnects it from the network.
-     * @param peer The peer to distrust.
+     * Distrust a peer.
      */
-    async function deletePeer(peer: PeeringNodeStatusResponse) {
-        await peersService.distrustPeer(peer);
+    async function handleDeletePeer() {
+        if (peerDialog.isBusy) {
+            return;
+        }
+        if (peerDialog.peerAddress === "" || peerDialog.peerId === "") {
+            return;
+        }
+
+        const peerToDistrust: PeeringTrustRequest = {
+            publicKey: peerDialog.peerAddress,
+            netID: peerDialog.peerId,
+        };
+        setPeerDialog({ ...peerDialog, isBusy: true });
+        await peersService.distrustPeer(peerToDistrust);
+        resetDialogState();
     }
 
     /**
@@ -112,7 +153,18 @@ const Peers: React.FC = () => {
      * @param e The event.
      */
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setAddPeerDialog({ ...addPeerDialog, [e.target.name]: e.target.value });
+        setPeerDialog({ ...peerDialog, [e.target.name]: e.target.value });
+    }
+
+    /**
+     * OnClick handler of the primary button of the dialog.
+     */
+    async function handlePrimaryDialogAction() {
+        if (peerDialog.type === DialogType.Add) {
+            await handleAddPeer();
+        } else if (peerDialog.type === DialogType.Delete) {
+            await handleDeletePeer();
+        }
     }
 
     return (
@@ -128,7 +180,7 @@ const Peers: React.FC = () => {
                         <button
                             type="button"
                             className="add-button"
-                            onClick={() => setAddPeerDialog({ ...addPeerDialog, show: true })}
+                            onClick={() => setPeerDialog({ ...peerDialog, show: true, type: DialogType.Add })}
                         >
                             Add Peer
                         </button>
@@ -141,59 +193,57 @@ const Peers: React.FC = () => {
                         <PeersList peers={peersList} blindMode={blindMode} peerActions={PEER_ACTIONS} />
                     )}
                 </div>
-                {addPeerDialog.show && (
+                {peerDialog.show && (
                     <Dialog
-                        onClose={() => setAddPeerDialog({ ...addPeerDialog, show: false })}
-                        title="Add Peer"
+                        onClose={() => setPeerDialog({ ...peerDialog, show: false })}
+                        title={peerDialog.type === DialogType.Add ? "Add Peer" : "Delete Confirmation"}
                         actions={
                             <React.Fragment>
                                 <button
                                     type="button"
                                     className="button button--primary"
-                                    onClick={handleAddPeer}
-                                    disabled={addPeerDialog.isBusy}
+                                    onClick={handlePrimaryDialogAction}
+                                    disabled={peerDialog.isBusy}
                                 >
-                                    Add
+                                    {peerDialog.type === DialogType.Add ? "Add" : "Yes"}
                                 </button>
-                                <button
-                                    type="button"
-                                    className="button button--secondary"
-                                    onClick={() => setAddPeerDialog({ ...addPeerDialog, show: false })}
-                                >
-                                    Cancel
+                                <button type="button" className="button button--secondary" onClick={resetDialogState}>
+                                    {peerDialog.type === DialogType.Add ? "Cancel" : "No"}
                                 </button>
                             </React.Fragment>
                         }
                     >
-                        <React.Fragment>
-                            <p>Please enter the details of the peer to add.</p>
-                            <div className="dialog--label">Address</div>
-                            <div className="dialog--value">
-                                <input
-                                    type="text"
-                                    className="input--stretch"
-                                    placeholder="e.g. /ip4/127.0.0.1/tcp/15600"
-                                    name="peerAddress"
-                                    value={addPeerDialog.peerAddress}
-                                    disabled={addPeerDialog.isBusy}
-                                    onChange={(e) =>
-                                        setAddPeerDialog({ ...addPeerDialog, peerAddress: e.target.value })
-                                    }
-                                />
-                            </div>
-                            <div className="dialog--label">Id</div>
-                            <div className="dialog--value">
-                                <input
-                                    type="text"
-                                    className="input--stretch"
-                                    placeholder="e.g. 12D3KooWC7uE9w3RN4Vh1FJAZa8SbE8yMWR6wCVBajcWpyWguV73"
-                                    name="peerId"
-                                    value={addPeerDialog.peerId}
-                                    disabled={addPeerDialog.isBusy}
-                                    onChange={onChange}
-                                />
-                            </div>
-                        </React.Fragment>
+                        {peerDialog.type === DialogType.Add ? (
+                            <React.Fragment>
+                                <p>Please enter the details of the peer to add.</p>
+                                <div className="dialog--label">Address</div>
+                                <div className="dialog--value">
+                                    <input
+                                        type="text"
+                                        className="input--stretch"
+                                        placeholder="e.g. /ip4/127.0.0.1/tcp/15600"
+                                        name="peerAddress"
+                                        value={peerDialog.peerAddress}
+                                        disabled={peerDialog.isBusy}
+                                        onChange={(e) => setPeerDialog({ ...peerDialog, peerAddress: e.target.value })}
+                                    />
+                                </div>
+                                <div className="dialog--label">Id</div>
+                                <div className="dialog--value">
+                                    <input
+                                        type="text"
+                                        className="input--stretch"
+                                        placeholder="e.g. 12D3KooWC7uE9w3RN4Vh1FJAZa8SbE8yMWR6wCVBajcWpyWguV73"
+                                        name="peerId"
+                                        value={peerDialog.peerId}
+                                        disabled={peerDialog.isBusy}
+                                        onChange={onChange}
+                                    />
+                                </div>
+                            </React.Fragment>
+                        ) : (
+                            <p className="margin-t-t">Are you sure you want to delete the peer? </p>
+                        )}
                     </Dialog>
                 )}
             </div>

@@ -82,11 +82,10 @@ export class PeersService {
      * Note: This action will remove the peer from the list of peers.
      * @param peer The peer to distrust.
      */
-    public async distrustPeer(peer: PeeringNodeStatusResponse): Promise<void> {
+    public async distrustPeer(peer: PeeringTrustRequest): Promise<void> {
         try {
             const waspClientService = ServiceFactory.get<WaspClientService>("wasp-client");
-            const reqParams = { body: { publicKey: peer.publicKey, netID: peer.netID } };
-            const { raw } = await waspClientService.node().distrustPeerRaw(reqParams);
+            const { raw } = await waspClientService.node().distrustPeerRaw({ body: peer });
             if (raw.status !== 200) {
                 throw new Error("Failed to distrust peer");
             }
