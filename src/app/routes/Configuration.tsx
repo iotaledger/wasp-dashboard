@@ -21,7 +21,7 @@ function Configuration() {
             const newConfig = await waspClientService.node().getConfiguration();
             setConfig(newConfig);
         })();
-    });
+    }, []);
 
     return (
         <div className="configuration">
