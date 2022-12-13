@@ -278,14 +278,21 @@ class Home extends AsyncComponent<unknown, HomeState> {
                         <div className="banner row">
                             <div className="node-info">
                                 <div>
-                                    <h3>{this.state.blindMode ? "**********" : this.state.publicKey}</h3>
+                                    <h1>WASP node</h1>
+                                    <h3 className="secondary">
+                                        {this.state.blindMode ? "**********" : this.state.publicKey}
+                                    </h3>
                                 </div>
                                 <p className="secondary">{this.state.networkId}</p>
                                 <p className="secondary">{this.state.version}</p>
                             </div>
-                            <BannerCurve className="banner-curve" />
-                            <div className="banner-image">
-                                <img src={this.state.bannerSrc} />
+                            <div className="banner-image-wrapper">
+                                <div className="banner-curve">
+                                    <BannerCurve />
+                                </div>
+                                <div className="banner-image">
+                                    <img src={this.state.bannerSrc} />
+                                </div>
                             </div>
                         </div>
                     </div>
