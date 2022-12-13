@@ -1,3 +1,5 @@
+import "./PeerList.scss";
+
 import React from "react";
 import { PeerActions } from "../../lib/interfaces";
 import { PeeringNodeStatusResponse } from "../../services/wasp_client";
@@ -14,21 +16,22 @@ interface PeersListProps {
      */
     blindMode: boolean;
     /**
-     * Whether to show the detailed list of peers
-     * @default false
+     * Object with the actions of the buttons in the peer tile.
      */
     peerActions?: PeerActions;
 }
 
 const PeersList: React.FC<PeersListProps> = ({ peers, blindMode, peerActions }) => (
-    <React.Fragment>
-        {peers.map((peer, idx) => (
-            <PeerTile key={idx} peer={peer} blindMode={blindMode} actions={peerActions} />
-        ))}
-    </React.Fragment>
+    <div className="peer-list">
+        {peers.length === 0 ? (
+            <p className="margin-t-s">There are no peers.</p>
+        ) : (
+            peers.map((peer, idx) => <PeerTile key={idx} peer={peer} blindMode={blindMode} actions={peerActions} />)
+        )}
+    </div>
 );
 PeersList.defaultProps = {
-    peerActions: undefined,
+    peerActions: undefined
 };
 
 export default PeersList;

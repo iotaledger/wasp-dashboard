@@ -31,7 +31,8 @@ export class WebSocketService {
      * Subscribers to the messages.
      */
     private readonly _subscriptions: {
-        [topic: number]: {
+        [topic: number]:
+        {
             requiresAuth: boolean;
             isSubscribed: boolean;
             subs: {
@@ -69,7 +70,7 @@ export class WebSocketService {
             this._subscriptions[topic] = {
                 requiresAuth,
                 isSubscribed: false,
-                subs: [],
+                subs: []
             };
         }
 
@@ -77,7 +78,7 @@ export class WebSocketService {
 
         this._subscriptions[topic].subs.push({
             subscriptionId,
-            callback,
+            callback
         });
 
         if (this._webSocket && this._webSocket.readyState === WebSocket.OPEN) {
@@ -98,9 +99,7 @@ export class WebSocketService {
      */
     public unsubscribe(subscriptionId: string): void {
         for (const topic of Object.keys(this._subscriptions).map(Number)) {
-            const subscriptionIdx = this._subscriptions[topic].subs.findIndex(
-                (s) => s.subscriptionId === subscriptionId
-            );
+            const subscriptionIdx = this._subscriptions[topic].subs.findIndex(s => s.subscriptionId === subscriptionId);
             if (subscriptionIdx >= 0) {
                 this._subscriptions[topic].subs.splice(subscriptionIdx, 1);
 
@@ -166,11 +165,11 @@ export class WebSocketService {
             this.disconnectSocket();
         };
 
-        this._webSocket.onerror = (err) => {
+        this._webSocket.onerror = err => {
             console.error("Socket error", err);
         };
 
-        this._webSocket.onmessage = (msg) => {
+        this._webSocket.onmessage = msg => {
             this._lastMessage = Date.now();
             this.handleMessage(msg.data as string);
         };
@@ -188,7 +187,7 @@ export class WebSocketService {
                 if (this._webSocket.readyState === WebSocket.OPEN) {
                     this._webSocket.close();
                 }
-            } catch {}
+            } catch { }
             this._webSocket = undefined;
         }
     }

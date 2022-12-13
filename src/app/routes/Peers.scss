@@ -16,7 +16,7 @@
     flex: 1;
     max-width: $content-width-desktop;
 
-    .peers--icon-button {
+    .peers--blind-icon-button {
       margin-right: $spacing-small;
       border: 0;
       outline: 0;
@@ -58,6 +58,7 @@
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: space-between;
+      margin-top: $spacing-medium;
 
       @media (max-width: 1340px) {
         flex-direction: column;
