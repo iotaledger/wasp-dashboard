@@ -144,6 +144,10 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
             // Raise exception message to frontend
         }
 
+        if (this.state.isLoggedIn) {
+            this.validateTokenPeriodically();
+        }
+
         EventAggregator.subscribe("auth-state", "app", (isLoggedIn) => {
             this.setState(
                 {
@@ -389,21 +393,26 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
      * Refresh the token one minute before it expires.
      */
     private validateTokenPeriodically() {
-        this.clearTokenExpiryInterval();
-        const jwt = this._storageService.load<string>("dashboard-jwt");
-        const expiryTimestamp = this.getTokenExpiry(jwt);
-        const expiryDate = moment(expiryTimestamp);
-        const refreshTokenDate = moment(expiryDate).subtract(1, "minutes");
+        try {
+            this.clearTokenExpiryInterval();
+            const jwt = this._storageService.load<string>("dashboard-jwt");
+            const expiryTimestamp = this.getTokenExpiry(jwt);
+            const expiryDate = moment(expiryTimestamp);
+            const refreshTokenDate = moment(expiryDate).subtract(1, "minutes");
 
-        this._tokenExpiryTimer = setInterval(async () => {
-            const now = moment();
-            if (now.isAfter(expiryDate)) {
-                this._authService.logout();
-                this.clearTokenExpiryInterval();
-            } else if (now.isBetween(refreshTokenDate, expiryDate)) {
-                await this._authService.initialize();
-            }
-        }, 5000);
+            this._tokenExpiryTimer = setInterval(async () => {
+                const now = moment();
+                if (now.isAfter(expiryDate)) {
+                    this._authService.logout();
+                    this.clearTokenExpiryInterval();
+                } else if (now.isBetween(refreshTokenDate, expiryDate)) {
+                    await this._authService.initialize();
+                }
+            }, 5000);
+        } catch {
+            this._authService.logout();
+            this.clearTokenExpiryInterval();
+        }
     }
 
     /**
