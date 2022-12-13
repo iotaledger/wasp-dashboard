@@ -6,7 +6,7 @@ export class BrandHelper {
     /**
      * The brand id from the environment.
      */
-    private static readonly _brandId?: string = "wasp";
+    private static readonly _brandId?: string = process.env.REACT_APP_BRAND_ID;
 
     /**
      * The brand configuration.
