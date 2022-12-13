@@ -23,79 +23,67 @@ import {
 /**
  * 
  * @export
- * @interface ChainInfoResponse
+ * @interface GovChainInfoResponse
  */
-export interface ChainInfoResponse {
+export interface GovChainInfoResponse {
     /**
      * ChainID (Bech32-encoded).
      * @type {string}
-     * @memberof ChainInfoResponse
+     * @memberof GovChainInfoResponse
      */
     chainID?: string;
     /**
      * The chain owner address (Bech32-encoded).
      * @type {string}
-     * @memberof ChainInfoResponse
+     * @memberof GovChainInfoResponse
      */
     chainOwnerID?: string;
     /**
      * The description of the chain.
      * @type {string}
-     * @memberof ChainInfoResponse
+     * @memberof GovChainInfoResponse
      */
     description?: string;
     /**
-     * The EVM chain ID
-     * @type {number}
-     * @memberof ChainInfoResponse
-     */
-    eVMChainID?: number;
-    /**
      * 
      * @type {GasFeePolicy}
-     * @memberof ChainInfoResponse
+     * @memberof GovChainInfoResponse
      */
     gasFeePolicy?: GasFeePolicy;
     /**
-     * Whether or not the chain is active.
-     * @type {boolean}
-     * @memberof ChainInfoResponse
-     */
-    isActive?: boolean;
-    /**
      * The maximum contract blob size.
      * @type {number}
-     * @memberof ChainInfoResponse
+     * @memberof GovChainInfoResponse
      */
     maxBlobSize?: number;
     /**
      * The maximum event size.
      * @type {number}
-     * @memberof ChainInfoResponse
+     * @memberof GovChainInfoResponse
      */
     maxEventSize?: number;
     /**
      * The maximum amount of events per request.
      * @type {number}
-     * @memberof ChainInfoResponse
+     * @memberof GovChainInfoResponse
      */
     maxEventsPerReq?: number;
 }
 
 /**
- * Check if a given object implements the ChainInfoResponse interface.
+ * Check if a given object implements the GovChainInfoResponse interface.
  */
-export function instanceOfChainInfoResponse(value: object): boolean {
+export function instanceOfGovChainInfoResponse(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function ChainInfoResponseFromJSON(json: any): ChainInfoResponse {
-    return ChainInfoResponseFromJSONTyped(json, false);
+export function GovChainInfoResponseFromJSON(json: any): GovChainInfoResponse {
+    return GovChainInfoResponseFromJSONTyped(json, false);
 }
 
-export function ChainInfoResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): ChainInfoResponse {
+export function GovChainInfoResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): GovChainInfoResponse {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -104,16 +92,14 @@ export function ChainInfoResponseFromJSONTyped(json: any, ignoreDiscriminator: b
         'chainID': !exists(json, 'ChainID') ? undefined : json['ChainID'],
         'chainOwnerID': !exists(json, 'ChainOwnerID') ? undefined : json['ChainOwnerID'],
         'description': !exists(json, 'Description') ? undefined : json['Description'],
-        'eVMChainID': !exists(json, 'EVMChainID') ? undefined : json['EVMChainID'],
         'gasFeePolicy': !exists(json, 'GasFeePolicy') ? undefined : GasFeePolicyFromJSON(json['GasFeePolicy']),
-        'isActive': !exists(json, 'IsActive') ? undefined : json['IsActive'],
         'maxBlobSize': !exists(json, 'MaxBlobSize') ? undefined : json['MaxBlobSize'],
         'maxEventSize': !exists(json, 'MaxEventSize') ? undefined : json['MaxEventSize'],
         'maxEventsPerReq': !exists(json, 'MaxEventsPerReq') ? undefined : json['MaxEventsPerReq'],
     };
 }
 
-export function ChainInfoResponseToJSON(value?: ChainInfoResponse | null): any {
+export function GovChainInfoResponseToJSON(value?: GovChainInfoResponse | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -125,9 +111,7 @@ export function ChainInfoResponseToJSON(value?: ChainInfoResponse | null): any {
         'ChainID': value.chainID,
         'ChainOwnerID': value.chainOwnerID,
         'Description': value.description,
-        'EVMChainID': value.eVMChainID,
         'GasFeePolicy': GasFeePolicyToJSON(value.gasFeePolicy),
-        'IsActive': value.isActive,
         'MaxBlobSize': value.maxBlobSize,
         'MaxEventSize': value.maxEventSize,
         'MaxEventsPerReq': value.maxEventsPerReq,

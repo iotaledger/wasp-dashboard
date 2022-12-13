@@ -24,10 +24,10 @@ import type {
   BlobValueResponse,
   BlockInfoResponse,
   BlockReceiptsResponse,
-  ChainInfoResponse,
   ControlAddressesResponse,
   ErrorMessageFormatResponse,
   FoundryOutputResponse,
+  GovChainInfoResponse,
   NFTDataResponse,
   NativeTokenIDRegistryResponse,
   RequestIDsResponse,
@@ -54,14 +54,14 @@ import {
     BlockInfoResponseToJSON,
     BlockReceiptsResponseFromJSON,
     BlockReceiptsResponseToJSON,
-    ChainInfoResponseFromJSON,
-    ChainInfoResponseToJSON,
     ControlAddressesResponseFromJSON,
     ControlAddressesResponseToJSON,
     ErrorMessageFormatResponseFromJSON,
     ErrorMessageFormatResponseToJSON,
     FoundryOutputResponseFromJSON,
     FoundryOutputResponseToJSON,
+    GovChainInfoResponseFromJSON,
+    GovChainInfoResponseToJSON,
     NFTDataResponseFromJSON,
     NFTDataResponseToJSON,
     NativeTokenIDRegistryResponseFromJSON,
@@ -990,7 +990,7 @@ export class CorecontractsApi extends runtime.BaseAPI {
      * If you are using the common API functions, you most likely rather want to use \'/chains/:chainID\' to get information about a chain.
      * Get the chain info
      */
-    async governanceGetChainInfoRaw(requestParameters: GovernanceGetChainInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChainInfoResponse>> {
+    async governanceGetChainInfoRaw(requestParameters: GovernanceGetChainInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GovChainInfoResponse>> {
         if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
             throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling governanceGetChainInfo.');
         }
@@ -1006,14 +1006,14 @@ export class CorecontractsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ChainInfoResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GovChainInfoResponseFromJSON(jsonValue));
     }
 
     /**
      * If you are using the common API functions, you most likely rather want to use \'/chains/:chainID\' to get information about a chain.
      * Get the chain info
      */
-    async governanceGetChainInfo(requestParameters: GovernanceGetChainInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChainInfoResponse> {
+    async governanceGetChainInfo(requestParameters: GovernanceGetChainInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GovChainInfoResponse> {
         const response = await this.governanceGetChainInfoRaw(requestParameters, initOverrides);
         return await response.value();
     }

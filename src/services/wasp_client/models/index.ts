@@ -31,6 +31,7 @@ export * from './DKSharesPostRequest';
 export * from './ErrorMessageFormatResponse';
 export * from './FoundryOutputResponse';
 export * from './GasFeePolicy';
+export * from './GovChainInfoResponse';
 export * from './InOutput';
 export * from './InOutputMetricItem';
 export * from './InStateOutput';

@@ -40,6 +40,7 @@ models/DKSharesPostRequest.ts
 models/ErrorMessageFormatResponse.ts
 models/FoundryOutputResponse.ts
 models/GasFeePolicy.ts
+models/GovChainInfoResponse.ts
 models/InOutput.ts
 models/InOutputMetricItem.ts
 models/InStateOutput.ts
