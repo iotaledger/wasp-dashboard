@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import { Dialog } from "../";
 import { ServiceFactory } from "../../../factories/serviceFactory";
-import { IDialogState } from "../../../lib/interfaces";
 import { PeersService } from "../../../services/peersService";
 import { PeeringTrustRequest } from "../../../services/wasp_client";
 
-interface AddPeerDialogProps {
-    onClose: () => void;
+interface IDialogState {
+    publicKey: string;
+    netID: string;
+    isBusy: boolean;
 }
 
 const DIALOG_INITIAL_STATE: IDialogState = {
-    peerAddress: "",
-    peerId: ""
+    publicKey: "",
+    netID: "",
+    isBusy: false,
 };
 
-const AddPeerDialog: React.FC<AddPeerDialogProps> = ({ onClose }) => {
+interface IAddPeerDialog {
+    onClose: () => void;
+}
+
+const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
     const [dialog, setDialog] = useState<IDialogState>(DIALOG_INITIAL_STATE);
 
     /**
@@ -26,17 +32,16 @@ const AddPeerDialog: React.FC<AddPeerDialogProps> = ({ onClose }) => {
      * Handle add a ner peer.
      */
     async function handleAddPeer(): Promise<void> {
-        if (!dialog.peerAddress || !dialog.peerId || dialog.isBusy) {
+        if (!dialog.publicKey || !dialog.netID || dialog.isBusy) {
             return;
         }
 
         const newPeer: PeeringTrustRequest = {
-            publicKey: dialog.peerAddress,
-            netID: dialog.peerId
+            publicKey: dialog.publicKey,
+            netID: dialog.netID,
         };
         setDialog({ ...dialog, isBusy: true });
         await peersService.trustPeer(newPeer);
-        setDialog(DIALOG_INITIAL_STATE);
         onClose();
     }
 
@@ -47,18 +52,9 @@ const AddPeerDialog: React.FC<AddPeerDialogProps> = ({ onClose }) => {
     function onChange(e: React.ChangeEvent<HTMLInputElement>): void {
         setDialog({ ...dialog, [e.target.name]: e.target.value });
     }
-
-    /**
-     * Handle the close of the dialog.
-     */
-    function handleOnClose(): void {
-        setDialog(DIALOG_INITIAL_STATE);
-        onClose();
-    }
-
     return (
         <Dialog
-            onClose={handleOnClose}
+            onClose={onClose}
             title="Add Peer"
             actions={
                 <React.Fragment>
@@ -70,7 +66,7 @@ const AddPeerDialog: React.FC<AddPeerDialogProps> = ({ onClose }) => {
                     >
                         Add
                     </button>
-                    <button type="button" className="button button--secondary" onClick={handleOnClose}>
+                    <button type="button" className="button button--secondary" onClick={onClose}>
                         Cancel
                     </button>
                 </React.Fragment>
@@ -78,26 +74,26 @@ const AddPeerDialog: React.FC<AddPeerDialogProps> = ({ onClose }) => {
         >
             <React.Fragment>
                 <p>Please enter the details of the peer to add.</p>
-                <div className="dialog--label">Address</div>
+                <div className="dialog--label">Public key</div>
                 <div className="dialog--value">
                     <input
                         type="text"
                         className="input--stretch"
-                        placeholder="e.g. /ip4/127.0.0.1/tcp/15600"
-                        name="peerAddress"
-                        value={dialog.peerAddress}
+                        placeholder="e.g. 0x0000000000000000000000000000000000000000000000000000000000000000"
+                        name="publicKey"
+                        value={dialog.publicKey}
                         disabled={dialog.isBusy}
                         onChange={onChange}
                     />
                 </div>
-                <div className="dialog--label">Id</div>
+                <div className="dialog--label">Network id</div>
                 <div className="dialog--value">
                     <input
                         type="text"
                         className="input--stretch"
-                        placeholder="e.g. 12D3KooWC7uE9w3RN4Vh1FJAZa8SbE8yMWR6wCVBajcWpyWguV73"
-                        name="peerId"
-                        value={dialog.peerId}
+                        placeholder="e.g. 127.0.0.1:15600"
+                        name="netID"
+                        value={dialog.netID}
                         disabled={dialog.isBusy}
                         onChange={onChange}
                     />
