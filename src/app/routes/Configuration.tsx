@@ -24,10 +24,10 @@ function Configuration() {
             // The documentation generator doesn't support "any/dynamic" values and forces a string instead.
             // The API will still return a dynamic value
             // We therefore cast the map[string]string to map[string]never to make use of dynamic typing.
-            const newConfig = await waspClientService.node().getConfiguration() as ConfigMap;
+            const newConfig = (await waspClientService.node().getConfiguration()) as ConfigMap;
             setConfig(newConfig);
         })();
-    });
+    }, []);
 
     return (
         <div className="configuration">
