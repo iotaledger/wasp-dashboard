@@ -3,7 +3,7 @@ import { Environment } from "../environment";
 const EXPECTED_RESPONSE = { Error: "code=404, message=Not Found" };
 
 /**
- *
+ * Check if the Node API is up and running
  */
 export default async function isNodeOnline() {
     try {
