@@ -1,0 +1,60 @@
+@import "../../scss/fonts";
+@import "../../scss/media-queries";
+@import "../../scss/variables";
+
+.peers-panel--item {
+    width: 100%;
+    padding: $spacing-large;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: 90px;
+
+    &.detailed {
+        padding: $spacing-large;
+        .peer-id {
+            font-weight: 700;
+        }
+    }
+
+    &.summary {
+        padding: $spacing-small;
+        border: none;
+        border-radius: $spacing-small;
+        background-color: var(--panel-background-highlight);
+    }
+
+    .peer-health {
+        width: 16px;
+        height: 16px;
+        margin-right: $spacing-small;
+    }
+
+    .peer-data {
+        @include font-size(14px);
+
+        @media (max-width: 1340px) {
+            @include font-size(12px);
+        }
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        font-weight: 500;
+        color: var(--text-color-primary);
+        font-family: $font-sans;
+
+        > p {
+            margin-top: $spacing-small;
+            font-weight: 400
+        }
+
+        .peer-id {
+            @include font-size(14px);
+
+            color: var(--text-color-primary);
+            word-break: break-all;
+            overflow-wrap: anywhere;
+        }
+    }
+}

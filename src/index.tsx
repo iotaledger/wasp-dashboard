@@ -11,7 +11,7 @@ import { EventAggregator } from "./services/eventAggregator";
 import { LocalStorageService } from "./services/localStorageService";
 import { MetricsService } from "./services/metricsService";
 import { NodeConfigService } from "./services/nodeConfigService";
-import { PeersService } from "./services/peersServices";
+import { PeersService } from "./services/peersService";
 import { SessionStorageService } from "./services/sessionStorageService";
 import { SettingsService } from "./services/settingsService";
 import { ThemeService } from "./services/themeService";
