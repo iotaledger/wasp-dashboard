@@ -19,6 +19,7 @@ import { MetricsService } from "../services/metricsService";
 import { ThemeService } from "../services/themeService";
 import { WaspClientService } from "../services/waspClientService";
 import { BrandHelper } from "../utils/brandHelper";
+import isNodeOnline from "../utils/nodeStatus";
 import "./App.scss";
 import { AppState } from "./AppState";
 import AsyncComponent from "./components/layout/AsyncComponent";
@@ -133,16 +134,12 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
     public async componentDidMount(): Promise<void> {
         super.componentDidMount();
 
-        try {
-            await this._waspClientService.node().getInfo();
-
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        isNodeOnline().then((online) => {
             this.setState({
-                online: true,
+                online,
             });
-        } catch (ex) {
-            console.log(ex);
-            // Raise exception message to frontend
-        }
+        });
 
         if (this.state.isLoggedIn) {
             this.validateTokenPeriodically();

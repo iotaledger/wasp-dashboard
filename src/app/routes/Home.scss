@@ -19,7 +19,8 @@
 
     .banner {
       flex: 1;
-      height: 140px;
+      width: 100%;
+      height: 100%;
 
       @include desktop-down {
         height: unset;
@@ -33,30 +34,70 @@
         padding: $spacing-small;
 
         @include desktop-down {
+          padding: $spacing-tiny;
+        }
+
+        @include desktop-down {
           * + .secondary {
             margin-top: $spacing-tiny;
           }
         }
-      }
 
-      .banner-curve {
-        color: var(--panel-background-highlight);
+        h3 {
+          @include font-size(16px);
 
-        @include desktop-down {
-          display: none;
+          margin-top: 10px;
+          word-break: break-all;
+
+          @include desktop-down {
+            @include font-size(14px);
+          }
         }
       }
 
-      .banner-image {
+      .banner-image-wrapper {
         display: flex;
         flex: 1;
         align-items: center;
         justify-content: center;
-        border-radius: 0 16px 16px 0;
-        background-color: var(--panel-background-highlight);
+        max-width: 350px;
 
         @include desktop-down {
           display: none;
+        }
+
+        .banner-curve {
+          height: 100%;
+          color: var(--panel-background-highlight);
+
+          @include desktop-down {
+            display: none;
+          }
+
+          svg {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .banner-image {
+          display: flex;
+          flex: 1;
+          align-items: center;
+          justify-content: center;
+          width: 200px;
+          height: 100%;
+          border-radius: 0 16px 16px 0;
+          background-color: var(--panel-background-highlight);
+
+          img {
+            width: 100%;
+            height: 80px;
+          }
+
+          @include desktop-down {
+            display: none;
+          }
         }
       }
     }
