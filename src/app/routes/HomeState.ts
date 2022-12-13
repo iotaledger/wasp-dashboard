@@ -1,3 +1,5 @@
+import { PeeringNodeStatusResponse } from "../../services/wasp_client";
+
 export interface HomeState {
     /**
      * The version.
@@ -53,4 +55,9 @@ export interface HomeState {
      * Hide any details.
      */
     blindMode: boolean;
+
+    /**
+     *  The list of peers.
+     */
+    peersList: PeeringNodeStatusResponse[];
 }
