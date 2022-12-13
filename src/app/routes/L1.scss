@@ -19,6 +19,7 @@
     flex-wrap: wrap;
     flex-direction: row;
     max-width: $content-width-desktop;
+    color: var(--text-color-primary);
     
     & > div {
         margin: 16px;
