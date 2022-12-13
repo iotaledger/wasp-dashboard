@@ -421,7 +421,10 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
      * @returns The expiry time.
      */
     private getTokenExpiry(token: string) {
-        const payload = token.split(".")[1];
+        const [header, payload, signature] = token.split(".");
+        if (header.length !== 43 || signature.length !== 43) {
+            throw new Error("Malformed JWT");
+        }
         const decodedToken = window.atob(payload);
         const parsedToken = JSON.parse(decodedToken);
         const expiryTimestamp = parsedToken.exp * 1000;
