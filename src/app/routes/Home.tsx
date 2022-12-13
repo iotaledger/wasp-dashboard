@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { EyeClosedIcon, EyeIcon } from "../../assets";
 import { ReactComponent as BannerCurve } from "../../assets/banner-curve.svg";
 import { ReactComponent as DbIcon } from "../../assets/db-icon.svg";
 import { ReactComponent as MemoryIcon } from "../../assets/memory.svg";
@@ -16,14 +17,15 @@ import { AuthService } from "../../services/authService";
 import { EventAggregator } from "../../services/eventAggregator";
 import { MetricsService } from "../../services/metricsService";
 import { NodeConfigService } from "../../services/nodeConfigService";
+import { PeersService } from "../../services/peersService";
 import { SettingsService } from "../../services/settingsService";
 import { ThemeService } from "../../services/themeService";
 import { BrandHelper } from "../../utils/brandHelper";
 import { FormatHelper } from "../../utils/formatHelper";
+import { PeersList } from "../components";
 import AsyncComponent from "../components/layout/AsyncComponent";
 import Graph from "../components/layout/Graph";
 import InfoPanel from "../components/layout/InfoPanel";
-import PeersQuickList from "../components/PeersQuickList";
 import "./Home.scss";
 import { HomeState } from "./HomeState";
 
@@ -55,6 +57,11 @@ class Home extends AsyncComponent<unknown, HomeState> {
      * The auth service.
      */
     private readonly _authService: AuthService;
+
+    /**
+     * The peers service.
+     */
+    private readonly _peersService: PeersService;
 
     /**
      * The status subscription id.
@@ -93,6 +100,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
         this._themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
         this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
         this._nodeConfigService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
+        this._peersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
         this.state = {
             lmi: "-",
@@ -110,6 +118,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
             publicKey: "",
             version: "",
             networkId: "",
+            peersList: [],
         };
     }
 
@@ -121,6 +130,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
 
         this.setState({
             bannerSrc: await BrandHelper.getBanner(this._themeService.get()),
+            peersList: this._peersService.get(),
         });
 
         if (this._authService.isLoggedIn()) {
@@ -227,6 +237,10 @@ class Home extends AsyncComponent<unknown, HomeState> {
 
         EventAggregator.subscribe("settings.blindMode", "home", (blindMode) => {
             this.setState({ blindMode });
+        });
+
+        EventAggregator.subscribe("peers-state", "home", (peers) => {
+            this.setState({ peersList: peers });
         });
     }
 
@@ -357,7 +371,19 @@ class Home extends AsyncComponent<unknown, HomeState> {
                             </div>
                         </div>
                         <div className="card col peers-summary-col peers-summary-panel">
-                            <PeersQuickList />
+                            <div className="peers-summary">
+                                <div className="row middle spread margin-b-m">
+                                    <h4>Peers</h4>
+                                    <button
+                                        type="button"
+                                        onClick={this.handleBlindMode}
+                                        className="peers-summary--blind-button"
+                                    >
+                                        {this.state.blindMode ? <EyeIcon /> : <EyeClosedIcon />}
+                                    </button>
+                                </div>
+                                <PeersList peers={this.state.peersList} blindMode={this.state.blindMode} />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -420,6 +446,13 @@ class Home extends AsyncComponent<unknown, HomeState> {
 
         return 0;
     }
+
+    /**
+     * Toggle blind mode in peers list.
+     */
+    private readonly handleBlindMode = (): void => {
+        this.setState({ blindMode: !this.state.blindMode });
+    };
 }
 
 export default Home;
