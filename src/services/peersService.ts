@@ -66,8 +66,10 @@ export class PeersService {
      */
     private readonly fetchPeers = async (): Promise<void> => {
         // eslint-disable-next-line max-len
-        const waspClientService: WaspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
-        const peers = await waspClientService.node().getAllPeers();
+        const waspClientService: WaspClientService = ServiceFactory.get<WaspClientService>(
+            WaspClientService.ServiceName
+        );
+        const peers = await waspClientService.node().getTrustedPeers();
         EventAggregator.publish("peers-state", peers);
         this._peers = peers;
     };

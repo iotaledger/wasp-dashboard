@@ -1,6 +1,7 @@
 import { INodeInfoBaseToken } from "@iota/iota.js";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { SessionStorageService } from "./sessionStorageService";
+import { L1Params } from "./wasp_client";
 import { WaspClientService } from "./waspClientService";
 
 /**
@@ -23,6 +24,11 @@ export class NodeConfigService {
      * The public key.
      */
     private _publicKey?: string;
+
+    /**
+     * The L1 params.
+     */
+    private _l1Params?: L1Params;
 
     /**
      * The base token.
@@ -63,8 +69,9 @@ export class NodeConfigService {
         this._networkId = this._storageService.load<string>("networkId");
         this._publicKey = this._storageService.load<string>("publicKey");
         this._version = this._storageService.load<string>("version");
+        this._l1Params = this._storageService.load<L1Params>("l1Params");
 
-        if (!this._networkId || !this._version || !this._publicKey) {
+        if (!this._networkId || !this._version || !this._publicKey || !this._l1Params) {
             const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
             try {
@@ -78,6 +85,9 @@ export class NodeConfigService {
                 }
                 if (info.publicKey) {
                     this.setPublicKey(info.publicKey);
+                }
+                if (info.l1Params) {
+                    this.setL1Params(info.l1Params);
                 }
             } catch (e) {
                 console.log(e);
@@ -126,6 +136,14 @@ export class NodeConfigService {
     }
 
     /**
+     * Get the L1 params.
+     * @returns The L1 params.
+     */
+    public getL1Params(): L1Params | undefined {
+        return this._l1Params;
+    }
+
+    /**
      * Set the network id.
      * @param networkId The new network id.
      */
@@ -150,5 +168,14 @@ export class NodeConfigService {
     public setPublicKey(publicKey: string): void {
         this._publicKey = publicKey;
         this._storageService.save<string>("publicKey", this._publicKey);
+    }
+
+    /**
+     * Set L1 params.
+     * @param params The new L1 params.
+     */
+    public setL1Params(params: L1Params): void {
+        this._l1Params = params;
+        this._storageService.save<L1Params>("l1Params", this._l1Params);
     }
 }

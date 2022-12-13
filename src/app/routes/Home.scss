@@ -1,6 +1,7 @@
 @import "../../scss/card";
 @import "../../scss/fonts";
 @import "../../scss/media-queries";
+@import "../../scss/variables";
 
 .home {
   display: flex;
@@ -123,6 +124,23 @@
 
       @include desktop-down {
         width: unset;
+      }
+
+      .peers-summary {
+        padding: $spacing-small;
+
+        /* stylelint-disable-next-line selector-class-pattern */
+        .peers-summary--blind-button {
+          border: 0;
+          outline: 0;
+          background: none;
+          color: var(--text-color-secondary);
+          cursor: pointer;
+
+          &:hover {
+            color: var(--accent-primary);
+          }
+        }
       }
     }
 
