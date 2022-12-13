@@ -56,7 +56,7 @@ const Peers: React.FC = () => {
                 <div className="row spread">
                     <h2>Peers</h2>
                     <div className="row">
-                        <button type="button" onClick={toggleBlindMode} className="peers--icon-button">
+                        <button type="button" onClick={toggleBlindMode} className="peers--blind-icon-button">
                             {blindMode ? <EyeIcon /> : <EyeClosedIcon />}
                         </button>
 
@@ -66,11 +66,7 @@ const Peers: React.FC = () => {
                     </div>
                 </div>
                 <div className="peers-panel">
-                    {peersList.length === 0 ? (
-                        <p className="margin-t-s">There are no peers.</p>
-                    ) : (
-                        <PeersList peers={peersList} blindMode={blindMode} detailedList />
-                    )}
+                    <PeersList peers={peersList} blindMode={blindMode} detailedList />
                 </div>
             </div>
         </div>

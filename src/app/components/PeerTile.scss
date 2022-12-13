@@ -2,93 +2,59 @@
 @import "../../scss/media-queries";
 @import "../../scss/variables";
 
-// Detailed peer.
-
 .peers-panel--item {
     width: 100%;
-    margin-top: $spacing-small;
-    overflow: hidden;
-
-    @media (max-width: 1340px) {
-        width: 100%;
-    }
-
-    .card {
-        padding: $spacing-large;
-
-        .peer-health {
-            width: 16px;
-            height: 16px;
-            margin-right: $spacing-small;
-        }
-
-        .peer-data {
-            @include font-size(14px);
-
-            @media (max-width: 1340px) {
-                @include font-size(12px);
-            }
-
-            display: flex;
-            flex-direction: column;
-            color: var(--text-color-primary);
-            font-family: $font-sans;
-            font-weight: 500;
-        }
-
-        .graph {
-            margin-top: 24px;
-        }
-
-        .peer-actions {
-            justify-content: space-between;
-            margin-top: $spacing-small;
-
-            @media (max-width: 720px) {
-                flex-direction: column;
-
-                .card--action {
-                    justify-content: center;
-                }
-
-                p {
-                    display: flex;
-                    justify-content: center;
-                }
-            }
-        }
-    }
-}
-
-// Simplified peer.
-
-.peers-summary--item {
+    padding: $spacing-large;
     display: flex;
     flex-direction: row;
     align-items: center;
     min-height: 90px;
-    margin-bottom: $spacing-small;
-    padding: $spacing-small;
-    overflow: hidden;
-    border-radius: $spacing-small;
-    background-color: var(--panel-background-highlight);
-    width: 100%;
 
-    &:focus {
-        border: 0;
+    &.detailed {
+        padding: $spacing-large;
+        .peer-id {
+            font-weight: 700;
+        }
     }
 
-    .peer-health-icon {
+    &.summary {
+        padding: $spacing-small;
+        border: none;
+        border-radius: $spacing-small;
+        background-color: var(--panel-background-highlight);
+    }
+
+    .peer-health {
         width: 16px;
+        height: 16px;
+        margin-right: $spacing-small;
     }
 
-    .peer-id {
+    .peer-data {
         @include font-size(14px);
 
-        margin-left: $spacing-small;
+        @media (max-width: 1340px) {
+            @include font-size(12px);
+        }
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        font-weight: 500;
         color: var(--text-color-primary);
         font-family: $font-sans;
-        font-weight: 500;
-        word-break: break-all;
+
+        > p {
+            margin-top: $spacing-small;
+            font-weight: 400
+        }
+
+        .peer-id {
+            @include font-size(14px);
+
+            color: var(--text-color-primary);
+            word-break: break-all;
+            overflow-wrap: anywhere;
+        }
     }
 }

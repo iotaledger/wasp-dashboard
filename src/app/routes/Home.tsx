@@ -377,16 +377,12 @@ class Home extends AsyncComponent<unknown, HomeState> {
                                     <button
                                         type="button"
                                         onClick={this.handleBlindMode}
-                                        className="peers-summary--icon-button"
+                                        className="peers-summary--blind-button"
                                     >
                                         {this.state.blindMode ? <EyeIcon /> : <EyeClosedIcon />}
                                     </button>
                                 </div>
-                                {!this.state.peersList?.length ? (
-                                    <p>There are no peers.</p>
-                                ) : (
-                                    <PeersList peers={this.state.peersList} blindMode={this.state.blindMode} />
-                                )}
+                                <PeersList peers={this.state.peersList} blindMode={this.state.blindMode} />
                             </div>
                         </div>
                     </div>
