@@ -1,6 +1,7 @@
 .openapi-generator-ignore
 apis/AdminApi.ts
 apis/ChainsApi.ts
+apis/CorecontractsApi.ts
 apis/MetricsApi.ts
 apis/NodeApi.ts
 apis/PublicApi.ts
@@ -8,9 +9,20 @@ apis/RequestsApi.ts
 apis/UsersApi.ts
 apis/index.ts
 index.ts
+models/AccountListResponse.ts
+models/AccountNFTsResponse.ts
+models/AccountNonceResponse.ts
 models/AddUserRequest.ts
 models/AliasOutputMetricItem.ts
+models/AssetsResponse.ts
 models/BaseToken.ts
+models/Blob.ts
+models/BlobInfoResponse.ts
+models/BlobListResponse.ts
+models/BlobValueResponse.ts
+models/BlockInfoResponse.ts
+models/BlockReceiptsResponse.ts
+models/BurnLog.ts
 models/BurnRecord.ts
 models/ChainInfoResponse.ts
 models/ChainMetrics.ts
@@ -22,8 +34,11 @@ models/ConsensusWorkflowMetrics.ts
 models/ConsensusWorkflowStatus.ts
 models/ContractCallViewRequest.ts
 models/ContractInfoResponse.ts
+models/ControlAddressesResponse.ts
 models/DKSharesInfo.ts
 models/DKSharesPostRequest.ts
+models/ErrorMessageFormatResponse.ts
+models/FoundryOutputResponse.ts
 models/GasFeePolicy.ts
 models/InOutput.ts
 models/InOutputMetricItem.ts
@@ -34,6 +49,9 @@ models/InterfaceMetricItem.ts
 models/Item.ts
 models/JSONDict.ts
 models/L1Params.ts
+models/NFTDataResponse.ts
+models/NativeToken.ts
+models/NativeTokenIDRegistryResponse.ts
 models/NodeConnectionMessageMetrics.ts
 models/NodeConnectionMessagesMetrics.ts
 models/NodeConnectionMetrics.ts
@@ -53,6 +71,8 @@ models/ProtocolParameters.ts
 models/ReceiptError.ts
 models/ReceiptResponse.ts
 models/RentStructure.ts
+models/RequestIDsResponse.ts
+models/RequestProcessedResponse.ts
 models/RequestReceiptResponse.ts
 models/Transaction.ts
 models/TransactionIDMetricItem.ts
@@ -64,6 +84,7 @@ models/UTXOInputMetricItem.ts
 models/UpdateUserPasswordRequest.ts
 models/UpdateUserPermissionsRequest.ts
 models/User.ts
+models/ValidationError.ts
 models/WaitRequestProcessedParams.ts
 models/index.ts
 runtime.ts

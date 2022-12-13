@@ -20,13 +20,13 @@ import { exists, mapValues } from '../runtime';
  */
 export interface NodeOwnerCertificateRequest {
     /**
-     * Node pub key. (base64)
+     * Node pub key. (Hex)
      * @type {string}
      * @memberof NodeOwnerCertificateRequest
      */
     nodePubKey?: string;
     /**
-     * Node owner address. (bech32)
+     * Node owner address. (Bech32)
      * @type {string}
      * @memberof NodeOwnerCertificateRequest
      */

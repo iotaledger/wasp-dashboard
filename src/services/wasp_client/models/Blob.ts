@@ -16,48 +16,48 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface ReceiptError
+ * @interface Blob
  */
-export interface ReceiptError {
+export interface Blob {
     /**
      * 
      * @type {string}
-     * @memberof ReceiptError
-     */
-    errorMessage?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ReceiptError
+     * @memberof Blob
      */
     hash?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Blob
+     */
+    size?: number;
 }
 
 /**
- * Check if a given object implements the ReceiptError interface.
+ * Check if a given object implements the Blob interface.
  */
-export function instanceOfReceiptError(value: object): boolean {
+export function instanceOfBlob(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function ReceiptErrorFromJSON(json: any): ReceiptError {
-    return ReceiptErrorFromJSONTyped(json, false);
+export function BlobFromJSON(json: any): Blob {
+    return BlobFromJSONTyped(json, false);
 }
 
-export function ReceiptErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): ReceiptError {
+export function BlobFromJSONTyped(json: any, ignoreDiscriminator: boolean): Blob {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'errorMessage': !exists(json, 'ErrorMessage') ? undefined : json['ErrorMessage'],
         'hash': !exists(json, 'Hash') ? undefined : json['Hash'],
+        'size': !exists(json, 'Size') ? undefined : json['Size'],
     };
 }
 
-export function ReceiptErrorToJSON(value?: ReceiptError | null): any {
+export function BlobToJSON(value?: Blob | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -66,8 +66,8 @@ export function ReceiptErrorToJSON(value?: ReceiptError | null): any {
     }
     return {
         
-        'ErrorMessage': value.errorMessage,
         'Hash': value.hash,
+        'Size': value.size,
     };
 }
 

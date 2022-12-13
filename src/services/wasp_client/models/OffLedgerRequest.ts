@@ -26,7 +26,7 @@ export interface OffLedgerRequest {
      */
     chainID?: string;
     /**
-     * Offledger Request (base64)
+     * Offledger Request (Hex)
      * @type {string}
      * @memberof OffLedgerRequest
      */

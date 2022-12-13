@@ -18,6 +18,7 @@ import type {
   ChainMetrics,
   ConsensusPipeMetrics,
   ConsensusWorkflowMetrics,
+  ValidationError,
 } from '../models';
 import {
     ChainMetricsFromJSON,
@@ -26,6 +27,8 @@ import {
     ConsensusPipeMetricsToJSON,
     ConsensusWorkflowMetricsFromJSON,
     ConsensusWorkflowMetricsToJSON,
+    ValidationErrorFromJSON,
+    ValidationErrorToJSON,
 } from '../models';
 
 export interface GetChainMetricsRequest {
@@ -144,6 +147,36 @@ export class MetricsApi extends runtime.BaseAPI {
      */
     async getChainWorkflowMetrics(requestParameters: GetChainWorkflowMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ConsensusWorkflowMetrics> {
         const response = await this.getChainWorkflowMetricsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get accumulated metrics.
+     */
+    async getL1MetricsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChainMetrics>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/v2/metrics/l1`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ChainMetricsFromJSON(jsonValue));
+    }
+
+    /**
+     * Get accumulated metrics.
+     */
+    async getL1Metrics(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChainMetrics> {
+        const response = await this.getL1MetricsRaw(initOverrides);
         return await response.value();
     }
 

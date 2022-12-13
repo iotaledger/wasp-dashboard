@@ -2,6 +2,7 @@
 /* eslint-disable */
 export * from './AdminApi';
 export * from './ChainsApi';
+export * from './CorecontractsApi';
 export * from './MetricsApi';
 export * from './NodeApi';
 export * from './PublicApi';
