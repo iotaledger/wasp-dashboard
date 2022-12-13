@@ -30,41 +30,6 @@ export interface HomeState {
     displayLatestVersion?: string;
 
     /**
-     * Confirmed milestone index.
-     */
-    cmi?: string;
-
-    /**
-     * Latest milestone index.
-     */
-    lmi?: string;
-
-    /**
-     * The pruning index.
-     */
-    pruningIndex?: string;
-
-    /**
-     * Uptime.
-     */
-    uptime?: string;
-
-    /**
-     * Memory usage.
-     */
-    memory?: string;
-
-    /**
-     * Ledger database size.
-     */
-    dbLedgerSizeFormatted: string;
-
-    /**
-     * Tangle database size.
-     */
-    dbTangleSizeFormatted: string;
-
-    /**
      * Last received bps time.
      */
     lastReceivedBpsTime: number;
