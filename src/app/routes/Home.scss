@@ -77,20 +77,11 @@
     }
 
     .peers-summary-col {
-      width: 33%;
+      width: 100%;
       overflow: hidden;
 
       @include desktop-down {
         width: unset;
-      }
-    }
-
-    .peers-summary-panel {
-      margin-left: $spacing-small;
-
-      @include desktop-down {
-        margin-top: $spacing-small;
-        margin-left: 0;
       }
     }
 

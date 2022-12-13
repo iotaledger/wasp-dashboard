@@ -130,8 +130,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
                         </div>
                     </div>
                     <div className="row fill margin-t-s desktop-down-column">
-                        <div className="col info-col fill" />
-                        <div className="card col peers-summary-col peers-summary-panel">
+                        <div className="card col peers-summary-col">
                             <PeersQuickList />
                         </div>
                     </div>
