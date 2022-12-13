@@ -50,7 +50,7 @@ class PeersSummaryPanel extends Component<unknown, PeersSummaryState> {
         this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
 
         this.state = {
-            blindMode: this._settingsService.getBlindMode(),
+            blindMode: this._settingsService.getBlindMode()
         };
     }
 
@@ -58,13 +58,15 @@ class PeersSummaryPanel extends Component<unknown, PeersSummaryState> {
      * The component mounted.
      */
     public componentDidMount(): void {
-        this._peerSubscription = this._metricsService.subscribe<IPeer[]>(WebSocketTopic.PeerMetric, (data) => {
-            this.handleData(data);
-        });
+        this._peerSubscription = this._metricsService.subscribe<IPeer[]>(
+            WebSocketTopic.PeerMetric,
+            data => {
+                this.handleData(data);
+            });
 
         this._syncStatusSubscription = this._metricsService.subscribe<ISyncStatus>(
             WebSocketTopic.SyncStatus,
-            (data) => {
+            data => {
                 if (data) {
                     const cmi = data.cmi;
                     const lmi = data.lmi;
@@ -77,8 +79,7 @@ class PeersSummaryPanel extends Component<unknown, PeersSummaryState> {
                         this.setState({ lmi });
                     }
                 }
-            }
-        );
+            });
     }
 
     /**
@@ -105,13 +106,23 @@ class PeersSummaryPanel extends Component<unknown, PeersSummaryState> {
             <div className="peers-summary">
                 <div className="row middle spread margin-b-m">
                     <h4>Peers</h4>
-                    <button type="button" onClick={() => this.toggleBlindMode()} className="peers-summary--icon-button">
+                    <button
+                        type="button"
+                        onClick={() => this.toggleBlindMode()}
+                        className="peers-summary--icon-button"
+                    >
                         {this.state.blindMode ? <EyeIcon /> : <EyeClosedIcon />}
                     </button>
                 </div>
-                {!this.state.peers && <p>There are no peers.</p>}
+                {!this.state.peers && (
+                    <p>There are no peers.</p>
+                )}
                 {this.state.peers?.map((p, idx) => (
-                    <Link to={`/peers/${p.id}`} key={idx} className="peers-summary--item">
+                    <Link
+                        to={`/peers/${p.id}`}
+                        key={idx}
+                        className="peers-summary--item"
+                    >
                         <div className="peer-health-icon">
                             {p.health === 0 && <HealthBadIcon />}
                             {p.health === 1 && <HealthWarningIcon />}
@@ -119,7 +130,7 @@ class PeersSummaryPanel extends Component<unknown, PeersSummaryState> {
                         </div>
                         <div className="col">
                             <div className="peer-id">
-                                {this.state.blindMode && "*".repeat((p.alias ?? p.id).length)}
+                                {this.state.blindMode && ("*".repeat((p.alias ?? p.id).length))}
                                 {!this.state.blindMode && (p.alias ?? p.id)}
                             </div>
                             {p.address && (
@@ -142,23 +153,21 @@ class PeersSummaryPanel extends Component<unknown, PeersSummaryState> {
         let sortedPeers;
 
         if (data) {
-            sortedPeers = DataHelper.sortPeers(
-                data.map((p) => {
-                    const cmi = this.state.cmi ?? 0;
-                    const lmi = this.state.lmi ?? 0;
+            sortedPeers = DataHelper.sortPeers(data.map(p => {
+                const cmi = this.state.cmi ?? 0;
+                const lmi = this.state.lmi ?? 0;
 
-                    return {
-                        id: p.id,
-                        alias: p.alias,
-                        health: DataHelper.calculateHealth(p, cmi, lmi),
-                        address: DataHelper.formatPeerAddress(p),
-                    };
-                })
-            );
+                return {
+                    id: p.id,
+                    alias: p.alias,
+                    health: DataHelper.calculateHealth(p, cmi, lmi),
+                    address: DataHelper.formatPeerAddress(p)
+                };
+            }));
         }
 
         this.setState({
-            peers: sortedPeers,
+            peers: sortedPeers
         });
     }
 

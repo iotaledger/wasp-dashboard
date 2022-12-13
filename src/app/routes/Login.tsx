@@ -30,7 +30,7 @@ class Login extends AsyncComponent<unknown, LoginState> {
             password: "",
             isBusy: false,
             error: false,
-            redirect: this._authService.isLoggedIn() ? "/" : "",
+            redirect: this._authService.isLoggedIn() ? "/" : ""
         };
     }
 
@@ -49,31 +49,33 @@ class Login extends AsyncComponent<unknown, LoginState> {
                     <div className="card margin-t-s padding-l">
                         <form>
                             <p>Please enter your credentials to unlock the full dashboard.</p>
-                            <div className="card--label">User</div>
+                            <div className="card--label">
+                                User
+                            </div>
                             <div className="card--value row">
                                 <input
                                     type="text"
                                     autoComplete="username"
                                     value={this.state.user}
                                     disabled={this.state.isBusy}
-                                    onChange={(e) => this.setState({ user: e.target.value })}
+                                    onChange={e => this.setState({ user: e.target.value })}
                                     autoFocus={true}
                                 />
                             </div>
-                            <div className="card--label">Password</div>
+                            <div className="card--label">
+                                Password
+                            </div>
                             <div className="card--value row">
                                 <input
                                     type="password"
                                     autoComplete="current-password"
                                     value={this.state.password}
                                     disabled={this.state.isBusy}
-                                    onChange={(e) => this.setState({ password: e.target.value })}
-                                    onKeyDown={(e) => {
-                                        if (
-                                            e.key === "Enter" &&
+                                    onChange={e => this.setState({ password: e.target.value })}
+                                    onKeyDown={e => {
+                                        if (e.key === "Enter" &&
                                             this.state.password.trim().length > 0 &&
-                                            this.state.user.trim().length > 0
-                                        ) {
+                                            this.state.user.trim().length > 0) {
                                             this.login();
                                         }
                                     }}
@@ -84,16 +86,16 @@ class Login extends AsyncComponent<unknown, LoginState> {
                                 <button
                                     className="card--action margin-r-s"
                                     type="button"
-                                    disabled={
-                                        this.state.isBusy ||
+                                    disabled={this.state.isBusy ||
                                         this.state.user.trim().length === 0 ||
-                                        this.state.password.trim().length === 0
-                                    }
-                                    onClick={(e) => this.login()}
+                                        this.state.password.trim().length === 0}
+                                    onClick={e => this.login()}
                                 >
                                     Login
                                 </button>
-                                {this.state.isBusy && <Spinner compact={true} />}
+                                {this.state.isBusy && (
+                                    <Spinner compact={true} />
+                                )}
                                 {this.state.error && (
                                     <p className="danger margin-l-t">Your login attempt failed, please try again.</p>
                                 )}
@@ -109,20 +111,17 @@ class Login extends AsyncComponent<unknown, LoginState> {
      * Try the login.
      */
     private login(): void {
-        this.setState(
-            {
-                isBusy: true,
-                error: false,
-            },
-            async () => {
-                const success = await this._authService.login(this.state.user, this.state.password);
+        this.setState({
+            isBusy: true,
+            error: false
+        }, async () => {
+            const success = await this._authService.login(this.state.user, this.state.password);
 
-                this.setState({
-                    isBusy: false,
-                    error: !success,
-                });
-            }
-        );
+            this.setState({
+                isBusy: false,
+                error: !success
+            });
+        });
     }
 }
 
