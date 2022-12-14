@@ -14,6 +14,7 @@ models/AccountNFTsResponse.ts
 models/AccountNonceResponse.ts
 models/AddUserRequest.ts
 models/AliasOutputMetricItem.ts
+models/Allowance.ts
 models/AssetsResponse.ts
 models/BaseToken.ts
 models/Blob.ts
@@ -21,9 +22,11 @@ models/BlobInfoResponse.ts
 models/BlobListResponse.ts
 models/BlobValueResponse.ts
 models/BlockInfoResponse.ts
+models/BlockReceiptError.ts
 models/BlockReceiptsResponse.ts
 models/BurnLog.ts
 models/BurnRecord.ts
+models/CallTarget.ts
 models/ChainInfoResponse.ts
 models/ChainMetrics.ts
 models/ChainRecord.ts
@@ -39,6 +42,7 @@ models/DKSharesInfo.ts
 models/DKSharesPostRequest.ts
 models/ErrorMessageFormatResponse.ts
 models/FoundryOutputResponse.ts
+models/FungibleTokens.ts
 models/GasFeePolicy.ts
 models/GovChainInfoResponse.ts
 models/InOutput.ts
@@ -72,6 +76,7 @@ models/ProtocolParameters.ts
 models/ReceiptError.ts
 models/ReceiptResponse.ts
 models/RentStructure.ts
+models/RequestDetail.ts
 models/RequestIDsResponse.ts
 models/RequestProcessedResponse.ts
 models/RequestReceiptResponse.ts
