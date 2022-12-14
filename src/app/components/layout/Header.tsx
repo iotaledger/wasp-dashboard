@@ -1,5 +1,5 @@
-import React, { ReactNode } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ServiceFactory } from "../../../factories/serviceFactory";
 import { IBpsMetrics } from "../../../models/websocket/IBpsMetrics";
 import { IDBSizeMetric } from "../../../models/websocket/IDBSizeMetric";
@@ -10,274 +10,166 @@ import { AuthService } from "../../../services/authService";
 import { EventAggregator } from "../../../services/eventAggregator";
 import { MetricsService } from "../../../services/metricsService";
 import { FormatHelper } from "../../../utils/formatHelper";
-import AsyncComponent from "./AsyncComponent";
 import Breakpoint from "./Breakpoint";
 import "./Header.scss";
 import { HeaderProps } from "./HeaderProps";
-import { HeaderState } from "./HeaderState";
 import HealthIndicator from "./HealthIndicator";
 import MicroGraph from "./MicroGraph";
 import SearchInput from "./SearchInput";
 
 /**
  * Header panel.
+ * @param props The Header props.
+ * @returns The node to render.
  */
-class Header extends AsyncComponent<RouteComponentProps & HeaderProps, HeaderState> {
-    /**
-     * The auth service.
-     */
-    private readonly _authService: AuthService;
+function Header(props: HeaderProps) {
+    const metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
+    const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
 
-    /**
-     * The metrics service.
-     */
-    private readonly _metricsService: MetricsService;
+    const [isLoggedIn, setIsLoggedIn] = useState(Boolean(authService.isLoggedIn()));
+    const [online, setOnline] = useState(false);
+    const [isHealthy, setIsHealth] = useState(false);
+    const [isSinced, setIsSynced] = useState(false);
+    const [memorySizeFormatted, setMemorySizeFormatted] = useState("");
+    const [memorySize, setMemorySize] = useState<number[]>([]);
+    const [dbLedgerSizeFormatted, setDbLedgerSizeFormatted] = useState("");
+    const [dbTangleSizeFormatted, setDbTangleSizeFormatted] = useState("");
+    const [dbLedgerSize, setDbLedgerSize] = useState<number[]>([]);
+    const [dbTangleSize, setDbTangleSize] = useState<number[]>([]);
+    const [bpsValues, setBpsValues] = useState<number[]>([]);
+    const navigate = useNavigate();
 
-    /**
-     * The node status subscription id.
-     */
-    private _nodeStatusSubscription?: string;
-
-    /**
-     * The public node status subscription id.
-     */
-    private _publicNodeStatusSubscription?: string;
-
-    /**
-     * The database size metrics subscription id.
-     */
-    private _databaseSizeSubscription?: string;
-
-    /**
-     * The bps metrics subscription id.
-     */
-    private _bpsMetricsSubscription?: string;
-
-    /**
-     * Create a new instance of Header.
-     * @param props The props.
-     */
-    constructor(props: RouteComponentProps & HeaderProps) {
-        super(props);
-
-        this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
-        this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
-
-        this.state = {
-            syncHealth: false,
-            nodeHealth: false,
-            bps: "-",
-            bpsValues: [],
-            memorySizeFormatted: "-",
-            memorySize: [],
-            dbLedgerSizeFormatted: "-",
-            dbLedgerSize: [],
-            dbTangleSizeFormatted: "-",
-            dbTangleSize: [],
-            isLoggedIn: Boolean(this._authService.isLoggedIn()),
-            online: false
-        };
-    }
-
-    /**
-     * The component mounted.
-     */
-    public componentDidMount(): void {
-        super.componentDidMount();
-
-        EventAggregator.subscribe("auth-state", "header", isLoggedIn => {
-            this.setState({
-                isLoggedIn
-            });
+    useEffect(() => {
+        EventAggregator.subscribe("auth-state", "header", (newIsLoggedIn: boolean) => {
+            setIsLoggedIn(newIsLoggedIn);
         });
 
-        EventAggregator.subscribe("online", "header", online => {
-            if (online !== this.state.online) {
-                this.setState({
-                    online
-                });
+        EventAggregator.subscribe("online", "header", (newOnline: boolean) => {
+            setOnline(newOnline);
+        });
+
+        const publicNodeStatusSubscription = metricsService.subscribe<IPublicNodeStatus>(
+            WebSocketTopic.PublicNodeStatus,
+            (data) => {
+                if (data) {
+                    setOnline(true);
+                    setIsHealth(data.isHealthy);
+                    setIsSynced(data.isSynced);
+                }
+            }
+        );
+
+        const nodeStatusSubscription = metricsService.subscribe<INodeStatus>(
+            WebSocketTopic.NodeStatus,
+            (data) => {
+                if (data) {
+                    const newMemorySizeFormatted = FormatHelper.iSize(data.memUsage, 1);
+
+                    setMemorySizeFormatted(newMemorySizeFormatted);
+                }
+            },
+            (allData) => {
+                const nonNull = allData.filter((d) => d !== undefined && d !== null);
+                setMemorySize(nonNull.map((d) => d.memUsage));
+            }
+        );
+
+        const databaseSizeSubscription = metricsService.subscribe<IDBSizeMetric>(
+            WebSocketTopic.DBSizeMetric,
+            (data) => {
+                if (data) {
+                    const newDbLedgerSizeFormatted = FormatHelper.size(data.utxo);
+
+                    setDbLedgerSizeFormatted(newDbLedgerSizeFormatted);
+
+                    const newDbTangleSizeFormatted = FormatHelper.size(data.tangle);
+
+                    setDbTangleSizeFormatted(newDbTangleSizeFormatted);
+                }
+            },
+            (allData) => {
+                const nonNull = allData.filter((d) => d !== undefined && d !== null);
+
+                const newDbLedgerSizeValues = nonNull.map((d) => d.utxo);
+
+                setDbLedgerSize(newDbLedgerSizeValues);
+
+                const newDbTangleSizeValues = nonNull.map((d) => d.tangle);
+
+                setDbTangleSize(newDbTangleSizeValues);
+            }
+        );
+
+        let cachedbBpsValues: number[] = [];
+
+        const bpsMetricsSubscription = metricsService.subscribe<IBpsMetrics>(WebSocketTopic.BPSMetrics, (data) => {
+            if (data) {
+                const newBpsValues = cachedbBpsValues.slice(-40);
+                newBpsValues.push(data.new);
+
+                cachedbBpsValues = newBpsValues;
+                setBpsValues(newBpsValues);
             }
         });
 
-        this._publicNodeStatusSubscription = this._metricsService.subscribe<IPublicNodeStatus>(
-            WebSocketTopic.PublicNodeStatus,
-            data => {
-                if (data) {
-                    if (!this.state.online) {
-                        this.setState({
-                            online: true
-                        });
-                    }
-                    if (data.isHealthy !== this.state.nodeHealth) {
-                        this.setState({ nodeHealth: data.isHealthy });
-                    }
-                    if (data.isSynced !== this.state.syncHealth) {
-                        this.setState({ syncHealth: data.isSynced });
-                    }
-                }
-            });
+        return () => {
+            EventAggregator.unsubscribe("auth-state", "header");
+            EventAggregator.unsubscribe("online", "header");
 
-        this._nodeStatusSubscription = this._metricsService.subscribe<INodeStatus>(
-            WebSocketTopic.NodeStatus,
-            data => {
-                if (data) {
-                    const memorySizeFormatted = FormatHelper.iSize(data.memUsage, 1);
+            metricsService.unsubscribe(publicNodeStatusSubscription);
+            metricsService.unsubscribe(nodeStatusSubscription);
+            metricsService.unsubscribe(databaseSizeSubscription);
+            metricsService.unsubscribe(bpsMetricsSubscription);
+        };
+    }, []);
 
-                    if (memorySizeFormatted !== this.state.memorySizeFormatted) {
-                        this.setState({ memorySizeFormatted });
-                    }
-                }
-            },
-            allData => {
-                const nonNull = allData.filter(d => d !== undefined && d !== null);
-                this.setState({
-                    memorySize: nonNull
-                        .map(d => d.memUsage)
-                });
-            });
+    const bpsFormatted = bpsValues[bpsValues.length - 1].toString();
 
-        this._databaseSizeSubscription = this._metricsService.subscribe<IDBSizeMetric>(
-            WebSocketTopic.DBSizeMetric,
-            data => {
-                if (data) {
-                    const dbLedgerSizeFormatted = FormatHelper.size(data.utxo);
-
-                    if (dbLedgerSizeFormatted !== this.state.dbLedgerSizeFormatted) {
-                        this.setState({ dbLedgerSizeFormatted });
-                    }
-
-                    const dbTangleSizeFormatted = FormatHelper.size(data.tangle);
-
-                    if (dbTangleSizeFormatted !== this.state.dbTangleSizeFormatted) {
-                        this.setState({ dbTangleSizeFormatted });
-                    }
-                }
-            },
-            allData => {
-                const nonNull = allData.filter(d => d !== undefined && d !== null);
-
-                const dbLedgerSizeValues = nonNull
-                    .map(d => d.utxo);
-
-                this.setState({ dbLedgerSize: dbLedgerSizeValues });
-
-                const dbTangleSizeValues = nonNull
-                    .map(d => d.tangle);
-
-                this.setState({ dbTangleSize: dbTangleSizeValues });
-            });
-
-        this._bpsMetricsSubscription = this._metricsService.subscribe<IBpsMetrics>(
-            WebSocketTopic.BPSMetrics,
-            data => {
-                if (data) {
-                    const bpsValues = this.state.bpsValues.slice(-40);
-                    bpsValues.push(data.new);
-
-                    const bpsFormatted = bpsValues[bpsValues.length - 1].toString();
-
-                    if (bpsFormatted !== this.state.bps) {
-                        this.setState({ bps: bpsFormatted });
-                    }
-                    this.setState({ bpsValues });
-                }
-            });
-    }
-
-    /**
-     * The component will unmount.
-     */
-    public componentWillUnmount(): void {
-        super.componentWillUnmount();
-
-        EventAggregator.unsubscribe("auth-state", "header");
-        EventAggregator.unsubscribe("online", "header");
-
-        if (this._publicNodeStatusSubscription) {
-            this._metricsService.unsubscribe(this._publicNodeStatusSubscription);
-            this._publicNodeStatusSubscription = undefined;
-        }
-
-        if (this._nodeStatusSubscription) {
-            this._metricsService.unsubscribe(this._nodeStatusSubscription);
-            this._nodeStatusSubscription = undefined;
-        }
-
-        if (this._databaseSizeSubscription) {
-            this._metricsService.unsubscribe(this._databaseSizeSubscription);
-            this._databaseSizeSubscription = undefined;
-        }
-
-        if (this._bpsMetricsSubscription) {
-            this._metricsService.unsubscribe(this._bpsMetricsSubscription);
-            this._bpsMetricsSubscription = undefined;
-        }
-    }
-
-    /**
-     * Render the component.
-     * @returns The node to render.
-     */
-    public render(): ReactNode {
-        return (
-            <header className="header">
-                <div className="content">
-                    {this.state.online && (
-                        <React.Fragment>
-                            {this.props.children}
-                            <SearchInput
-                                compact={true}
-                                onSearch={query => this.props.history.push(`/explorer/search/${query}`)}
-                                className="child child-fill"
-                            />
-                            <Breakpoint size="tablet" aboveBelow="above">
-                                <HealthIndicator
-                                    label="Health"
-                                    healthy={this.state.nodeHealth}
-                                    className="child"
-                                />
-                                <HealthIndicator
-                                    label="Sync"
-                                    healthy={this.state.syncHealth}
-                                    className="child"
-                                />
-                            </Breakpoint>
-                            <Breakpoint size="desktop" aboveBelow="above">
-                                <MicroGraph
-                                    label="BPS"
-                                    value={this.state.bps}
-                                    values={this.state.bpsValues}
-                                    className="child"
-                                />
-                                {this.state.isLoggedIn && (
-                                    <React.Fragment>
-                                        <MicroGraph
-                                            label="Ledger db"
-                                            value={this.state.dbLedgerSizeFormatted}
-                                            values={this.state.dbLedgerSize}
-                                            className="child"
-                                        />
-                                        <MicroGraph
-                                            label="Tangle db"
-                                            value={this.state.dbTangleSizeFormatted}
-                                            values={this.state.dbTangleSize}
-                                            className="child"
-                                        />
-                                        <MicroGraph
-                                            label="Memory"
-                                            value={this.state.memorySizeFormatted}
-                                            values={this.state.memorySize}
-                                            className="child"
-                                        />
-                                    </React.Fragment>
-                                )}
-                            </Breakpoint>
-                        </React.Fragment>
-                    )}
-                </div>
-            </header>
-        );
-    }
+    return (
+        <header className="header">
+            <div className="content">
+                {online && (
+                    <React.Fragment>
+                        {props.children}
+                        <SearchInput
+                            compact={true}
+                            onSearch={(query) => navigate(`/explorer/search/${query}`)}
+                            className="child child-fill"
+                        />
+                        <Breakpoint size="tablet" aboveBelow="above">
+                            <HealthIndicator label="Health" healthy={isHealthy} className="child" />
+                            <HealthIndicator label="Sync" healthy={isSinced} className="child" />
+                        </Breakpoint>
+                        <Breakpoint size="desktop" aboveBelow="above">
+                            <MicroGraph label="BPS" value={bpsFormatted} values={bpsValues} className="child" />
+                            {isLoggedIn && (
+                                <React.Fragment>
+                                    <MicroGraph
+                                        label="Ledger db"
+                                        value={dbLedgerSizeFormatted}
+                                        values={dbLedgerSize}
+                                        className="child"
+                                    />
+                                    <MicroGraph
+                                        label="Tangle db"
+                                        value={dbTangleSizeFormatted}
+                                        values={dbTangleSize}
+                                        className="child"
+                                    />
+                                    <MicroGraph
+                                        label="Memory"
+                                        value={memorySizeFormatted}
+                                        values={memorySize}
+                                        className="child"
+                                    />
+                                </React.Fragment>
+                            )}
+                        </Breakpoint>
+                    </React.Fragment>
+                )}
+            </div>
+        </header>
+    );
 }
 
-export default withRouter(Header);
+export default Header;
