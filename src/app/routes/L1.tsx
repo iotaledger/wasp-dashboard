@@ -41,52 +41,65 @@ function L1() {
 
     return (
         <div className="l1">
-            <div className="content">
-                <div className="card col fill">
-                    <div className="l1-summary">
-                        <h4>L1 params</h4>
-                        {l1Params &&
-                            Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
-                                const isObject = typeof val === "object";
-                                return (
-                                    <div key={key} className="l1-info--item">
-                                        <h2>{key}</h2>
-                                        {isObject ? (
-                                            <ul>
-                                                {Object.entries(val).map(([prop, propVal]) => (
-                                                    <li key={prop}>
-                                                        <b>{prop}:</b> {`${propVal}`}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        ) : (
-                                            <p>{val}</p>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                    </div>
-                </div>
-                <div className="card col">
-                    <div className="l1-summary">
-                        <h4>Chains</h4>
-                        {chains?.map((chain) => (
-                            <div key={chain.chainID} className="l1-summary--item">
-                                <div className="l1-health-icon">
-                                    {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
-                                </div>
-                                <p className="l1-id" title={chain.chainID}>
-                                    {addressShorter(chain.chainID)}
-                                </p>
+            <div className="l1-wrapper">
+                <h2>L1</h2>
+                <div className="content">
+                    {l1Params && (
+                        <div className="card col fill first-card">
+                            <div className="l1-summary">
+                                <h4>L1 params</h4>
+
+                                {Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
+                                    const isObject = typeof val === "object";
+                                    return (
+                                        <div key={key} className="l1-info--item">
+                                            <h4>{key}</h4>
+                                            {isObject ? (
+                                                <div>
+                                                    {Object.entries(val).map(([prop, propVal]) => (
+                                                        <div className="info--item" key={prop}>
+                                                            <span>{prop}:</span>
+
+                                                            {typeof propVal === "boolean" ? (
+                                                                propVal ? (
+                                                                    <input type="checkbox" checked disabled />
+                                                                ) : (
+                                                                    <input type="checkbox" disabled />
+                                                                )
+                                                            ) : (
+                                                                <p> {`${propVal}`}</p>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p>{val}</p>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
-                        ))}
+                        </div>
+                    )}
+                    <div className="card col fill">
+                        <div className="l1-summary">
+                            <h4>Chains</h4>
+                            {chains?.map((chain) => (
+                                <div key={chain.chainID} className="l1-summary--item">
+                                    <div className="l1-health-icon">
+                                        {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
+                                    </div>
+                                    <p className="l1-id" title={chain.chainID}>
+                                        {chain.chainID}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     );
 }
-
-const addressShorter = (addr?: string) => `${addr?.slice(0, 30)}...`;
 
 export default L1;
