@@ -83,9 +83,20 @@
       border-radius: $spacing-small;
       background-color: var(--panel-background-highlight);
 
-      p,
-      li {
-        font-family: monospace;
+      .info--item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        span {
+          margin-right: 10px;
+          color: var(--text-color-secondary);
+          @include font-size(14px);
+        }
+
+        p {
+          color: var(--text-color-primary);
+        }
       }
     }
 

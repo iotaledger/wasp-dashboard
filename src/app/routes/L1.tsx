@@ -55,13 +55,23 @@ function L1() {
                                         <div key={key} className="l1-info--item">
                                             <h4>{key}</h4>
                                             {isObject ? (
-                                                <ul>
+                                                <div>
                                                     {Object.entries(val).map(([prop, propVal]) => (
-                                                        <li key={prop}>
-                                                            <b>{prop}:</b> {`${propVal}`}
-                                                        </li>
+                                                        <div className="info--item" key={prop}>
+                                                            <span>{prop}:</span>
+
+                                                            {typeof propVal === "boolean" ? (
+                                                                propVal ? (
+                                                                    <input type="checkbox" checked disabled />
+                                                                ) : (
+                                                                    <input type="checkbox" disabled />
+                                                                )
+                                                            ) : (
+                                                                <p> {`${propVal}`}</p>
+                                                            )}
+                                                        </div>
                                                     ))}
-                                                </ul>
+                                                </div>
                                             ) : (
                                                 <p>{val}</p>
                                             )}
