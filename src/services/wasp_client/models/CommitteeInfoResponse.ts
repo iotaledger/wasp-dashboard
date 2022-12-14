@@ -45,7 +45,7 @@ export interface CommitteeInfoResponse {
      */
     candidateNodes?: Array<CommitteeNode>;
     /**
-     * ChainID (bech32-encoded).
+     * ChainID (Bech32-encoded).
      * @type {string}
      * @memberof CommitteeInfoResponse
      */

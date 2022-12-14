@@ -23,12 +23,12 @@
         "node": ">=14 <=16.16"
     },
     "scripts": {
-        "start": "cross-env PORT=9090 REACT_APP_BRAND_ID=hornet craco start",
+        "start": "cross-env PORT=9090 REACT_APP_BRAND_ID=wasp craco start",
         "start-bee": "cross-env PORT=9090 REACT_APP_BRAND_ID=bee craco start",
         "lint": "eslint src --ext .tsx,.ts",
         "sass-lint": "stylelint ./src/**/*.scss --custom-syntax postcss-scss",
         "build-internal": "craco build",
-        "build": "cross-env REACT_APP_BRAND_ID=hornet run-s lint sass-lint build-internal",
+        "build": "cross-env REACT_APP_BRAND_ID=wasp run-s lint sass-lint build-internal",
         "build-bee": "cross-env REACT_APP_BRAND_ID=bee run-s lint sass-lint build-internal",
         "test": "craco test",
         "eject": "react-scripts eject",
@@ -51,7 +51,7 @@
         "@types/react-helmet": "^6.1.1",
         "@types/react-router-dom": "^5.1.7",
         "@typescript-eslint/eslint-plugin": "^5.38.0",
-        "@typescript-eslint/parser": "^5.30.7",
+        "@typescript-eslint/parser": "^5.46.1",
         "buffer": "^6.0.3",
         "cross-env": "^7.0.3",
         "eslint": "^8.20.0",
@@ -65,15 +65,15 @@
         "postcss-scss": "^4.0.5",
         "prettier": "^2.7.1",
         "react-scripts": "^5.0.1",
-        "sass": "^1.55.0",
+        "sass": "^1.56.2",
         "stylelint": "^14.12.1",
         "stylelint-config-property-sort-order-smacss": "^9.0.0",
         "stylelint-config-recommended": "^9.0.0",
-        "stylelint-config-recommended-scss": "7.0.0",
+        "stylelint-config-recommended-scss": "8.0.0",
         "stylelint-config-sass-guidelines": "^9.0.1",
-        "stylelint-config-standard": "^28.0.0",
+        "stylelint-config-standard": "^29.0.0",
         "stylelint-scss": "^4.0.0",
-        "typescript": "^4.7.4"
+        "typescript": "^4.9.4"
     },
     "overrides": {
         "@svgr/webpack": "^6.3.1"

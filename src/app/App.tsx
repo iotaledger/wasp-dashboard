@@ -19,13 +19,11 @@ import { MetricsService } from "../services/metricsService";
 import { ThemeService } from "../services/themeService";
 import { WaspClientService } from "../services/waspClientService";
 import { BrandHelper } from "../utils/brandHelper";
+import isNodeOnline from "../utils/nodeStatus";
 import "./App.scss";
 import { AppState } from "./AppState";
 import AsyncComponent from "./components/layout/AsyncComponent";
 import Breakpoint from "./components/layout/Breakpoint";
-import Header from "./components/layout/Header";
-import HealthIndicator from "./components/layout/HealthIndicator";
-import NavMenu from "./components/layout/NavMenu";
 import NavPanel from "./components/layout/NavPanel";
 import RoutesSwitcher from "./routes/RoutesSwitcher";
 
@@ -133,16 +131,12 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
     public async componentDidMount(): Promise<void> {
         super.componentDidMount();
 
-        try {
-            await this._waspClientService.node().getInfo();
-
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        isNodeOnline().then((online) => {
             this.setState({
-                online: true,
+                online,
             });
-        } catch (ex) {
-            console.log(ex);
-            // Raise exception message to frontend
-        }
+        });
 
         if (this.state.isLoggedIn) {
             this.validateTokenPeriodically();
@@ -335,38 +329,9 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
                     />
                 </Breakpoint>
                 <div className="col fill">
-                    <Header>
-                        <Breakpoint size="phone" aboveBelow="below">
-                            <NavMenu>
-                                <NavPanel
-                                    fullWidth={true}
-                                    middle={this.state.online ? sections : []}
-                                    end={this.state.online ? endSections : []}
-                                />
-                            </NavMenu>
-                        </Breakpoint>
-                    </Header>
                     <div className="fill scroll-content">
                         {!this.state.online && <p className="padding-l">The node is offline or loading.</p>}
-                        {this.state.online && (
-                            <React.Fragment>
-                                <Breakpoint size="tablet" aboveBelow="below">
-                                    <div className="card card__flat row middle health-indicators">
-                                        <HealthIndicator
-                                            label="Health"
-                                            healthy={this.state.nodeHealth}
-                                            className="child margin-r-l"
-                                        />
-                                        <HealthIndicator
-                                            label="Sync"
-                                            healthy={this.state.syncHealth}
-                                            className="child"
-                                        />
-                                    </div>
-                                </Breakpoint>
-                                <RoutesSwitcher isLoggedIn={this.state.isLoggedIn} />
-                            </React.Fragment>
-                        )}
+                        {this.state.online && <RoutesSwitcher isLoggedIn={this.state.isLoggedIn} />}
                     </div>
                 </div>
             </div>

@@ -1,31 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React, { ReactNode } from "react";
 import { EyeClosedIcon, EyeIcon } from "../../assets";
 import { ReactComponent as BannerCurve } from "../../assets/banner-curve.svg";
-import { ReactComponent as DbIcon } from "../../assets/db-icon.svg";
-import { ReactComponent as MemoryIcon } from "../../assets/memory.svg";
-import { ReactComponent as MilestoneIcon } from "../../assets/milestone.svg";
-import { ReactComponent as PruningIcon } from "../../assets/pruning.svg";
-import { ReactComponent as UptimeIcon } from "../../assets/uptime.svg";
 import { ServiceFactory } from "../../factories/serviceFactory";
-import { IBpsMetrics } from "../../models/websocket/IBpsMetrics";
-import { IDBSizeMetric } from "../../models/websocket/IDBSizeMetric";
-import { INodeStatus } from "../../models/websocket/INodeStatus";
-import { IPublicNodeStatus } from "../../models/websocket/IPublicNodeStatus";
-import { ISyncStatus } from "../../models/websocket/ISyncStatus";
-import { WebSocketTopic } from "../../models/websocket/webSocketTopic";
 import { AuthService } from "../../services/authService";
 import { EventAggregator } from "../../services/eventAggregator";
-import { MetricsService } from "../../services/metricsService";
 import { NodeConfigService } from "../../services/nodeConfigService";
 import { PeersService } from "../../services/peersService";
 import { SettingsService } from "../../services/settingsService";
 import { ThemeService } from "../../services/themeService";
 import { BrandHelper } from "../../utils/brandHelper";
-import { FormatHelper } from "../../utils/formatHelper";
 import { PeersList } from "../components";
 import AsyncComponent from "../components/layout/AsyncComponent";
-import Graph from "../components/layout/Graph";
-import InfoPanel from "../components/layout/InfoPanel";
 import "./Home.scss";
 import { HomeState } from "./HomeState";
 
@@ -37,11 +23,6 @@ class Home extends AsyncComponent<unknown, HomeState> {
      * The theme service.
      */
     private readonly _themeService: ThemeService;
-
-    /**
-     * The metrics service.
-     */
-    private readonly _metricsService: MetricsService;
 
     /**
      * The settings service.
@@ -64,31 +45,6 @@ class Home extends AsyncComponent<unknown, HomeState> {
     private readonly _peersService: PeersService;
 
     /**
-     * The status subscription id.
-     */
-    private _nodeStatusSubscription?: string;
-
-    /**
-     * The public node status subscription id.
-     */
-    private _publicNodeStatusSubscription?: string;
-
-    /**
-     * The sync status subscription id.
-     */
-    private _syncStatusSubscription?: string;
-
-    /**
-     * The bps metrics subscription id.
-     */
-    private _bpsMetricsSubscription?: string;
-
-    /**
-     * The database size metrics subscription id.
-     */
-    private _databaseSizeSubscription?: string;
-
-    /**
      * Create a new instance of Home.
      * @param props The props.
      */
@@ -96,20 +52,12 @@ class Home extends AsyncComponent<unknown, HomeState> {
         super(props);
 
         this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
-        this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
         this._themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
         this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
         this._nodeConfigService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
         this._peersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
         this.state = {
-            lmi: "-",
-            cmi: "-",
-            pruningIndex: "-",
-            memory: "-",
-            dbLedgerSizeFormatted: "-",
-            dbTangleSizeFormatted: "-",
-            uptime: "-",
             lastReceivedBpsTime: 0,
             bpsIncoming: [],
             bpsOutgoing: [],
@@ -152,89 +100,6 @@ class Home extends AsyncComponent<unknown, HomeState> {
             });
         });
 
-        this._publicNodeStatusSubscription = this._metricsService.subscribe<IPublicNodeStatus>(
-            WebSocketTopic.PublicNodeStatus,
-            (data) => {
-                if (data) {
-                    const pruningIndex = data.pruningIndex.toString();
-
-                    if (pruningIndex !== this.state.pruningIndex) {
-                        this.setState({ pruningIndex });
-                    }
-                }
-            }
-        );
-
-        this._nodeStatusSubscription = this._metricsService.subscribe<INodeStatus>(
-            WebSocketTopic.NodeStatus,
-            (data) => {
-                if (data) {
-                    const uptime = FormatHelper.duration(data.uptime);
-                    const memory = FormatHelper.iSize(data.memUsage);
-
-                    if (uptime !== this.state.uptime) {
-                        this.setState({ uptime });
-                    }
-
-                    if (memory !== this.state.memory) {
-                        this.setState({ memory });
-                    }
-
-                    this.checkVersion(data.version, data.latestVersion);
-                }
-            }
-        );
-
-        this._syncStatusSubscription = this._metricsService.subscribe<ISyncStatus>(
-            WebSocketTopic.SyncStatus,
-            (data) => {
-                if (data) {
-                    const lmi = data.lmi ? data.lmi.toString() : "";
-                    const cmi = data.cmi ? data.cmi.toString() : "";
-
-                    if (lmi !== this.state.lmi) {
-                        this.setState({ lmi });
-                    }
-
-                    if (cmi !== this.state.cmi) {
-                        this.setState({ cmi });
-                    }
-                }
-            }
-        );
-
-        this._bpsMetricsSubscription = this._metricsService.subscribe<IBpsMetrics>(
-            WebSocketTopic.BPSMetrics,
-            undefined,
-            (allData) => {
-                const nonNull = allData.filter((d) => d !== undefined && d !== null);
-
-                const bpsIncoming = nonNull.map((m) => m.incoming);
-                const bpsOutgoing = nonNull.map((m) => m.outgoing);
-
-                this.setState({ bpsIncoming, bpsOutgoing, lastReceivedBpsTime: Date.now() });
-            }
-        );
-
-        this._databaseSizeSubscription = this._metricsService.subscribe<IDBSizeMetric>(
-            WebSocketTopic.DBSizeMetric,
-            (data) => {
-                if (data) {
-                    const dbLedgerSizeFormatted = FormatHelper.size(data.utxo);
-
-                    if (dbLedgerSizeFormatted !== this.state.dbLedgerSizeFormatted) {
-                        this.setState({ dbLedgerSizeFormatted });
-                    }
-
-                    const dbTangleSizeFormatted = FormatHelper.size(data.tangle);
-
-                    if (dbTangleSizeFormatted !== this.state.dbTangleSizeFormatted) {
-                        this.setState({ dbTangleSizeFormatted });
-                    }
-                }
-            }
-        );
-
         EventAggregator.subscribe("settings.blindMode", "home", (blindMode) => {
             this.setState({ blindMode });
         });
@@ -252,31 +117,6 @@ class Home extends AsyncComponent<unknown, HomeState> {
 
         EventAggregator.unsubscribe("theme", "home");
 
-        if (this._nodeStatusSubscription) {
-            this._metricsService.unsubscribe(this._nodeStatusSubscription);
-            this._nodeStatusSubscription = undefined;
-        }
-
-        if (this._publicNodeStatusSubscription) {
-            this._metricsService.unsubscribe(this._publicNodeStatusSubscription);
-            this._publicNodeStatusSubscription = undefined;
-        }
-
-        if (this._syncStatusSubscription) {
-            this._metricsService.unsubscribe(this._syncStatusSubscription);
-            this._syncStatusSubscription = undefined;
-        }
-
-        if (this._bpsMetricsSubscription) {
-            this._metricsService.unsubscribe(this._bpsMetricsSubscription);
-            this._bpsMetricsSubscription = undefined;
-        }
-
-        if (this._databaseSizeSubscription) {
-            this._metricsService.unsubscribe(this._databaseSizeSubscription);
-            this._databaseSizeSubscription = undefined;
-        }
-
         EventAggregator.unsubscribe("settings.blindMode", "home");
     }
 
@@ -292,85 +132,26 @@ class Home extends AsyncComponent<unknown, HomeState> {
                         <div className="banner row">
                             <div className="node-info">
                                 <div>
-                                    <h3>{this.state.blindMode ? "**********" : this.state.publicKey}</h3>
+                                    <h1>WASP node</h1>
+                                    <h3 className="secondary">
+                                        {this.state.blindMode ? "**********" : this.state.publicKey}
+                                    </h3>
                                 </div>
                                 <p className="secondary">{this.state.networkId}</p>
                                 <p className="secondary">{this.state.version}</p>
                             </div>
-                            <BannerCurve className="banner-curve" />
-                            <div className="banner-image">
-                                <img src={this.state.bannerSrc} />
+                            <div className="banner-image-wrapper">
+                                <div className="banner-curve">
+                                    <BannerCurve />
+                                </div>
+                                <div className="banner-image">
+                                    <img src={this.state.bannerSrc} />
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div className="row fill margin-t-s desktop-down-column">
-                        <div className="col info-col fill">
-                            <div className="row tablet-down-column">
-                                <InfoPanel
-                                    caption="CMI / LMI"
-                                    value={`${this.state.cmi} / ${this.state.lmi}`}
-                                    icon={<MilestoneIcon />}
-                                    backgroundStyle="green"
-                                />
-                                <InfoPanel
-                                    caption="Pruning Index"
-                                    value={this.state.pruningIndex?.toString()}
-                                    icon={<PruningIcon />}
-                                    backgroundStyle="orange"
-                                />
-                            </div>
-                            <div className="row margin-t-s tablet-down-column">
-                                <InfoPanel
-                                    caption="Uptime"
-                                    value={this.state.uptime}
-                                    icon={<UptimeIcon />}
-                                    backgroundStyle="blue"
-                                />
-                                <InfoPanel
-                                    caption="Memory Usage"
-                                    value={this.state.memory}
-                                    icon={<MemoryIcon />}
-                                    backgroundStyle="purple"
-                                />
-                            </div>
-                            <div className="row margin-t-s tablet-down-column">
-                                <InfoPanel
-                                    caption="Ledger DB"
-                                    value={this.state.dbLedgerSizeFormatted}
-                                    icon={<DbIcon />}
-                                    backgroundStyle="green"
-                                />
-                                <InfoPanel
-                                    caption="Tangle DB"
-                                    value={this.state.dbTangleSizeFormatted}
-                                    icon={<DbIcon />}
-                                    backgroundStyle="green"
-                                />
-                            </div>
-                            <div className="row margin-t-s">
-                                <div className="card fill blocks-graph-panel">
-                                    <Graph
-                                        caption="Blocks Per Second"
-                                        seriesMaxLength={20}
-                                        timeInterval={1000}
-                                        endTime={this.state.lastReceivedBpsTime}
-                                        series={[
-                                            {
-                                                className: "bar-color-1",
-                                                label: "Incoming",
-                                                values: this.state.bpsIncoming,
-                                            },
-                                            {
-                                                className: "bar-color-2",
-                                                label: "Outgoing",
-                                                values: this.state.bpsOutgoing,
-                                            },
-                                        ]}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="card col peers-summary-col peers-summary-panel">
+                        <div className="card col peers-summary-col">
                             <div className="peers-summary">
                                 <div className="row middle spread margin-b-m">
                                     <h4>Peers</h4>
