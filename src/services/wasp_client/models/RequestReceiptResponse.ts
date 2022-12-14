@@ -13,18 +13,24 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { BlockReceiptError } from './BlockReceiptError';
+import {
+    BlockReceiptErrorFromJSON,
+    BlockReceiptErrorFromJSONTyped,
+    BlockReceiptErrorToJSON,
+} from './BlockReceiptError';
 import type { BurnLog } from './BurnLog';
 import {
     BurnLogFromJSON,
     BurnLogFromJSONTyped,
     BurnLogToJSON,
 } from './BurnLog';
-import type { ReceiptError } from './ReceiptError';
+import type { RequestDetail } from './RequestDetail';
 import {
-    ReceiptErrorFromJSON,
-    ReceiptErrorFromJSONTyped,
-    ReceiptErrorToJSON,
-} from './ReceiptError';
+    RequestDetailFromJSON,
+    RequestDetailFromJSONTyped,
+    RequestDetailToJSON,
+} from './RequestDetail';
 
 /**
  * 
@@ -40,10 +46,10 @@ export interface RequestReceiptResponse {
     blockIndex?: number;
     /**
      * 
-     * @type {ReceiptError}
+     * @type {BlockReceiptError}
      * @memberof RequestReceiptResponse
      */
-    error?: ReceiptError;
+    error?: BlockReceiptError;
     /**
      * 
      * @type {number}
@@ -70,10 +76,10 @@ export interface RequestReceiptResponse {
     gasFeeCharged?: number;
     /**
      * 
-     * @type {string}
+     * @type {RequestDetail}
      * @memberof RequestReceiptResponse
      */
-    request?: string;
+    request?: RequestDetail;
     /**
      * 
      * @type {number}
@@ -102,12 +108,12 @@ export function RequestReceiptResponseFromJSONTyped(json: any, ignoreDiscriminat
     return {
         
         'blockIndex': !exists(json, 'BlockIndex') ? undefined : json['BlockIndex'],
-        'error': !exists(json, 'Error') ? undefined : ReceiptErrorFromJSON(json['Error']),
+        'error': !exists(json, 'Error') ? undefined : BlockReceiptErrorFromJSON(json['Error']),
         'gasBudget': !exists(json, 'GasBudget') ? undefined : json['GasBudget'],
         'gasBurnLog': !exists(json, 'GasBurnLog') ? undefined : BurnLogFromJSON(json['GasBurnLog']),
         'gasBurned': !exists(json, 'GasBurned') ? undefined : json['GasBurned'],
         'gasFeeCharged': !exists(json, 'GasFeeCharged') ? undefined : json['GasFeeCharged'],
-        'request': !exists(json, 'Request') ? undefined : json['Request'],
+        'request': !exists(json, 'Request') ? undefined : RequestDetailFromJSON(json['Request']),
         'requestIndex': !exists(json, 'RequestIndex') ? undefined : json['RequestIndex'],
     };
 }
@@ -122,12 +128,12 @@ export function RequestReceiptResponseToJSON(value?: RequestReceiptResponse | nu
     return {
         
         'BlockIndex': value.blockIndex,
-        'Error': ReceiptErrorToJSON(value.error),
+        'Error': BlockReceiptErrorToJSON(value.error),
         'GasBudget': value.gasBudget,
         'GasBurnLog': BurnLogToJSON(value.gasBurnLog),
         'GasBurned': value.gasBurned,
         'GasFeeCharged': value.gasFeeCharged,
-        'Request': value.request,
+        'Request': RequestDetailToJSON(value.request),
         'RequestIndex': value.requestIndex,
     };
 }
