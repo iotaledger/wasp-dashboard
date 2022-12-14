@@ -146,12 +146,7 @@ function L1() {
 interface StandardMessage {
     messages?: number;
     timestamp: Date;
-    lastMessage?: {
-        output: {
-            bytes: string;
-        };
-        outputID: string;
-    };
+    lastMessage?: Record<string, unknown>;
 }
 
 const addressShorter = (addr?: string) => `${addr?.slice(0, 30)}...`;
