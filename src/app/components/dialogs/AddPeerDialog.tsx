@@ -35,9 +35,6 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
     async function handleAddPeer(): Promise<void> {
         setError(null);
         try {
-            if (!dialog.publicKey || !dialog.netID) {
-                return setError("Please enter the details of the peer to add.");
-            }
             setDialog({ ...dialog, isBusy: true });
             const newPeer: PeeringTrustRequest = {
                 publicKey: dialog.publicKey,
@@ -74,7 +71,7 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
                         type="button"
                         className="button button--primary"
                         onClick={handleAddPeer}
-                        disabled={dialog.isBusy}
+                        disabled={dialog.isBusy || !dialog.publicKey || !dialog.netID}
                     >
                         Add
                     </button>
