@@ -28,13 +28,6 @@
 
       .key {
         margin-bottom: 20px;
-        color: var(--text-color-secondary);
-        font-family: "DM Sans", sans-serif;
-
-        @include font-size(10px);
-
-        font-weight: 500;
-        text-transform: uppercase;
       }
 
       .card {

@@ -78,7 +78,7 @@ function Configuration() {
                                 const value = Object.values(item)[0] as any;
                                 return (
                                     <div className="card" key={index}>
-                                        <h2 className="key">{key} </h2>
+                                        <h4 className="key">{key} </h4>
                                         {Object.entries(value).map(([keyVal, val]) =>
                                             typeof val === "boolean" ? (
                                                 val ? (
