@@ -79,26 +79,26 @@ function Configuration() {
                                 return (
                                     <div className="card" key={index}>
                                         <h4 className="key">{key} </h4>
-                                        {Object.entries(value).map(([keyVal, val]) =>
+                                        {Object.entries(value).map(([keyVal, val], valueIndex) =>
                                             typeof val === "boolean" ? (
                                                 val ? (
-                                                    <div className="card-item">
+                                                    <div key={valueIndex} className="card-item">
                                                         <span>{keyVal}:</span>
                                                         <input type="checkbox" checked disabled />
                                                     </div>
                                                 ) : (
-                                                    <div className="card-item">
+                                                    <div key={valueIndex} className="card-item">
                                                         <span>{keyVal}:</span>
                                                         <input type="checkbox" disabled />
                                                     </div>
                                                 )
                                             ) : typeof val === "string" ? (
-                                                <div className="card-item">
+                                                <div key={valueIndex} className="card-item">
                                                     <span>{keyVal}:</span>
                                                     <p className="value">{val}</p>
                                                 </div>
                                             ) : (
-                                                <div className="card-item">
+                                                <div key={valueIndex} className="card-item">
                                                     <span>{keyVal}:</span>
                                                     <p className="value">{JSON.stringify(val)}</p>
                                                 </div>
