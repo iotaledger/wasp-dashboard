@@ -1,7 +1,7 @@
 import { ServiceFactory } from "../factories/serviceFactory";
 import { AuthService } from "./authService";
 import { EventAggregator } from "./eventAggregator";
-import { PeeringNodeStatusResponse } from "./wasp_client";
+import { PeeringNodeStatusResponse, PeeringTrustRequest } from "./wasp_client";
 import { WaspClientService } from "./waspClientService";
 
 /**
@@ -60,6 +60,41 @@ export class PeersService {
      * @returns Array of peers.
      */
     public get: () => PeeringNodeStatusResponse[] = () => this._peers;
+
+    /**
+     * Trust a peer and refetch the list of peers.
+     * @param peer The peer to trust.
+     */
+    public async trustPeer(peer: PeeringTrustRequest): Promise<void> {
+        try {
+            const waspAPI: WaspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+            await waspAPI.node().trustPeer({ peeringTrustRequest: peer });
+
+            // refetch peers because the api response returns void.
+            await this.fetchPeers();
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error(`Failed to trust peer: ${err.message}`);
+            }
+        }
+    }
+
+    /**
+     * Distrust a peer and refetch the list of peers.
+     * Note: This action will remove the peer from the list of peers.
+     * @param peer The peer to distrust.
+     */
+    public async distrustPeer(peer: PeeringTrustRequest): Promise<void> {
+        try {
+            const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+            await waspClientService.node().distrustPeer({ peeringTrustRequest: peer });
+            await this.fetchPeers();
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error(err.message);
+            }
+        }
+    }
 
     /**
      * Fetch the peers.
