@@ -7,7 +7,7 @@ import { EventAggregator } from "../../services/eventAggregator";
 import { PeersService } from "../../services/peersService";
 import { SettingsService } from "../../services/settingsService";
 import { PeeringNodeStatusResponse } from "../../services/wasp_client";
-import { PeersList } from "../components";
+import { PeersList, AddPeerDialog } from "../components";
 
 const Peers: React.FC = () => {
     /**
@@ -35,8 +35,12 @@ const Peers: React.FC = () => {
     const [blindMode, setBlindMode] = useState<boolean>(settingsService.getBlindMode());
 
     /**
+     * The state to handle "Add Peer" dialog.
+     */
+    const [showAddPeerDialog, setShowAddPeerDialog] = useState<boolean>(false);
+
+    /**
      * The component mounted.
-     * @returns {Promise<void>}
      */
     useEffect(() => {
         EventAggregator.subscribe("peers-state", "peers-quick-list", setPeersList);
@@ -45,7 +49,7 @@ const Peers: React.FC = () => {
     /**
      * Toggle the blind mode.
      */
-    function toggleBlindMode() {
+    function toggleBlindMode(): void {
         const newBlindMode = !blindMode;
         setBlindMode(newBlindMode);
         settingsService.setBlindMode(newBlindMode);
@@ -60,7 +64,7 @@ const Peers: React.FC = () => {
                             {blindMode ? <EyeIcon /> : <EyeClosedIcon />}
                         </button>
 
-                        <button type="button" className="add-button" onClick={() => {}}>
+                        <button type="button" className="add-button" onClick={() => setShowAddPeerDialog(true)}>
                             Add Peer
                         </button>
                     </div>
@@ -68,6 +72,7 @@ const Peers: React.FC = () => {
                 <div className="peers-panel">
                     <PeersList peers={peersList} blindMode={blindMode} detailedList />
                 </div>
+                {showAddPeerDialog && <AddPeerDialog onClose={() => setShowAddPeerDialog(false)} />}
             </div>
         </div>
     );
