@@ -20,11 +20,21 @@
     flex-direction: row;
     max-width: $content-width-desktop;
     color: var(--text-color-primary);
-    
-    & > div {
-        margin: 16px;
+
+    & .group {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      flex-grow: 1;
+      &.column {
+        flex-direction: column;
+      }
     }
-   
+
+    & .card {
+      margin: 10px;
+    }
+    
     & ul {
         margin-block-start: 10px;
         margin-inline-start: 20px;
