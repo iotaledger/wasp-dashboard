@@ -2,8 +2,6 @@ import "./PeerTile.scss";
 
 import React, { useState } from "react";
 import { HealthGood, HealthWarning } from "../../assets";
-import { ServiceFactory } from "../../factories/serviceFactory";
-import { PeersService } from "../../services/peersService";
 import { PeeringNodeStatusResponse } from "../../services/wasp_client";
 import { DeletePeerDialog } from "./dialogs";
 
@@ -26,19 +24,6 @@ interface PeerTileProps {
 
 const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
-
-    /**
-     * The peer service.
-     */
-    const peerService: PeersService = ServiceFactory.get<PeersService>(PeersService.name);
-
-    /**
-     * Handle the delete peer action.
-     */
-    async function handleDeletePeer(): Promise<void> {
-        await peerService.distrustPeer(peer);
-        setShowDeleteDialog(false);
-    }
     return (
         <React.Fragment>
             <div className={`peers-panel--item card ${detailed ? "detailed" : "summary"}`}>
@@ -74,7 +59,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
                     onClose={() => {
                         setShowDeleteDialog(false);
                     }}
-                    deletePeer={handleDeletePeer}
+                    peer={peer}
                 />
             )}
         </React.Fragment>

@@ -63,6 +63,12 @@
                 font-weight: 500;
                 text-transform: uppercase;
             }
+
+            .dialog--error {
+                color: $danger;
+                font-weight: 500;
+                margin-top: $spacing-small;
+            }
         }
 
         .dialog-footer {

@@ -4,24 +4,24 @@ import { ServiceFactory } from "../../../factories/serviceFactory";
 import { PeersService } from "../../../services/peersService";
 import { PeeringTrustRequest } from "../../../services/wasp_client";
 
-interface IDialogState {
-    publicKey: string;
-    netID: string;
-    isBusy: boolean;
-}
-
-const DIALOG_INITIAL_STATE: IDialogState = {
+const FORM_INITIAL_VALUES: IFormValues = {
     publicKey: "",
     netID: "",
-    isBusy: false,
 };
+
+interface IFormValues {
+    publicKey: string;
+    netID: string;
+}
 
 interface IAddPeerDialog {
     onClose: () => void;
 }
 
 const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
-    const [dialog, setDialog] = useState<IDialogState>(DIALOG_INITIAL_STATE);
+    const [formValues, setFormValues] = useState<IFormValues>(FORM_INITIAL_VALUES);
+    const [isBusy, setIsBusy] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     /**
      * The peers service.
@@ -29,20 +29,28 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
     const peersService: PeersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
     /**
-     * Handle add a ner peer.
+     * Handle add new peer.
      */
     async function handleAddPeer(): Promise<void> {
-        if (!dialog.publicKey || !dialog.netID || dialog.isBusy) {
-            return;
+        setError(null);
+        try {
+            setIsBusy(true);
+            const newPeer: PeeringTrustRequest = {
+                publicKey: formValues.publicKey,
+                netID: formValues.netID,
+            };
+            const success = await peersService.trustPeer(newPeer);
+            if (!success) {
+                throw new Error("Failed to add peer");
+            }
+            onClose();
+        } catch (e) {
+            if (e instanceof Error) {
+                setError(e.message);
+            }
+        } finally {
+            setIsBusy(false);
         }
-
-        const newPeer: PeeringTrustRequest = {
-            publicKey: dialog.publicKey,
-            netID: dialog.netID,
-        };
-        setDialog({ ...dialog, isBusy: true });
-        await peersService.trustPeer(newPeer);
-        onClose();
     }
 
     /**
@@ -50,7 +58,7 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
      * @param e The event.
      */
     function onChange(e: React.ChangeEvent<HTMLInputElement>): void {
-        setDialog({ ...dialog, [e.target.name]: e.target.value });
+        setFormValues({ ...formValues, [e.target.name]: e.target.value });
     }
     return (
         <Dialog
@@ -62,11 +70,11 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
                         type="button"
                         className="button button--primary"
                         onClick={handleAddPeer}
-                        disabled={dialog.isBusy}
+                        disabled={isBusy || !formValues.publicKey || !formValues.netID}
                     >
                         Add
                     </button>
-                    <button type="button" className="button button--secondary" onClick={onClose}>
+                    <button type="button" className="button button--secondary" disabled={isBusy} onClick={onClose}>
                         Cancel
                     </button>
                 </React.Fragment>
@@ -81,8 +89,8 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
                         className="input--stretch"
                         placeholder="e.g. 0x0000000000000000000000000000000000000000000000000000000000000000"
                         name="publicKey"
-                        value={dialog.publicKey}
-                        disabled={dialog.isBusy}
+                        value={formValues.publicKey}
+                        disabled={isBusy}
                         onChange={onChange}
                     />
                 </div>
@@ -93,10 +101,11 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
                         className="input--stretch"
                         placeholder="e.g. 127.0.0.1:15600"
                         name="netID"
-                        value={dialog.netID}
-                        disabled={dialog.isBusy}
+                        value={formValues.netID}
+                        disabled={isBusy}
                         onChange={onChange}
                     />
+                    {error && <p className="dialog--error">{error}</p>}
                 </div>
             </React.Fragment>
         </Dialog>
