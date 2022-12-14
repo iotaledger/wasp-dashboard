@@ -32,7 +32,7 @@ export interface PeeringNodeIdentityResponse {
      */
     netID?: string;
     /**
-     * The peers public key encoded in hex
+     * The peers public key encoded in Hex
      * @type {string}
      * @memberof PeeringNodeIdentityResponse
      */

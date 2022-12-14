@@ -18,6 +18,7 @@ import type {
   ChainInfoResponse,
   CommitteeInfoResponse,
   ContractInfoResponse,
+  ValidationError,
 } from '../models';
 import {
     ChainInfoResponseFromJSON,
@@ -26,6 +27,8 @@ import {
     CommitteeInfoResponseToJSON,
     ContractInfoResponseFromJSON,
     ContractInfoResponseToJSON,
+    ValidationErrorFromJSON,
+    ValidationErrorToJSON,
 } from '../models';
 
 export interface ActivateChainRequest {
@@ -225,7 +228,7 @@ export class ChainsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get basic chain info
+     * Get information about the deployed committee
      */
     async getCommitteeInfoRaw(requestParameters: GetCommitteeInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CommitteeInfoResponse>> {
         if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
@@ -251,7 +254,7 @@ export class ChainsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get basic chain info
+     * Get information about the deployed committee
      */
     async getCommitteeInfo(requestParameters: GetCommitteeInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CommitteeInfoResponse> {
         const response = await this.getCommitteeInfoRaw(requestParameters, initOverrides);

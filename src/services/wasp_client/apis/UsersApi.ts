@@ -19,6 +19,7 @@ import type {
   UpdateUserPasswordRequest,
   UpdateUserPermissionsRequest,
   User,
+  ValidationError,
 } from '../models';
 import {
     AddUserRequestFromJSON,
@@ -29,6 +30,8 @@ import {
     UpdateUserPermissionsRequestToJSON,
     UserFromJSON,
     UserToJSON,
+    ValidationErrorFromJSON,
+    ValidationErrorToJSON,
 } from '../models';
 
 export interface AddUserOperationRequest {

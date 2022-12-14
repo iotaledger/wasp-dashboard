@@ -55,6 +55,7 @@ export interface WaitForTransactionRequest {
 export class RequestsApi extends runtime.BaseAPI {
 
     /**
+     * Execute a view call. Either use HName or Name properties. If both are supplied, HName are used.
      * Call a view function on a contract by Hname
      */
     async callViewRaw(requestParameters: CallViewRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<JSONDict>> {
@@ -76,6 +77,7 @@ export class RequestsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Execute a view call. Either use HName or Name properties. If both are supplied, HName are used.
      * Call a view function on a contract by Hname
      */
     async callView(requestParameters: CallViewRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<JSONDict> {
@@ -100,7 +102,7 @@ export class RequestsApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/v2/requests/{chainID}/receipt/{requestID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
+            path: `/v2/chains/{chainID}/receipts/{requestID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -162,7 +164,7 @@ export class RequestsApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/v2/requests/{chainID}/request/{requestID}/wait`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
+            path: `/v2/chains/{chainID}/requests/{requestID}/wait`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

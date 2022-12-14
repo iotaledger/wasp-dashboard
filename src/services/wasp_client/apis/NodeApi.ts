@@ -22,6 +22,7 @@ import type {
   PeeringNodeIdentityResponse,
   PeeringNodeStatusResponse,
   PeeringTrustRequest,
+  ValidationError,
 } from '../models';
 import {
     DKSharesInfoFromJSON,
@@ -38,6 +39,8 @@ import {
     PeeringNodeStatusResponseToJSON,
     PeeringTrustRequestFromJSON,
     PeeringTrustRequestToJSON,
+    ValidationErrorFromJSON,
+    ValidationErrorToJSON,
 } from '../models';
 
 export interface DistrustPeerRequest {
