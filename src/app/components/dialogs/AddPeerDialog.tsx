@@ -22,6 +22,7 @@ interface IAddPeerDialog {
 
 const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
     const [dialog, setDialog] = useState<IDialogState>(DIALOG_INITIAL_STATE);
+    const [error, setError] = useState<string | null>(null);
 
     /**
      * The peers service.
@@ -29,20 +30,31 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
     const peersService: PeersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
     /**
-     * Handle add a ner peer.
+     * Handle add new peer.
      */
     async function handleAddPeer(): Promise<void> {
-        if (!dialog.publicKey || !dialog.netID || dialog.isBusy) {
-            return;
+        setError(null);
+        try {
+            if (!dialog.publicKey || !dialog.netID) {
+                return setError("Please enter the details of the peer to add.");
+            }
+            setDialog({ ...dialog, isBusy: true });
+            const newPeer: PeeringTrustRequest = {
+                publicKey: dialog.publicKey,
+                netID: dialog.netID,
+            };
+            const success = await peersService.trustPeer(newPeer);
+            if (!success) {
+                setDialog({ ...dialog, isBusy: false });
+                throw new Error("Failed to add peer");
+            }
+            onClose();
+        } catch (e) {
+            if (e instanceof Error) {
+                setError(e.message);
+            }
         }
-
-        const newPeer: PeeringTrustRequest = {
-            publicKey: dialog.publicKey,
-            netID: dialog.netID,
-        };
-        setDialog({ ...dialog, isBusy: true });
-        await peersService.trustPeer(newPeer);
-        onClose();
+        setDialog({ ...dialog, isBusy: false });
     }
 
     /**
@@ -66,7 +78,12 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
                     >
                         Add
                     </button>
-                    <button type="button" className="button button--secondary" onClick={onClose}>
+                    <button
+                        type="button"
+                        className="button button--secondary"
+                        disabled={dialog.isBusy}
+                        onClick={onClose}
+                    >
                         Cancel
                     </button>
                 </React.Fragment>
@@ -97,6 +114,7 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
                         disabled={dialog.isBusy}
                         onChange={onChange}
                     />
+                    {error && <p className="dialog--error">{error}</p>}
                 </div>
             </React.Fragment>
         </Dialog>
