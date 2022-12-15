@@ -8,12 +8,10 @@ interface ChainMessagesTableProps {
 
 /**
  * L1 Chain Messages table.
- * @param root0
- * @param root0.chainMetrics
- * @params root0 L1 Chain messages table props.
+ * @param props L1 Chain Messages table props.
  * @returns The node to render.
  */
-function ChainMessagesTable({ chainMetrics }: ChainMessagesTableProps) {
+function ChainMessagesTable(props: ChainMessagesTableProps) {
     return (
         <table cellSpacing={0}>
             <thead>
@@ -26,7 +24,7 @@ function ChainMessagesTable({ chainMetrics }: ChainMessagesTableProps) {
                 </tr>
             </thead>
             <tbody>
-                {Object.entries(chainMetrics).map(([key, val]: [string, StandardMessage]) => {
+                {Object.entries(props.chainMetrics).map(([key, val]: [string, StandardMessage]) => {
                     const name = METRICS_NAMES[key];
                     const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
                     const totalMessages = val.messages ?? 0;
