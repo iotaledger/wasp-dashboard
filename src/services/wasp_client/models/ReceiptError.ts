@@ -21,16 +21,34 @@ import { exists, mapValues } from '../runtime';
 export interface ReceiptError {
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof ReceiptError
      */
-    errorMessage?: string;
+    contractID?: number;
     /**
      * 
      * @type {string}
      * @memberof ReceiptError
      */
-    hash?: string;
+    errorCode?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ReceiptError
+     */
+    errorID?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReceiptError
+     */
+    message?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ReceiptError
+     */
+    parameters?: Array<string>;
 }
 
 /**
@@ -52,8 +70,11 @@ export function ReceiptErrorFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'errorMessage': !exists(json, 'ErrorMessage') ? undefined : json['ErrorMessage'],
-        'hash': !exists(json, 'Hash') ? undefined : json['Hash'],
+        'contractID': !exists(json, 'ContractID') ? undefined : json['ContractID'],
+        'errorCode': !exists(json, 'ErrorCode') ? undefined : json['ErrorCode'],
+        'errorID': !exists(json, 'ErrorID') ? undefined : json['ErrorID'],
+        'message': !exists(json, 'Message') ? undefined : json['Message'],
+        'parameters': !exists(json, 'Parameters') ? undefined : json['Parameters'],
     };
 }
 
@@ -66,8 +87,11 @@ export function ReceiptErrorToJSON(value?: ReceiptError | null): any {
     }
     return {
         
-        'ErrorMessage': value.errorMessage,
-        'Hash': value.hash,
+        'ContractID': value.contractID,
+        'ErrorCode': value.errorCode,
+        'ErrorID': value.errorID,
+        'Message': value.message,
+        'Parameters': value.parameters,
     };
 }
 

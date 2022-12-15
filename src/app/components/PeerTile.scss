@@ -46,7 +46,7 @@
 
         > p {
             margin-top: $spacing-small;
-            font-weight: 400
+            font-weight: 400;
         }
 
         .peer-id {
@@ -55,6 +55,13 @@
             color: var(--text-color-primary);
             word-break: break-all;
             overflow-wrap: anywhere;
+        }
+    }
+
+    .peer-actions {
+        margin-left: auto;
+        > button:not(:first-child) {
+            margin-top: $spacing-tiny;
         }
     }
 }

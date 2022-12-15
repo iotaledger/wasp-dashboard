@@ -1,6 +1,6 @@
-@import '../../scss/card';
-@import '../../scss/fonts';
-@import '../../scss/media-queries';
+@import "../../scss/card";
+@import "../../scss/fonts";
+@import "../../scss/media-queries";
 
 .l1 {
   display: flex;
@@ -8,103 +8,139 @@
   justify-content: center;
   padding: 60px;
   font-family: $font-sans;
-  
+
   @include desktop-down {
     padding: $spacing-small;
   }
 
-  .content {
+  .l1-wrapper {
+    display: flex;
     flex: 1;
+    flex-direction: column;
+    max-width: $content-width-desktop;
+
+    h2 {
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+  }
+
+  .content {
     display: inline-flex;
-    flex-wrap: wrap;
+    flex: 1;
     flex-direction: row;
+    flex-wrap: wrap;
     max-width: $content-width-desktop;
     color: var(--text-color-primary);
 
-    & .group {
-      flex: 1;
-      display: flex;
-      flex-direction: row;
-      
-      &.column {
-        flex-direction: column;
+    @include desktop-down {
+      flex-direction: column;
+    }
+
+    .first-card {
+      margin-right: $spacing-small;
+      margin-bottom: 0;
+
+      @include desktop-down {
+        margin-right: 0;
+        margin-bottom: $spacing-small;
       }
     }
 
-    & .card {
-      margin: 10px;
+    .last-card {
+      margin-top: $spacing-small;
     }
-    
+
     & ul {
-        margin-block-start: 10px;
-        margin-inline-start: 20px;
+      margin-block-start: 10px;
+      margin-inline-start: 20px;
     }
 
     & table {
-        & tr {
-            height: 40px;
+      & tr {
+        height: 40px;
+      }
+
+      & td,
+      th,
+      .status {
+        padding: 8px 15px;
+
+        &.big {
+          min-width: 200px;
         }
-        & td, th, .status {
-            padding: 8px 15px; 
-            &.big {
-                min-width: 200px;   
-            }
-        }
-        & .status {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-        }
+      }
+
+      & .status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
     }
 
     .l1-info--item {
-        min-height: 90px;
-        margin-bottom: $spacing-small;
-        padding: $spacing-small;
-        overflow: hidden;
-        border-radius: $spacing-small;
-        background-color: var(--panel-background-highlight);
+      min-height: 90px;
+      margin-bottom: $spacing-small;
+      padding: $spacing-small;
+      overflow: hidden;
+      border-radius: $spacing-small;
+      background-color: var(--panel-background-highlight);
 
-        p, li {
-            font-family: monospace;
-        }
-    }
-
-    .l1-summary--item {
+      .info--item {
         display: flex;
         flex-direction: row;
         align-items: center;
-        min-height: 90px;
-        margin-bottom: $spacing-small;
-        padding: $spacing-small;
-        overflow: hidden;
-        border-radius: $spacing-small;
-        background-color: var(--panel-background-highlight);
-    
-        &:focus {
-          border: 0;
-        }
-    
-        .l1-health-icon {
-          width: 16px;
-        }
-    
-        .l1-id {
+        margin-bottom: 4px;
+
+        span {
+          margin-right: 10px;
+          color: var(--text-color-secondary);
           @include font-size(14px);
-    
-          margin-left: $spacing-small;
+          font-family: $font-mono;
+        }
+
+        p {
           color: var(--text-color-primary);
-          font-family: $font-sans;
-          font-weight: 500;
-          word-break: break-all;
         }
+      }
     }
+
+    .l1-summary--item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      min-height: 90px;
+      margin-bottom: $spacing-small;
+      padding: $spacing-large;
+      overflow: hidden;
+      border-radius: $spacing-small;
+      background-color: var(--panel-background-highlight);
+
+      &:focus {
+        border: 0;
+      }
+
+      .l1-health-icon {
+        width: 16px;
+      }
+
+      .l1-id {
+        @include font-size(14px);
+
+        margin-left: $spacing-small;
+        color: var(--text-color-primary);
+        word-break: break-all;
+        overflow-wrap: anywhere;
+      }
+    }
+
     .l1-summary {
-        padding: 16px;
-        h4 {
-            margin-bottom: 20px;
-        }
+      padding: 16px;
+
+      h4 {
+        margin-bottom: 20px;
+      }
     }
   }
 }

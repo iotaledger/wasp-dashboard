@@ -1,7 +1,7 @@
 import { ServiceFactory } from "../factories/serviceFactory";
 import { AuthService } from "./authService";
 import { EventAggregator } from "./eventAggregator";
-import { PeeringNodeStatusResponse } from "./wasp_client";
+import { PeeringNodeStatusResponse, PeeringTrustRequest } from "./wasp_client";
 import { WaspClientService } from "./waspClientService";
 
 /**
@@ -60,6 +60,47 @@ export class PeersService {
      * @returns Array of peers.
      */
     public get: () => PeeringNodeStatusResponse[] = () => this._peers;
+
+    /**
+     * Trust a peer and refetch the list of peers.
+     * @param peer The peer to trust.
+     * @returns true if the peer was added.
+     */
+    public async trustPeer(peer: PeeringTrustRequest): Promise<boolean> {
+        try {
+            const waspAPI: WaspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+            await waspAPI.node().trustPeer({ peeringTrustRequest: peer });
+
+            // refetch peers because the api response returns void.
+            await this.fetchPeers();
+            return true;
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error(`Failed to trust peer: ${err.message}`);
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Distrust a peer and refetch the list of peers.
+     * Note: This action will remove the peer from the list of peers.
+     * @param peer The peer to distrust.
+     * @returns true if the peer was removed.
+     */
+    public async distrustPeer(peer: PeeringTrustRequest): Promise<boolean> {
+        try {
+            const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+            await waspClientService.node().distrustPeer({ peeringTrustRequest: peer });
+            await this.fetchPeers();
+            return true;
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error(err.message);
+            }
+            return false;
+        }
+    }
 
     /**
      * Fetch the peers.

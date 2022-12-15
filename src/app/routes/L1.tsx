@@ -17,84 +17,92 @@ function L1() {
     const [l1Metrics, setl1Metrics] = useState<ChainMetrics | null>(null);
 
     React.useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        (async () => {
-            const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
-            const nodeService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
+        const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+        const nodeService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
 
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            nodeService.initialize().then(() => {
-                const params = nodeService.getL1Params();
-                if (params) {
-                    setL1Params(params);
-                }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        nodeService.initialize().then(() => {
+            const params = nodeService.getL1Params();
+            if (params) {
+                setL1Params(params);
+            }
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .chains()
+            .getChains()
+            .then((newChains) => {
+                setChains(newChains);
             });
 
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            waspClientService
-                .chains()
-                .getChains()
-                .then((newChains) => {
-                    setChains(newChains);
-                });
-
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            waspClientService
-                .metrics()
-                .getL1Metrics()
-                .then((metrics) => {
-                    setl1Metrics(metrics);
-                });
-        })();
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .metrics()
+            .getL1Metrics()
+            .then((metrics) => {
+                setl1Metrics(metrics);
+            });
     }, []);
 
     return (
         <div className="l1">
-            <div className="content">
-                <div className="group column">
-                    <div className="group">
-                        <div className="card col fill">
+            <div className="l1-wrapper">
+                <h2>L1</h2>
+                <div className="content">
+                    {l1Params && (
+                        <div className="card col fill first-card">
                             <div className="l1-summary">
                                 <h4>L1 params</h4>
-                                {l1Params &&
-                                    Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
-                                        const isObject = typeof val === "object";
-                                        return (
-                                            <div key={key} className="l1-info--item">
-                                                <h2>{key}</h2>
-                                                {isObject ? (
-                                                    <ul>
-                                                        {Object.entries(val).map(([prop, propVal]) => (
-                                                            <li key={prop}>
-                                                                <b>{prop}:</b> {`${propVal}`}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                ) : (
-                                                    <p>{val}</p>
-                                                )}
-                                            </div>
-                                        );
-                                    })}
+
+                                {Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
+                                    const isObject = typeof val === "object";
+                                    return (
+                                        <div key={key} className="l1-info--item">
+                                            <h4>{key}</h4>
+                                            {isObject ? (
+                                                <div>
+                                                    {Object.entries(val).map(([prop, propVal]) => (
+                                                        <div className="info--item" key={prop}>
+                                                            <span>{prop}:</span>
+
+                                                            {typeof propVal === "boolean" ? (
+                                                                propVal ? (
+                                                                    <input type="checkbox" checked disabled />
+                                                                ) : (
+                                                                    <input type="checkbox" disabled />
+                                                                )
+                                                            ) : (
+                                                                <p> {`${propVal}`}</p>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p>{val}</p>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
-                        <div className="card col">
-                            <div className="l1-summary">
-                                <h4>Chains</h4>
-                                {chains?.map((chain) => (
-                                    <div key={chain.chainID} className="l1-summary--item">
-                                        <div className="l1-health-icon">
-                                            {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
-                                        </div>
-                                        <p className="l1-id" title={chain.chainID}>
-                                            {addressShorter(chain.chainID)}
-                                        </p>
+                    )}
+                    <div className="card col fill">
+                        <div className="l1-summary">
+                            <h4>Chains</h4>
+                            {chains?.map((chain) => (
+                                <div key={chain.chainID} className="l1-summary--item">
+                                    <div className="l1-health-icon">
+                                        {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
                                     </div>
-                                ))}
-                            </div>
+                                    <p className="l1-id" title={chain.chainID}>
+                                        {chain.chainID}
+                                    </p>
+                                </div>
+                            ))}
                         </div>
                     </div>
-                    <div className="card col fill">
+                    <div className="card col fill last-card">
                         <div className="l1-summary">
                             <h4>L1 metrics</h4>
                             {l1Metrics && (
@@ -148,8 +156,6 @@ interface StandardMessage {
     timestamp: Date;
     lastMessage?: Record<string, unknown>;
 }
-
-const addressShorter = (addr?: string) => `${addr?.slice(0, 30)}...`;
 
 const METRICS_NAMES: Record<string, string> = {
     inAliasOutput: "Alias output",
