@@ -15,7 +15,7 @@ interface ChainMessagesTableProps {
  */
 function ChainMessagesTable({ chainMetrics }: ChainMessagesTableProps) {
     return (
-        <table>
+        <table cellSpacing={0}>
             <thead>
                 <tr>
                     <th>Message name</th>
