@@ -93,14 +93,16 @@ function L1() {
                         <div className="l1-summary">
                             <h4>Chains</h4>
                             {chains?.map((chain) => (
-                                <div key={chain.chainID} className="l1-summary--item">
-                                    <div className="l1-health-icon">
-                                        {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
+                                <Link key={chain.chainID} to={`/l1/${chain.chainID}`}>
+                                    <div className="l1-summary--item">
+                                        <div className="l1-health-icon">
+                                            {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
+                                        </div>
+                                        <p className="l1-id" title={chain.chainID}>
+                                            {chain.chainID}
+                                        </p>
                                     </div>
-                                    <p className="l1-id" title={chain.chainID}>
-                                        <Link to={`/l1/${chain.chainID}`}>{chain.chainID}</Link>
-                                    </p>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     </div>
