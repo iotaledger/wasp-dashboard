@@ -28,8 +28,8 @@ function ChainMessagesTable(props: ChainMessagesTableProps) {
                     const name = METRICS_NAMES[key];
                     const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
                     const totalMessages = val.messages ?? 0;
-                    const date = val.timestamp.valueOf() > 0 ? val.timestamp.toISOString() : "NEVER";
-                    const lastMessage = val.lastMessage ? `${JSON.stringify(val.lastMessage).slice(0, 45)}...` : "";
+                    const date = val.timestamp.valueOf() > 0 ? formatDateToDDMMYYYYHHMM(val.timestamp) : "NEVER";
+                    const lastMessage = val.lastMessage ? JSON.stringify(val.lastMessage, null, 2) : "";
                     return (
                         <tr key={key}>
                             <td>{name}</td>
@@ -67,4 +67,24 @@ const METRICS_NAMES: Record<string, string> = {
     outPullTxInclusionState: "Pull tx inclusion state",
 };
 
+/**
+ *
+ * @param date
+ * @returns
+ */
+function formatDateToDDMMYYYYHHMM(date?: Date | null) {
+    if (!date) {
+        return "-";
+    }
+    return new Intl.DateTimeFormat("es-ES", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+    })
+        .format(new Date(date))
+        .replace(",", " -");
+}
 export default ChainMessagesTable;
