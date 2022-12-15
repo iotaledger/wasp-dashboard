@@ -28,14 +28,14 @@ function ChainMessagesTable({ chainMetrics }: ChainMessagesTableProps) {
             <tbody>
                 {Object.entries(chainMetrics).map(([key, val]: [string, StandardMessage]) => {
                     const name = METRICS_NAMES[key];
-                    const inOrOut = key.startsWith("in") ? "IN" : "OUT";
+                    const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
                     const totalMessages = val.messages ?? 0;
                     const date = val.timestamp.valueOf() > 0 ? val.timestamp.toISOString() : "NEVER";
                     const lastMessage = val.lastMessage ? `${JSON.stringify(val.lastMessage).slice(0, 45)}...` : "";
                     return (
                         <tr key={key}>
                             <td>{name}</td>
-                            <td>{inOrOut}</td>
+                            <td>{typeInOrOut}</td>
                             <td>{totalMessages}</td>
                             <td>{date}</td>
                             <td>
