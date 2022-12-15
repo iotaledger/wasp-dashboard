@@ -56,27 +56,8 @@
       margin-inline-start: 20px;
     }
 
-    & table {
-      & tr {
-        height: 40px;
-      }
-
-      & td,
-      th,
-      .status {
-        padding: 8px 15px;
-
-        &.big {
-          min-width: 200px;
-        }
-      }
-
-      & .status {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-      }
+    & a {
+      color: var(--text-color-primary);
     }
 
     .l1-info--item {
