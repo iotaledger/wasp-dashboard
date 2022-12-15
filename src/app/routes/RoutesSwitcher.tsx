@@ -5,6 +5,7 @@ import Home from "./Home";
 import L1 from "./L1";
 import Login from "./Login";
 import Peers from "./Peers";
+import Users from "./Users";
 
 /**
  *
@@ -44,12 +45,7 @@ function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
                     /> */}
                     <Route path="/configuration" element={<Configuration />} key="configuration" />
                     <Route path="/l1" element={<L1 />} key="l1" />
-                    {/* <Route
-
-                        path="/users"
-                        element={(<Users />)}
-                        key="home"
-                    /> */}
+                    <Route path="/users" element={<Users />} key="home" />
                 </React.Fragment>
             )}
         </Routes>
