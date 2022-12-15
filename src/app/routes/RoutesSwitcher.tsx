@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Routes, useNavigate, Route } from "react-router-dom";
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Configuration from "./Configuration";
 import Home from "./Home";
 import L1 from "./L1";
@@ -13,20 +13,9 @@ import Peers from "./Peers";
  * @returns The node to render.
  */
 function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            navigate("/");
-        } else {
-            navigate("/login");
-        }
-    }, [isLoggedIn]);
-
     return (
         <Routes>
-            <Route path="/login" element={<Login />} key="login" />
-            {isLoggedIn && (
+            {isLoggedIn ? (
                 <React.Fragment>
                     <Route path="/" element={<Home />} key="home" />
                     <Route path="/peers" element={<Peers />} key="peers" />
@@ -50,6 +39,12 @@ function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
                         element={(<Users />)}
                         key="home"
                     /> */}
+                    <Route path="*" element={<Navigate to="/" />} key="redirect-to-home" />
+                </React.Fragment>
+            ) : (
+                <React.Fragment>
+                    <Route path="/login" element={<Login />} key="login" />
+                    <Route path="*" element={<Navigate to="/login" />} key="redirect-to-login" />
                 </React.Fragment>
             )}
         </Routes>
