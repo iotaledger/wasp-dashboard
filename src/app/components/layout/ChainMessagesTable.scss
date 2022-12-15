@@ -3,20 +3,7 @@ table {
     height: 40px;
   }
 
-  & td,
-  th,
-  .status {
+  & td, th{
     padding: 8px 15px;
-
-    &.big {
-      min-width: 200px;
-    }
-  }
-
-  & .status {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
   }
 }
