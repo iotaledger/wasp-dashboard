@@ -1,4 +1,5 @@
 import "./ChainMessagesTable.scss";
+import moment from "moment";
 import React from "react";
 import { ChainMetrics } from "../../../services/wasp_client";
 
@@ -72,19 +73,11 @@ const METRICS_NAMES: Record<string, string> = {
  * @param date
  * @returns
  */
-function formatDate(date?: Date | null) {
+function formatDate(date?: Date | null): string {
     if (!date) {
         return "-";
     }
-    return new Intl.DateTimeFormat("es-ES", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-    })
-        .format(new Date(date))
-        .replace(",", " -");
+    return moment(date).format("YYYY-MM-DD HH:mm:ss");
 }
+
 export default ChainMessagesTable;
