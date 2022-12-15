@@ -1,4 +1,5 @@
 import "./ChainMessagesTable.scss";
+import moment from "moment";
 import React from "react";
 import { ChainMetrics } from "../../../services/wasp_client";
 
@@ -28,8 +29,8 @@ function ChainMessagesTable(props: ChainMessagesTableProps) {
                     const name = METRICS_NAMES[key];
                     const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
                     const totalMessages = val.messages ?? 0;
-                    const date = val.timestamp.valueOf() > 0 ? val.timestamp.toISOString() : "NEVER";
-                    const lastMessage = val.lastMessage ? `${JSON.stringify(val.lastMessage).slice(0, 45)}...` : "";
+                    const date = val.timestamp.valueOf() > 0 ? formatDate(val.timestamp) : "-";
+                    const lastMessage = val.lastMessage ? JSON.stringify(val.lastMessage, null, 2) : "";
                     return (
                         <tr key={key}>
                             <td>{name}</td>
@@ -66,5 +67,17 @@ const METRICS_NAMES: Record<string, string> = {
     outPullOutputByID: "Pull output by ID",
     outPullTxInclusionState: "Pull tx inclusion state",
 };
+
+/**
+ *
+ * @param date
+ * @returns
+ */
+function formatDate(date?: Date | null): string {
+    if (!date) {
+        return "-";
+    }
+    return moment(date).format("YYYY-MM-DD HH:mm:ss");
+}
 
 export default ChainMessagesTable;
