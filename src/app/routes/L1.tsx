@@ -106,7 +106,7 @@ function L1() {
                         <div className="l1-summary">
                             <h4>L1 metrics</h4>
                             {l1Metrics && (
-                                <table>
+                                <table cellSpacing={0}>
                                     <thead>
                                         <tr>
                                             <th>Message name</th>
