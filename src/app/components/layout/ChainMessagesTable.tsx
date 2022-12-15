@@ -28,7 +28,7 @@ function ChainMessagesTable(props: ChainMessagesTableProps) {
                     const name = METRICS_NAMES[key];
                     const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
                     const totalMessages = val.messages ?? 0;
-                    const date = val.timestamp.valueOf() > 0 ? formatDateToDDMMYYYYHHMM(val.timestamp) : "NEVER";
+                    const date = val.timestamp.valueOf() > 0 ? formatDate(val.timestamp) : "-";
                     const lastMessage = val.lastMessage ? JSON.stringify(val.lastMessage, null, 2) : "";
                     return (
                         <tr key={key}>
@@ -72,14 +72,14 @@ const METRICS_NAMES: Record<string, string> = {
  * @param date
  * @returns
  */
-function formatDateToDDMMYYYYHHMM(date?: Date | null) {
+function formatDate(date?: Date | null) {
     if (!date) {
         return "-";
     }
     return new Intl.DateTimeFormat("es-ES", {
-        day: "2-digit",
-        month: "2-digit",
         year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
