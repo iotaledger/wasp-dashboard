@@ -31,7 +31,11 @@ const UserTile: React.FC<UserTileProps> = ({ user }) => (
                 Edit
             </button>
 
-            <button type="button" className="delete-button" onClick={() => console.log("delete")}>
+            <button
+                type="button"
+                className="delete-button card--action card--action-danger"
+                onClick={() => console.log("delete")}
+            >
                 Delete
             </button>
         </div>
