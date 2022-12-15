@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Configuration from "./Configuration";
 import Home from "./Home";
 import L1 from "./L1";
+import L1Chain from "./L1Chain";
 import Login from "./Login";
 import Peers from "./Peers";
 
@@ -33,6 +34,7 @@ function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
                     /> */}
                     <Route path="/configuration" element={<Configuration />} key="configuration" />
                     <Route path="/l1" element={<L1 />} key="l1" />
+                    <Route path="/l1/:chainId" element={<L1Chain />} key="l1-chain" />
                     {/* <Route
 
                         path="/users"

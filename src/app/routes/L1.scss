@@ -56,24 +56,8 @@
       margin-inline-start: 20px;
     }
 
-    & table {
-      & tr {
-        height: 40px;
-      }
-
-      & th {
-        color: var(--text-color-secondary);
-        border-bottom: 1px solid var(--text-color-secondary);
-        font-family: $font-mono;
-        font-weight: normal;
-        text-align: left;
-        @include font-size(14px);
-      }
-
-      & td,
-      th {
-        padding: 8px 15px;
-      }
+    & a {
+      color: var(--text-color-primary);
     }
 
     .l1-info--item {

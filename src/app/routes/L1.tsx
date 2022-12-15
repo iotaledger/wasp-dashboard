@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as HealthBadIcon } from "../../assets/health-bad.svg";
 import { ReactComponent as HealthGoodIcon } from "../../assets/health-good.svg";
 import { ServiceFactory } from "../../factories/serviceFactory";
@@ -6,6 +7,7 @@ import "./L1.scss";
 import { NodeConfigService } from "../../services/nodeConfigService";
 import { ChainInfoResponse, ChainMetrics, L1Params } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
+import ChainMessagesTable from "../components/layout/ChainMessagesTable";
 
 /**
  * L1 panel.
@@ -96,7 +98,7 @@ function L1() {
                                         {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
                                     </div>
                                     <p className="l1-id" title={chain.chainID}>
-                                        {chain.chainID}
+                                        <Link to={`/l1/${chain.chainID}`}>{chain.chainID}</Link>
                                     </p>
                                 </div>
                             ))}
@@ -104,45 +106,8 @@ function L1() {
                     </div>
                     <div className="card col fill last-card">
                         <div className="l1-summary">
-                            <h4>L1 metrics</h4>
-                            {l1Metrics && (
-                                <table cellSpacing={0}>
-                                    <thead>
-                                        <tr>
-                                            <th>Message name</th>
-                                            <th>Type</th>
-                                            <th>Total</th>
-                                            <th>Last time</th>
-                                            <th>Last message</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {Object.entries(l1Metrics).map(([key, val]: [string, StandardMessage]) => {
-                                            const name = METRICS_NAMES[key];
-                                            const inOrOut = key.startsWith("in") ? "IN" : "OUT";
-                                            const totalMessages = val.messages ?? 0;
-                                            const date =
-                                                val.timestamp.valueOf() > 0 ? val.timestamp.toISOString() : "NEVER";
-                                            const lastMessage = val.lastMessage
-                                                ? `${JSON.stringify(val.lastMessage).slice(0, 45)}...`
-                                                : "";
-                                            return (
-                                                <tr key={key}>
-                                                    <td>{name}</td>
-                                                    <td>{inOrOut}</td>
-                                                    <td>{totalMessages}</td>
-                                                    <td>{date}</td>
-                                                    <td>
-                                                        <pre>
-                                                            <code>{lastMessage}</code>
-                                                        </pre>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
-                            )}
+                            <h4>L1 global metrics</h4>
+                            {l1Metrics && <ChainMessagesTable chainMetrics={l1Metrics} />}
                         </div>
                     </div>
                 </div>
