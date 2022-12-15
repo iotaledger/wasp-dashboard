@@ -6,15 +6,26 @@ table {
   }
 
   & th {
-    color: var(--text-color-secondary);
     border-bottom: 1px solid var(--text-color-secondary);
+    color: var(--text-color-secondary);
     font-family: $font-mono;
     font-weight: normal;
     text-align: left;
+
     @include font-size(14px);
   }
 
-  & td, th{
-    padding: 8px 15px;
+  td {
+    min-width: 180px;
+  }
+
+  & td,
+  th {
+    padding: 8px 0;
+
+    code {
+      word-break: break-all;
+      white-space: normal;
+    }
   }
 }
