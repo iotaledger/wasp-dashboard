@@ -11,6 +11,7 @@ import {
 } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 import { formatEVMJSONRPCUrl } from "../../utils/evm";
+import GoBackButton from "../components/layout/GoBackButton";
 
 interface ChainInfoValue {
     key: string;
@@ -111,7 +112,10 @@ function Chain() {
     return (
         <div className="chain">
             <div className="chain-wrapper">
-                <h2>Chain {chainID}</h2>
+                <div className="middle row">
+                    <GoBackButton goTo="/chains" text="chains" />
+                    <h2 className="margin-l-s l1-details-title">Chain {chainID}</h2>
+                </div>
                 <div className="content">
                     <div className="card col fill">
                         <div className="chain-summary">
