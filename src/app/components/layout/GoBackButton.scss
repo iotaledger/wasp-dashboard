@@ -5,10 +5,14 @@
   text-decoration: none;
 
   span {
-    margin-left: 6px;
+    margin-left: 12px;
   }
 
   &:hover {
     color: var(--text-color-secondary);
+  }
+
+  &:focus {
+    border: 0;
   }
 }

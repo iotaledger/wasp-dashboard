@@ -31,9 +31,9 @@ function L1Chain() {
     return (
         <div className="l1">
             <div className="l1-wrapper">
-                <div className="spread row">
-                    <h2>L1 Chain {chainID}</h2>
+                <div className="l1-header spread middle row">
                     <GoBackButton goTo="/l1" text="L1" />
+                    <h2 className="l1-details-title">L1 Chain {chainID}</h2>
                 </div>
                 <div className="content">
                     <div className="card col fill last-card">
