@@ -108,20 +108,11 @@ function Chain() {
                     <div className="card col fill">
                         <div className="chain-summary">
                             <h4>On-chain accounts</h4>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Account</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {chainAccounts.map((account) => (
-                                        <tr key={account}>
-                                            <td>{account}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            <ul>
+                                {chainAccounts.map((account) => (
+                                    <li key={account}>{account}</li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
                     <div className="card col fill">
