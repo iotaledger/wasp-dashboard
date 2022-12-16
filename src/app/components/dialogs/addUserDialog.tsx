@@ -52,11 +52,8 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                 password: formValues.password,
             };
 
-            const successs = waspClientService.users().addUser({ addUserRequest: newUser });
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            if (!successs) {
-                throw new Error("Failed to add user");
-            }
+            await waspClientService.users().addUser({ addUserRequest: newUser });
+
             onUserAdded();
             onClose();
         } catch (e) {
