@@ -32,7 +32,7 @@ function Chains() {
                 <h2>Chains</h2>
                 <div className="content">
                     {chains?.map((chain) => (
-                        <Link key={chain.chainID} to={`/chain/${chain.chainID}`} className="fill">
+                        <Link key={chain.chainID} to={`/chains/${chain.chainID}`} className="fill">
                             <div className="chains-summary--item">
                                 <div className="chains-health-icon">
                                     {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
