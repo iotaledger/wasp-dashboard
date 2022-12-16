@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
-import { ChainInfoResponse } from "../../services/wasp_client";
+import { ChainInfoResponse, ContractInfoResponse } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 
 interface ChainInfoValue {
@@ -31,6 +31,7 @@ function transformInfoIntoArray(chainInfo: ChainInfoResponse): ChainInfoValue[] 
  */
 function Chain() {
     const [chainInfo, setChainInfo] = useState<ChainInfoValue[]>([]);
+    const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
     const { chainID } = useParams();
 
     React.useEffect(() => {
@@ -47,6 +48,14 @@ function Chain() {
             .then((newChainInfo) => {
                 setChainInfo(transformInfoIntoArray(newChainInfo));
             });
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .chains()
+            .getContracts({ chainID })
+            .then((newChainContracts) => {
+                setChainContracts(newChainContracts);
+            });
     }, []);
 
     return (
@@ -54,13 +63,24 @@ function Chain() {
             <div className="chain-wrapper">
                 <h2>Chain {chainID}</h2>
                 <div className="content">
-                    <div className="card col fill last-card">
+                    <div className="card col fill">
                         <div className="chain-summary">
-                            <h4>Chain info</h4>
+                            <h4>Info</h4>
                             {chainInfo.map(({ key, val }) => (
                                 <div key={key} className="card-item">
                                     <span>{INFO_NAMES[key]}:</span>
                                     <p className="value">{val.toString()}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="card col fill">
+                        <div className="chain-summary">
+                            <h4>Contracts</h4>
+                            {chainContracts.map(({ name, hName, description, programHash }) => (
+                                <div key={name} className="card-item">
+                                    <span>{name}:</span>
+                                    <p className="value">{description}</p>
                                 </div>
                             ))}
                         </div>

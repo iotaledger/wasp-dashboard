@@ -25,6 +25,10 @@
     }
   }
 
+  .card {
+    margin-bottom: 16px;
+  }
+
   .chain-summary {
     padding: 16px;
 
@@ -36,14 +40,10 @@
   .content {
     display: inline-flex;
     flex: 1;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     max-width: $content-width-desktop;
     color: var(--text-color-primary);
-
-    @include desktop-down {
-    flex-direction: column;
-    }
 
     .card-item {
       display: flex;
