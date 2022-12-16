@@ -10,7 +10,7 @@
     "homepage": "/dashboard",
     "license": "MIT",
     "dependencies": {
-        "@iota/iota.js": "^2.0.0-rc.1",
+        "@iota/iota.js": "^2.0.0-rc.2",
         "classnames": "^2.3.2",
         "humanize-duration": "^3.27.3",
         "moment": "^2.29.4",
