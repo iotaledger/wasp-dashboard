@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
-import { ChainInfoResponse, ContractInfoResponse } from "../../services/wasp_client";
+import { AssetsResponse, ChainInfoResponse, ContractInfoResponse } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 
 interface ChainInfoValue {
@@ -32,6 +32,8 @@ function transformInfoIntoArray(chainInfo: ChainInfoResponse): ChainInfoValue[] 
 function Chain() {
     const [chainInfo, setChainInfo] = useState<ChainInfoValue[]>([]);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
+    const [chainAccounts, setChainAccounts] = useState<string[]>([]);
+    const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
     const { chainID } = useParams();
 
     React.useEffect(() => {
@@ -55,6 +57,24 @@ function Chain() {
             .getContracts({ chainID })
             .then((newChainContracts) => {
                 setChainContracts(newChainContracts);
+            });
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .accountsGetAccounts({ chainID })
+            .then((newAccounts) => {
+                if (newAccounts.accounts) {
+                    setChainAccounts(newAccounts.accounts);
+                }
+            });
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .accountsGetTotalAssets({ chainID })
+            .then((newTotalAssets) => {
+                setChainAssets(newTotalAssets);
             });
     }, []);
 
@@ -83,6 +103,48 @@ function Chain() {
                                     <p className="value">{description}</p>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                    <div className="card col fill">
+                        <div className="chain-summary">
+                            <h4>On-chain accounts</h4>
+                            <ul>
+                                {chainAccounts.map((account) => (
+                                    <li key={account}>{account}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="card col fill">
+                        <div className="chain-summary">
+                            <h4>Total Assets</h4>
+                            {chainAssets?.baseTokens && (
+                                <React.Fragment>
+                                    <div className="card-item">
+                                        <span>Base Tokens:</span>
+                                        <p className="value">{chainAssets?.baseTokens}</p>
+                                    </div>
+                                    <br />
+                                </React.Fragment>
+                            )}
+                            {chainAssets?.tokens && chainAssets.tokens.length > 0 && (
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {chainAssets?.tokens?.map((token) => (
+                                            <tr key={token.iD}>
+                                                <td>{token.iD}</td>
+                                                <td>{token.amount}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
                         </div>
                     </div>
                 </div>
