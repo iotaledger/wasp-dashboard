@@ -10,6 +10,7 @@ import {
     BlockInfoResponse,
 } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
+import { formatEVMJSONRPCUrl } from "../../utils/evm";
 
 interface ChainInfoValue {
     key: string;
@@ -43,6 +44,9 @@ function Chain() {
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const { chainID } = useParams();
+
+    const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
+    const ChainID = chainInfo.find(({ key }) => key === "chainID");
 
     React.useEffect(() => {
         if (!chainID) {
@@ -112,12 +116,14 @@ function Chain() {
                     <div className="card col fill">
                         <div className="chain-summary">
                             <h4>Info</h4>
-                            {chainInfo.map(({ key, val }) => (
-                                <div key={key} className="card-item">
-                                    <span>{INFO_NAMES[key]}:</span>
-                                    <p className="value">{val.toString()}</p>
-                                </div>
-                            ))}
+                            {chainInfo
+                                .filter(({ key }) => !INFO_SKIP_NAMES.has(key))
+                                .map(({ key, val }) => (
+                                    <div key={key} className="card-item">
+                                        <span>{INFO_NAMES[key]}:</span>
+                                        <p className="value">{val.toString()}</p>
+                                    </div>
+                                ))}
                         </div>
                     </div>
                     <div className="card col fill">
@@ -211,16 +217,34 @@ function Chain() {
                             </div>
                         </div>
                     </div>
+                    <div className="card col fill">
+                        <div className="chain-summary">
+                            <h4>EVM</h4>
+                            {ChainID && (
+                                <React.Fragment>
+                                    <div className="card-item">
+                                        <span>EVM ChainID:</span>
+                                        <p className="value">{EVMChainID?.val}</p>
+                                    </div>
+                                    <div className="card-item">
+                                        <span>JSON-RPC URL:</span>
+                                        <p className="value">{formatEVMJSONRPCUrl(ChainID?.val)}</p>
+                                    </div>
+                                </React.Fragment>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
 
+const INFO_SKIP_NAMES = new Set(["eVMChainID"]);
+
 const INFO_NAMES: Record<string, string> = {
     chainID: "Chain ID",
     chainOwnerID: "Owner ID",
-    eVMChainID: "EVM Chain ID",
     description: "Description",
     gasFeeTokenID: "Gas fee token ID",
     gasPerToken: "Gas per token",
