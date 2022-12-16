@@ -56,7 +56,6 @@ const Users: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                ¡
                 {showAddUserDialog && (
                     <AddUserDialog onClose={() => setShowAddUserDialog(false)} onUserAdded={loadAllUsers} />
                 )}
