@@ -5,6 +5,7 @@ import "./L1.scss";
 import { ChainMetrics } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 import ChainMessagesTable from "../components/layout/ChainMessagesTable";
+import GoBackButton from "../components/layout/GoBackButton";
 
 /**
  * L1 chain panel.
@@ -30,7 +31,10 @@ function L1Chain() {
     return (
         <div className="l1">
             <div className="l1-wrapper">
-                <h2>L1 Chain {chainID}</h2>
+                <div className="spread row">
+                    <h2>L1 Chain {chainID}</h2>
+                    <GoBackButton goTo="/l1" text="L1" />
+                </div>
                 <div className="content">
                     <div className="card col fill last-card">
                         <div className="l1-summary">

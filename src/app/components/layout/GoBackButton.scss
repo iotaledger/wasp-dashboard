@@ -1,0 +1,14 @@
+.back-link {
+  display: flex;
+  align-items: center;
+  color: var(--text-color-primary);
+  text-decoration: none;
+
+  span {
+    margin-left: 6px;
+  }
+
+  &:hover {
+    color: var(--text-color-secondary);
+  }
+}
