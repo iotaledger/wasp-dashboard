@@ -30,9 +30,10 @@ interface IFormValues {
 
 interface IAddUserDialog {
     onClose: () => void;
+    onUserAdded: () => void;
 }
 
-const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose }) => {
+const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
     const [formValues, setFormValues] = useState<IFormValues>(FORM_INITIAL_VALUES);
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -56,6 +57,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose }) => {
             if (!successs) {
                 throw new Error("Failed to add user");
             }
+            onUserAdded();
             onClose();
         } catch (e) {
             if (e instanceof Error) {
@@ -136,4 +138,5 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose }) => {
         </Dialog>
     );
 };
+
 export default AddUserDialog;

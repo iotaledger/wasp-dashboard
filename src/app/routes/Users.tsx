@@ -27,6 +27,13 @@ const Users: React.FC = () => {
      * The component mounted.
      */
     useEffect(() => {
+        getAllUsers();
+    }, []);
+
+    /**
+     *
+     */
+    function getAllUsers(): void {
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -36,8 +43,7 @@ const Users: React.FC = () => {
             .then((allUsers) => {
                 setUsersList(allUsers);
             });
-    }, []);
-
+    }
     return (
         <div className="users">
             <div className="content">
@@ -49,7 +55,10 @@ const Users: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                {showAddUserDialog && <AddUserDialog onClose={() => setShowAddUserDialog(false)} />}
+                ¡
+                {showAddUserDialog && (
+                    <AddUserDialog onClose={() => setShowAddUserDialog(false)} onUserAdded={() => getAllUsers()} />
+                )}
                 <div className="users-panel">
                     <UsersList users={usersList} />
                 </div>
