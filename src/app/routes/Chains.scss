@@ -37,6 +37,10 @@
       flex-direction: column;
     }
 
+    a {
+      border: none;
+    }
+
     .chains-summary--item {
       display: flex;
       flex-direction: row;
@@ -63,14 +67,6 @@
         color: var(--text-color-primary);
         word-break: break-all;
         overflow-wrap: anywhere;
-      }
-    }
-
-    .chains-summary {
-      padding: 16px;
-
-      h4 {
-        margin-bottom: 20px;
       }
     }
   }
