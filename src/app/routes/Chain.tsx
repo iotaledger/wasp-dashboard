@@ -32,6 +32,7 @@ function transformInfoIntoArray(chainInfo: ChainInfoResponse): ChainInfoValue[] 
 function Chain() {
     const [chainInfo, setChainInfo] = useState<ChainInfoValue[]>([]);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
+    const [chainAccounts, setChainAccounts] = useState<string[]>([]);
     const { chainID } = useParams();
 
     React.useEffect(() => {
@@ -55,6 +56,16 @@ function Chain() {
             .getContracts({ chainID })
             .then((newChainContracts) => {
                 setChainContracts(newChainContracts);
+            });
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .accountsGetAccounts({ chainID })
+            .then((newAccounts) => {
+                if (newAccounts.accounts) {
+                    setChainAccounts(newAccounts.accounts);
+                }
             });
     }, []);
 
@@ -83,6 +94,25 @@ function Chain() {
                                     <p className="value">{description}</p>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                    <div className="card col fill">
+                        <div className="chain-summary">
+                            <h4>On-chain accounts</h4>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Account</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {chainAccounts.map((account) => (
+                                        <tr key={account}>
+                                            <td>{account}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
