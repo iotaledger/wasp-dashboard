@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
-import { AssetsResponse, ChainInfoResponse, ContractInfoResponse } from "../../services/wasp_client";
+import { AssetsResponse, ChainInfoResponse, ContractInfoResponse, Blob } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 
 interface ChainInfoValue {
@@ -34,6 +34,7 @@ function Chain() {
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
     const [chainAccounts, setChainAccounts] = useState<string[]>([]);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
+    const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
     const { chainID } = useParams();
 
     React.useEffect(() => {
@@ -75,6 +76,16 @@ function Chain() {
             .accountsGetTotalAssets({ chainID })
             .then((newTotalAssets) => {
                 setChainAssets(newTotalAssets);
+            });
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .blobsGetAllBlobs({ chainID })
+            .then((newBlobs) => {
+                if (newBlobs.blobs) {
+                    setChainBlobs(newBlobs.blobs);
+                }
             });
     }, []);
 
@@ -144,6 +155,31 @@ function Chain() {
                                         ))}
                                     </tbody>
                                 </table>
+                            )}
+                        </div>
+                    </div>
+                    <div className="card col fill">
+                        <div className="chain-summary">
+                            <h4>Blobs</h4>
+                            {chainBlobs.length > 0 ? (
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Hash</th>
+                                            <th>Size (bytes)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {chainBlobs.map((blob) => (
+                                            <tr key={blob.hash}>
+                                                <td>{blob.hash}</td>
+                                                <td>{blob.size}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                <p>No blobs found.</p>
                             )}
                         </div>
                     </div>
