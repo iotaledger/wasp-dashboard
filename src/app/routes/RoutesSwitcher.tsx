@@ -33,7 +33,7 @@ function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
                     <Route path="/chains" element={<Chains />} key="chains" />
                     <Route path="/configuration" element={<Configuration />} key="configuration" />
                     <Route path="/l1" element={<L1 />} key="l1" />
-                    <Route path="/l1/:chainId" element={<L1Chain />} key="l1-chain" />
+                    <Route path="/l1/:chainID" element={<L1Chain />} key="l1-chain" />
                     <Route path="/users" element={<Users />} key="users" />
                     <Route path="*" element={<Navigate to="/" />} key="redirect-to-home" />
                 </React.Fragment>
