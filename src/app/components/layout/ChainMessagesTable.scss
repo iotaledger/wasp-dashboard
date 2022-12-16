@@ -1,32 +1,4 @@
-@import "../../../scss/fonts";
-
-table {
-  border-collapse: collapse;
-  & tr {
-    height: 40px;
-    border-bottom: 1px solid var(--panel-background-highlight);
-  }
-
-  & th {
-    border-bottom: 1px solid var(--text-color-secondary);
-    color: var(--text-color-secondary);
-    font-family: $font-mono;
-    font-weight: normal;
-    text-align: left;
-
-    @include font-size(14px);
-  }
-
-  td,
-  th {
-    padding: 8px;
-
-    code {
-      word-break: break-all;
-      white-space: break-spaces;
-    }
-  }
-
+.chainMessagesTable {
   th:nth-of-type(1),
   th:nth-of-type(4),
   th:nth-of-type(5) {

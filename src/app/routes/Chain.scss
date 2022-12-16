@@ -1,0 +1,75 @@
+@import "../../scss/card";
+@import "../../scss/fonts";
+@import "../../scss/media-queries";
+
+.chain {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding: 60px;
+  font-family: $font-sans;
+
+  @include desktop-down {
+    padding: $spacing-small;
+  }
+
+  .chain-wrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    max-width: $content-width-desktop;
+
+    h2 {
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+  }
+
+  .card {
+    margin-bottom: 16px;
+  }
+
+  .chain-summary {
+    padding: 16px;
+
+    h4 {
+      margin-bottom: 20px;
+    }
+  }
+
+  .content {
+    display: inline-flex;
+    flex: 1;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-width: $content-width-desktop;
+    color: var(--text-color-primary);
+
+    .card-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 4px;
+      color: var(--text-color-secondary);
+      font-family: $font-mono;
+
+      @include font-size(14px);
+
+      span {
+          margin-right: 10px;
+      }
+
+      p {
+          &.value {
+          color: var(--text-color-primary);
+          }
+      }
+    }       
+
+    ul {
+      margin-left: 20px;
+      li {
+        margin: 5px 0px;
+      }
+    }
+  }
+}

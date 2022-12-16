@@ -14,7 +14,7 @@ interface ChainMessagesTableProps {
  */
 function ChainMessagesTable(props: ChainMessagesTableProps) {
     return (
-        <table cellSpacing={0}>
+        <table cellSpacing={0} className="chainMessagesTable">
             <thead>
                 <tr>
                     <th>Message name</th>

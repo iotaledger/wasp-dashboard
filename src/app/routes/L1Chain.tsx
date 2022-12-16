@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./L1.scss";
 import { ChainMetrics } from "../../services/wasp_client";
@@ -13,10 +13,13 @@ import GoBackButton from "../components/layout/GoBackButton";
  */
 function L1Chain() {
     const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null>(null);
-    const location = useLocation();
-    const chainID = location.pathname.replace("/l1/", "");
+    const { chainID } = useParams();
 
     React.useEffect(() => {
+        if (!chainID) {
+            return;
+        }
+
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
