@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
-import { AssetsResponse, ChainInfoResponse, ContractInfoResponse, Blob } from "../../services/wasp_client";
+import {
+    AssetsResponse,
+    ChainInfoResponse,
+    ContractInfoResponse,
+    Blob,
+    BlockInfoResponse,
+} from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 
 interface ChainInfoValue {
@@ -35,6 +41,7 @@ function Chain() {
     const [chainAccounts, setChainAccounts] = useState<string[]>([]);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
+    const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const { chainID } = useParams();
 
     React.useEffect(() => {
@@ -86,6 +93,14 @@ function Chain() {
                 if (newBlobs.blobs) {
                     setChainBlobs(newBlobs.blobs);
                 }
+            });
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .blocklogGetLatestBlockInfo({ chainID })
+            .then((newLatestBlock) => {
+                setChainLatestBlock(newLatestBlock);
             });
     }, []);
 
@@ -181,6 +196,19 @@ function Chain() {
                             ) : (
                                 <p>No blobs found.</p>
                             )}
+                        </div>
+                    </div>
+                    <div className="card col fill">
+                        <div className="chain-summary">
+                            <h4>Latest block</h4>
+                            <div className="card-item">
+                                <span>Block index:</span>
+                                <p className="value">{chainLatestBlock?.blockIndex}</p>
+                            </div>
+                            <div className="card-item">
+                                <span>Last updated:</span>
+                                <p className="value">{chainLatestBlock?.timestamp?.toISOString()}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
