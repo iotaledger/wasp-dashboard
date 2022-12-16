@@ -31,23 +31,18 @@ function Chains() {
             <div className="chains-wrapper">
                 <h2>Chains</h2>
                 <div className="content">
-                    <div className="card col fill">
-                        <div className="chains-summary">
-                            <h4>Chains</h4>
-                            {chains?.map((chain) => (
-                                <Link key={chain.chainID} to={`/chain/${chain.chainID}`}>
-                                    <div className="chains-summary--item">
-                                        <div className="chains-health-icon">
-                                            {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
-                                        </div>
-                                        <p className="chains-id" title={chain.chainID}>
-                                            {chain.chainID}
-                                        </p>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
+                    {chains?.map((chain) => (
+                        <Link key={chain.chainID} to={`/chain/${chain.chainID}`} className="fill">
+                            <div className="chains-summary--item">
+                                <div className="chains-health-icon">
+                                    {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
+                                </div>
+                                <p className="chains-id" title={chain.chainID}>
+                                    {chain.chainID}
+                                </p>
+                            </div>
+                        </Link>
+                    ))}
                 </div>
             </div>
         </div>
