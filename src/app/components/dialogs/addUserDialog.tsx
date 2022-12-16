@@ -117,7 +117,6 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                         disabled={isBusy}
                         onChange={onChange}
                     />
-                    {error && <p className="dialog--error">{error}</p>}
                 </div>
                 <div className="dialog--label">Permissions</div>
                 <div className="dialog--value">
@@ -129,6 +128,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                         value={formValues.permissions.join(", ")}
                         disabled
                     />
+                    {error && <p className="dialog--error">{error}</p>}
                 </div>
             </React.Fragment>
         </Dialog>
