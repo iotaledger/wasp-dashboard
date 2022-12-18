@@ -21,7 +21,7 @@ function NavPanel(props: NavPanelProps) {
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        BrandHelper.getLogoNavigation(themeService.get()).then((logo) => {
+        BrandHelper.getLogoNavigation(themeService.get()).then(logo => {
             setLogoSrc(logo);
         });
 
@@ -41,15 +41,15 @@ function NavPanel(props: NavPanelProps) {
             </Link>
 
             <div className="nav-panel-middle">
-                {props.middle.map((b) => (
+                {props.middle.map(b => (
                     <React.Fragment key={b.label}>
                         {!b.hidden && b.route && (
                             <Link
                                 to={b.route}
-                                className={classNames("nav-panel--button", {
-                                    "nav-panel--button__selected":
+                                className={classNames("nav-panel-button", {
+                                    "nav-panel-button-selected":
                                         (b.route.length > 1 && location.pathname.startsWith(b.route)) ||
-                                        b.route === location.pathname,
+                                        b.route === location.pathname
                                 })}
                             >
                                 {b.icon}
@@ -60,7 +60,7 @@ function NavPanel(props: NavPanelProps) {
                             <button
                                 type="button"
                                 onClick={() => b.function?.()}
-                                className={classNames("nav-panel--button")}
+                                className={classNames("nav-panel-button")}
                             >
                                 {b.icon}
                                 <span className="nav-panel-button-label">{b.label}</span>
@@ -71,15 +71,15 @@ function NavPanel(props: NavPanelProps) {
             </div>
 
             <div className="nav-panel-end">
-                {props.end.map((b) => (
+                {props.end.map(b => (
                     <React.Fragment key={b.label}>
                         {!b.hidden && b.route && (
                             <Link
                                 to={b.route}
-                                className={classNames("nav-panel--button", {
-                                    "nav-panel--button__selected":
+                                className={classNames("nav-panel-button", {
+                                    "nav-panel-button-selected":
                                         (b.route.length > 1 && location.pathname.startsWith(b.route)) ||
-                                        b.route === location.pathname,
+                                        b.route === location.pathname
                                 })}
                             >
                                 {b.icon}
@@ -90,7 +90,7 @@ function NavPanel(props: NavPanelProps) {
                             <button
                                 type="button"
                                 onClick={() => b.function?.()}
-                                className={classNames("nav-panel--button")}
+                                className={classNames("nav-panel-button")}
                             >
                                 {b.icon}
                                 <span className="nav-panel-button-label">{b.label}</span>

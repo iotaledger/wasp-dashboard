@@ -26,7 +26,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
     return (
         <React.Fragment>
-            <div className={`peers-panel--item card ${detailed ? "detailed" : "summary"}`}>
+            <div className={`peers-panel-item card ${detailed ? "detailed" : "summary"}`}>
                 <span className="peer-health">
                     <div className="peer-health-icon">{peer.isAlive ? <HealthGood /> : <HealthWarning />}</div>
                 </span>
@@ -67,7 +67,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
 };
 
 PeerTile.defaultProps = {
-    detailed: false,
+    detailed: false
 };
 
 export default PeerTile;

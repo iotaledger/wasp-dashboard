@@ -18,7 +18,7 @@ class FeatureBlock extends Component<FeatureProps, FeatureState> {
      * Create a new instance of Feature.
      * @param props The props.
      */
-     constructor(props: FeatureProps) {
+    constructor(props: FeatureProps) {
         super(props);
 
         let hexData;
@@ -27,8 +27,8 @@ class FeatureBlock extends Component<FeatureProps, FeatureState> {
         let dataLabel;
 
         if (this.props.feature.type === METADATA_FEATURE_TYPE || this.props.feature.type === TAG_FEATURE_TYPE) {
-            const data = this.props.feature.type === TAG_FEATURE_TYPE
-                            ? this.props.feature.tag : this.props.feature.data;
+            const data =
+                this.props.feature.type === TAG_FEATURE_TYPE ? this.props.feature.tag : this.props.feature.data;
             const matchHexData = data.match(/.{1,2}/g);
 
             dataLabel = this.props.feature.type === METADATA_FEATURE_TYPE ? "Data" : "Tag";
@@ -39,7 +39,6 @@ class FeatureBlock extends Component<FeatureProps, FeatureState> {
                 jsonData = JSON.stringify(JSON.parse(utf8Data), undefined, "  ");
             } catch {}
         }
-
 
         this.state = {
             showDetails: false,
@@ -61,12 +60,10 @@ class FeatureBlock extends Component<FeatureProps, FeatureState> {
                     className="card--content__input"
                     onClick={() => this.setState({ showDetails: !this.state.showDetails })}
                 >
-
-                    <div className={classNames(
-                            "margin-r-t",
-                            "card--content__input--dropdown",
-                            { "opened": this.state.showDetails }
-                        )}
+                    <div
+                        className={classNames("margin-r-t", "card--content__input--dropdown", {
+                            opened: this.state.showDetails
+                        })}
                     >
                         <DropdownIcon />
                     </div>
@@ -78,7 +75,7 @@ class FeatureBlock extends Component<FeatureProps, FeatureState> {
                 {this.state.showDetails && (
                     <div className="card--content--border-l">
                         {(this.props.feature.type === SENDER_FEATURE_TYPE ||
-                        this.props.feature.type === ISSUER_FEATURE_TYPE) && (
+                            this.props.feature.type === ISSUER_FEATURE_TYPE) && (
                             <Bech32Address
                                 activeLinks={false}
                                 showHexAddress={true}
@@ -86,16 +83,14 @@ class FeatureBlock extends Component<FeatureProps, FeatureState> {
                             />
                         )}
                         {(this.props.feature.type === METADATA_FEATURE_TYPE ||
-                        this.props.feature.type === TAG_FEATURE_TYPE) && (
+                            this.props.feature.type === TAG_FEATURE_TYPE) && (
                             <React.Fragment>
                                 {!this.state.jsonData && this.state.utf8Data && (
                                     <React.Fragment>
                                         <div className="card--label row middle">
                                             <span className="margin-r-t">{this.state.dataLabel} UTF8</span>
                                             <BlockButton
-                                                onClick={() => ClipboardHelper.copy(
-                                                    this.state.utf8Data
-                                                )}
+                                                onClick={() => ClipboardHelper.copy(this.state.utf8Data)}
                                                 buttonType="copy"
                                                 labelPosition="top"
                                             />
@@ -110,9 +105,7 @@ class FeatureBlock extends Component<FeatureProps, FeatureState> {
                                         <div className="card--label row middle">
                                             <span className="margin-r-t">{this.state.dataLabel} JSON</span>
                                             <BlockButton
-                                                onClick={() => ClipboardHelper.copy(
-                                                    this.state.jsonData
-                                                )}
+                                                onClick={() => ClipboardHelper.copy(this.state.jsonData)}
                                                 buttonType="copy"
                                                 labelPosition="top"
                                             />
@@ -127,9 +120,8 @@ class FeatureBlock extends Component<FeatureProps, FeatureState> {
                                         <div className="card--label row middle">
                                             <span className="margin-r-t">{this.state.dataLabel} Hex</span>
                                             <BlockButton
-                                                onClick={() => ClipboardHelper.copy(
-                                                    this.state.hexData?.replace(/ /g, "")
-                                                )}
+                                                onClick={() =>
+                                                    ClipboardHelper.copy(this.state.hexData?.replace(/ /g, ""))}
                                                 buttonType="copy"
                                                 labelPosition="right"
                                             />
@@ -143,7 +135,6 @@ class FeatureBlock extends Component<FeatureProps, FeatureState> {
                         )}
                     </div>
                 )}
-
             </div>
         );
     }

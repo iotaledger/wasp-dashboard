@@ -50,7 +50,7 @@ function Header(props: HeaderProps) {
 
         const publicNodeStatusSubscription = metricsService.subscribe<IPublicNodeStatus>(
             WebSocketTopic.PublicNodeStatus,
-            (data) => {
+            data => {
                 if (data) {
                     setOnline(true);
                     setIsHealth(data.isHealthy);
@@ -61,22 +61,22 @@ function Header(props: HeaderProps) {
 
         const nodeStatusSubscription = metricsService.subscribe<INodeStatus>(
             WebSocketTopic.NodeStatus,
-            (data) => {
+            data => {
                 if (data) {
                     const newMemorySizeFormatted = FormatHelper.iSize(data.memUsage, 1);
 
                     setMemorySizeFormatted(newMemorySizeFormatted);
                 }
             },
-            (allData) => {
-                const nonNull = allData.filter((d) => d !== undefined && d !== null);
-                setMemorySize(nonNull.map((d) => d.memUsage));
+            allData => {
+                const nonNull = allData.filter(d => d !== undefined && d !== null);
+                setMemorySize(nonNull.map(d => d.memUsage));
             }
         );
 
         const databaseSizeSubscription = metricsService.subscribe<IDBSizeMetric>(
             WebSocketTopic.DBSizeMetric,
-            (data) => {
+            data => {
                 if (data) {
                     const newDbLedgerSizeFormatted = FormatHelper.size(data.utxo);
 
@@ -87,14 +87,14 @@ function Header(props: HeaderProps) {
                     setDbTangleSizeFormatted(newDbTangleSizeFormatted);
                 }
             },
-            (allData) => {
-                const nonNull = allData.filter((d) => d !== undefined && d !== null);
+            allData => {
+                const nonNull = allData.filter(d => d !== undefined && d !== null);
 
-                const newDbLedgerSizeValues = nonNull.map((d) => d.utxo);
+                const newDbLedgerSizeValues = nonNull.map(d => d.utxo);
 
                 setDbLedgerSize(newDbLedgerSizeValues);
 
-                const newDbTangleSizeValues = nonNull.map((d) => d.tangle);
+                const newDbTangleSizeValues = nonNull.map(d => d.tangle);
 
                 setDbTangleSize(newDbTangleSizeValues);
             }
@@ -102,7 +102,7 @@ function Header(props: HeaderProps) {
 
         let cachedbBpsValues: number[] = [];
 
-        const bpsMetricsSubscription = metricsService.subscribe<IBpsMetrics>(WebSocketTopic.BPSMetrics, (data) => {
+        const bpsMetricsSubscription = metricsService.subscribe<IBpsMetrics>(WebSocketTopic.BPSMetrics, data => {
             if (data) {
                 const newBpsValues = cachedbBpsValues.slice(-40);
                 newBpsValues.push(data.new);
@@ -133,7 +133,7 @@ function Header(props: HeaderProps) {
                         {props.children}
                         <SearchInput
                             compact={true}
-                            onSearch={(query) => navigate(`/explorer/search/${query}`)}
+                            onSearch={query => navigate(`/explorer/search/${query}`)}
                             className="child child-fill"
                         />
                         <Breakpoint size="tablet" aboveBelow="above">

@@ -21,7 +21,7 @@ export class WaspClientService {
     constructor() {
         this.initialize();
 
-        EventAggregator.subscribe("auth-state", "waspClient", (isLoggedIn) => {
+        EventAggregator.subscribe("auth-state", "waspClient", isLoggedIn => {
             this.initialize();
         });
     }
@@ -30,7 +30,7 @@ export class WaspClientService {
         const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
         const config: Configuration = new Configuration({
             apiKey: storageService.load("dashboard-jwt"),
-            basePath: Environment.WaspApiUrl,
+            basePath: Environment.WaspApiUrl
         });
 
         this._apiClients = {
@@ -38,7 +38,7 @@ export class WaspClientService {
             chains: new ChainsApi(config),
             node: new NodeApi(config),
             requests: new RequestsApi(config),
-            metrics: new MetricsApi(config),
+            metrics: new MetricsApi(config)
         };
     }
 

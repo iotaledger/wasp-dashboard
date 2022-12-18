@@ -1,50 +1,51 @@
-@import '../../scss/card';
-@import '../../scss/fonts';
-@import '../../scss/media-queries';
+@use "../../scss/card" as *;
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
 
 .users {
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  padding: 60px;
-
-  @include desktop-down {
-    padding: $spacing-small;
-  }
-
-  .content {
+    display: flex;
     flex: 1;
-    max-width: $content-width-desktop;
+    justify-content: center;
+    padding: 60px;
 
-    .add-button {
-      @include font-size(14px);
-
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding: 6px 12px;
-      border: 1px solid var(--text-color-secondary);
-      border-radius: $form-input-radius;
-      outline: 0;
-      background: var(--bar-color-2);
-      color: var(--text-color-primary);
-      font-family: $font-sans;
-      cursor: pointer;
-
-      &:hover {
-        color: var(--accent-primary);
-      }
-
-      &:focus {
-        box-shadow: 0 0 3px 0 var(--accent-primary);
-      }
+    @include desktop-down {
+        padding: $spacing-small;
     }
 
-    .users-panel {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      margin-top: $spacing-medium;
+    .content {
+        flex: 1;
+        max-width: $content-width-desktop;
+
+        .add-button {
+            @include font-size(14px);
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 6px 12px;
+            border: 1px solid var(--text-color-secondary);
+            border-radius: $form-input-radius;
+            outline: 0;
+            background: var(--bar-color-2);
+            color: var(--text-color-primary);
+            font-family: $font-sans;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--accent-primary);
+            }
+
+            &:focus {
+                box-shadow: 0 0 3px 0 var(--accent-primary);
+            }
+        }
+
+        .users-panel {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-top: $spacing-medium;
+        }
     }
-  }
 }

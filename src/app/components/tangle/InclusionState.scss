@@ -1,57 +1,57 @@
-@import '../../../scss/fonts';
-@import '../../../scss/variables';
-@import '../../../scss/media-queries';
+@use "../../../scss/fonts" as *;
+@use "../../../scss/variables" as *;
+@use "../../../scss/media-queries" as *;
 
 .inclusion-state {
-  @include font-size(12px);
+    @include font-size(12px);
 
-  display: flex;
-  align-items: center;
-  font-family: $font-sans;
-
-  @include tablet-down {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: $spacing-tiny;
-  }
-
-  .inclusion-state-pill {
     display: flex;
     align-items: center;
-    height: 24px;
-    margin-right: $spacing-small;
-    padding: 0 $spacing-tiny;
-    border: 0;
-    border-radius: 6px;
-    outline: none;
-    background-color: var(--panel-border);
-    color: var(--text-color-primary);
-    font-weight: bold;
-    text-transform: uppercase;
-    white-space: nowrap;
+    font-family: $font-sans;
 
     @include tablet-down {
-      margin-bottom: $spacing-small;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: $spacing-tiny;
     }
 
-    &.inclusion__not-included {
-      background-color: $warning;
-      color: #ffffff;
-    }
+    .inclusion-state-pill {
+        display: flex;
+        align-items: center;
+        height: 24px;
+        margin-right: $spacing-small;
+        padding: 0 $spacing-tiny;
+        border: 0;
+        border-radius: 6px;
+        outline: none;
+        background-color: var(--panel-border);
+        color: var(--text-color-primary);
+        font-weight: bold;
+        text-transform: uppercase;
+        white-space: nowrap;
 
-    &.inclusion__included {
-      background-color: #12bf3f;
-      color: #ffffff;
-    }
+        @include tablet-down {
+            margin-bottom: $spacing-small;
+        }
 
-    &.inclusion__no-transaction {
-      background-color: var(--accent-primary);
-      color: #ffffff;
-    }
+        &.inclusion-not-included {
+            background-color: $warning;
+            color: #ffffff;
+        }
 
-    &.inclusion__conflicting {
-      background-color: $danger;
-      color: #ffffff;
+        &.inclusion-included {
+            background-color: #12bf3f;
+            color: #ffffff;
+        }
+
+        &.inclusion-no-transaction {
+            background-color: var(--accent-primary);
+            color: #ffffff;
+        }
+
+        &.inclusion-conflicting {
+            background-color: $danger;
+            color: #ffffff;
+        }
     }
-  }
 }

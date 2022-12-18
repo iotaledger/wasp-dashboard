@@ -39,14 +39,9 @@ class ToggleButton extends Component<ToggleButtonProps, ToggleButtonState> {
         return (
             <button
                 type="button"
-                className={
-                    classNames(
-                        "toggle-button",
-                        { "toggle-button--checked": this.state.value }
-                    )
-                }
-                onClick={e => this.setState({ value: !this.state.value },
-                    () => {
+                className={classNames("toggle-button", { "toggle-button-checked": this.state.value })}
+                onClick={e =>
+                    this.setState({ value: !this.state.value }, () => {
                         this.props.onChanged(this.state.value);
                     })}
             >

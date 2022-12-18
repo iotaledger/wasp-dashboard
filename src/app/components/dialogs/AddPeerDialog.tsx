@@ -6,7 +6,7 @@ import { PeeringTrustRequest } from "../../../services/wasp_client";
 
 const FORM_INITIAL_VALUES: IFormValues = {
     publicKey: "",
-    netID: "",
+    netID: ""
 };
 
 interface IFormValues {
@@ -37,7 +37,7 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
             setIsBusy(true);
             const newPeer: PeeringTrustRequest = {
                 publicKey: formValues.publicKey,
-                netID: formValues.netID,
+                netID: formValues.netID
             };
             const success = await peersService.trustPeer(newPeer);
             if (!success) {
@@ -82,7 +82,7 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
         >
             <React.Fragment>
                 <p>Please enter the details of the peer to add.</p>
-                <div className="dialog--label">Public key</div>
+                <div className="dialog-content-label">Public key</div>
                 <div className="dialog--value">
                     <input
                         type="text"
@@ -94,7 +94,7 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
                         onChange={onChange}
                     />
                 </div>
-                <div className="dialog--label">Network id</div>
+                <div className="dialog-content-label">Network id</div>
                 <div className="dialog--value">
                     <input
                         type="text"
@@ -105,7 +105,7 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
                         disabled={isBusy}
                         onChange={onChange}
                     />
-                    {error && <p className="dialog--error">{error}</p>}
+                    {error && <p className="dialog-content-error">{error}</p>}
                 </div>
             </React.Fragment>
         </Dialog>

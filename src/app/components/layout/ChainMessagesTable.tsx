@@ -65,13 +65,13 @@ const METRICS_NAMES: Record<string, string> = {
     outPublishGovernanceTransaction: "Publish governance tx",
     outPullLatestOutput: "Pull latest output",
     outPullOutputByID: "Pull output by ID",
-    outPullTxInclusionState: "Pull tx inclusion state",
+    outPullTxInclusionState: "Pull tx inclusion state"
 };
 
 /**
  *
- * @param date
- * @returns
+ * @param date The date to format.
+ * @returns The formatted date.
  */
 function formatDate(date?: Date | null): string {
     if (!date) {

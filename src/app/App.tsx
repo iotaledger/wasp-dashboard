@@ -1,3 +1,5 @@
+import "./App.scss";
+
 import moment from "moment";
 import React, { Component, ReactNode } from "react";
 import { ReactComponent as ChainsIcon } from "../assets/chains.svg";
@@ -19,7 +21,6 @@ import { ThemeService } from "../services/themeService";
 import { WaspClientService } from "../services/waspClientService";
 import { BrandHelper } from "../utils/brandHelper";
 import isNodeOnline from "../utils/nodeStatus";
-import "./App.scss";
 import { AppState } from "./AppState";
 import Breakpoint from "./components/layout/Breakpoint";
 import NavPanel from "./components/layout/NavPanel";
@@ -119,7 +120,7 @@ class App extends Component<object, AppState> {
             // eslint-disable-next-line react/no-unused-state
             syncHealth: false,
             // eslint-disable-next-line react/no-unused-state
-            nodeHealth: false,
+            nodeHealth: false
         };
 
         this.updateTitle();
@@ -130,9 +131,9 @@ class App extends Component<object, AppState> {
      */
     public async componentDidMount(): Promise<void> {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        isNodeOnline().then((online) => {
+        isNodeOnline().then(online => {
             this.setState({
-                online,
+                online
             });
         });
 
@@ -140,10 +141,10 @@ class App extends Component<object, AppState> {
             this.validateTokenPeriodically();
         }
 
-        EventAggregator.subscribe("auth-state", "app", (isLoggedIn) => {
+        EventAggregator.subscribe("auth-state", "app", isLoggedIn => {
             this.setState(
                 {
-                    isLoggedIn,
+                    isLoggedIn
                 },
                 () => {
                     if (this.state.isLoggedIn) {
@@ -153,7 +154,7 @@ class App extends Component<object, AppState> {
             );
         });
 
-        EventAggregator.subscribe("theme", "app", (theme) => {
+        EventAggregator.subscribe("theme", "app", theme => {
             this.setState({ theme });
         });
 
@@ -254,50 +255,50 @@ class App extends Component<object, AppState> {
                 label: "Home",
                 icon: <HomeIcon />,
                 route: "/",
-                hidden: !this.state.isLoggedIn,
+                hidden: !this.state.isLoggedIn
             },
             {
                 label: "Peers",
                 icon: <PeersIcon />,
                 route: "/peers",
-                hidden: !this.state.isLoggedIn,
+                hidden: !this.state.isLoggedIn
             },
             {
                 label: "Chains",
                 icon: <ChainsIcon />,
                 route: "/chains",
-                hidden: !this.state.isLoggedIn,
+                hidden: !this.state.isLoggedIn
             },
             {
                 label: "Configuration",
                 icon: <ConfigurationIcon />,
                 route: "/configuration",
-                hidden: !this.state.isLoggedIn,
+                hidden: !this.state.isLoggedIn
             },
             {
                 label: "L1",
                 icon: <L1Icon />,
                 route: "/l1",
-                hidden: !this.state.isLoggedIn,
+                hidden: !this.state.isLoggedIn
             },
             {
                 label: "Users",
                 icon: <UsersIcon />,
                 route: "/users",
-                hidden: !this.state.isLoggedIn,
+                hidden: !this.state.isLoggedIn
             },
             {
                 label: "Login",
                 icon: <PadlockIcon />,
                 route: "/login",
-                hidden: this.state.isLoggedIn,
+                hidden: this.state.isLoggedIn
             },
             {
                 label: "Logout",
                 icon: <PadlockUnlockedIcon />,
                 function: () => this._authService.logout(),
-                hidden: !this.state.isLoggedIn,
-            },
+                hidden: !this.state.isLoggedIn
+            }
         ];
 
         const endSections = [
@@ -305,14 +306,14 @@ class App extends Component<object, AppState> {
                 label: "Light",
                 icon: <SunIcon />,
                 function: () => this._themeService.apply("light", true),
-                hidden: this.state.theme === "light",
+                hidden: this.state.theme === "light"
             },
             {
                 label: "Dark",
                 icon: <MoonIcon />,
                 function: () => this._themeService.apply("dark", true),
-                hidden: this.state.theme === "dark",
-            },
+                hidden: this.state.theme === "dark"
+            }
         ];
 
         return (

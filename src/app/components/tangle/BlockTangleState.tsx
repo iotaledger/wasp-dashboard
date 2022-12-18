@@ -56,24 +56,25 @@ class BlockTangleState extends AsyncComponent<BlockTangleStateProps, BlockTangle
         return (
             <div
                 onClick={this.props.onClick}
-                className={
-                    classNames(
-                        "block-tangle-state",
-                        { "block-tangle-state__no-click": !this.props.onClick },
-                        { "block-tangle-state__referenced": this.props.status === "referenced" },
-                        { "block-tangle-state__milestone": this.props.status === "milestone" },
-                        { "block-tangle-state__pending": this.props.status === "pending" },
-                        { "block-tangle-state__unknown": this.props.status === "unknown" }
-                    )
-                }
+                className={classNames(
+                    "block-tangle-state",
+                    { "block-tangle-state-no-click": !this.props.onClick },
+                    { "block-tangle-state-referenced": this.props.status === "referenced" },
+                    { "block-tangle-state-milestone": this.props.status === "milestone" },
+                    { "block-tangle-state-pending": this.props.status === "pending" },
+                    { "block-tangle-state-unknown": this.props.status === "unknown" }
+                )}
             >
-                {this.props.status === "unknown" && ("Unknown")}
+                {this.props.status === "unknown" && "Unknown"}
                 {this.props.status === "referenced" &&
-                    (`Referenced${this.props.milestoneIndex !== undefined && this.props.milestoneIndex > 1
-                        ? ` by MS ${this.props.milestoneIndex}` : ""}`)}
+                    `Referenced${
+                        this.props.milestoneIndex !== undefined && this.props.milestoneIndex > 1
+                            ? ` by MS ${this.props.milestoneIndex}`
+                            : ""
+                    }`}
                 {this.props.status === "milestone" &&
-                    (`MS${this.props.milestoneIndex !== undefined ? ` ${this.props.milestoneIndex}` : ""}`)}
-                {this.props.status === "pending" && ("Pending")}
+                    `MS${this.props.milestoneIndex === undefined ? "" : ` ${this.props.milestoneIndex}`}`}
+                {this.props.status === "pending" && "Pending"}
 
                 {this.state.timestamp}
             </div>
@@ -88,9 +89,7 @@ class BlockTangleState extends AsyncComponent<BlockTangleStateProps, BlockTangle
             const result = await this._tangleService.milestoneDetails(this.props.milestoneIndex);
             if (result) {
                 this.setState({
-                    timestamp: result.timestamp
-                        ? ` at ${FormatHelper.dateShort(result.timestamp)}`
-                        : undefined
+                    timestamp: result.timestamp ? ` at ${FormatHelper.dateShort(result.timestamp)}` : undefined
                 });
             }
         }

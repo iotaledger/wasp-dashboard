@@ -30,11 +30,11 @@ const Tooltip: React.FC<TooltipProps> = ({ children, tooltipContent }) => {
 
     return (
         <div className="tooltip">
-            <div className="tooltip__wrapper" ref={tooltip}>
-                <div className="tooltip__arrow" />
+            <div className="tooltip-wrapper" ref={tooltip}>
+                <div className="tooltip-arrow" />
                 {tooltipContent}
             </div>
-            <div className="tooltip__children" onMouseEnter={onEnter} onMouseLeave={onLeave}>
+            <div className="tooltip-children" onMouseEnter={onEnter} onMouseLeave={onLeave}>
                 {children}
             </div>
         </div>

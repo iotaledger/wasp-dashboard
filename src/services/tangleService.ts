@@ -11,7 +11,7 @@ import {
     SingleNodeClient,
     IndexerPluginClient,
     ALIAS_ADDRESS_TYPE,
-    NFT_ADDRESS_TYPE,
+    NFT_ADDRESS_TYPE
 } from "@iota/iota.js";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { IAssociatedOutput } from "../models/tangle/IAssociatedOutputsResponse";
@@ -67,12 +67,12 @@ export class TangleService {
                 const milestone = await client.milestoneByIndex(searchQuery.milestoneIndex);
 
                 return {
-                    milestone,
+                    milestone
                 };
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true,
+                        unavailable: true
                     };
                 }
             }
@@ -83,12 +83,12 @@ export class TangleService {
                 const milestone = await client.milestoneById(searchQuery.milestoneId);
 
                 return {
-                    milestone,
+                    milestone
                 };
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true,
+                        unavailable: true
                     };
                 }
             }
@@ -100,13 +100,13 @@ export class TangleService {
 
                 if (Object.keys(block).length > 0) {
                     return {
-                        block,
+                        block
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true,
+                        unavailable: true
                     };
                 }
             }
@@ -116,13 +116,13 @@ export class TangleService {
 
                 if (Object.keys(block).length > 0) {
                     return {
-                        block,
+                        block
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true,
+                        unavailable: true
                     };
                 }
             }
@@ -132,12 +132,12 @@ export class TangleService {
             try {
                 return {
                     outputId: searchQuery.output,
-                    output: await client.output(searchQuery.output),
+                    output: await client.output(searchQuery.output)
                 };
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true,
+                        unavailable: true
                     };
                 }
             }
@@ -154,13 +154,13 @@ export class TangleService {
                     );
                     return {
                         address,
-                        addressOutputIds: aliasOutputs.items,
+                        addressOutputIds: aliasOutputs.items
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true,
+                        unavailable: true
                     };
                 }
             }
@@ -173,13 +173,13 @@ export class TangleService {
                     const address = Bech32AddressHelper.buildAddress(searchQuery.nftId, bech32HRP, NFT_ADDRESS_TYPE);
                     return {
                         address,
-                        addressOutputIds: nftOutputs.items,
+                        addressOutputIds: nftOutputs.items
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true,
+                        unavailable: true
                     };
                 }
             }
@@ -190,13 +190,13 @@ export class TangleService {
                 const foundryOutputs = await indexerPlugin.foundry(searchQuery.foundryId);
                 if (foundryOutputs.items.length > 0) {
                     return {
-                        outputId: foundryOutputs.items[0],
+                        outputId: foundryOutputs.items[0]
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true,
+                        unavailable: true
                     };
                 }
             }
@@ -208,13 +208,13 @@ export class TangleService {
 
                 if (taggedOutputs.items.length > 0) {
                     return {
-                        outputs: taggedOutputs.items,
+                        outputs: taggedOutputs.items
                     };
                 }
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true,
+                        unavailable: true
                     };
                 }
             }
@@ -223,12 +223,12 @@ export class TangleService {
         if (searchQuery.address?.hexNoPrefix && searchQuery.address?.hexNoPrefix.length === 64) {
             try {
                 return {
-                    address: { ...searchQuery.address },
+                    address: { ...searchQuery.address }
                 };
             } catch (err) {
                 if (err instanceof ClientError && this.checkForUnavailable(err)) {
                     return {
-                        unavailable: true,
+                        unavailable: true
                     };
                 }
             }
@@ -251,7 +251,7 @@ export class TangleService {
             const block = await client.block(blockId);
 
             return block?.payload;
-        } catch { }
+        } catch {}
     }
 
     /**
@@ -264,7 +264,7 @@ export class TangleService {
             const client = this.buildClient();
 
             return await client.output(outputId);
-        } catch { }
+        } catch {}
     }
 
     /**
@@ -281,7 +281,7 @@ export class TangleService {
             if (nftOutputs.items.length > 0) {
                 return { ...(await client.output(nftOutputs.items[0])), outputId: nftOutputs.items[0] };
             }
-        } catch { }
+        } catch {}
     }
 
     /**
@@ -298,7 +298,7 @@ export class TangleService {
             if (aliasOutputs.items.length > 0) {
                 return { ...(await client.output(aliasOutputs.items[0])), outputId: aliasOutputs.items[0] };
             }
-        } catch { }
+        } catch {}
     }
 
     /**
@@ -314,7 +314,7 @@ export class TangleService {
             const helper = new OutputsHelper(addressBech32, client);
             await helper.fetchAssociatedOutputs();
             outputs = helper.associatedOutputs;
-        } catch { }
+        } catch {}
 
         return outputs;
     }
@@ -332,7 +332,7 @@ export class TangleService {
             const helper = new OutputsHelper(tag, client);
             await helper.fetchOutputsByTag();
             outputs = helper.associatedOutputs;
-        } catch { }
+        } catch {}
 
         return outputs;
     }
@@ -347,7 +347,7 @@ export class TangleService {
             const client = this.buildClient();
 
             return await client.milestoneByIndex(milestoneIndex);
-        } catch { }
+        } catch {}
     }
 
     /**
@@ -357,9 +357,9 @@ export class TangleService {
      */
     public async blockDetails(blockId: string): Promise<
         | {
-            metadata?: IBlockMetadata;
-            unavailable?: boolean;
-        }
+              metadata?: IBlockMetadata;
+              unavailable?: boolean;
+          }
         | undefined
     > {
         try {
@@ -368,12 +368,12 @@ export class TangleService {
             const metadata = await client.blockMetadata(blockId);
 
             return {
-                metadata,
+                metadata
             };
         } catch (err) {
             if (err instanceof ClientError && this.checkForUnavailable(err)) {
                 return {
-                    unavailable: true,
+                    unavailable: true
                 };
             }
         }
@@ -409,7 +409,7 @@ export class TangleService {
 
         return new SingleNodeClient(`${window.location.protocol}//${window.location.host}`, {
             basePath: "/dashboard/api/",
-            headers,
+            headers
         });
     }
 

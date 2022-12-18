@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-operators */
+
 import { ArrayHelper } from "@iota/crypto.js";
 import classNames from "classnames";
 import React, { ReactNode } from "react";
@@ -79,31 +81,22 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
                 <div className="title-row">
                     <div className="caption">{this.props.caption}</div>
                     <div className="key">
-                        {this.props.series.length > 1 && this.props.series.map((s, idx) => (
-                            <span key={idx} className="key">
-                                <div className={classNames("key-color", s.className)} />
-                                <span className="key-label">
-                                    {s.label}
+                        {this.props.series.length > 1 &&
+                            this.props.series.map((s, idx) => (
+                                <span key={idx} className="key">
+                                    <div className={classNames("key-color", s.className)} />
+                                    <span className="key-label">{s.label}</span>
                                 </span>
-                            </span>
-                        ))}
+                            ))}
                     </div>
                 </div>
                 <span className="canvas">
-                    <svg
-                        ref={r => this.setElement(r)}
-                    >
+                    <svg ref={r => this.setElement(r)}>
                         {this.state.paths?.map((b, idx) => (
                             <path key={idx} d={b.path} className={b.className} strokeWidth={1} />
                         ))}
                         {this.state.text?.map((t, idx) => (
-                            <text
-                                key={idx}
-                                x={t.x}
-                                y={t.y}
-                                textAnchor={t.anchor ?? "start"}
-                                className="axis-label"
-                            >
+                            <text key={idx} x={t.x} y={t.y} textAnchor={t.anchor ?? "start"} className="axis-label">
                                 {t.content}
                             </text>
                         ))}
@@ -166,8 +159,7 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
                     seriesMaxLength /= 2;
                 }
 
-                const actualSeriesValues: number[][] =
-                    this.props.series.map(s => s.values.slice(-seriesMaxLength));
+                const actualSeriesValues: number[][] = this.props.series.map(s => s.values.slice(-seriesMaxLength));
 
                 let maxY = 0;
                 const maxItems = Math.min(seriesMaxLength, actualSeriesValues[0].length);
@@ -192,21 +184,23 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
                 const decimalPlaces = maxY <= 2 ? 2 : 0;
 
                 const yScale = (graphHeight * yUsage) / maxY;
-                const barWidth = (graphWidth - axisLabelWidth - marginLeft - marginRight) /
+                const barWidth =
+                    (graphWidth - axisLabelWidth - marginLeft - marginRight) /
                     (seriesMaxLength * this.props.series.length);
                 const axisSpacing = graphHeight / (axisLineCount - 1);
 
                 for (let i = 0; i < axisLineCount; i++) {
                     axis.push({
-                        path: `M ${axisLabelWidth} ${graphHeight - (i * axisSpacing)
-                            } L ${graphWidth} ${graphHeight - (i * axisSpacing)}`,
+                        path: `M ${axisLabelWidth} ${graphHeight - i * axisSpacing} L ${graphWidth} ${
+                            graphHeight - i * axisSpacing
+                        }`,
                         className: "axis-color"
                     });
                     text.push({
                         x: axisLabelWidth - 5,
-                        y: graphHeight - (i * axisSpacing) + 2,
+                        y: graphHeight - i * axisSpacing + 2,
                         anchor: "end",
-                        content: (i * ((maxY / yUsage) / (axisLineCount - 1))).toFixed(decimalPlaces)
+                        content: (i * (maxY / yUsage / (axisLineCount - 1))).toFixed(decimalPlaces)
                     });
                 }
 
@@ -215,19 +209,23 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
                     if (graphWidth < 300) {
                         numTimeEntries = 3;
                     }
-                    const startTime = this.props.endTime - (maxItems * this.props.timeInterval);
+                    const startTime = this.props.endTime - maxItems * this.props.timeInterval;
                     const timePerInterval = (seriesMaxLength * this.props.timeInterval) / numTimeEntries;
                     for (let i = 0; i <= numTimeEntries; i++) {
-                        const dt = new Date(startTime + (i * timePerInterval));
+                        const dt = new Date(startTime + i * timePerInterval);
                         text.push({
-                            x: marginLeft + (axisLabelWidth / 2) +
-                                (((graphWidth - marginLeft - marginRight) / numTimeEntries) * i),
+                            x:
+                                marginLeft +
+                                axisLabelWidth / 2 +
+                                ((graphWidth - marginLeft - marginRight) / numTimeEntries) * i,
                             y: graphHeight + axisLabelHeight,
                             anchor: "middle",
                             content: `${dt.getHours().toString()
-                                .padStart(2, "0")}:${dt.getMinutes().toString()
-                                    .padStart(2, "0")}.${dt.getSeconds().toString()
-                                        .padStart(2, "0")}`
+.padStart(2, "0")}:${dt
+                                .getMinutes()
+                                .toString()
+                                .padStart(2, "0")}.${dt.getSeconds().toString()
+.padStart(2, "0")}`
                         });
                     }
                 }
@@ -240,8 +238,9 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
                                 graphHeight,
                                 barWidth,
                                 axisLabelWidth + marginLeft,
-                                j + (i * actualSeriesValues.length),
-                                val * yScale),
+                                j + i * actualSeriesValues.length,
+                                val * yScale
+                            ),
                             className: this.props.series[j].className
                         });
                     }
@@ -265,24 +264,32 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
      * @returns The path.
      */
     private calculatePath(
-        graphHeight: number, barWidth: number, marginLeft: number,
-        index: number, scaledVal: number): string {
+        graphHeight: number,
+        barWidth: number,
+        marginLeft: number,
+        index: number,
+        scaledVal: number
+    ): string {
         const spacing = 2;
-        let pathSegments = [`M ${marginLeft + (index * barWidth) + spacing} ${graphHeight}`];
+        let pathSegments = [`M ${marginLeft + index * barWidth + spacing} ${graphHeight}`];
 
         pathSegments = [
             ...pathSegments,
-            ...(scaledVal <= 0 ? [
-                `L ${marginLeft + ((index * barWidth) + spacing)} ${graphHeight - 1}`,
-                `L ${marginLeft + ((index + 1) * barWidth) - spacing} ${graphHeight - 1}`,
-                `L ${marginLeft + ((index + 1) * barWidth) - spacing} ${graphHeight}`
-            ] : [
-                    `L ${marginLeft + (index * barWidth) + spacing} ${graphHeight - scaledVal}`,
-                    `C ${marginLeft + (index * barWidth) + spacing} ${graphHeight - scaledVal - 10
-                    } ${marginLeft + ((index + 1) * barWidth) - spacing} ${graphHeight - scaledVal - 10
-                    } ${marginLeft + ((index + 1) * barWidth) - spacing} ${graphHeight - scaledVal}`,
-                    `L ${marginLeft + ((index + 1) * barWidth) - spacing} ${graphHeight}`
-                ])
+            ...(scaledVal <= 0
+                ? [
+                      `L ${marginLeft + (index * barWidth + spacing)} ${graphHeight - 1}`,
+                      `L ${marginLeft + (index + 1) * barWidth - spacing} ${graphHeight - 1}`,
+                      `L ${marginLeft + (index + 1) * barWidth - spacing} ${graphHeight}`
+                  ]
+                : [
+                      `L ${marginLeft + index * barWidth + spacing} ${graphHeight - scaledVal}`,
+                      `C ${marginLeft + index * barWidth + spacing} ${graphHeight - scaledVal - 10} ${
+                          marginLeft + (index + 1) * barWidth - spacing
+                      } ${graphHeight - scaledVal - 10} ${marginLeft + (index + 1) * barWidth - spacing} ${
+                          graphHeight - scaledVal
+                      }`,
+                      `L ${marginLeft + (index + 1) * barWidth - spacing} ${graphHeight}`
+                  ])
         ];
 
         return pathSegments.join(" ");

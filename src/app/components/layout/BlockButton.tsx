@@ -31,22 +31,17 @@ class BlockButton extends Component<BlockButtonProps, BlockButtonState> {
             <div className="block-button">
                 <button
                     type="button"
-                    className={classNames(
-                        "block-button-btn",
-                        { "block-button-btn--active": this.state.active }
-                    )}
+                    className={classNames("block-button-btn", { "block-button-btn--active": this.state.active })}
                     onClick={() => this.activate()}
                 >
-                    {this.props.buttonType === "copy" && (
-                        <CopyIcon />
-                    )}
+                    {this.props.buttonType === "copy" && <CopyIcon />}
                 </button>
                 {this.state.active && this.state.message && (
                     <span
                         className={classNames(
-                            "block-button--message",
-                            { "block-button--message--right": this.props.labelPosition === "right" },
-                            { "block-button--message--top": this.props.labelPosition === "top" }
+                            "block-button-message",
+                            { "block-button-message-right": this.props.labelPosition === "right" },
+                            { "block-button-message-top": this.props.labelPosition === "top" }
                         )}
                     >
                         {this.state.message}
@@ -63,11 +58,9 @@ class BlockButton extends Component<BlockButtonProps, BlockButtonState> {
         this.props.onClick();
 
         this.setState({ active: true });
-        setTimeout(
-            () => {
-                this.setState({ active: false });
-            },
-            2000);
+        setTimeout(() => {
+            this.setState({ active: false });
+        }, 2000);
     }
 }
 

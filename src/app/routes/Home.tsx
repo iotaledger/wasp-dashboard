@@ -66,7 +66,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
             publicKey: "",
             version: "",
             networkId: "",
-            peersList: [],
+            peersList: []
         };
     }
 
@@ -78,7 +78,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
 
         this.setState({
             bannerSrc: await BrandHelper.getBanner(this._themeService.get()),
-            peersList: this._peersService.get(),
+            peersList: this._peersService.get()
         });
 
         if (this._authService.isLoggedIn()) {
@@ -88,23 +88,23 @@ class Home extends AsyncComponent<unknown, HomeState> {
                     this.setState({
                         networkId: this._nodeConfigService.getNetworkId(),
                         version: this._nodeConfigService.getVersion(),
-                        publicKey: this._nodeConfigService.getPublicKey(),
+                        publicKey: this._nodeConfigService.getPublicKey()
                     });
                 })
-                .catch((e) => console.log(e));
+                .catch(e => console.log(e));
         }
 
         EventAggregator.subscribe("theme", "home", async (theme: string) => {
             this.setState({
-                bannerSrc: await BrandHelper.getBanner(theme),
+                bannerSrc: await BrandHelper.getBanner(theme)
             });
         });
 
-        EventAggregator.subscribe("settings.blindMode", "home", (blindMode) => {
+        EventAggregator.subscribe("settings.blindMode", "home", blindMode => {
             this.setState({ blindMode });
         });
 
-        EventAggregator.subscribe("peers-state", "home", (peers) => {
+        EventAggregator.subscribe("peers-state", "home", peers => {
             this.setState({ peersList: peers });
         });
     }
@@ -158,7 +158,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
                                     <button
                                         type="button"
                                         onClick={this.handleBlindMode}
-                                        className="peers-summary--blind-button"
+                                        className="peers-summary-blind-button"
                                     >
                                         {this.state.blindMode ? <EyeIcon /> : <EyeClosedIcon />}
                                     </button>

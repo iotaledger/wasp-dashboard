@@ -36,7 +36,7 @@ function Configuration() {
     useEffect(() => {
         if (config) {
             // To get the first part of the key before the first dot
-            const configCategory = Object.keys(config).map((key) => key.slice(0, Math.max(0, key.indexOf("."))));
+            const configCategory = Object.keys(config).map(key => key.slice(0, Math.max(0, key.indexOf("."))));
 
             // To remove the duplicated keys
             const notDuplicatedConfigCategory = configCategory.filter(
@@ -44,9 +44,9 @@ function Configuration() {
             );
 
             // To create an array of objects with the items that have the same key
-            const newConfig = notDuplicatedConfigCategory.map((item) => {
+            const newConfig = notDuplicatedConfigCategory.map(item => {
                 const newObj = {
-                    [item]: { [item]: config[item] },
+                    [item]: { [item]: config[item] }
                 };
                 for (const key in config) {
                     if (key.startsWith(item)) {
@@ -80,7 +80,7 @@ function Configuration() {
                                     <div className="card" key={index}>
                                         <h4 className="key">{key} </h4>
                                         {Object.entries(value).map(([keyVal, val], valueIndex) =>
-                                            typeof val === "boolean" ? (
+                                            (typeof val === "boolean" ? (
                                                 val ? (
                                                     <div key={valueIndex} className="card-item">
                                                         <span>{keyVal}:</span>
@@ -92,7 +92,7 @@ function Configuration() {
                                                         <input type="checkbox" disabled />
                                                     </div>
                                                 )
-                                            ) : typeof val === "string" ? (
+                                            ) : (typeof val === "string" ? (
                                                 <div key={valueIndex} className="card-item">
                                                     <span>{keyVal}:</span>
                                                     <p className="value">{val}</p>
@@ -102,7 +102,7 @@ function Configuration() {
                                                     <span>{keyVal}:</span>
                                                     <p className="value">{JSON.stringify(val)}</p>
                                                 </div>
-                                            )
+                                            )))
                                         )}
                                     </div>
                                 );

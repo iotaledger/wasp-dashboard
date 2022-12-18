@@ -30,7 +30,7 @@ export class PeersService {
         if (authService.isLoggedIn()) {
             this.start();
         }
-        EventAggregator.subscribe("auth-state", "peersService", (isLoggedIn) => {
+        EventAggregator.subscribe("auth-state", "peersService", isLoggedIn => {
             if (isLoggedIn) {
                 this.start();
             } else {

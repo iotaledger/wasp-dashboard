@@ -1,6 +1,6 @@
-@import "../../scss/fonts";
-@import "../../scss/media-queries";
-@import "../../scss/variables";
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
 
 .dialog-click-shield {
     position: absolute;
@@ -39,12 +39,13 @@
         }
 
         .dialog-header {
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: $spacing-small;
             padding-bottom: $spacing-small;
             border-bottom: 1px solid var(--panel-border);
-            justify-content: space-between;
-            align-items: center;
-            .dialog-header--close {
+
+            .dialog-header-close {
                 color: var(--text-color-primary);
                 font-size: 20px;
             }
@@ -52,8 +53,8 @@
 
         .dialog-content {
             flex: 1;
-
-            .dialog--label {
+            
+            .dialog-content-label {
                 @include font-size(10px);
 
                 margin-top: $spacing-small;
@@ -64,10 +65,10 @@
                 text-transform: uppercase;
             }
 
-            .dialog--error {
+            .dialog-content-error {
+                margin-top: $spacing-small;
                 color: $danger;
                 font-weight: 500;
-                margin-top: $spacing-small;
             }
         }
 

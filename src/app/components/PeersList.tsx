@@ -32,7 +32,7 @@ const PeersList: React.FC<PeersListProps> = ({ peers, blindMode, detailedList })
 );
 
 PeersList.defaultProps = {
-    detailedList: false,
+    detailedList: false
 };
 
 export default PeersList;

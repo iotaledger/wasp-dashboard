@@ -30,15 +30,11 @@ class SearchInput extends Component<SearchInputProps, SearchInputState> {
             <div
                 className={classNames(
                     "search-input",
-                    { "search-input--compact": this.props.compact },
+                    { "search-input-compact": this.props.compact },
                     this.props.className
                 )}
             >
-                <button
-                    type="button"
-                    className="icon-button"
-                    onClick={() => this.props.onSearch(this.state.query)}
-                >
+                <button type="button" className="icon-button" onClick={() => this.props.onSearch(this.state.query)}>
                     <SearchIcon />
                 </button>
                 <input

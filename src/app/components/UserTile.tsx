@@ -11,7 +11,7 @@ interface UserTileProps {
 }
 
 const UserTile: React.FC<UserTileProps> = ({ user }) => (
-    <div className="user-panel--item card">
+    <div className="user-panel-item card">
         <div className="col user-data">
             <h4>Username</h4>
             <p>{user?.username}</p>

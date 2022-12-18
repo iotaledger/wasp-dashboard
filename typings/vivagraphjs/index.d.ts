@@ -55,19 +55,21 @@ declare module "vivagraphjs" {
         function webglInputEvents<T, U>(graphics: View.IWebGLGraphics<T, U>, graph: IGraph<T, U>): IEvents<T, U>;
 
         export namespace View {
-            export interface IItem {
-
-            }
+            export interface IItem {}
             export interface IWebGLGraphics<T, U> {
                 link: (callback: (link: ILink<U>) => IItem) => void;
                 node: (callback: (node: INode<T, U>) => IItem) => void;
-                getNodeUI: (nodeId: string) => {
-                    color: number;
-                    size: number;
-                } | undefined;
-                getLinkUI: (linkId: string) => {
-                    color: number;
-                } | undefined;
+                getNodeUI: (nodeId: string) =>
+                    | {
+                          color: number;
+                          size: number;
+                      }
+                    | undefined;
+                getLinkUI: (linkId: string) =>
+                    | {
+                          color: number;
+                      }
+                    | undefined;
                 setNodeProgram: (program: WebGLProgram) => void;
                 updateSize: () => void;
                 scale: (scale: number, offset: { x: number; y: number }) => void;
@@ -90,12 +92,15 @@ declare module "vivagraphjs" {
             function webglLine(color: string | number): IItem;
             function webglSquare(size: nubmer, color: string): IItem;
 
-            function renderer<T, U>(graph: IGraph<T, U>, options: {
-                container: HTMLElement | null;
-                graphics: IWebGLGraphics<T, U>;
-                layout: Layout.ILayout;
-                renderLinks: boolean;
-            }): IRenderer;
+            function renderer<T, U>(
+                graph: IGraph<T, U>,
+                options: {
+                    container: HTMLElement | null;
+                    graphics: IWebGLGraphics<T, U>;
+                    layout: Layout.ILayout;
+                    renderLinks: boolean;
+                }
+            ): IRenderer;
         }
 
         export namespace Layout {
@@ -115,7 +120,8 @@ declare module "vivagraphjs" {
                     gravity: number;
                     timeStep: number;
                     theta: number;
-                }): ILayout;
+                }
+            ): ILayout;
         }
     }
 }

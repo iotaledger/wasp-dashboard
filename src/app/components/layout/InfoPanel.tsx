@@ -25,26 +25,24 @@ class InfoPanel extends Component<InfoPanelProps> {
         return (
             <div className={classNames("card", "info-panel", this.props.className)}>
                 <div className="icon-container">
-                    <div className={`icon-background icon-background--${this.props.backgroundStyle}`} />
+                    <div className={`icon-background icon-background-${this.props.backgroundStyle}`} />
                     {this.props.icon}
                 </div>
-                <div className="col info--labels">
+                <div className="col info-labels">
                     <h4>{this.props.caption}</h4>
-                    {
-                        this.props.caption === MILESTONE_CAPTION ?
-                            <Tooltip
-                                tooltipContent={this.props.value ?? "-"}
-                            >
-                                {
-                                    this.props.value ?
-                                        <div className="value">
-                                            {cmi} / <span className="lmi">{lmi}</span>
-                                        </div> :
-                                        "-"
-                                }
-                            </Tooltip> :
-                            <div className="value">{this.props.value ?? "-"}</div>
-                    }
+                    {this.props.caption === MILESTONE_CAPTION ? (
+                        <Tooltip tooltipContent={this.props.value ?? "-"}>
+                            {this.props.value ? (
+                                <div className="value">
+                                    {cmi} / <span className="lmi">{lmi}</span>
+                                </div>
+                            ) : (
+                                "-"
+                            )}
+                        </Tooltip>
+                    ) : (
+                        <div className="value">{this.props.value ?? "-"}</div>
+                    )}
                 </div>
             </div>
         );

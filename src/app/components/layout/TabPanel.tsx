@@ -37,18 +37,16 @@ class TabPanel extends Component<TabPanelProps, TabPanelState> {
     public render(): ReactNode {
         return (
             <div className="tab-panel">
-                <div className="tab-panel--buttons">
+                <div className="tab-panel-buttons">
                     {this.props.tabs.map(l => (
                         <button
                             key={l}
                             type="button"
-                            className={classNames(
-                                "tab-panel--button",
-                                { "tab-panel--button__selected": l.toLowerCase() === this.state.activeTab }
-                            )}
-                            onClick={e => this.setState(
-                                { activeTab: l.toLowerCase() },
-                                () => {
+                            className={classNames("tab-panel-button", {
+                                "tab-panel-button-selected": l.toLowerCase() === this.state.activeTab
+                            })}
+                            onClick={e =>
+                                this.setState({ activeTab: l.toLowerCase() }, () => {
                                     if (this.props.onTabChanged) {
                                         this.props.onTabChanged(this.state.activeTab);
                                     }
@@ -61,8 +59,10 @@ class TabPanel extends Component<TabPanelProps, TabPanelState> {
                 </div>
                 {this.props.children?.flat().map((c, idx) => (
                     <React.Fragment key={idx}>
-                        {React.isValidElement(c) && c.props["data-label"] &&
-                         c.props["data-label"].toLowerCase() === this.state.activeTab && c}
+                        {React.isValidElement(c) &&
+                            c.props["data-label"] &&
+                            c.props["data-label"].toLowerCase() === this.state.activeTab &&
+                            c}
                     </React.Fragment>
                 ))}
             </div>

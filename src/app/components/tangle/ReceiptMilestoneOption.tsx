@@ -33,51 +33,34 @@ class ReceiptMilestoneOption extends Component<ReceiptMilestoneOptionProps, Rece
                     className="card--content__input"
                     onClick={() => this.setState({ showReceiptDetails: !this.state.showReceiptDetails })}
                 >
-
-                    <div className={classNames(
-                            "margin-r-t",
-                            "card--content__input--dropdown",
-                            { "opened": this.state.showReceiptDetails }
-                        )}
+                    <div
+                        className={classNames("margin-r-t", "card--content__input--dropdown", {
+                            opened: this.state.showReceiptDetails
+                        })}
                     >
                         <DropdownIcon />
                     </div>
-                    <h3 className="card--content__input--label">
-                        Receipt
-                    </h3>
+                    <h3 className="card--content__input--label">Receipt</h3>
                 </div>
                 {this.state.showReceiptDetails && (
                     <div className="card--content--border-l">
-                        <div className="card--label">
-                            Migrated At
-                        </div>
-                        <div className="card--value row">
-                            {this.props.option.migratedAt}
-                        </div>
-                        <div className="card--label">
-                            Final
-                        </div>
-                        <div className="card--value row">
-                            {this.props.option.final ? "Yes" : "No"}
-                        </div>
-                        <div className="card--label">
-                            Input Transaction Milestone Id
-                        </div>
+                        <div className="card--label">Migrated At</div>
+                        <div className="card--value row">{this.props.option.migratedAt}</div>
+                        <div className="card--label">Final</div>
+                        <div className="card--value row">{this.props.option.final ? "Yes" : "No"}</div>
+                        <div className="card--label">Input Transaction Milestone Id</div>
                         <div className="card--value card--value__mono">
                             {this.props.option.transaction.input.milestoneId}
                         </div>
-                        <div className="card--label">
-                            Output Transaction Amount to Treasury
-                        </div>
+                        <div className="card--label">Output Transaction Amount to Treasury</div>
                         <div className="card--value card--value__mono">
                             <button
                                 className="card--value--button"
                                 type="button"
-                                onClick={() => this.setState(
-                                    {
+                                onClick={() =>
+                                    this.setState({
                                         formatFull: !this.state.formatFull
-                                    }
-                                )}
+                                    })}
                             >
                                 {FormatHelper.getInstance().amount(
                                     Number(this.props.option.transaction.output.amount),

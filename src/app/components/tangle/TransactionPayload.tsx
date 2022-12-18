@@ -16,7 +16,7 @@ class TransactionPayload extends Component<TransactionPayloadProps, TransactionP
     /**
      * Service for tangle requests.
      */
-     private readonly _tangleService: TangleService;
+    private readonly _tangleService: TangleService;
 
     /**
      * Create a new instance of TransactionPayload.
@@ -26,24 +26,28 @@ class TransactionPayload extends Component<TransactionPayloadProps, TransactionP
         super(props);
         this._tangleService = ServiceFactory.get<TangleService>(TangleService.ServiceName);
 
-        const inputs = this.props.payload.essence.inputs
-            .map((input, idx) => {
-                const output: IAssociatedOutput = {
-                    outputId: TransactionHelper.outputIdFromTransactionData(input.transactionId, input.transactionOutputIndex)
-                };
-                return output;
-            });
+        const inputs = this.props.payload.essence.inputs.map((input, idx) => {
+            const output: IAssociatedOutput = {
+                outputId: TransactionHelper.outputIdFromTransactionData(
+                    input.transactionId,
+                    input.transactionOutputIndex
+                )
+            };
+            return output;
+        });
 
-        const outputs = this.props.payload.essence.outputs
-            .map((output, idx) => {
-                const transactionId = Converter.bytesToHex(TransactionHelper.getTransactionPayloadHash(this.props.payload), true);
+        const outputs = this.props.payload.essence.outputs.map((output, idx) => {
+            const transactionId = Converter.bytesToHex(
+                TransactionHelper.getTransactionPayloadHash(this.props.payload),
+                true
+            );
 
-                const associatedOutput: IAssociatedOutput = {
-                    outputId: TransactionHelper.outputIdFromTransactionData(transactionId, idx),
-                    outputType: output
-                };
-                return associatedOutput;
-            });
+            const associatedOutput: IAssociatedOutput = {
+                outputId: TransactionHelper.outputIdFromTransactionData(transactionId, idx),
+                outputType: output
+            };
+            return associatedOutput;
+        });
 
         this.state = {
             outputs,
@@ -72,10 +76,9 @@ class TransactionPayload extends Component<TransactionPayloadProps, TransactionP
                         title="Inputs"
                         onPageChange={(page: number, firstPageIndex: number, lastPageIndex: number) => {
                             if (this.state.inputs.length > 0) {
-                                this.updateOutputDetails(
-                                    firstPageIndex,
-                                    lastPageIndex
-                                ).catch(err => console.error(err));
+                                this.updateOutputDetails(firstPageIndex, lastPageIndex).catch(err =>
+                                    console.error(err)
+                                );
                             }
                         }}
                     />
@@ -99,9 +102,7 @@ class TransactionPayload extends Component<TransactionPayloadProps, TransactionP
      * @param startIndex The start index of the output.
      * @param endIndex The end index of the output.
      */
-    private async updateOutputDetails(
-        startIndex: number,
-        endIndex: number) {
+    private async updateOutputDetails(startIndex: number, endIndex: number) {
         const outputs = [...this.state.inputs];
         if (outputs.length > 0) {
             this.setState({ statusInputsBusy: true });

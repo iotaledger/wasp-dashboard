@@ -27,11 +27,7 @@ export class OutputsHelper {
                 { tagHex: tag },
                 AssociationType.TAG
             ),
-            this.tryFetchOutputs(
-                async query => indexerPlugin.nfts(query),
-                { tagHex: tag },
-                AssociationType.TAG
-            )
+            this.tryFetchOutputs(async query => indexerPlugin.nfts(query), { tagHex: tag }, AssociationType.TAG)
         ];
         await Promise.all(promises);
     }
@@ -142,27 +138,26 @@ export class OutputsHelper {
         await Promise.all(promises);
     }
 
-
     private async tryFetchOutputs(
         fetch: (req: Record<string, unknown>) => Promise<IOutputsResponse>,
         request: Record<string, unknown>,
         association: AssociationType
-     ) {
-         const associatedOutputs = this.associatedOutputs;
-         let cursor: string | undefined;
+    ) {
+        const associatedOutputs = this.associatedOutputs;
+        let cursor: string | undefined;
 
-         do {
-             try {
-                 const outputs = await fetch({ ...request, cursor });
+        do {
+            try {
+                const outputs = await fetch({ ...request, cursor });
 
-                 if (outputs.items.length > 0) {
-                     for (const outputId of outputs.items) {
-                         associatedOutputs.push({ outputId, association });
-                     }
-                 }
+                if (outputs.items.length > 0) {
+                    for (const outputId of outputs.items) {
+                        associatedOutputs.push({ outputId, association });
+                    }
+                }
 
-                 cursor = outputs.cursor;
-             } catch {}
-         } while (cursor);
-     }
+                cursor = outputs.cursor;
+            } catch {}
+        } while (cursor);
+    }
 }

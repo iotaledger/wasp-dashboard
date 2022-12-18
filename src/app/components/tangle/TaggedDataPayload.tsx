@@ -18,7 +18,7 @@ class TaggedDataPayload extends Component<TaggedDataPayloadProps, TaggedDataPayl
 
         const utf8Index = props.payload.tag ? Converter.hexToUtf8(props.payload.tag) : "";
         const matchHexIndex = props.payload.tag ? props.payload.tag.match(/.{1,2}/g) : "";
-        const hexIndex = matchHexIndex ? matchHexIndex.join(" ") : (props.payload.tag ?? "");
+        const hexIndex = matchHexIndex ? matchHexIndex.join(" ") : props.payload.tag ?? "";
 
         let hexData;
         let utf8Data;
@@ -57,22 +57,16 @@ class TaggedDataPayload extends Component<TaggedDataPayloadProps, TaggedDataPayl
                 <div className="card--label row middle">
                     <span className="margin-r-t">Tag UTF8 [{this.state.indexLengthBytes}]</span>
                     <BlockButton
-                        onClick={() => ClipboardHelper.copy(
-                            this.state.utf8Index
-                        )}
+                        onClick={() => ClipboardHelper.copy(this.state.utf8Index)}
                         buttonType="copy"
                         labelPosition="right"
                     />
                 </div>
-                <div className="card--value row">
-                    {this.state.utf8Index}
-                </div>
+                <div className="card--value row">{this.state.utf8Index}</div>
                 <div className="card--label row middle">
                     <span className="margin-r-t">Tag Hex [{this.state.indexLengthBytes}]</span>
                     <BlockButton
-                        onClick={() => ClipboardHelper.copy(
-                            this.state.hexIndex.replace(/ /g, "")
-                        )}
+                        onClick={() => ClipboardHelper.copy(this.state.hexIndex.replace(/ /g, ""))}
                         buttonType="copy"
                         labelPosition="right"
                     />
@@ -85,9 +79,7 @@ class TaggedDataPayload extends Component<TaggedDataPayloadProps, TaggedDataPayl
                         <div className="card--label row bottom spread">
                             <span className="margin-r-t">Data UTF8 [{this.state.dataLengthBytes}]</span>
                             <BlockButton
-                                onClick={() => ClipboardHelper.copy(
-                                    this.state.utf8Data
-                                )}
+                                onClick={() => ClipboardHelper.copy(this.state.utf8Data)}
                                 buttonType="copy"
                                 labelPosition="top"
                             />
@@ -102,9 +94,7 @@ class TaggedDataPayload extends Component<TaggedDataPayloadProps, TaggedDataPayl
                         <div className="card--label row bottom spread">
                             Data JSON
                             <BlockButton
-                                onClick={() => ClipboardHelper.copy(
-                                    this.state.jsonData
-                                )}
+                                onClick={() => ClipboardHelper.copy(this.state.jsonData)}
                                 buttonType="copy"
                                 labelPosition="top"
                             />
@@ -119,9 +109,7 @@ class TaggedDataPayload extends Component<TaggedDataPayloadProps, TaggedDataPayl
                         <div className="card--label row middle">
                             <span className="margin-r-t">Data Hex [{this.state.dataLengthBytes}]</span>
                             <BlockButton
-                                onClick={() => ClipboardHelper.copy(
-                                    this.state.hexData?.replace(/ /g, "")
-                                )}
+                                onClick={() => ClipboardHelper.copy(this.state.hexData?.replace(/ /g, ""))}
                                 buttonType="copy"
                                 labelPosition="right"
                             />

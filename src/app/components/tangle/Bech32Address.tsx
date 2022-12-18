@@ -24,18 +24,19 @@ class Bech32Address extends Component<Bech32AddressProps, Bech32AddressState> {
         if (this.props.address) {
             const nodeConfigService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
 
-            const hash = this.props.address.type === ED25519_ADDRESS_TYPE
-                        ? this.props.address?.pubKeyHash
-                        : (this.props.address.type === ALIAS_ADDRESS_TYPE
-                            ? this.props.address?.aliasId
-                            : this.props.address?.nftId);
+            const hash =
+                this.props.address.type === ED25519_ADDRESS_TYPE
+                    ? this.props.address?.pubKeyHash
+                    : (this.props.address.type === ALIAS_ADDRESS_TYPE
+                    ? this.props.address?.aliasId
+                    : this.props.address?.nftId);
 
             this.state = {
                 addressDetails: Bech32AddressHelper.buildAddress(
-                                    hash,
-                                    nodeConfigService.getBech32Hrp(),
-                                    this.props.address.type
-                                )
+                    hash,
+                    nodeConfigService.getBech32Hrp(),
+                    this.props.address.type
+                )
             };
         } else if (this.props.addressDetails) {
             this.state = {
@@ -78,18 +79,12 @@ class Bech32Address extends Component<Bech32AddressProps, Bech32AddressState> {
                         </div>
                     </React.Fragment>
                 )}
-                {this.props.showHexAddress &&
-                this.state.addressDetails?.hex && (
+                {this.props.showHexAddress && this.state.addressDetails?.hex && (
                     <React.Fragment>
-                        <div className="card--label">
-                            {this.state.addressDetails.typeLabel} Address
-                        </div>
+                        <div className="card--label">{this.state.addressDetails.typeLabel} Address</div>
                         <div className="card--value card--value__mono row">
                             {this.props.activeLinks && (
-                                <Link
-                                    className="margin-r-t"
-                                    to={`/explorer/address/${this.state.addressDetails?.hex}`}
-                                >
+                                <Link className="margin-r-t" to={`/explorer/address/${this.state.addressDetails?.hex}`}>
                                     {this.state.addressDetails?.hex}
                                 </Link>
                             )}

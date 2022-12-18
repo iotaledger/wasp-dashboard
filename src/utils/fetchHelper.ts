@@ -20,7 +20,7 @@ export class FetchHelper {
         headers?: { [id: string]: string },
         timeout?: number
     ): Promise<U> {
-        headers = headers ?? {};
+        headers ??= {};
         headers["Content-Type"] = "application/json";
 
         let controller: AbortController | undefined;
@@ -28,32 +28,29 @@ export class FetchHelper {
 
         if (timeout !== undefined) {
             controller = new AbortController();
-            timerId = setTimeout(
-                () => {
-                    if (controller) {
-                        controller.abort();
-                    }
-                },
-                timeout);
+            timerId = setTimeout(() => {
+                if (controller) {
+                    controller.abort();
+                }
+            }, timeout);
         }
 
         try {
-            const res = await fetch(
-                `${baseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`,
-                {
-                    method,
-                    headers,
-                    body: payload ? JSON.stringify(payload) : undefined,
-                    signal: controller ? controller.signal : undefined
-                });
+            const res = await fetch(`${baseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`, {
+                method,
+                headers,
+                body: payload ? JSON.stringify(payload) : undefined,
+                signal: controller ? controller.signal : undefined
+            });
 
-                const json = (res.status === 204) ? {}
-                    : await res.json()
-                        .catch(error => {
-                            throw new Error(`Fetched failed: ${error.message}`);
-                        });
+            const json =
+                res.status === 204
+                    ? {}
+                    : await res.json().catch(error => {
+                          throw new Error(`Fetched failed: ${error.message}`);
+                      });
 
-                return json as U;
+            return json as U;
         } catch (err) {
             if (err instanceof Error) {
                 throw err.name === "AbortError" ? new Error("Timeout") : err;
@@ -85,7 +82,7 @@ export class FetchHelper {
         headers?: { [id: string]: string },
         timeout?: number
     ): Promise<U> {
-        headers = headers ?? {};
+        headers ??= {};
         headers["Content-Type"] = "text/plain";
 
         let controller: AbortController | undefined;
@@ -93,31 +90,28 @@ export class FetchHelper {
 
         if (timeout !== undefined) {
             controller = new AbortController();
-            timerId = setTimeout(
-                () => {
-                    if (controller) {
-                        controller.abort();
-                    }
-                },
-                timeout);
+            timerId = setTimeout(() => {
+                if (controller) {
+                    controller.abort();
+                }
+            }, timeout);
         }
 
         try {
-            const res = await fetch(
-                `${baseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`,
-                {
-                    method,
-                    headers,
-                    body: payload ? JSON.stringify(payload) : undefined,
-                    signal: controller ? controller.signal : undefined
-                });
-                const json = (res.status === 204) ? {}
-                    : await res.json()
-                        .catch(error => {
-                            throw new Error(`Fetched failed: ${res.statusText}`);
-                        });
+            const res = await fetch(`${baseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`, {
+                method,
+                headers,
+                body: payload ? JSON.stringify(payload) : undefined,
+                signal: controller ? controller.signal : undefined
+            });
+            const json =
+                res.status === 204
+                    ? {}
+                    : await res.json().catch(error => {
+                          throw new Error(`Fetched failed: ${res.statusText}`);
+                      });
 
-                return json as U;
+            return json as U;
         } catch (err) {
             if (err instanceof Error) {
                 throw err.name === "AbortError" ? new Error("Timeout") : err;

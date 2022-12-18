@@ -34,12 +34,10 @@ class UTXOInput extends Component<UTXOInputProps, UTXOInputState> {
                         className="card--content__input"
                         onClick={() => this.setState({ showDetails: !this.state.showDetails })}
                     >
-
-                        <div className={classNames(
-                                "margin-r-t",
-                                "card--content__input--dropdown",
-                                { "opened": this.state.showDetails }
-                            )}
+                        <div
+                            className={classNames("margin-r-t", "card--content__input--dropdown", {
+                                opened: this.state.showDetails
+                            })}
                         >
                             <DropdownIcon />
                         </div>
@@ -55,21 +53,13 @@ class UTXOInput extends Component<UTXOInputProps, UTXOInputState> {
                                 showHexAddress={true}
                                 address={this.props.unlockAddress}
                             />
-                            <div className="card--label">
-                                Transaction Id
-                            </div>
+                            <div className="card--label">Transaction Id</div>
                             <div className="card--value card--value__mono">
-                                {this.props.input.transactionId === "0".repeat(64) && (
-                                    <span>Genesis</span>
-                                )}
+                                {this.props.input.transactionId === "0".repeat(64) && <span>Genesis</span>}
                                 {this.props.input.transactionId !== "0".repeat(64) && this.props.input.transactionId}
                             </div>
-                            <div className="card--label">
-                                Transaction Output Index
-                            </div>
-                            <div className="card--value">
-                                {this.props.input.transactionOutputIndex}
-                            </div>
+                            <div className="card--label">Transaction Output Index</div>
+                            <div className="card--value">{this.props.input.transactionOutputIndex}</div>
                         </div>
                     )}
                 </div>

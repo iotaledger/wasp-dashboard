@@ -30,7 +30,7 @@ class Login extends AsyncComponent<unknown, LoginState> {
             password: "",
             isBusy: false,
             error: false,
-            redirect: this._authService.isLoggedIn() ? "/" : "",
+            redirect: this._authService.isLoggedIn() ? "/" : ""
         };
     }
 
@@ -56,7 +56,7 @@ class Login extends AsyncComponent<unknown, LoginState> {
                                     autoComplete="username"
                                     value={this.state.user}
                                     disabled={this.state.isBusy}
-                                    onChange={(e) => this.setState({ user: e.target.value })}
+                                    onChange={e => this.setState({ user: e.target.value })}
                                     autoFocus={true}
                                 />
                             </div>
@@ -67,8 +67,8 @@ class Login extends AsyncComponent<unknown, LoginState> {
                                     autoComplete="current-password"
                                     value={this.state.password}
                                     disabled={this.state.isBusy}
-                                    onChange={(e) => this.setState({ password: e.target.value })}
-                                    onKeyDown={(e) => {
+                                    onChange={e => this.setState({ password: e.target.value })}
+                                    onKeyDown={e => {
                                         if (
                                             e.key === "Enter" &&
                                             this.state.password.trim().length > 0 &&
@@ -89,7 +89,7 @@ class Login extends AsyncComponent<unknown, LoginState> {
                                         this.state.user.trim().length === 0 ||
                                         this.state.password.trim().length === 0
                                     }
-                                    onClick={(e) => this.login()}
+                                    onClick={e => this.login()}
                                 >
                                     Login
                                 </button>
@@ -112,14 +112,14 @@ class Login extends AsyncComponent<unknown, LoginState> {
         this.setState(
             {
                 isBusy: true,
-                error: false,
+                error: false
             },
             async () => {
                 const success = await this._authService.login(this.state.user, this.state.password);
 
                 this.setState({
                     isBusy: false,
-                    error: !success,
+                    error: !success
                 });
             }
         );

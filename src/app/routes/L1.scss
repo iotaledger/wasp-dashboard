@@ -1,127 +1,128 @@
-@import "../../scss/card";
-@import "../../scss/fonts";
-@import "../../scss/media-queries";
+@use "../../scss/card" as *;
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
 
 .l1 {
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  padding: 60px;
-  font-family: $font-sans;
-
-  @include desktop-down {
-    padding: $spacing-small;
-  }
-
-  .l1-wrapper {
     display: flex;
     flex: 1;
-    flex-direction: column;
-    max-width: $content-width-desktop;
-
-    h2 {
-      margin-bottom: 16px;
-      text-transform: uppercase;
-    }
-  }
-
-  .content {
-    display: inline-flex;
-    flex: 1;
-    flex-direction: row;
-    flex-wrap: wrap;
-    max-width: $content-width-desktop;
-    color: var(--text-color-primary);
+    justify-content: center;
+    padding: 60px;
+    font-family: $font-sans;
 
     @include desktop-down {
-      flex-direction: column;
+        padding: $spacing-small;
     }
 
-    .first-card {
-      margin-right: $spacing-small;
-      margin-bottom: 0;
-
-      @include desktop-down {
-        margin-right: 0;
-        margin-bottom: $spacing-small;
-      }
-    }
-
-    .last-card {
-      margin-top: $spacing-small;
-    }
-
-    & ul {
-      margin-block-start: 10px;
-      margin-inline-start: 20px;
-    }
-
-    & a {
-      color: var(--text-color-primary);
-    }
-
-    .l1-info--item {
-      min-height: 90px;
-      margin-bottom: $spacing-small;
-      padding: $spacing-small;
-      overflow: hidden;
-      border-radius: $spacing-small;
-      background-color: var(--panel-background-highlight);
-
-      .info--item {
+    .l1-wrapper {
         display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-bottom: 4px;
+        flex: 1;
+        flex-direction: column;
+        max-width: $content-width-desktop;
 
-        span {
-          margin-right: 10px;
-          color: var(--text-color-secondary);
-          @include font-size(14px);
-          font-family: $font-mono;
+        h2 {
+            margin-bottom: 16px;
+            text-transform: uppercase;
         }
-
-        p {
-          color: var(--text-color-primary);
-        }
-      }
     }
 
-    .l1-summary--item {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      min-height: 90px;
-      margin-bottom: $spacing-small;
-      padding: $spacing-large;
-      overflow: hidden;
-      border-radius: $spacing-small;
-      background-color: var(--panel-background-highlight);
-
-      &:focus {
-        border: 0;
-      }
-
-      .l1-health-icon {
-        width: 16px;
-      }
-
-      .l1-id {
-        @include font-size(14px);
-
-        margin-left: $spacing-small;
+    .content {
+        display: inline-flex;
+        flex: 1;
+        flex-flow: row wrap;
+        max-width: $content-width-desktop;
         color: var(--text-color-primary);
-        word-break: break-all;
-        overflow-wrap: anywhere;
-      }
-    }
 
-    .l1-summary {
-      padding: 16px;
+        @include desktop-down {
+            flex-direction: column;
+        }
 
-      h4 {
-        margin-bottom: 20px;
-      }
+        .first-card {
+            margin-right: $spacing-small;
+            margin-bottom: 0;
+
+            @include desktop-down {
+                margin-right: 0;
+                margin-bottom: $spacing-small;
+            }
+        }
+
+        .last-card {
+            margin-top: $spacing-small;
+        }
+
+        & ul {
+            margin-block-start: 10px;
+            margin-inline-start: 20px;
+        }
+
+        & a {
+            color: var(--text-color-primary);
+        }
+
+        .l1-info-item {
+            min-height: 90px;
+            margin-bottom: $spacing-small;
+            padding: $spacing-small;
+            overflow: hidden;
+            border-radius: $spacing-small;
+            background-color: var(--panel-background-highlight);
+
+            .info-item {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                margin-bottom: 4px;
+
+                span {
+                    margin-right: 10px;
+                    color: var(--text-color-secondary);
+                    @include font-size(14px);
+
+                    font-family: $font-mono;
+                }
+
+                p {
+                    color: var(--text-color-primary);
+                }
+            }
+        }
+
+        .l1-summary-item {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            min-height: 90px;
+            margin-bottom: $spacing-small;
+            padding: $spacing-large;
+            overflow: hidden;
+            border-radius: $spacing-small;
+            background-color: var(--panel-background-highlight);
+
+            &:focus {
+                border: 0;
+            }
+
+            .l1-health-icon {
+                width: 16px;
+            }
+
+            .l1-id {
+                @include font-size(14px);
+
+                margin-left: $spacing-small;
+                color: var(--text-color-primary);
+                word-break: break-all;
+                overflow-wrap: anywhere;
+            }
+        }
+
+        .l1-summary {
+            padding: 16px;
+
+            h4 {
+                margin-bottom: 20px;
+            }
+        }
     }
-  }
 }
