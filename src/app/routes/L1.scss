@@ -6,9 +6,26 @@
 .l1 {
     display: flex;
     flex: 1;
-    justify-content: center;
-    padding: 60px;
-    font-family: $font-sans;
+    flex-direction: column;
+    max-width: $content-width-desktop;
+
+    h2 {
+      margin-bottom: 16px;
+      text-transform: uppercase;
+
+      &.l1-details-title {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .content {
+    display: inline-flex;
+    flex: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: $content-width-desktop;
+    color: var(--text-color-primary);
 
     @include desktop-down {
         padding: $spacing-small;
@@ -125,4 +142,5 @@
             }
         }
     }
-}
+  }
+
