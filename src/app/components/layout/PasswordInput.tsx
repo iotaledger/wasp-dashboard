@@ -37,7 +37,7 @@ const PasswordInput = ({ disabled, onChange, inputValue }: PasswordInputProps) =
                 autoComplete="new-password"
             />
             <button type="button" className="blindmode-input-button" onClick={toggleBlindMode}>
-                {blindMode ? <EyeClosedIcon /> : <EyeIcon />}
+                {blindMode ? <EyeIcon /> : <EyeClosedIcon />}
             </button>
         </React.Fragment>
     );
