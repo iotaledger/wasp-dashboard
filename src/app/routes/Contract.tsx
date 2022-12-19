@@ -24,8 +24,8 @@ function Contract() {
         waspClientService
             .chains()
             .getContracts({ chainID })
-            .then((contracts) => {
-                const contract = contracts.find((c) => c.hName?.toString() === contractHName);
+            .then(contracts => {
+                const contract = contracts.find(c => c.hName?.toString() === contractHName);
                 if (contract) {
                     setContractInfo(contract);
                 }
