@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Dialog } from "../";
-import { EyeIcon, EyeClosedIcon } from "../../../assets";
 import { ServiceFactory } from "../../../factories/serviceFactory";
 import { AddUserRequest } from "../../../services/wasp_client";
 import { WaspClientService } from "../../../services/waspClientService";
+import PasswordInput from "../layout/PasswordInput";
 
 const FORM_INITIAL_VALUES: IFormValues = {
     username: "",
@@ -117,31 +117,13 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                 </div>
                 <div className="dialog--label">Password</div>
                 <div className="dialog--value">
-                    <input
-                        type={blindMode ? "password" : "text"}
-                        className="input--stretch"
-                        placeholder="e.g. password"
-                        name="password"
-                        value={formValues.password}
-                        disabled={isBusy}
+                    <PasswordInput
+                        inputValue={formValues.password}
                         onChange={onChange}
-                        autoComplete="new-password"
-                    />
-                    <button
-                        type="button"
+                        blindMode={blindMode}
                         onClick={toggleBlindMode}
-                        style={{
-                            position: "absolute",
-                            right: "10px",
-                            top: "-5px",
-                            transform: "translateY(50%)",
-                            border: "none",
-                            background: "transparent",
-                            color: "var(--text-color-secondary)",
-                        }}
-                    >
-                        {blindMode ? <EyeClosedIcon /> : <EyeIcon />}
-                    </button>
+                        disabled={isBusy}
+                    />
                 </div>
                 <div className="dialog--label">Permissions</div>
                 <div className="dialog--value">
