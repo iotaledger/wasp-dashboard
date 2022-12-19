@@ -53,7 +53,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user }) => {
                         onClick={handleEditUser}
                         disabled={isBusy || confirmPassword !== newPassword || confirmPassword === ""}
                     >
-                        Edit
+                        Save
                     </button>
                     <button type="button" className="button button--secondary" disabled={isBusy} onClick={onClose}>
                         Cancel
