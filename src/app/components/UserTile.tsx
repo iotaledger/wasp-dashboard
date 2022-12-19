@@ -17,10 +17,10 @@ interface UserTileProps {
      * Whether there is more than one user.
      * @type {boolean}
      */
-    moreThanOneUser: boolean;
+    canBeDeleted: boolean;
 }
 
-const UserTile: React.FC<UserTileProps> = ({ user, refreshUsers, moreThanOneUser }) => {
+const UserTile: React.FC<UserTileProps> = ({ user, refreshUsers, canBeDeleted }) => {
     const [showDeleteUserDialog, setShowDeleteUserDialog] = useState<boolean>(false);
     return (
         <div className="user-panel--item card">
@@ -42,7 +42,7 @@ const UserTile: React.FC<UserTileProps> = ({ user, refreshUsers, moreThanOneUser
                 <button type="button" className="edit-button" onClick={() => console.log("edit")}>
                     Edit
                 </button>
-                {moreThanOneUser && (
+                {canBeDeleted && (
                     <button
                         type="button"
                         className="delete-button card--action card--action-danger"
