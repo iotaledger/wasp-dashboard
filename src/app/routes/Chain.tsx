@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
 import {
@@ -225,7 +225,9 @@ function Chain() {
                             <h4>Latest block</h4>
                             <div className="card-item">
                                 <span>Block index:</span>
-                                <p className="value">{chainLatestBlock?.blockIndex}</p>
+                                <Link to={`blocks/${chainLatestBlock?.blockIndex}`}>
+                                    <p className="value">{chainLatestBlock?.blockIndex}</p>
+                                </Link>
                             </div>
                             <div className="card-item">
                                 <span>Last updated:</span>
