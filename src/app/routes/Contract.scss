@@ -2,7 +2,7 @@
 @import "../../scss/fonts";
 @import "../../scss/media-queries";
 
-.chain {
+.contract {
   display: flex;
   flex: 1;
   justify-content: center;
@@ -13,13 +13,14 @@
     padding: $spacing-small;
   }
 
-  .chain-wrapper {
+  .contract-wrapper {
     display: flex;
     flex: 1;
     flex-direction: column;
     max-width: $content-width-desktop;
 
     h2 {
+      margin-bottom: 16px;
       text-transform: uppercase;
     }
   }
@@ -28,7 +29,7 @@
     margin-bottom: 16px;
   }
 
-  .chain-summary {
+  .contract-summary {
     padding: 16px;
 
     h4 {
@@ -42,7 +43,6 @@
     flex-direction: column;
     flex-wrap: wrap;
     max-width: $content-width-desktop;
-    margin-top: $spacing-small;
     color: var(--text-color-primary);
 
     .card-item {
@@ -57,27 +57,12 @@
       span {
         margin-right: 10px;
       }
-
-      p {
-        &.value {
-          color: var(--text-color-primary);
-        }
-      }
-    }
+    }       
 
     ul {
       margin-left: 20px;
-
       li {
         margin: 5px 0px;
-      }
-    }
-
-    a {
-      color: var(--accent-primary);
-      border: none;
-      &:hover{
-        text-decoration: underline;
       }
     }
   }
