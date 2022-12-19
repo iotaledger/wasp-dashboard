@@ -12,18 +12,18 @@ interface UsersListProps {
     /**
      * Refresh the list of users.
      */
-    refreshUsers: () => void;
+    onDeleteSuccess: () => void;
     /**
      * Whether there is more than one user.
      * @type {boolean}
      */
-    moreThanOneUser: boolean;
+    canBeDeleted: boolean;
 }
 
-const UsersList: React.FC<UsersListProps> = ({ users, refreshUsers, moreThanOneUser }) => (
+const UsersList: React.FC<UsersListProps> = ({ users, onDeleteSuccess, canBeDeleted }) => (
     <div className="users-list">
         {users.map((user, idx) => (
-            <UserTile key={idx} user={user} refreshUsers={refreshUsers} moreThanOneUser={moreThanOneUser} />
+            <UserTile key={idx} user={user} onDeleteSuccess={onDeleteSuccess} canBeDeleted={canBeDeleted} />
         ))}
     </div>
 );

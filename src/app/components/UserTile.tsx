@@ -10,17 +10,17 @@ interface UserTileProps {
      */
     user: User;
     /**
-     * Refresh the list of users.
+     * Callback when the user is deleted.
      */
-    refreshUsers: () => void;
+    onDeleteSuccess?: () => void;
     /**
      * Whether there is more than one user.
      * @type {boolean}
      */
-    moreThanOneUser: boolean;
+    canBeDeleted: boolean;
 }
 
-const UserTile: React.FC<UserTileProps> = ({ user, refreshUsers, moreThanOneUser }) => {
+const UserTile: React.FC<UserTileProps> = ({ user, onDeleteSuccess, canBeDeleted }) => {
     const [showDeleteUserDialog, setShowDeleteUserDialog] = useState<boolean>(false);
     return (
         <div className="user-panel-item card">
@@ -42,7 +42,7 @@ const UserTile: React.FC<UserTileProps> = ({ user, refreshUsers, moreThanOneUser
                 <button type="button" className="edit-button" onClick={() => console.log("edit")}>
                     Edit
                 </button>
-                {moreThanOneUser && (
+                {canBeDeleted && (
                     <button
                         type="button"
                         className="delete-button card--action card--action-danger"
@@ -58,11 +58,15 @@ const UserTile: React.FC<UserTileProps> = ({ user, refreshUsers, moreThanOneUser
                         setShowDeleteUserDialog(false);
                     }}
                     user={user}
-                    onUserDeleted={refreshUsers}
+                    onSuccess={onDeleteSuccess}
                 />
             )}
         </div>
     );
+};
+
+UserTile.defaultProps = {
+    onDeleteSuccess: () => {},
 };
 
 export default UserTile;
