@@ -26,7 +26,7 @@ function L1Chain() {
         waspClientService
             .metrics()
             .getChainMetrics({ chainID })
-            .then((metrics) => {
+            .then(metrics => {
                 setChainL1Metrics(metrics);
             });
     }, []);

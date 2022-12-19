@@ -1,6 +1,6 @@
-@import "../../scss/card";
-@import "../../scss/fonts";
-@import "../../scss/media-queries";
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
 
 .l1 {
   display: flex;
@@ -32,8 +32,7 @@
   .content {
     display: inline-flex;
     flex: 1;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
     max-width: $content-width-desktop;
     color: var(--text-color-primary);
 
@@ -64,7 +63,7 @@
       color: var(--text-color-primary);
     }
 
-    .l1-info--item {
+    .l1-info-item {
       min-height: 90px;
       margin-bottom: $spacing-small;
       padding: $spacing-small;
@@ -72,7 +71,7 @@
       border-radius: $spacing-small;
       background-color: var(--panel-background-highlight);
 
-      .info--item {
+      .info-item {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -82,6 +81,7 @@
           margin-right: 10px;
           color: var(--text-color-secondary);
           @include font-size(14px);
+
           font-family: $font-mono;
         }
 
@@ -91,7 +91,7 @@
       }
     }
 
-    .l1-summary--item {
+    .l1-summary-item {
       display: flex;
       flex-direction: row;
       align-items: center;

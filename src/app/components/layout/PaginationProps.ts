@@ -1,5 +1,4 @@
 export interface PaginationProps {
-
     /**
      * The total number of pages.
      */

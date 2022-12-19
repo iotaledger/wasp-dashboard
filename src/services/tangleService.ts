@@ -150,7 +150,7 @@ export class TangleService {
                     const address = Bech32AddressHelper.buildAddress(
                         searchQuery.aliasId,
                         bech32HRP,
-                        ALIAS_ADDRESS_TYPE
+                        ALIAS_ADDRESS_TYPE,
                     );
                     return {
                         address,
@@ -243,7 +243,7 @@ export class TangleService {
      * @returns The response data.
      */
     public async payload(
-        blockId: string
+        blockId: string,
     ): Promise<ITransactionPayload | ITaggedDataPayload | IMilestonePayload | undefined> {
         try {
             const client = this.buildClient();
@@ -251,7 +251,7 @@ export class TangleService {
             const block = await client.block(blockId);
 
             return block?.payload;
-        } catch { }
+        } catch {}
     }
 
     /**
@@ -264,7 +264,7 @@ export class TangleService {
             const client = this.buildClient();
 
             return await client.output(outputId);
-        } catch { }
+        } catch {}
     }
 
     /**
@@ -281,7 +281,7 @@ export class TangleService {
             if (nftOutputs.items.length > 0) {
                 return { ...(await client.output(nftOutputs.items[0])), outputId: nftOutputs.items[0] };
             }
-        } catch { }
+        } catch {}
     }
 
     /**
@@ -298,7 +298,7 @@ export class TangleService {
             if (aliasOutputs.items.length > 0) {
                 return { ...(await client.output(aliasOutputs.items[0])), outputId: aliasOutputs.items[0] };
             }
-        } catch { }
+        } catch {}
     }
 
     /**
@@ -314,7 +314,7 @@ export class TangleService {
             const helper = new OutputsHelper(addressBech32, client);
             await helper.fetchAssociatedOutputs();
             outputs = helper.associatedOutputs;
-        } catch { }
+        } catch {}
 
         return outputs;
     }
@@ -332,7 +332,7 @@ export class TangleService {
             const helper = new OutputsHelper(tag, client);
             await helper.fetchOutputsByTag();
             outputs = helper.associatedOutputs;
-        } catch { }
+        } catch {}
 
         return outputs;
     }
@@ -347,7 +347,7 @@ export class TangleService {
             const client = this.buildClient();
 
             return await client.milestoneByIndex(milestoneIndex);
-        } catch { }
+        } catch {}
     }
 
     /**
@@ -357,9 +357,9 @@ export class TangleService {
      */
     public async blockDetails(blockId: string): Promise<
         | {
-            metadata?: IBlockMetadata;
-            unavailable?: boolean;
-        }
+              metadata?: IBlockMetadata;
+              unavailable?: boolean;
+          }
         | undefined
     > {
         try {

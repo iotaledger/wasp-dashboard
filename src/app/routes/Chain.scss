@@ -1,6 +1,7 @@
-@import "../../scss/card";
-@import "../../scss/fonts";
-@import "../../scss/media-queries";
+
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
 
 .chain {
   display: flex;
@@ -39,8 +40,7 @@
   .content {
     display: inline-flex;
     flex: 1;
-    flex-direction: column;
-    flex-wrap: wrap;
+    flex-flow: column wrap;
     max-width: $content-width-desktop;
     margin-top: $spacing-small;
     color: var(--text-color-primary);

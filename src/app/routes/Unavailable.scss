@@ -1,19 +1,19 @@
-@import '../../scss/card';
-@import '../../scss/fonts';
-@import '../../scss/media-queries';
+
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
 
 .unavailable {
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  padding: 40px 60px;
-
-  @include desktop-down {
-    padding: $spacing-small;
-  }
-
-  .content {
+    display: flex;
     flex: 1;
-    max-width: $content-width-desktop;
-  }
+    justify-content: center;
+    padding: 40px 60px;
+
+    @include desktop-down {
+        padding: $spacing-small;
+    }
+
+    .content {
+        flex: 1;
+        max-width: $content-width-desktop;
+    }
 }

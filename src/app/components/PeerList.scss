@@ -1,11 +1,11 @@
-@import "../../scss/variables";
+@use "../../scss/variables" as *;
 
 .peer-list {
-    width: 100%;
     display: flex;
     flex-direction: column;
+    width: 100%;
 
-    .peers-panel--item:not(:first-child) {
+    .peers-panel-item:not(:first-child) {
         margin-top: $spacing-tiny;
     }
 }

@@ -31,7 +31,7 @@ export class Bech32AddressHelper {
         if (!bech32) {
             hex = HexHelper.addPrefix(address);
             hexNoPrefix = HexHelper.stripPrefix(address);
-            type = addressType !== undefined ? addressType : ED25519_ADDRESS_TYPE;
+            type = addressType === undefined ? ED25519_ADDRESS_TYPE : addressType;
             bech32 = Bech32Helper.toBech32(type, Converter.hexToBytes(hex), hrp);
         }
 
@@ -40,7 +40,7 @@ export class Bech32AddressHelper {
             hex,
             hexNoPrefix,
             type,
-            typeLabel: Bech32AddressHelper.typeLabel(type)
+            typeLabel: Bech32AddressHelper.typeLabel(type),
         };
     }
 
@@ -57,6 +57,6 @@ export class Bech32AddressHelper {
         } else if (addressType === NFT_ADDRESS_TYPE) {
             return "Nft";
         }
-            return "Unknown address type";
+        return "Unknown address type";
     }
 }

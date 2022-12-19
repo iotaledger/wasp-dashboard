@@ -10,9 +10,9 @@ class Breakpoint extends Component<BreakpointProps, BreakpointState> {
      * The size for the breakpoints.
      */
     private static readonly SIZE_BREAKPOINTS = {
-        "phone": 480,
-        "tablet": 768,
-        "desktop": 1024
+        phone: 480,
+        tablet: 768,
+        desktop: 1024,
     };
 
     /**
@@ -30,7 +30,7 @@ class Breakpoint extends Component<BreakpointProps, BreakpointState> {
         this._resize = () => this.resize();
 
         this.state = {
-            isVisible: this.calculateVisible()
+            isVisible: this.calculateVisible(),
         };
     }
 
@@ -53,9 +53,7 @@ class Breakpoint extends Component<BreakpointProps, BreakpointState> {
      * @returns The node to render.
      */
     public render(): ReactNode {
-        return this.state.isVisible
-            ? this.props.children
-            : null;
+        return this.state.isVisible ? this.props.children : null;
     }
 
     /**
@@ -65,7 +63,7 @@ class Breakpoint extends Component<BreakpointProps, BreakpointState> {
         const isVisible = this.calculateVisible();
 
         this.setState({
-            isVisible
+            isVisible,
         });
     }
 

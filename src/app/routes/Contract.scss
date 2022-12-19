@@ -1,6 +1,7 @@
-@import "../../scss/card";
-@import "../../scss/fonts";
-@import "../../scss/media-queries";
+@use "../../scss/card" as *;
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use '../../scss/variables' as *;
 
 .contract {
   display: flex;
