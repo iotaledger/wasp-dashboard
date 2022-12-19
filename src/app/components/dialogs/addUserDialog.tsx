@@ -125,6 +125,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                         value={formValues.password}
                         disabled={isBusy}
                         onChange={onChange}
+                        autoComplete="new-password"
                     />
                     <button
                         type="button"
