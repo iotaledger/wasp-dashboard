@@ -38,7 +38,6 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
     const [formValues, setFormValues] = useState<IFormValues>(FORM_INITIAL_VALUES);
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [blindMode, setBlindMode] = useState<boolean>(true);
     /**
      *
      */
@@ -72,13 +71,6 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
      */
     function onChange(e: React.ChangeEvent<HTMLInputElement>): void {
         setFormValues({ ...formValues, [e.target.name]: e.target.value });
-    }
-
-    /**
-     * Toggle the blind mode.
-     */
-    function toggleBlindMode(): void {
-        setBlindMode(!blindMode);
     }
 
     return (
@@ -117,13 +109,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                 </div>
                 <div className="dialog--label">Password</div>
                 <div className="dialog--value">
-                    <PasswordInput
-                        inputValue={formValues.password}
-                        onChange={onChange}
-                        blindMode={blindMode}
-                        onClick={toggleBlindMode}
-                        disabled={isBusy}
-                    />
+                    <PasswordInput inputValue={formValues.password} onChange={onChange} disabled={isBusy} />
                 </div>
                 <div className="dialog--label">Permissions</div>
                 <div className="dialog--value">
