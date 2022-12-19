@@ -1,6 +1,7 @@
-@import "../../scss/card";
-@import "../../scss/fonts";
-@import "../../scss/media-queries";
+
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *; 
 
 .chains {
   display: flex;
@@ -28,8 +29,7 @@
   .content {
     display: flex;
     flex: 1;
-    flex-direction: column;
-    flex-wrap: wrap;
+    flex-flow: column wrap;
     max-width: $content-width-desktop;
     color: var(--text-color-primary);
 
@@ -41,7 +41,7 @@
       border: none;
     }
 
-    .chains-summary--item {
+    .chains-summary-item {
       display: flex;
       flex-direction: row;
       align-items: center;

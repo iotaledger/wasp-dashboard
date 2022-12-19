@@ -1,106 +1,107 @@
-@import "./fonts";
-@import "./variables";
+@use "./fonts" as *;
+@use "./variables" as *;
 
 h1 {
-  @include font-size(24px);
+    @include font-size(24px);
 
-  color: var(--text-color-primary);
-  font-family: $font-sans;
-  font-weight: bold;
-  text-decoration: none;
-  white-space: nowrap;
+    color: var(--text-color-primary);
+    font-family: $font-sans;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
 h2 {
-  @include font-size(18px);
+    @include font-size(18px);
 
-  color: var(--text-color-primary);
-  font-family: $font-sans;
-  font-weight: bold;
-  text-decoration: none;
+    color: var(--text-color-primary);
+    font-family: $font-sans;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 h3 {
-  @include font-size(14px);
+    @include font-size(14px);
 
-  color: var(--text-color-primary);
-  font-family: $font-sans;
-  font-weight: bold;
-  text-decoration: none;
+    color: var(--text-color-primary);
+    font-family: $font-sans;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 h4 {
-  @include font-size(10px);
+    @include font-size(10px);
 
-  color: var(--text-color-secondary);
-  font-family: $font-sans;
-  font-weight: 500;
-  text-decoration: none;
-  text-transform: uppercase;
+    color: var(--text-color-secondary);
+    font-family: $font-sans;
+    font-weight: 500;
+    text-decoration: none;
+    text-transform: uppercase;
 }
 
 p {
-  @include font-size(14px);
+    @include font-size(14px);
 
-  color: var(--text-color-primary);
-  font-family: $font-sans;
+    color: var(--text-color-primary);
+    font-family: $font-sans;
 }
 
 a {
-  outline: 0;
-  text-decoration: none;
+    outline: 0;
+    text-decoration: none;
 
-  &:focus {
-    border-bottom: 1px solid var(--accent-primary);
-  }
+    &:focus {
+        border-bottom: 1px solid var(--accent-primary);
+    }
 }
 
 hr {
-  height: 1px;
-  margin: $spacing-medium 0;
-  border: 0;
-  background-color: var(--panel-border);
+    height: 1px;
+    margin: $spacing-medium 0;
+    border: 0;
+    background-color: var(--panel-border);
 }
 
 .secondary {
-  color: var(--text-color-secondary);
+    color: var(--text-color-secondary);
 }
 
 .icon-button {
-  padding: $spacing-tiny;
-  border: 0;
-  border-radius: $spacing-tiny;
-  outline: 0;
-  background: none;
-  cursor: pointer;
+    padding: $spacing-tiny;
+    border: 0;
+    border-radius: $spacing-tiny;
+    outline: 0;
+    background: none;
+    cursor: pointer;
 
-  &:focus {
-    box-shadow: 0 0 3px 0 var(--accent-primary);
-  }
+    &:focus {
+        box-shadow: 0 0 3px 0 var(--accent-primary);
+    }
 }
 
 .word-break {
-  word-break: break-word;
+    word-break: break-word;
 }
 
 .word-break-all {
-  word-break: break-all;
+    word-break: break-all;
 }
 
 .hide-overflow {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .d-none {
-  display: none !important;
+    display: none !important;
 }
 
 .text-ellipsis {
-  text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
 
 table {
   border-collapse: collapse;
+
   & tr {
     height: 40px;
     border-bottom: 1px solid var(--panel-background-highlight);

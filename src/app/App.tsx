@@ -1,3 +1,5 @@
+import "./App.scss";
+
 import moment from "moment";
 import React, { Component, ReactNode } from "react";
 import { ReactComponent as ChainsIcon } from "../assets/chains.svg";
@@ -19,7 +21,6 @@ import { ThemeService } from "../services/themeService";
 import { WaspClientService } from "../services/waspClientService";
 import { BrandHelper } from "../utils/brandHelper";
 import isNodeOnline from "../utils/nodeStatus";
-import "./App.scss";
 import { AppState } from "./AppState";
 import Breakpoint from "./components/layout/Breakpoint";
 import NavPanel from "./components/layout/NavPanel";
@@ -130,7 +131,7 @@ class App extends Component<object, AppState> {
      */
     public async componentDidMount(): Promise<void> {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        isNodeOnline().then((online) => {
+        isNodeOnline().then(online => {
             this.setState({
                 online,
             });
@@ -140,7 +141,7 @@ class App extends Component<object, AppState> {
             this.validateTokenPeriodically();
         }
 
-        EventAggregator.subscribe("auth-state", "app", (isLoggedIn) => {
+        EventAggregator.subscribe("auth-state", "app", isLoggedIn => {
             this.setState(
                 {
                     isLoggedIn,
@@ -149,11 +150,11 @@ class App extends Component<object, AppState> {
                     if (this.state.isLoggedIn) {
                         this.validateTokenPeriodically();
                     }
-                }
+                },
             );
         });
 
-        EventAggregator.subscribe("theme", "app", (theme) => {
+        EventAggregator.subscribe("theme", "app", theme => {
             this.setState({ theme });
         });
 

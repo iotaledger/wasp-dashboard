@@ -14,33 +14,29 @@ class InclusionState extends Component<InclusionStateProps> {
     public render(): ReactNode {
         return (
             <div className="inclusion-state">
+                {/* prettier-ignore */}
                 <div
-                    className={
-                        classNames(
-                            "inclusion-state-pill",
-                            { "inclusion__not-included": this.props.state === undefined },
-                            { "inclusion__included": this.props.state === "included" },
-                            { "inclusion__no-transaction": this.props.state === "noTransaction" },
-                            { "inclusion__conflicting": this.props.state === "conflicting" }
-                        )
-                    }
+                    className={classNames(
+                        "inclusion-state-pill",
+                        { "inclusion-not-included": this.props.state === undefined },
+                        { "inclusion-included": this.props.state === "included" },
+                        { "inclusion-no-transaction": this.props.state === "noTransaction" },
+                        { "inclusion-conflicting": this.props.state === "conflicting" },
+                    )}
                 >
-                    {this.props.state === undefined && ("Not included")}
-                    {this.props.state === "included" && ("Included")}
-                    {this.props.state === "noTransaction" && ("No Transaction")}
-                    {this.props.state === "conflicting" && ("Conflicting")}
+                    {this.props.state === undefined && "Not included"}
+                    {this.props.state === "included" && "Included"}
+                    {this.props.state === "noTransaction" && "No Transaction"}
+                    {this.props.state === "conflicting" && "Conflicting"}
                 </div>
-                {this.props.state === undefined && ("The block is not yet referenced by a milestone.")}
-                {this.props.state === "included" && (
-                    "The block is referenced by a milestone, the transaction is included in the ledger."
-                )}
-                {this.props.state === "noTransaction" && (
+                {this.props.state === undefined && "The block is not yet referenced by a milestone."}
+                {this.props.state === "included" &&
+                    "The block is referenced by a milestone, the transaction is included in the ledger."}
+                {this.props.state === "noTransaction" &&
                     "The block is referenced by a milestone, the data is included in the ledger" +
-                    ", but there is no value transfer."
-                )}
-                {this.props.state === "conflicting" && (
-                    "The block has a conflict and will not be included in the ledger."
-                )}
+                        ", but there is no value transfer."}
+                {this.props.state === "conflicting" &&
+                    "The block has a conflict and will not be included in the ledger."}
             </div>
         );
     }

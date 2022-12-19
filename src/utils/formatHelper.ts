@@ -161,9 +161,7 @@ export class FormatHelper {
      * @returns The correct id.
      */
     public static resolveId(id: string, outputId: string): string {
-        return !HexHelper.toBigInt256(id).eq(bigInt.zero)
-            ? id
-            : TransactionHelper.resolveIdFromOutputId(outputId);
+        return HexHelper.toBigInt256(id).eq(bigInt.zero) ? TransactionHelper.resolveIdFromOutputId(outputId) : id;
     }
 
     /**

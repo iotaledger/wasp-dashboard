@@ -1,10 +1,11 @@
+import "./index.scss";
+
 /* eslint-disable unicorn/prefer-top-level-await */
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./app/App";
 import { ServiceFactory } from "./factories/serviceFactory";
-import "./index.scss";
 import { IBrandConfiguration } from "./models/IBrandConfiguration";
 import { AuthService } from "./services/authService";
 import { EventAggregator } from "./services/eventAggregator";
@@ -20,21 +21,21 @@ import { WebSocketService } from "./services/webSocketService";
 import { BrandHelper } from "./utils/brandHelper";
 
 initServices()
-    .then((brandConfiguration) => {
+    .then(brandConfiguration => {
         /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
         const container = document.querySelector("#root")!;
         const root = createRoot(container);
         root.render(
-            !brandConfiguration ? (
-                <div>REACT_APP_BRAND_ID is not set</div>
-            ) : (
+            brandConfiguration ? (
                 <BrowserRouter basename={process.env.PUBLIC_URL}>
                     <App />
                 </BrowserRouter>
-            )
+            ) : (
+                <div>REACT_APP_BRAND_ID is not set</div>
+            ),
         );
     })
-    .catch((err) => console.error(err));
+    .catch(err => console.error(err));
 
 /**
  * Initialise the services.
@@ -75,7 +76,7 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
         webSocketService.resubscribe();
     });
 
-    EventAggregator.subscribe("online", "init", async (o) => {
+    EventAggregator.subscribe("online", "init", async o => {
         if (o) {
             await nodeConfigService.initialize();
             webSocketService.resubscribe();

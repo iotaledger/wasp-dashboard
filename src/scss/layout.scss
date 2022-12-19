@@ -1,239 +1,240 @@
-@import "./variables";
-@import "./media-queries";
+@use "card" as *;
+@use "variables" as *;
+@use "media-queries" as *;
 
 .row {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 
-  &.start {
-    justify-content: flex-start;
-  }
+    &.start {
+        justify-content: flex-start;
+    }
 
-  &.middle {
-    align-items: center;
-  }
+    &.middle {
+        align-items: center;
+    }
 
-  &.end {
-    justify-content: flex-end;
-  }
+    &.end {
+        justify-content: flex-end;
+    }
 
-  &.bottom {
-    align-items: flex-end;
-  }
+    &.bottom {
+        align-items: flex-end;
+    }
 
-  &.inline {
-    display: inline-flex;
-  }
+    &.inline {
+        display: inline-flex;
+    }
 
-  &.spread {
-    justify-content: space-between;
-  }
+    &.spread {
+        justify-content: space-between;
+    }
 
-  &.wrap {
-    flex-wrap: wrap;
-  }
+    &.wrap {
+        flex-wrap: wrap;
+    }
 }
 
 .col {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .col,
 .row {
-  @include phone-down {
-    &.phone-down-column {
-      flex-direction: column;
+    @include phone-down {
+        &.phone-down-column {
+            flex-direction: column;
+        }
+
+        &.start {
+            align-items: flex-start;
+        }
     }
 
-    &.start {
-      align-items: flex-start;
-    }
-  }
+    @include tablet-down {
+        &.tablet-down-column {
+            flex-direction: column;
+        }
 
-  @include tablet-down {
-    &.tablet-down-column {
-      flex-direction: column;
+        &.start {
+            align-items: flex-start;
+        }
     }
 
-    &.start {
-      align-items: flex-start;
-    }
-  }
+    @include tablet-down-only {
+        &.tablet-down-only-column {
+            flex-direction: column;
 
-  @include tablet-down-only {
-    &.tablet-down-only-column {
-      flex-direction: column;
-
-      &.start {
-        align-items: flex-start;
-      }
+            &.start {
+                align-items: flex-start;
+            }
+        }
     }
-  }
 
-  @include desktop-down {
-    &.desktop-down-column {
-      flex-direction: column;
+    @include desktop-down {
+        &.desktop-down-column {
+            flex-direction: column;
+        }
     }
-  }
 
-  @include phone-down {
-    &.phone-down-row {
-      flex-direction: row;
+    @include phone-down {
+        &.phone-down-row {
+            flex-direction: row;
+        }
     }
-  }
 
-  @include tablet-down {
-    &.tablet-down-row {
-      flex-direction: row;
+    @include tablet-down {
+        &.tablet-down-row {
+            flex-direction: row;
+        }
     }
-  }
 
-  @include tablet-down-only {
-    &.tablet-down-only-row {
-      flex-direction: row;
+    @include tablet-down-only {
+        &.tablet-down-only-row {
+            flex-direction: row;
+        }
     }
-  }
 
-  @include desktop-down {
-    &.desktop-down-row {
-      flex-direction: row;
+    @include desktop-down {
+        &.desktop-down-row {
+            flex-direction: row;
+        }
     }
-  }
 }
 
 .fill {
-  flex: 1;
+    flex: 1;
 }
 
 .margin-t-t {
-  margin-top: $spacing-tiny;
+    margin-top: $spacing-tiny;
 }
 
 .margin-t-s {
-  margin-top: $spacing-small;
+    margin-top: $spacing-small;
 }
 
 .margin-t-m {
-  margin-top: $spacing-medium;
+    margin-top: $spacing-medium;
 }
 
 .margin-t-l {
-  margin-top: $spacing-large;
+    margin-top: $spacing-large;
 }
 
 .margin-b-t {
-  margin-bottom: $spacing-tiny;
+    margin-bottom: $spacing-tiny;
 }
 
 .margin-b-s {
-  margin-bottom: $spacing-small;
+    margin-bottom: $spacing-small;
 }
 
 .margin-b-m {
-  margin-bottom: $spacing-medium;
+    margin-bottom: $spacing-medium;
 }
 
 .margin-b-l {
-  margin-bottom: $spacing-large;
+    margin-bottom: $spacing-large;
 }
 
 .margin-r-t {
-  margin-right: $spacing-tiny;
+    margin-right: $spacing-tiny;
 }
 
 .margin-r-s {
-  margin-right: $spacing-small;
+    margin-right: $spacing-small;
 }
 
 .margin-r-m {
-  margin-right: $spacing-medium;
+    margin-right: $spacing-medium;
 }
 
 .margin-r-l {
-  margin-right: $spacing-large;
+    margin-right: $spacing-large;
 }
 
 .margin-l-t {
-  margin-left: $spacing-tiny;
+    margin-left: $spacing-tiny;
 }
 
 .margin-l-s {
-  margin-left: $spacing-small;
+    margin-left: $spacing-small;
 }
 
 .margin-l-m {
-  margin-left: $spacing-medium;
+    margin-left: $spacing-medium;
 }
 
 .margin-l-l {
-  margin-left: $spacing-large;
+    margin-left: $spacing-large;
 }
 
 .padding-t {
-  padding: $spacing-tiny;
+    padding: $spacing-tiny;
 }
 
 .padding-s {
-  padding: $spacing-small;
+    padding: $spacing-small;
 }
 
 .padding-m {
-  padding: $spacing-medium;
+    padding: $spacing-medium;
 }
 
 .padding-l {
-  padding: $spacing-large;
+    padding: $spacing-large;
 }
 
 .padding-t-m {
-  padding-top: $spacing-medium;
+    padding-top: $spacing-medium;
 }
 
 .padding-b-m {
-  padding-bottom: $spacing-medium;
+    padding-bottom: $spacing-medium;
 }
 
 .padding-l-m {
-  padding-left: $spacing-medium;
+    padding-left: $spacing-medium;
 }
 
 .padding-r-m {
-  padding-right: $spacing-medium;
+    padding-right: $spacing-medium;
 }
 
 .padding-t-s {
-  padding-top: $spacing-small;
+    padding-top: $spacing-small;
 }
 
 .padding-b-s {
-  padding-bottom: $spacing-small;
+    padding-bottom: $spacing-small;
 }
 
 .padding-l-s {
-  padding-left: $spacing-small;
+    padding-left: $spacing-small;
 }
 
 .padding-r-s {
-  padding-right: $spacing-small;
+    padding-right: $spacing-small;
 }
 
 .padding-t-0 {
-  padding-top: 0;
+    padding-top: 0;
 }
 
 .padding-b-0 {
-  padding-bottom: 0;
+    padding-bottom: 0;
 }
 
 .padding-l-0 {
-  padding-left: 0;
+    padding-left: 0;
 }
 
 .padding-r-0 {
-  padding-right: 0;
+    padding-right: 0;
 }
 
 .padding-0 {
-  padding: 0 !important;
+    padding: 0 !important;
 }

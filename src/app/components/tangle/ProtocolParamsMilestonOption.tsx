@@ -7,8 +7,10 @@ import { ProtocoParamsMilestoneOptionState } from "./ProtocolParamsMilestonOptio
 /**
  * Component which will display a Protocol parameters milestone option.
  */
-class ProtocolParamsMilestonOption
-    extends Component<ProtocolParamsMilestonOptionProps, ProtocoParamsMilestoneOptionState> {
+class ProtocolParamsMilestonOption extends Component<
+    ProtocolParamsMilestonOptionProps,
+    ProtocoParamsMilestoneOptionState
+> {
     /**
      * Create a new instance of Protocol params milestone option.
      * @param props The props.
@@ -17,7 +19,7 @@ class ProtocolParamsMilestonOption
         super(props);
 
         this.state = {
-            showDetails: false
+            showDetails: false,
         };
     }
 
@@ -32,39 +34,23 @@ class ProtocolParamsMilestonOption
                     className="card--content__input"
                     onClick={() => this.setState({ showDetails: !this.state.showDetails })}
                 >
-
-                    <div className={classNames(
-                            "margin-r-t",
-                            "card--content__input--dropdown",
-                            { "opened": this.state.showDetails }
-                        )}
+                    <div
+                        className={classNames("margin-r-t", "card--content__input--dropdown", {
+                            opened: this.state.showDetails,
+                        })}
                     >
                         <DropdownIcon />
                     </div>
-                    <h3 className="card--content__input--label">
-                        Protocol Params
-                    </h3>
+                    <h3 className="card--content__input--label">Protocol Params</h3>
                 </div>
                 {this.state.showDetails && (
                     <div className="card--content--border-l">
-                        <div className="card--label">
-                            Target Milestone Index
-                        </div>
-                        <div className="card--value">
-                            {this.props.option.targetMilestoneIndex}
-                        </div>
-                        <div className="card--label">
-                            Protocol version
-                        </div>
-                        <div className="card--value">
-                            {this.props.option.protocolVersion}
-                        </div>
-                        <div className="card--label">
-                            Params
-                        </div>
-                        <div className="card--value">
-                            {this.props.option.params}
-                        </div>
+                        <div className="card--label">Target Milestone Index</div>
+                        <div className="card--value">{this.props.option.targetMilestoneIndex}</div>
+                        <div className="card--label">Protocol version</div>
+                        <div className="card--value">{this.props.option.protocolVersion}</div>
+                        <div className="card--label">Params</div>
+                        <div className="card--value">{this.props.option.params}</div>
                     </div>
                 )}
             </div>
