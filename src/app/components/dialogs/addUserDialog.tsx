@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Dialog } from "../";
+import { EyeIcon, EyeClosedIcon } from "../../../assets";
 import { ServiceFactory } from "../../../factories/serviceFactory";
 import { AddUserRequest } from "../../../services/wasp_client";
 import { WaspClientService } from "../../../services/waspClientService";
@@ -37,7 +38,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
     const [formValues, setFormValues] = useState<IFormValues>(FORM_INITIAL_VALUES);
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-
+    const [blindMode, setBlindMode] = useState<boolean>(true);
     /**
      *
      */
@@ -72,6 +73,14 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
     function onChange(e: React.ChangeEvent<HTMLInputElement>): void {
         setFormValues({ ...formValues, [e.target.name]: e.target.value });
     }
+
+    /**
+     * Toggle the blind mode.
+     */
+    function toggleBlindMode(): void {
+        setBlindMode(!blindMode);
+    }
+
     return (
         <Dialog
             onClose={onClose}
@@ -109,7 +118,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                 <div className="dialog--label">Password</div>
                 <div className="dialog--value">
                     <input
-                        type="text"
+                        type={blindMode ? "password" : "text"}
                         className="input--stretch"
                         placeholder="e.g. password"
                         name="password"
@@ -117,14 +126,29 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                         disabled={isBusy}
                         onChange={onChange}
                     />
+                    <button
+                        type="button"
+                        onClick={toggleBlindMode}
+                        style={{
+                            position: "absolute",
+                            right: "10px",
+                            top: "-5px",
+                            transform: "translateY(50%)",
+                            border: "none",
+                            background: "transparent",
+                            color: "var(--text-color-secondary)",
+                        }}
+                    >
+                        {blindMode ? <EyeClosedIcon /> : <EyeIcon />}
+                    </button>
                 </div>
                 <div className="dialog--label">Permissions</div>
                 <div className="dialog--value">
                     <input
                         type="textarea"
                         className="input--stretch"
-                        placeholder="e.g. password"
-                        name="password"
+                        placeholder="e.g. permissions"
+                        name="permissions"
                         value={formValues.permissions.join(", ")}
                         disabled
                     />

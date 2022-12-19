@@ -63,6 +63,9 @@
                 font-weight: 500;
                 text-transform: uppercase;
             }
+            .dialog--value {
+                position: relative;
+            }
 
             .dialog--error {
                 color: $danger;
