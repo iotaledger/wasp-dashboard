@@ -20,13 +20,13 @@ import { exists, mapValues } from '../runtime';
  */
 export interface Item {
     /**
-     * Key (base64-encoded)
+     * key (hex-encoded)
      * @type {string}
      * @memberof Item
      */
     key?: string;
     /**
-     * Value (base64-encoded)
+     * value (hex-encoded)
      * @type {string}
      * @memberof Item
      */

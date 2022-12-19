@@ -13,13 +13,6 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { UTXOInput } from './UTXOInput';
-import {
-    UTXOInputFromJSON,
-    UTXOInputFromJSONTyped,
-    UTXOInputToJSON,
-} from './UTXOInput';
-
 /**
  * 
  * @export
@@ -28,10 +21,10 @@ import {
 export interface UTXOInputMetricItem {
     /**
      * 
-     * @type {UTXOInput}
+     * @type {Array<number>}
      * @memberof UTXOInputMetricItem
      */
-    lastMessage?: UTXOInput;
+    lastMessage?: Array<number>;
     /**
      * 
      * @type {number}
@@ -65,7 +58,7 @@ export function UTXOInputMetricItemFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'lastMessage': !exists(json, 'LastMessage') ? undefined : UTXOInputFromJSON(json['LastMessage']),
+        'lastMessage': !exists(json, 'LastMessage') ? undefined : json['LastMessage'],
         'messages': !exists(json, 'Messages') ? undefined : json['Messages'],
         'timestamp': !exists(json, 'Timestamp') ? undefined : (new Date(json['Timestamp'])),
     };
@@ -80,7 +73,7 @@ export function UTXOInputMetricItemToJSON(value?: UTXOInputMetricItem | null): a
     }
     return {
         
-        'LastMessage': UTXOInputToJSON(value.lastMessage),
+        'LastMessage': value.lastMessage,
         'Messages': value.messages,
         'Timestamp': value.timestamp === undefined ? undefined : (value.timestamp.toISOString()),
     };

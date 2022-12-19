@@ -52,6 +52,16 @@ import {
     PeeringTrustedNodeToJSON,
 } from '../models';
 
+export interface AdmChainChainIDAccessNodeAddPostRequest {
+    chainID: string;
+    publicKey: string;
+}
+
+export interface AdmChainChainIDAccessNodeRemovePostRequest {
+    chainID: string;
+    publicKey: string;
+}
+
 export interface AdmChainChainIDActivatePostRequest {
     chainID: string;
 }
@@ -117,6 +127,72 @@ export interface AdmPeeringTrustedPubKeyPutRequest {
  * 
  */
 export class AdminApi extends runtime.BaseAPI {
+
+    /**
+     * Add an access node to a chain
+     */
+    async admChainChainIDAccessNodeAddPostRaw(requestParameters: AdmChainChainIDAccessNodeAddPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling admChainChainIDAccessNodeAddPost.');
+        }
+
+        if (requestParameters.publicKey === null || requestParameters.publicKey === undefined) {
+            throw new runtime.RequiredError('publicKey','Required parameter requestParameters.publicKey was null or undefined when calling admChainChainIDAccessNodeAddPost.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/adm/chain/{chainID}/access-node/add`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"PublicKey"}}`, encodeURIComponent(String(requestParameters.publicKey))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Add an access node to a chain
+     */
+    async admChainChainIDAccessNodeAddPost(requestParameters: AdmChainChainIDAccessNodeAddPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.admChainChainIDAccessNodeAddPostRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Remove an access node from a chain
+     */
+    async admChainChainIDAccessNodeRemovePostRaw(requestParameters: AdmChainChainIDAccessNodeRemovePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling admChainChainIDAccessNodeRemovePost.');
+        }
+
+        if (requestParameters.publicKey === null || requestParameters.publicKey === undefined) {
+            throw new runtime.RequiredError('publicKey','Required parameter requestParameters.publicKey was null or undefined when calling admChainChainIDAccessNodeRemovePost.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/adm/chain/{chainID}/access-node/remove`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"PublicKey"}}`, encodeURIComponent(String(requestParameters.publicKey))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Remove an access node from a chain
+     */
+    async admChainChainIDAccessNodeRemovePost(requestParameters: AdmChainChainIDAccessNodeRemovePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.admChainChainIDAccessNodeRemovePostRaw(requestParameters, initOverrides);
+    }
 
     /**
      * Activate a chain

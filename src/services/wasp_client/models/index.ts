@@ -76,7 +76,6 @@ export * from './TransactionIDMetricItem';
 export * from './TransactionMetricItem';
 export * from './TxInclusionStateMsg';
 export * from './TxInclusionStateMsgMetricItem';
-export * from './UTXOInput';
 export * from './UTXOInputMetricItem';
 export * from './UpdateUserPasswordRequest';
 export * from './UpdateUserPermissionsRequest';

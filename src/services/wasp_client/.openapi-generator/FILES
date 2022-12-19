@@ -85,7 +85,6 @@ models/TransactionIDMetricItem.ts
 models/TransactionMetricItem.ts
 models/TxInclusionStateMsg.ts
 models/TxInclusionStateMsgMetricItem.ts
-models/UTXOInput.ts
 models/UTXOInputMetricItem.ts
 models/UpdateUserPasswordRequest.ts
 models/UpdateUserPermissionsRequest.ts

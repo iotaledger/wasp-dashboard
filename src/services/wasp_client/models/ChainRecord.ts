@@ -20,6 +20,12 @@ import { exists, mapValues } from '../runtime';
  */
 export interface ChainRecord {
     /**
+     * 
+     * @type {Array<string>}
+     * @memberof ChainRecord
+     */
+    accessNodes?: Array<string>;
+    /**
      * Whether or not the chain is active
      * @type {boolean}
      * @memberof ChainRecord
@@ -52,6 +58,7 @@ export function ChainRecordFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
+        'accessNodes': !exists(json, 'AccessNodes') ? undefined : json['AccessNodes'],
         'active': !exists(json, 'Active') ? undefined : json['Active'],
         'chainID': !exists(json, 'ChainID') ? undefined : json['ChainID'],
     };
@@ -66,6 +73,7 @@ export function ChainRecordToJSON(value?: ChainRecord | null): any {
     }
     return {
         
+        'AccessNodes': value.accessNodes,
         'Active': value.active,
         'ChainID': value.chainID,
     };
