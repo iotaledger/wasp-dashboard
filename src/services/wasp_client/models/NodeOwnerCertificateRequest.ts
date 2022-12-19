@@ -52,8 +52,8 @@ export function NodeOwnerCertificateRequestFromJSONTyped(json: any, ignoreDiscri
     }
     return {
         
-        'nodePubKey': !exists(json, 'NodePubKey') ? undefined : json['NodePubKey'],
-        'ownerAddress': !exists(json, 'OwnerAddress') ? undefined : json['OwnerAddress'],
+        'nodePubKey': !exists(json, 'nodePubKey') ? undefined : json['nodePubKey'],
+        'ownerAddress': !exists(json, 'ownerAddress') ? undefined : json['ownerAddress'],
     };
 }
 
@@ -66,8 +66,8 @@ export function NodeOwnerCertificateRequestToJSON(value?: NodeOwnerCertificateRe
     }
     return {
         
-        'NodePubKey': value.nodePubKey,
-        'OwnerAddress': value.ownerAddress,
+        'nodePubKey': value.nodePubKey,
+        'ownerAddress': value.ownerAddress,
     };
 }
 

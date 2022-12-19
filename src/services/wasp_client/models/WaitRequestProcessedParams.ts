@@ -46,7 +46,7 @@ export function WaitRequestProcessedParamsFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
-        'timeout': !exists(json, 'Timeout') ? undefined : json['Timeout'],
+        'timeout': !exists(json, 'timeout') ? undefined : json['timeout'],
     };
 }
 
@@ -59,7 +59,7 @@ export function WaitRequestProcessedParamsToJSON(value?: WaitRequestProcessedPar
     }
     return {
         
-        'Timeout': value.timeout,
+        'timeout': value.timeout,
     };
 }
 

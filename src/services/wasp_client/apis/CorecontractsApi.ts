@@ -26,6 +26,7 @@ import type {
   BlockReceiptsResponse,
   ControlAddressesResponse,
   ErrorMessageFormatResponse,
+  EventsResponse,
   FoundryOutputResponse,
   GovChainInfoResponse,
   NFTDataResponse,
@@ -58,6 +59,8 @@ import {
     ControlAddressesResponseToJSON,
     ErrorMessageFormatResponseFromJSON,
     ErrorMessageFormatResponseToJSON,
+    EventsResponseFromJSON,
+    EventsResponseToJSON,
     FoundryOutputResponseFromJSON,
     FoundryOutputResponseToJSON,
     GovChainInfoResponseFromJSON,
@@ -140,6 +143,11 @@ export interface BlocklogGetControlAddressesRequest {
 export interface BlocklogGetEventsOfBlockRequest {
     chainID: string;
     blockIndex: number;
+}
+
+export interface BlocklogGetEventsOfContractRequest {
+    chainID: string;
+    contractHname: string;
 }
 
 export interface BlocklogGetEventsOfLatestBlockRequest {
@@ -627,7 +635,7 @@ export class CorecontractsApi extends runtime.BaseAPI {
     /**
      * Get events of a block
      */
-    async blocklogGetEventsOfBlockRaw(requestParameters: BlocklogGetEventsOfBlockRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BlockReceiptsResponse>> {
+    async blocklogGetEventsOfBlockRaw(requestParameters: BlocklogGetEventsOfBlockRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EventsResponse>> {
         if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
             throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling blocklogGetEventsOfBlock.');
         }
@@ -647,21 +655,55 @@ export class CorecontractsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => BlockReceiptsResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventsResponseFromJSON(jsonValue));
     }
 
     /**
      * Get events of a block
      */
-    async blocklogGetEventsOfBlock(requestParameters: BlocklogGetEventsOfBlockRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BlockReceiptsResponse> {
+    async blocklogGetEventsOfBlock(requestParameters: BlocklogGetEventsOfBlockRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EventsResponse> {
         const response = await this.blocklogGetEventsOfBlockRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get events of a contract
+     */
+    async blocklogGetEventsOfContractRaw(requestParameters: BlocklogGetEventsOfContractRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EventsResponse>> {
+        if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling blocklogGetEventsOfContract.');
+        }
+
+        if (requestParameters.contractHname === null || requestParameters.contractHname === undefined) {
+            throw new runtime.RequiredError('contractHname','Required parameter requestParameters.contractHname was null or undefined when calling blocklogGetEventsOfContract.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/v2/chains/{chainID}/core/blocklog/events/contract/{contractHname}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"contractHname"}}`, encodeURIComponent(String(requestParameters.contractHname))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventsResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Get events of a contract
+     */
+    async blocklogGetEventsOfContract(requestParameters: BlocklogGetEventsOfContractRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EventsResponse> {
+        const response = await this.blocklogGetEventsOfContractRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      * Get events of the latest block
      */
-    async blocklogGetEventsOfLatestBlockRaw(requestParameters: BlocklogGetEventsOfLatestBlockRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BlockReceiptsResponse>> {
+    async blocklogGetEventsOfLatestBlockRaw(requestParameters: BlocklogGetEventsOfLatestBlockRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EventsResponse>> {
         if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
             throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling blocklogGetEventsOfLatestBlock.');
         }
@@ -677,13 +719,13 @@ export class CorecontractsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => BlockReceiptsResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventsResponseFromJSON(jsonValue));
     }
 
     /**
      * Get events of the latest block
      */
-    async blocklogGetEventsOfLatestBlock(requestParameters: BlocklogGetEventsOfLatestBlockRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BlockReceiptsResponse> {
+    async blocklogGetEventsOfLatestBlock(requestParameters: BlocklogGetEventsOfLatestBlockRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EventsResponse> {
         const response = await this.blocklogGetEventsOfLatestBlockRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -691,7 +733,7 @@ export class CorecontractsApi extends runtime.BaseAPI {
     /**
      * Get events of a request
      */
-    async blocklogGetEventsOfRequestRaw(requestParameters: BlocklogGetEventsOfRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BlockReceiptsResponse>> {
+    async blocklogGetEventsOfRequestRaw(requestParameters: BlocklogGetEventsOfRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<EventsResponse>> {
         if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
             throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling blocklogGetEventsOfRequest.');
         }
@@ -711,13 +753,13 @@ export class CorecontractsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => BlockReceiptsResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => EventsResponseFromJSON(jsonValue));
     }
 
     /**
      * Get events of a request
      */
-    async blocklogGetEventsOfRequest(requestParameters: BlocklogGetEventsOfRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BlockReceiptsResponse> {
+    async blocklogGetEventsOfRequest(requestParameters: BlocklogGetEventsOfRequestRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<EventsResponse> {
         const response = await this.blocklogGetEventsOfRequestRaw(requestParameters, initOverrides);
         return await response.value();
     }

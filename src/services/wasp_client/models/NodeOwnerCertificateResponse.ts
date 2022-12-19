@@ -46,7 +46,7 @@ export function NodeOwnerCertificateResponseFromJSONTyped(json: any, ignoreDiscr
     }
     return {
         
-        'certificate': !exists(json, 'Certificate') ? undefined : json['Certificate'],
+        'certificate': !exists(json, 'certificate') ? undefined : json['certificate'],
     };
 }
 
@@ -59,7 +59,7 @@ export function NodeOwnerCertificateResponseToJSON(value?: NodeOwnerCertificateR
     }
     return {
         
-        'Certificate': value.certificate,
+        'certificate': value.certificate,
     };
 }
 

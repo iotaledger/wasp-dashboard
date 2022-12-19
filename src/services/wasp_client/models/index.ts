@@ -32,6 +32,7 @@ export * from './ControlAddressesResponse';
 export * from './DKSharesInfo';
 export * from './DKSharesPostRequest';
 export * from './ErrorMessageFormatResponse';
+export * from './EventsResponse';
 export * from './FoundryOutputResponse';
 export * from './FungibleTokens';
 export * from './GasFeePolicy';

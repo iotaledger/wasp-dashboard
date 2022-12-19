@@ -71,10 +71,10 @@ export function InfoResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'l1Params': !exists(json, 'L1Params') ? undefined : L1ParamsFromJSON(json['L1Params']),
-        'netID': !exists(json, 'NetID') ? undefined : json['NetID'],
-        'publicKey': !exists(json, 'PublicKey') ? undefined : json['PublicKey'],
-        'version': !exists(json, 'Version') ? undefined : json['Version'],
+        'l1Params': !exists(json, 'l1Params') ? undefined : L1ParamsFromJSON(json['l1Params']),
+        'netID': !exists(json, 'netID') ? undefined : json['netID'],
+        'publicKey': !exists(json, 'publicKey') ? undefined : json['publicKey'],
+        'version': !exists(json, 'version') ? undefined : json['version'],
     };
 }
 
@@ -87,10 +87,10 @@ export function InfoResponseToJSON(value?: InfoResponse | null): any {
     }
     return {
         
-        'L1Params': L1ParamsToJSON(value.l1Params),
-        'NetID': value.netID,
-        'PublicKey': value.publicKey,
-        'Version': value.version,
+        'l1Params': L1ParamsToJSON(value.l1Params),
+        'netID': value.netID,
+        'publicKey': value.publicKey,
+        'version': value.version,
     };
 }
 

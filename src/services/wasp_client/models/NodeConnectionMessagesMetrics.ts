@@ -107,16 +107,16 @@ export function NodeConnectionMessagesMetricsFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
-        'inAliasOutput': !exists(json, 'InAliasOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['InAliasOutput']),
-        'inOnLedgerRequest': !exists(json, 'InOnLedgerRequest') ? undefined : NodeConnectionMessageMetricsFromJSON(json['InOnLedgerRequest']),
-        'inOutput': !exists(json, 'InOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['InOutput']),
-        'inStateOutput': !exists(json, 'InStateOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['InStateOutput']),
-        'inTxInclusionState': !exists(json, 'InTxInclusionState') ? undefined : NodeConnectionMessageMetricsFromJSON(json['InTxInclusionState']),
-        'outPublishGovernanceTransaction': !exists(json, 'OutPublishGovernanceTransaction') ? undefined : NodeConnectionMessageMetricsFromJSON(json['OutPublishGovernanceTransaction']),
-        'outPublishStateTransaction': !exists(json, 'OutPublishStateTransaction') ? undefined : NodeConnectionMessageMetricsFromJSON(json['OutPublishStateTransaction']),
-        'outPullLatestOutput': !exists(json, 'OutPullLatestOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['OutPullLatestOutput']),
-        'outPullOutputByID': !exists(json, 'OutPullOutputByID') ? undefined : NodeConnectionMessageMetricsFromJSON(json['OutPullOutputByID']),
-        'outPullTxInclusionState': !exists(json, 'OutPullTxInclusionState') ? undefined : NodeConnectionMessageMetricsFromJSON(json['OutPullTxInclusionState']),
+        'inAliasOutput': !exists(json, 'inAliasOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['inAliasOutput']),
+        'inOnLedgerRequest': !exists(json, 'inOnLedgerRequest') ? undefined : NodeConnectionMessageMetricsFromJSON(json['inOnLedgerRequest']),
+        'inOutput': !exists(json, 'inOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['inOutput']),
+        'inStateOutput': !exists(json, 'inStateOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['inStateOutput']),
+        'inTxInclusionState': !exists(json, 'inTxInclusionState') ? undefined : NodeConnectionMessageMetricsFromJSON(json['inTxInclusionState']),
+        'outPublishGovernanceTransaction': !exists(json, 'outPublishGovernanceTransaction') ? undefined : NodeConnectionMessageMetricsFromJSON(json['outPublishGovernanceTransaction']),
+        'outPublishStateTransaction': !exists(json, 'outPublishStateTransaction') ? undefined : NodeConnectionMessageMetricsFromJSON(json['outPublishStateTransaction']),
+        'outPullLatestOutput': !exists(json, 'outPullLatestOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['outPullLatestOutput']),
+        'outPullOutputByID': !exists(json, 'outPullOutputByID') ? undefined : NodeConnectionMessageMetricsFromJSON(json['outPullOutputByID']),
+        'outPullTxInclusionState': !exists(json, 'outPullTxInclusionState') ? undefined : NodeConnectionMessageMetricsFromJSON(json['outPullTxInclusionState']),
     };
 }
 
@@ -129,16 +129,16 @@ export function NodeConnectionMessagesMetricsToJSON(value?: NodeConnectionMessag
     }
     return {
         
-        'InAliasOutput': NodeConnectionMessageMetricsToJSON(value.inAliasOutput),
-        'InOnLedgerRequest': NodeConnectionMessageMetricsToJSON(value.inOnLedgerRequest),
-        'InOutput': NodeConnectionMessageMetricsToJSON(value.inOutput),
-        'InStateOutput': NodeConnectionMessageMetricsToJSON(value.inStateOutput),
-        'InTxInclusionState': NodeConnectionMessageMetricsToJSON(value.inTxInclusionState),
-        'OutPublishGovernanceTransaction': NodeConnectionMessageMetricsToJSON(value.outPublishGovernanceTransaction),
-        'OutPublishStateTransaction': NodeConnectionMessageMetricsToJSON(value.outPublishStateTransaction),
-        'OutPullLatestOutput': NodeConnectionMessageMetricsToJSON(value.outPullLatestOutput),
-        'OutPullOutputByID': NodeConnectionMessageMetricsToJSON(value.outPullOutputByID),
-        'OutPullTxInclusionState': NodeConnectionMessageMetricsToJSON(value.outPullTxInclusionState),
+        'inAliasOutput': NodeConnectionMessageMetricsToJSON(value.inAliasOutput),
+        'inOnLedgerRequest': NodeConnectionMessageMetricsToJSON(value.inOnLedgerRequest),
+        'inOutput': NodeConnectionMessageMetricsToJSON(value.inOutput),
+        'inStateOutput': NodeConnectionMessageMetricsToJSON(value.inStateOutput),
+        'inTxInclusionState': NodeConnectionMessageMetricsToJSON(value.inTxInclusionState),
+        'outPublishGovernanceTransaction': NodeConnectionMessageMetricsToJSON(value.outPublishGovernanceTransaction),
+        'outPublishStateTransaction': NodeConnectionMessageMetricsToJSON(value.outPublishStateTransaction),
+        'outPullLatestOutput': NodeConnectionMessageMetricsToJSON(value.outPullLatestOutput),
+        'outPullOutputByID': NodeConnectionMessageMetricsToJSON(value.outPullOutputByID),
+        'outPullTxInclusionState': NodeConnectionMessageMetricsToJSON(value.outPullTxInclusionState),
     };
 }
 

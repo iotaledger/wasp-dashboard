@@ -52,8 +52,8 @@ export function ItemFromJSONTyped(json: any, ignoreDiscriminator: boolean): Item
     }
     return {
         
-        'key': !exists(json, 'Key') ? undefined : json['Key'],
-        'value': !exists(json, 'Value') ? undefined : json['Value'],
+        'key': !exists(json, 'key') ? undefined : json['key'],
+        'value': !exists(json, 'value') ? undefined : json['value'],
     };
 }
 
@@ -66,8 +66,8 @@ export function ItemToJSON(value?: Item | null): any {
     }
     return {
         
-        'Key': value.key,
-        'Value': value.value,
+        'key': value.key,
+        'value': value.value,
     };
 }
 

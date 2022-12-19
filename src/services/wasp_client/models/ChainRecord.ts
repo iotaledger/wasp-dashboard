@@ -36,7 +36,7 @@ export interface ChainRecord {
      * @type {string}
      * @memberof ChainRecord
      */
-    chainID?: string;
+    chainId?: string;
 }
 
 /**
@@ -58,9 +58,9 @@ export function ChainRecordFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'accessNodes': !exists(json, 'AccessNodes') ? undefined : json['AccessNodes'],
-        'active': !exists(json, 'Active') ? undefined : json['Active'],
-        'chainID': !exists(json, 'ChainID') ? undefined : json['ChainID'],
+        'accessNodes': !exists(json, 'accessNodes') ? undefined : json['accessNodes'],
+        'active': !exists(json, 'active') ? undefined : json['active'],
+        'chainId': !exists(json, 'chainId') ? undefined : json['chainId'],
     };
 }
 
@@ -73,9 +73,9 @@ export function ChainRecordToJSON(value?: ChainRecord | null): any {
     }
     return {
         
-        'AccessNodes': value.accessNodes,
-        'Active': value.active,
-        'ChainID': value.chainID,
+        'accessNodes': value.accessNodes,
+        'active': value.active,
+        'chainId': value.chainId,
     };
 }
 

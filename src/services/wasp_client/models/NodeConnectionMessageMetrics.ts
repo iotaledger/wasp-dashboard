@@ -58,9 +58,9 @@ export function NodeConnectionMessageMetricsFromJSONTyped(json: any, ignoreDiscr
     }
     return {
         
-        'lastEvent': !exists(json, 'LastEvent') ? undefined : (new Date(json['LastEvent'])),
-        'lastMessage': !exists(json, 'LastMessage') ? undefined : json['LastMessage'],
-        'total': !exists(json, 'Total') ? undefined : json['Total'],
+        'lastEvent': !exists(json, 'lastEvent') ? undefined : (new Date(json['lastEvent'])),
+        'lastMessage': !exists(json, 'lastMessage') ? undefined : json['lastMessage'],
+        'total': !exists(json, 'total') ? undefined : json['total'],
     };
 }
 
@@ -73,9 +73,9 @@ export function NodeConnectionMessageMetricsToJSON(value?: NodeConnectionMessage
     }
     return {
         
-        'LastEvent': value.lastEvent === undefined ? undefined : (value.lastEvent.toISOString()),
-        'LastMessage': value.lastMessage,
-        'Total': value.total,
+        'lastEvent': value.lastEvent === undefined ? undefined : (value.lastEvent.toISOString()),
+        'lastMessage': value.lastMessage,
+        'total': value.total,
     };
 }
 

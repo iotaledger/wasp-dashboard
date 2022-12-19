@@ -41,6 +41,7 @@ models/ControlAddressesResponse.ts
 models/DKSharesInfo.ts
 models/DKSharesPostRequest.ts
 models/ErrorMessageFormatResponse.ts
+models/EventsResponse.ts
 models/FoundryOutputResponse.ts
 models/FungibleTokens.ts
 models/GasFeePolicy.ts

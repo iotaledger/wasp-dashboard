@@ -31,6 +31,12 @@ import {
     FungibleTokensFromJSONTyped,
     FungibleTokensToJSON,
 } from './FungibleTokens';
+import type { JSONDict } from './JSONDict';
+import {
+    JSONDictFromJSON,
+    JSONDictFromJSONTyped,
+    JSONDictToJSON,
+} from './JSONDict';
 import type { NFTDataResponse } from './NFTDataResponse';
 import {
     NFTDataResponseFromJSON,
@@ -88,10 +94,10 @@ export interface RequestDetail {
     nFT?: NFTDataResponse;
     /**
      * 
-     * @type {{ [key: string]: Array<number>; }}
+     * @type {JSONDict}
      * @memberof RequestDetail
      */
-    params?: { [key: string]: Array<number>; };
+    params?: JSONDict;
     /**
      * 
      * @type {string}
@@ -138,7 +144,7 @@ export function RequestDetailFromJSONTyped(json: any, ignoreDiscriminator: boole
         'isEVM': !exists(json, 'IsEVM') ? undefined : json['IsEVM'],
         'isOffLedger': !exists(json, 'IsOffLedger') ? undefined : json['IsOffLedger'],
         'nFT': !exists(json, 'NFT') ? undefined : NFTDataResponseFromJSON(json['NFT']),
-        'params': !exists(json, 'Params') ? undefined : json['Params'],
+        'params': !exists(json, 'Params') ? undefined : JSONDictFromJSON(json['Params']),
         'requestID': !exists(json, 'RequestID') ? undefined : json['RequestID'],
         'senderAccount': !exists(json, 'SenderAccount') ? undefined : json['SenderAccount'],
         'targetAddress': !exists(json, 'TargetAddress') ? undefined : json['TargetAddress'],
@@ -161,7 +167,7 @@ export function RequestDetailToJSON(value?: RequestDetail | null): any {
         'IsEVM': value.isEVM,
         'IsOffLedger': value.isOffLedger,
         'NFT': NFTDataResponseToJSON(value.nFT),
-        'Params': value.params,
+        'Params': JSONDictToJSON(value.params),
         'RequestID': value.requestID,
         'SenderAccount': value.senderAccount,
         'TargetAddress': value.targetAddress,

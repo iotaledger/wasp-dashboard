@@ -19,6 +19,12 @@ import {
     NodeConnectionMessageMetricsFromJSONTyped,
     NodeConnectionMessageMetricsToJSON,
 } from './NodeConnectionMessageMetrics';
+import type { NodeConnectionMessagesMetrics } from './NodeConnectionMessagesMetrics';
+import {
+    NodeConnectionMessagesMetricsFromJSON,
+    NodeConnectionMessagesMetricsFromJSONTyped,
+    NodeConnectionMessagesMetricsToJSON,
+} from './NodeConnectionMessagesMetrics';
 
 /**
  * 
@@ -31,67 +37,13 @@ export interface NodeConnectionMetrics {
      * @type {NodeConnectionMessageMetrics}
      * @memberof NodeConnectionMetrics
      */
-    inAliasOutput?: NodeConnectionMessageMetrics;
-    /**
-     * 
-     * @type {NodeConnectionMessageMetrics}
-     * @memberof NodeConnectionMetrics
-     */
     inMilestone?: NodeConnectionMessageMetrics;
     /**
      * 
-     * @type {NodeConnectionMessageMetrics}
+     * @type {NodeConnectionMessagesMetrics}
      * @memberof NodeConnectionMetrics
      */
-    inOnLedgerRequest?: NodeConnectionMessageMetrics;
-    /**
-     * 
-     * @type {NodeConnectionMessageMetrics}
-     * @memberof NodeConnectionMetrics
-     */
-    inOutput?: NodeConnectionMessageMetrics;
-    /**
-     * 
-     * @type {NodeConnectionMessageMetrics}
-     * @memberof NodeConnectionMetrics
-     */
-    inStateOutput?: NodeConnectionMessageMetrics;
-    /**
-     * 
-     * @type {NodeConnectionMessageMetrics}
-     * @memberof NodeConnectionMetrics
-     */
-    inTxInclusionState?: NodeConnectionMessageMetrics;
-    /**
-     * 
-     * @type {NodeConnectionMessageMetrics}
-     * @memberof NodeConnectionMetrics
-     */
-    outPublishGovernanceTransaction?: NodeConnectionMessageMetrics;
-    /**
-     * 
-     * @type {NodeConnectionMessageMetrics}
-     * @memberof NodeConnectionMetrics
-     */
-    outPublishStateTransaction?: NodeConnectionMessageMetrics;
-    /**
-     * 
-     * @type {NodeConnectionMessageMetrics}
-     * @memberof NodeConnectionMetrics
-     */
-    outPullLatestOutput?: NodeConnectionMessageMetrics;
-    /**
-     * 
-     * @type {NodeConnectionMessageMetrics}
-     * @memberof NodeConnectionMetrics
-     */
-    outPullOutputByID?: NodeConnectionMessageMetrics;
-    /**
-     * 
-     * @type {NodeConnectionMessageMetrics}
-     * @memberof NodeConnectionMetrics
-     */
-    outPullTxInclusionState?: NodeConnectionMessageMetrics;
+    nodeConnectionMessagesMetrics?: NodeConnectionMessagesMetrics;
     /**
      * Chain IDs of the chains registered to receiving L1 events
      * @type {Array<string>}
@@ -119,18 +71,9 @@ export function NodeConnectionMetricsFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'inAliasOutput': !exists(json, 'InAliasOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['InAliasOutput']),
-        'inMilestone': !exists(json, 'InMilestone') ? undefined : NodeConnectionMessageMetricsFromJSON(json['InMilestone']),
-        'inOnLedgerRequest': !exists(json, 'InOnLedgerRequest') ? undefined : NodeConnectionMessageMetricsFromJSON(json['InOnLedgerRequest']),
-        'inOutput': !exists(json, 'InOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['InOutput']),
-        'inStateOutput': !exists(json, 'InStateOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['InStateOutput']),
-        'inTxInclusionState': !exists(json, 'InTxInclusionState') ? undefined : NodeConnectionMessageMetricsFromJSON(json['InTxInclusionState']),
-        'outPublishGovernanceTransaction': !exists(json, 'OutPublishGovernanceTransaction') ? undefined : NodeConnectionMessageMetricsFromJSON(json['OutPublishGovernanceTransaction']),
-        'outPublishStateTransaction': !exists(json, 'OutPublishStateTransaction') ? undefined : NodeConnectionMessageMetricsFromJSON(json['OutPublishStateTransaction']),
-        'outPullLatestOutput': !exists(json, 'OutPullLatestOutput') ? undefined : NodeConnectionMessageMetricsFromJSON(json['OutPullLatestOutput']),
-        'outPullOutputByID': !exists(json, 'OutPullOutputByID') ? undefined : NodeConnectionMessageMetricsFromJSON(json['OutPullOutputByID']),
-        'outPullTxInclusionState': !exists(json, 'OutPullTxInclusionState') ? undefined : NodeConnectionMessageMetricsFromJSON(json['OutPullTxInclusionState']),
-        'registered': !exists(json, 'Registered') ? undefined : json['Registered'],
+        'inMilestone': !exists(json, 'inMilestone') ? undefined : NodeConnectionMessageMetricsFromJSON(json['inMilestone']),
+        'nodeConnectionMessagesMetrics': !exists(json, 'nodeConnectionMessagesMetrics') ? undefined : NodeConnectionMessagesMetricsFromJSON(json['nodeConnectionMessagesMetrics']),
+        'registered': !exists(json, 'registered') ? undefined : json['registered'],
     };
 }
 
@@ -143,18 +86,9 @@ export function NodeConnectionMetricsToJSON(value?: NodeConnectionMetrics | null
     }
     return {
         
-        'InAliasOutput': NodeConnectionMessageMetricsToJSON(value.inAliasOutput),
-        'InMilestone': NodeConnectionMessageMetricsToJSON(value.inMilestone),
-        'InOnLedgerRequest': NodeConnectionMessageMetricsToJSON(value.inOnLedgerRequest),
-        'InOutput': NodeConnectionMessageMetricsToJSON(value.inOutput),
-        'InStateOutput': NodeConnectionMessageMetricsToJSON(value.inStateOutput),
-        'InTxInclusionState': NodeConnectionMessageMetricsToJSON(value.inTxInclusionState),
-        'OutPublishGovernanceTransaction': NodeConnectionMessageMetricsToJSON(value.outPublishGovernanceTransaction),
-        'OutPublishStateTransaction': NodeConnectionMessageMetricsToJSON(value.outPublishStateTransaction),
-        'OutPullLatestOutput': NodeConnectionMessageMetricsToJSON(value.outPullLatestOutput),
-        'OutPullOutputByID': NodeConnectionMessageMetricsToJSON(value.outPullOutputByID),
-        'OutPullTxInclusionState': NodeConnectionMessageMetricsToJSON(value.outPullTxInclusionState),
-        'Registered': value.registered,
+        'inMilestone': NodeConnectionMessageMetricsToJSON(value.inMilestone),
+        'nodeConnectionMessagesMetrics': NodeConnectionMessagesMetricsToJSON(value.nodeConnectionMessagesMetrics),
+        'registered': value.registered,
     };
 }
 

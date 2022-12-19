@@ -46,7 +46,7 @@ export function OffLedgerRequestBodyFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'request': !exists(json, 'Request') ? undefined : json['Request'],
+        'request': !exists(json, 'request') ? undefined : json['request'],
     };
 }
 
@@ -59,7 +59,7 @@ export function OffLedgerRequestBodyToJSON(value?: OffLedgerRequestBody | null):
     }
     return {
         
-        'Request': value.request,
+        'request': value.request,
     };
 }
 

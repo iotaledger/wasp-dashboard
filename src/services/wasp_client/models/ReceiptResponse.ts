@@ -70,10 +70,10 @@ export interface ReceiptResponse {
     gasFeeCharged?: number;
     /**
      * 
-     * @type {Array<number>}
+     * @type {string}
      * @memberof ReceiptResponse
      */
-    request?: Array<number>;
+    request?: string;
     /**
      * 
      * @type {number}

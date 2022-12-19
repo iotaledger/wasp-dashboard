@@ -24,7 +24,7 @@ export interface PeeringTrustRequest {
      * @type {string}
      * @memberof PeeringTrustRequest
      */
-    netID?: string;
+    netId?: string;
     /**
      * The peers public key encoded in Hex
      * @type {string}
@@ -52,8 +52,8 @@ export function PeeringTrustRequestFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'netID': !exists(json, 'NetID') ? undefined : json['NetID'],
-        'publicKey': !exists(json, 'PublicKey') ? undefined : json['PublicKey'],
+        'netId': !exists(json, 'netId') ? undefined : json['netId'],
+        'publicKey': !exists(json, 'publicKey') ? undefined : json['publicKey'],
     };
 }
 
@@ -66,8 +66,8 @@ export function PeeringTrustRequestToJSON(value?: PeeringTrustRequest | null): a
     }
     return {
         
-        'NetID': value.netID,
-        'PublicKey': value.publicKey,
+        'netId': value.netId,
+        'publicKey': value.publicKey,
     };
 }
 

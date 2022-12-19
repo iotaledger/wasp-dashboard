@@ -45,6 +45,12 @@ export interface ReceiptError {
     message?: string;
     /**
      * 
+     * @type {string}
+     * @memberof ReceiptError
+     */
+    messageFormat?: string;
+    /**
+     * 
      * @type {Array<string>}
      * @memberof ReceiptError
      */
@@ -74,6 +80,7 @@ export function ReceiptErrorFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'errorCode': !exists(json, 'ErrorCode') ? undefined : json['ErrorCode'],
         'errorID': !exists(json, 'ErrorID') ? undefined : json['ErrorID'],
         'message': !exists(json, 'Message') ? undefined : json['Message'],
+        'messageFormat': !exists(json, 'MessageFormat') ? undefined : json['MessageFormat'],
         'parameters': !exists(json, 'Parameters') ? undefined : json['Parameters'],
     };
 }
@@ -91,6 +98,7 @@ export function ReceiptErrorToJSON(value?: ReceiptError | null): any {
         'ErrorCode': value.errorCode,
         'ErrorID': value.errorID,
         'Message': value.message,
+        'MessageFormat': value.messageFormat,
         'Parameters': value.parameters,
     };
 }

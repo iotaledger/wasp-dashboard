@@ -71,9 +71,9 @@ export function L1ParamsFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'baseToken': !exists(json, 'BaseToken') ? undefined : BaseTokenFromJSON(json['BaseToken']),
-        'maxPayloadSize': !exists(json, 'MaxPayloadSize') ? undefined : json['MaxPayloadSize'],
-        'protocol': !exists(json, 'Protocol') ? undefined : ProtocolParametersFromJSON(json['Protocol']),
+        'baseToken': !exists(json, 'baseToken') ? undefined : BaseTokenFromJSON(json['baseToken']),
+        'maxPayloadSize': !exists(json, 'maxPayloadSize') ? undefined : json['maxPayloadSize'],
+        'protocol': !exists(json, 'protocol') ? undefined : ProtocolParametersFromJSON(json['protocol']),
     };
 }
 
@@ -86,9 +86,9 @@ export function L1ParamsToJSON(value?: L1Params | null): any {
     }
     return {
         
-        'BaseToken': BaseTokenToJSON(value.baseToken),
-        'MaxPayloadSize': value.maxPayloadSize,
-        'Protocol': ProtocolParametersToJSON(value.protocol),
+        'baseToken': BaseTokenToJSON(value.baseToken),
+        'maxPayloadSize': value.maxPayloadSize,
+        'protocol': ProtocolParametersToJSON(value.protocol),
     };
 }
 

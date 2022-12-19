@@ -64,10 +64,10 @@ export function ContractInfoResponseFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'description': !exists(json, 'Description') ? undefined : json['Description'],
-        'hName': !exists(json, 'HName') ? undefined : json['HName'],
-        'name': !exists(json, 'Name') ? undefined : json['Name'],
-        'programHash': !exists(json, 'ProgramHash') ? undefined : json['ProgramHash'],
+        'description': !exists(json, 'description') ? undefined : json['description'],
+        'hName': !exists(json, 'hName') ? undefined : json['hName'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'programHash': !exists(json, 'programHash') ? undefined : json['programHash'],
     };
 }
 
@@ -80,10 +80,10 @@ export function ContractInfoResponseToJSON(value?: ContractInfoResponse | null):
     }
     return {
         
-        'Description': value.description,
-        'HName': value.hName,
-        'Name': value.name,
-        'ProgramHash': value.programHash,
+        'description': value.description,
+        'hName': value.hName,
+        'name': value.name,
+        'programHash': value.programHash,
     };
 }
 

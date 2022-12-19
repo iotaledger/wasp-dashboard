@@ -24,7 +24,7 @@ export interface GasFeePolicy {
      * @type {string}
      * @memberof GasFeePolicy
      */
-    gasFeeTokenID?: string;
+    gasFeeTokenId?: string;
     /**
      * The amount of gas per token.
      * @type {number}
@@ -58,9 +58,9 @@ export function GasFeePolicyFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'gasFeeTokenID': !exists(json, 'GasFeeTokenID') ? undefined : json['GasFeeTokenID'],
-        'gasPerToken': !exists(json, 'GasPerToken') ? undefined : json['GasPerToken'],
-        'validatorFeeShare': !exists(json, 'ValidatorFeeShare') ? undefined : json['ValidatorFeeShare'],
+        'gasFeeTokenId': !exists(json, 'gasFeeTokenId') ? undefined : json['gasFeeTokenId'],
+        'gasPerToken': !exists(json, 'gasPerToken') ? undefined : json['gasPerToken'],
+        'validatorFeeShare': !exists(json, 'validatorFeeShare') ? undefined : json['validatorFeeShare'],
     };
 }
 
@@ -73,9 +73,9 @@ export function GasFeePolicyToJSON(value?: GasFeePolicy | null): any {
     }
     return {
         
-        'GasFeeTokenID': value.gasFeeTokenID,
-        'GasPerToken': value.gasPerToken,
-        'ValidatorFeeShare': value.validatorFeeShare,
+        'gasFeeTokenId': value.gasFeeTokenId,
+        'gasPerToken': value.gasPerToken,
+        'validatorFeeShare': value.validatorFeeShare,
     };
 }
 

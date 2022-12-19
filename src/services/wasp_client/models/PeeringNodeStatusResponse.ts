@@ -36,7 +36,7 @@ export interface PeeringNodeStatusResponse {
      * @type {string}
      * @memberof PeeringNodeStatusResponse
      */
-    netID?: string;
+    netId?: string;
     /**
      * The amount of users attached to the peer
      * @type {number}
@@ -70,11 +70,11 @@ export function PeeringNodeStatusResponseFromJSONTyped(json: any, ignoreDiscrimi
     }
     return {
         
-        'isAlive': !exists(json, 'IsAlive') ? undefined : json['IsAlive'],
-        'isTrusted': !exists(json, 'IsTrusted') ? undefined : json['IsTrusted'],
-        'netID': !exists(json, 'NetID') ? undefined : json['NetID'],
-        'numUsers': !exists(json, 'NumUsers') ? undefined : json['NumUsers'],
-        'publicKey': !exists(json, 'PublicKey') ? undefined : json['PublicKey'],
+        'isAlive': !exists(json, 'isAlive') ? undefined : json['isAlive'],
+        'isTrusted': !exists(json, 'isTrusted') ? undefined : json['isTrusted'],
+        'netId': !exists(json, 'netId') ? undefined : json['netId'],
+        'numUsers': !exists(json, 'numUsers') ? undefined : json['numUsers'],
+        'publicKey': !exists(json, 'publicKey') ? undefined : json['publicKey'],
     };
 }
 
@@ -87,11 +87,11 @@ export function PeeringNodeStatusResponseToJSON(value?: PeeringNodeStatusRespons
     }
     return {
         
-        'IsAlive': value.isAlive,
-        'IsTrusted': value.isTrusted,
-        'NetID': value.netID,
-        'NumUsers': value.numUsers,
-        'PublicKey': value.publicKey,
+        'isAlive': value.isAlive,
+        'isTrusted': value.isTrusted,
+        'netId': value.netId,
+        'numUsers': value.numUsers,
+        'publicKey': value.publicKey,
     };
 }
 
