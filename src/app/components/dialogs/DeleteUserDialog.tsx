@@ -7,10 +7,11 @@ import { WaspClientService } from "../../../services/waspClientService";
 interface IDeleteUserDialog {
     onClose: () => void;
     user: User;
+    onError?: () => void;
     onSuccess?: () => void;
 }
 
-const DeleteUserDialog: React.FC<IDeleteUserDialog> = ({ onClose, user, onSuccess }) => {
+const DeleteUserDialog: React.FC<IDeleteUserDialog> = ({ onClose, user, onSuccess, onError }) => {
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -23,13 +24,16 @@ const DeleteUserDialog: React.FC<IDeleteUserDialog> = ({ onClose, user, onSucces
         try {
             const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
             await waspClientService.users().deleteUser(user as DeleteUserRequest);
-            if (onSuccess) {
+            if (onSuccess && typeof onSuccess === "function") {
                 onSuccess();
             }
             onClose();
         } catch (e) {
             if (e instanceof Error) {
                 setError(e.message);
+            }
+            if (onError && typeof onError === "function") {
+                onError();
             }
         }
         setIsBusy(false);
@@ -61,6 +65,7 @@ const DeleteUserDialog: React.FC<IDeleteUserDialog> = ({ onClose, user, onSucces
 };
 
 DeleteUserDialog.defaultProps = {
+    onError: () => {},
     onSuccess: () => {},
 };
 export default DeleteUserDialog;

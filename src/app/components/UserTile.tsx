@@ -10,17 +10,21 @@ interface UserTileProps {
      */
     user: User;
     /**
-     * Callback when the user is deleted.
-     */
-    onDeleteSuccess?: () => void;
-    /**
      * Whether there is more than one user.
      * @type {boolean}
      */
     canBeDeleted: boolean;
+    /**
+     * Success callback when the user is deleted.
+     */
+    onDeleteSuccess?: () => void;
+    /**
+     * Error callback when the user is deleted.
+     */
+    onDeleteError?: () => void;
 }
 
-const UserTile: React.FC<UserTileProps> = ({ user, onDeleteSuccess, canBeDeleted }) => {
+const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess, onDeleteError }) => {
     const [showDeleteUserDialog, setShowDeleteUserDialog] = useState<boolean>(false);
     return (
         <div className="user-panel-item card">
@@ -59,6 +63,7 @@ const UserTile: React.FC<UserTileProps> = ({ user, onDeleteSuccess, canBeDeleted
                     }}
                     user={user}
                     onSuccess={onDeleteSuccess}
+                    onError={onDeleteError}
                 />
             )}
         </div>
@@ -66,6 +71,7 @@ const UserTile: React.FC<UserTileProps> = ({ user, onDeleteSuccess, canBeDeleted
 };
 
 UserTile.defaultProps = {
+    onDeleteError: () => {},
     onDeleteSuccess: () => {},
 };
 
