@@ -56,7 +56,7 @@ function Header(props: HeaderProps) {
                     setIsHealth(data.isHealthy);
                     setIsSynced(data.isSynced);
                 }
-            }
+            },
         );
 
         const nodeStatusSubscription = metricsService.subscribe<INodeStatus>(
@@ -71,7 +71,7 @@ function Header(props: HeaderProps) {
             allData => {
                 const nonNull = allData.filter(d => d !== undefined && d !== null);
                 setMemorySize(nonNull.map(d => d.memUsage));
-            }
+            },
         );
 
         const databaseSizeSubscription = metricsService.subscribe<IDBSizeMetric>(
@@ -97,7 +97,7 @@ function Header(props: HeaderProps) {
                 const newDbTangleSizeValues = nonNull.map(d => d.tangle);
 
                 setDbTangleSize(newDbTangleSizeValues);
-            }
+            },
         );
 
         let cachedbBpsValues: number[] = [];

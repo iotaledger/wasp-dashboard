@@ -86,9 +86,9 @@ export class AuthService {
                 {
                     username,
                     password,
-                    jwt
+                    jwt,
                 },
-                headers
+                headers,
             );
 
             if (response.jwt) {

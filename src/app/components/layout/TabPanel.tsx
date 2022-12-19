@@ -16,7 +16,7 @@ class TabPanel extends Component<TabPanelProps, TabPanelState> {
         super(props);
 
         this.state = {
-            activeTab: props.activeTab.toLowerCase()
+            activeTab: props.activeTab.toLowerCase(),
         };
     }
 
@@ -43,7 +43,7 @@ class TabPanel extends Component<TabPanelProps, TabPanelState> {
                             key={l}
                             type="button"
                             className={classNames("tab-panel-button", {
-                                "tab-panel-button-selected": l.toLowerCase() === this.state.activeTab
+                                "tab-panel-button-selected": l.toLowerCase() === this.state.activeTab,
                             })}
                             onClick={e =>
                                 this.setState({ activeTab: l.toLowerCase() }, () => {

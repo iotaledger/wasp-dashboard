@@ -12,7 +12,7 @@ class Breakpoint extends Component<BreakpointProps, BreakpointState> {
     private static readonly SIZE_BREAKPOINTS = {
         phone: 480,
         tablet: 768,
-        desktop: 1024
+        desktop: 1024,
     };
 
     /**
@@ -30,7 +30,7 @@ class Breakpoint extends Component<BreakpointProps, BreakpointState> {
         this._resize = () => this.resize();
 
         this.state = {
-            isVisible: this.calculateVisible()
+            isVisible: this.calculateVisible(),
         };
     }
 
@@ -63,7 +63,7 @@ class Breakpoint extends Component<BreakpointProps, BreakpointState> {
         const isVisible = this.calculateVisible();
 
         this.setState({
-            isVisible
+            isVisible,
         });
     }
 

@@ -6,7 +6,7 @@ import { PeeringTrustRequest } from "../../../services/wasp_client";
 
 const FORM_INITIAL_VALUES: IFormValues = {
     publicKey: "",
-    netID: ""
+    netID: "",
 };
 
 interface IFormValues {
@@ -37,7 +37,7 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
             setIsBusy(true);
             const newPeer: PeeringTrustRequest = {
                 publicKey: formValues.publicKey,
-                netID: formValues.netID
+                netID: formValues.netID,
             };
             const success = await peersService.trustPeer(newPeer);
             if (!success) {

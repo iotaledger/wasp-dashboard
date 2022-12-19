@@ -62,7 +62,7 @@ class BlockTangleState extends AsyncComponent<BlockTangleStateProps, BlockTangle
                     { "block-tangle-state-referenced": this.props.status === "referenced" },
                     { "block-tangle-state-milestone": this.props.status === "milestone" },
                     { "block-tangle-state-pending": this.props.status === "pending" },
-                    { "block-tangle-state-unknown": this.props.status === "unknown" }
+                    { "block-tangle-state-unknown": this.props.status === "unknown" },
                 )}
             >
                 {this.props.status === "unknown" && "Unknown"}
@@ -89,7 +89,7 @@ class BlockTangleState extends AsyncComponent<BlockTangleStateProps, BlockTangle
             const result = await this._tangleService.milestoneDetails(this.props.milestoneIndex);
             if (result) {
                 this.setState({
-                    timestamp: result.timestamp ? ` at ${FormatHelper.dateShort(result.timestamp)}` : undefined
+                    timestamp: result.timestamp ? ` at ${FormatHelper.dateShort(result.timestamp)}` : undefined,
                 });
             }
         }

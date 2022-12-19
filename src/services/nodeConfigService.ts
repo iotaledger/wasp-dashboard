@@ -58,7 +58,7 @@ export class NodeConfigService {
             unit: "i",
             decimals: 0,
             subunit: undefined,
-            useMetricPrefix: true
+            useMetricPrefix: true,
         };
     }
 

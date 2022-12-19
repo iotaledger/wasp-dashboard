@@ -45,7 +45,7 @@ class FeatureBlock extends Component<FeatureProps, FeatureState> {
             utf8Data,
             hexData,
             jsonData,
-            dataLabel
+            dataLabel,
         };
     }
 
@@ -62,7 +62,7 @@ class FeatureBlock extends Component<FeatureProps, FeatureState> {
                 >
                     <div
                         className={classNames("margin-r-t", "card--content__input--dropdown", {
-                            opened: this.state.showDetails
+                            opened: this.state.showDetails,
                         })}
                     >
                         <DropdownIcon />

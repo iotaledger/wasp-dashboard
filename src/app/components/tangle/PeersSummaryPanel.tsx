@@ -50,7 +50,7 @@ class PeersSummaryPanel extends Component<unknown, PeersSummaryState> {
         this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
 
         this.state = {
-            blindMode: this._settingsService.getBlindMode()
+            blindMode: this._settingsService.getBlindMode(),
         };
     }
 
@@ -77,7 +77,7 @@ class PeersSummaryPanel extends Component<unknown, PeersSummaryState> {
                         this.setState({ lmi });
                     }
                 }
-            }
+            },
         );
     }
 
@@ -151,14 +151,14 @@ class PeersSummaryPanel extends Component<unknown, PeersSummaryState> {
                         id: p.id,
                         alias: p.alias,
                         health: DataHelper.calculateHealth(p, cmi, lmi),
-                        address: DataHelper.formatPeerAddress(p)
+                        address: DataHelper.formatPeerAddress(p),
                     };
-                })
+                }),
             );
         }
 
         this.setState({
-            peers: sortedPeers
+            peers: sortedPeers,
         });
     }
 

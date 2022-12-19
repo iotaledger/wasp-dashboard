@@ -30,8 +30,8 @@ class TransactionPayload extends Component<TransactionPayloadProps, TransactionP
             const output: IAssociatedOutput = {
                 outputId: TransactionHelper.outputIdFromTransactionData(
                     input.transactionId,
-                    input.transactionOutputIndex
-                )
+                    input.transactionOutputIndex,
+                ),
             };
             return output;
         });
@@ -39,12 +39,12 @@ class TransactionPayload extends Component<TransactionPayloadProps, TransactionP
         const outputs = this.props.payload.essence.outputs.map((output, idx) => {
             const transactionId = Converter.bytesToHex(
                 TransactionHelper.getTransactionPayloadHash(this.props.payload),
-                true
+                true,
             );
 
             const associatedOutput: IAssociatedOutput = {
                 outputId: TransactionHelper.outputIdFromTransactionData(transactionId, idx),
-                outputType: output
+                outputType: output,
             };
             return associatedOutput;
         });
@@ -54,7 +54,7 @@ class TransactionPayload extends Component<TransactionPayloadProps, TransactionP
             currentOutputsPage: 1,
             outputsPageSize: 20,
             inputs,
-            statusInputsBusy: false
+            statusInputsBusy: false,
         };
     }
 
@@ -77,7 +77,7 @@ class TransactionPayload extends Component<TransactionPayloadProps, TransactionP
                         onPageChange={(page: number, firstPageIndex: number, lastPageIndex: number) => {
                             if (this.state.inputs.length > 0) {
                                 this.updateOutputDetails(firstPageIndex, lastPageIndex).catch(err =>
-                                    console.error(err)
+                                    console.error(err),
                                 );
                             }
                         }}
@@ -114,7 +114,7 @@ class TransactionPayload extends Component<TransactionPayloadProps, TransactionP
                     outputs[i].outputDetails = outputResult;
                     this.setState(prevState => ({
                         ...prevState,
-                        inputs: outputs
+                        inputs: outputs,
                     }));
                 }
             }

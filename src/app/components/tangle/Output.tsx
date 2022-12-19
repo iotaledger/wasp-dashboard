@@ -9,7 +9,7 @@ import {
     NFT_ADDRESS_TYPE,
     IImmutableAliasUnlockCondition,
     IAliasAddress,
-    TransactionHelper
+    TransactionHelper,
 } from "@iota/iota.js";
 import classNames from "classnames";
 import React, { Component, ReactNode } from "react";
@@ -41,7 +41,7 @@ class Output extends Component<OutputProps, OutputState> {
             formatFull: false,
             isGenesis: props.metadata?.blockId === "0".repeat(64),
             showDetails: this.props.showDetails ?? false,
-            showTokens: false
+            showTokens: false,
         };
     }
 
@@ -60,7 +60,7 @@ class Output extends Component<OutputProps, OutputState> {
                         >
                             <div
                                 className={classNames("margin-r-t", "card--content__input--dropdown", {
-                                    opened: this.state.showDetails
+                                    opened: this.state.showDetails,
                                 })}
                             >
                                 <DropdownIcon />
@@ -80,12 +80,12 @@ class Output extends Component<OutputProps, OutputState> {
                                 type="button"
                                 onClick={() =>
                                     this.setState({
-                                        formatFull: !this.state.formatFull
+                                        formatFull: !this.state.formatFull,
                                     })}
                             >
                                 {FormatHelper.getInstance().amount(
                                     Number(this.props.output.amount),
-                                    this.state.formatFull
+                                    this.state.formatFull,
                                 )}
                             </button>
                         </div>
@@ -148,9 +148,9 @@ class Output extends Component<OutputProps, OutputState> {
                                         address={{
                                             aliasId: FormatHelper.resolveId(
                                                 this.props.output.aliasId,
-                                                this.props.outputId
+                                                this.props.outputId,
                                             ),
-                                            type: ALIAS_ADDRESS_TYPE
+                                            type: ALIAS_ADDRESS_TYPE,
                                         }}
                                     />
                                     <div className="card--label">State index:</div>
@@ -168,7 +168,7 @@ class Output extends Component<OutputProps, OutputState> {
                                     showHexAddress={false}
                                     address={{
                                         nftId: FormatHelper.resolveId(this.props.output.nftId, this.props.outputId),
-                                        type: NFT_ADDRESS_TYPE
+                                        type: NFT_ADDRESS_TYPE,
                                     }}
                                 />
                             )}
@@ -185,7 +185,7 @@ class Output extends Component<OutputProps, OutputState> {
                                                 ).address as IAliasAddress
                                             ).aliasId,
                                             this.props.output.serialNumber,
-                                            this.props.output.tokenScheme.type
+                                            this.props.output.tokenScheme.type,
                                         )}
                                     </div>
                                     <div className="card--label">Serial number:</div>
@@ -239,7 +239,7 @@ class Output extends Component<OutputProps, OutputState> {
                                                     className={classNames(
                                                         "margin-r-t",
                                                         "card--content__input--dropdown",
-                                                        { opened: this.state.showTokens }
+                                                        { opened: this.state.showTokens },
                                                     )}
                                                 >
                                                     <DropdownIcon />
@@ -254,7 +254,7 @@ class Output extends Component<OutputProps, OutputState> {
                                                             index={idx + 1}
                                                             token={{
                                                                 id: token.id,
-                                                                amount: token.amount
+                                                                amount: token.amount,
                                                             }}
                                                         />
                                                     ))}

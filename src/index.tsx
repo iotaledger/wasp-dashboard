@@ -32,7 +32,7 @@ initServices()
                 </BrowserRouter>
             ) : (
                 <div>REACT_APP_BRAND_ID is not set</div>
-            )
+            ),
         );
     })
     .catch(err => console.error(err));

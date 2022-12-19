@@ -67,7 +67,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
 };
 
 PeerTile.defaultProps = {
-    detailed: false
+    detailed: false,
 };
 
 export default PeerTile;

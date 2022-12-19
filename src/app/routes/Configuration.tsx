@@ -40,13 +40,13 @@ function Configuration() {
 
             // To remove the duplicated keys
             const notDuplicatedConfigCategory = configCategory.filter(
-                (item, index) => configCategory.indexOf(item) === index
+                (item, index) => configCategory.indexOf(item) === index,
             );
 
             // To create an array of objects with the items that have the same key
             const newConfig = notDuplicatedConfigCategory.map(item => {
                 const newObj = {
-                    [item]: { [item]: config[item] }
+                    [item]: { [item]: config[item] },
                 };
                 for (const key in config) {
                     if (key.startsWith(item)) {
@@ -102,7 +102,7 @@ function Configuration() {
                                                     <span>{keyVal}:</span>
                                                     <p className="value">{JSON.stringify(val)}</p>
                                                 </div>
-                                            )))
+                                            ))),
                                         )}
                                     </div>
                                 );

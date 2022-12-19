@@ -17,7 +17,7 @@ class ToggleButton extends Component<ToggleButtonProps, ToggleButtonState> {
         super(props);
 
         this.state = {
-            value: props.value
+            value: props.value,
         };
     }
 

@@ -31,7 +31,7 @@ export class WaspClientService {
         const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
         const config: Configuration = new Configuration({
             apiKey: storageService.load("dashboard-jwt"),
-            basePath: Environment.WaspApiUrl
+            basePath: Environment.WaspApiUrl,
         });
 
         this._apiClients = {
@@ -40,7 +40,7 @@ export class WaspClientService {
             node: new NodeApi(config),
             requests: new RequestsApi(config),
             metrics: new MetricsApi(config),
-            corecontracts: new CorecontractsApi(config)
+            corecontracts: new CorecontractsApi(config),
         };
     }
 

@@ -19,7 +19,7 @@ const GoBackButton = ({ goTo, text }: GoBackButtonProps) => (
     </Link>
 );
 GoBackButton.defaultProps = {
-    text: ""
+    text: "",
 };
 
 export default GoBackButton;

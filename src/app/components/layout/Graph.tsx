@@ -194,13 +194,13 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
                         path: `M ${axisLabelWidth} ${graphHeight - i * axisSpacing} L ${graphWidth} ${
                             graphHeight - i * axisSpacing
                         }`,
-                        className: "axis-color"
+                        className: "axis-color",
                     });
                     text.push({
                         x: axisLabelWidth - 5,
                         y: graphHeight - i * axisSpacing + 2,
                         anchor: "end",
-                        content: (i * (maxY / yUsage / (axisLineCount - 1))).toFixed(decimalPlaces)
+                        content: (i * (maxY / yUsage / (axisLineCount - 1))).toFixed(decimalPlaces),
                     });
                 }
 
@@ -225,7 +225,7 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
                                 .getMinutes()
                                 .toString()
                                 .padStart(2, "0")}.${dt.getSeconds().toString()
-.padStart(2, "0")}`
+.padStart(2, "0")}`,
                         });
                     }
                 }
@@ -239,9 +239,9 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
                                 barWidth,
                                 axisLabelWidth + marginLeft,
                                 j + i * actualSeriesValues.length,
-                                val * yScale
+                                val * yScale,
                             ),
-                            className: this.props.series[j].className
+                            className: this.props.series[j].className,
                         });
                     }
                 }
@@ -250,7 +250,7 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
 
         return {
             text,
-            paths: [...axis, ...paths.reverse()]
+            paths: [...axis, ...paths.reverse()],
         };
     }
 
@@ -268,7 +268,7 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
         barWidth: number,
         marginLeft: number,
         index: number,
-        scaledVal: number
+        scaledVal: number,
     ): string {
         const spacing = 2;
         let pathSegments = [`M ${marginLeft + index * barWidth + spacing} ${graphHeight}`];
@@ -279,7 +279,7 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
                 ? [
                       `L ${marginLeft + (index * barWidth + spacing)} ${graphHeight - 1}`,
                       `L ${marginLeft + (index + 1) * barWidth - spacing} ${graphHeight - 1}`,
-                      `L ${marginLeft + (index + 1) * barWidth - spacing} ${graphHeight}`
+                      `L ${marginLeft + (index + 1) * barWidth - spacing} ${graphHeight}`,
                   ]
                 : [
                       `L ${marginLeft + index * barWidth + spacing} ${graphHeight - scaledVal}`,
@@ -288,8 +288,8 @@ class Graph extends AsyncComponent<GraphProps, GraphState> {
                       } ${graphHeight - scaledVal - 10} ${marginLeft + (index + 1) * barWidth - spacing} ${
                           graphHeight - scaledVal
                       }`,
-                      `L ${marginLeft + (index + 1) * barWidth - spacing} ${graphHeight}`
-                  ])
+                      `L ${marginLeft + (index + 1) * barWidth - spacing} ${graphHeight}`,
+                  ]),
         ];
 
         return pathSegments.join(" ");

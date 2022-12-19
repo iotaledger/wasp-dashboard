@@ -150,7 +150,7 @@ export class SearchQueryBuilder {
             aliasId,
             nftId,
             foundryId,
-            tag
+            tag,
         };
     }
 }

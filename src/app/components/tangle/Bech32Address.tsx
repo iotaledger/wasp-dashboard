@@ -35,12 +35,12 @@ class Bech32Address extends Component<Bech32AddressProps, Bech32AddressState> {
                 addressDetails: Bech32AddressHelper.buildAddress(
                     hash,
                     nodeConfigService.getBech32Hrp(),
-                    this.props.address.type
-                )
+                    this.props.address.type,
+                ),
             };
         } else if (this.props.addressDetails) {
             this.state = {
-                addressDetails: this.props.addressDetails
+                addressDetails: this.props.addressDetails,
             };
         }
     }

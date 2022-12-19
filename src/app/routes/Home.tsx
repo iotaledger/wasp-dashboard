@@ -66,7 +66,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
             publicKey: "",
             version: "",
             networkId: "",
-            peersList: []
+            peersList: [],
         };
     }
 
@@ -78,7 +78,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
 
         this.setState({
             bannerSrc: await BrandHelper.getBanner(this._themeService.get()),
-            peersList: this._peersService.get()
+            peersList: this._peersService.get(),
         });
 
         if (this._authService.isLoggedIn()) {
@@ -88,7 +88,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
                     this.setState({
                         networkId: this._nodeConfigService.getNetworkId(),
                         version: this._nodeConfigService.getVersion(),
-                        publicKey: this._nodeConfigService.getPublicKey()
+                        publicKey: this._nodeConfigService.getPublicKey(),
                     });
                 })
                 .catch(e => console.log(e));
@@ -96,7 +96,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
 
         EventAggregator.subscribe("theme", "home", async (theme: string) => {
             this.setState({
-                bannerSrc: await BrandHelper.getBanner(theme)
+                bannerSrc: await BrandHelper.getBanner(theme),
             });
         });
 

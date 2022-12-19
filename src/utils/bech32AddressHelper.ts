@@ -40,7 +40,7 @@ export class Bech32AddressHelper {
             hex,
             hexNoPrefix,
             type,
-            typeLabel: Bech32AddressHelper.typeLabel(type)
+            typeLabel: Bech32AddressHelper.typeLabel(type),
         };
     }
 

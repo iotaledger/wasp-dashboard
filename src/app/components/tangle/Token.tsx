@@ -16,7 +16,7 @@ class Token extends Component<TokenProps, TokenState> {
         super(props);
 
         this.state = {
-            showDetails: false
+            showDetails: false,
         };
     }
 
@@ -33,7 +33,7 @@ class Token extends Component<TokenProps, TokenState> {
                 >
                     <div
                         className={classNames("margin-r-t", "card--content__input--dropdown", {
-                            opened: this.state.showDetails
+                            opened: this.state.showDetails,
                         })}
                     >
                         <DropdownIcon />

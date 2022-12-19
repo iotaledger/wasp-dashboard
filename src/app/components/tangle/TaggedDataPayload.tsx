@@ -42,7 +42,7 @@ class TaggedDataPayload extends Component<TaggedDataPayloadProps, TaggedDataPayl
             utf8Data,
             hexData,
             jsonData,
-            dataLengthBytes: props.payload.data ? props.payload.data.length / 2 : 0
+            dataLengthBytes: props.payload.data ? props.payload.data.length / 2 : 0,
         };
     }
 

@@ -20,7 +20,7 @@ class Outputs extends Component<OutputsProps, OutputsState> {
         super(props);
 
         this.state = {
-            currentPage: this.props.currentPage
+            currentPage: this.props.currentPage,
         };
     }
 

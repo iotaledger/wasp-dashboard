@@ -18,7 +18,7 @@ class BlockButton extends Component<BlockButtonProps, BlockButtonState> {
 
         this.state = {
             active: false,
-            message: props.buttonType === "copy" ? "Copied" : ""
+            message: props.buttonType === "copy" ? "Copied" : "",
         };
     }
 
@@ -41,7 +41,7 @@ class BlockButton extends Component<BlockButtonProps, BlockButtonState> {
                         className={classNames(
                             "block-button-message",
                             { "block-button-message-right": this.props.labelPosition === "right" },
-                            { "block-button-message-top": this.props.labelPosition === "top" }
+                            { "block-button-message-top": this.props.labelPosition === "top" },
                         )}
                     >
                         {this.state.message}

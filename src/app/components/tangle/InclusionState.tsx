@@ -21,7 +21,7 @@ class InclusionState extends Component<InclusionStateProps> {
                         { "inclusion-not-included": this.props.state === undefined },
                         { "inclusion-included": this.props.state === "included" },
                         { "inclusion-no-transaction": this.props.state === "noTransaction" },
-                        { "inclusion-conflicting": this.props.state === "conflicting" }
+                        { "inclusion-conflicting": this.props.state === "conflicting" },
                     )}
                 >
                     {this.props.state === undefined && "Not included"}

@@ -18,7 +18,7 @@ class UTXOInput extends Component<UTXOInputProps, UTXOInputState> {
         super(props);
 
         this.state = {
-            showDetails: false
+            showDetails: false,
         };
     }
 
@@ -36,7 +36,7 @@ class UTXOInput extends Component<UTXOInputProps, UTXOInputState> {
                     >
                         <div
                             className={classNames("margin-r-t", "card--content__input--dropdown", {
-                                opened: this.state.showDetails
+                                opened: this.state.showDetails,
                             })}
                         >
                             <DropdownIcon />

@@ -18,7 +18,7 @@ class ReceiptMilestoneOption extends Component<ReceiptMilestoneOptionProps, Rece
 
         this.state = {
             formatFull: false,
-            showReceiptDetails: false
+            showReceiptDetails: false,
         };
     }
 
@@ -35,7 +35,7 @@ class ReceiptMilestoneOption extends Component<ReceiptMilestoneOptionProps, Rece
                 >
                     <div
                         className={classNames("margin-r-t", "card--content__input--dropdown", {
-                            opened: this.state.showReceiptDetails
+                            opened: this.state.showReceiptDetails,
                         })}
                     >
                         <DropdownIcon />
@@ -59,12 +59,12 @@ class ReceiptMilestoneOption extends Component<ReceiptMilestoneOptionProps, Rece
                                 type="button"
                                 onClick={() =>
                                     this.setState({
-                                        formatFull: !this.state.formatFull
+                                        formatFull: !this.state.formatFull,
                                     })}
                             >
                                 {FormatHelper.getInstance().amount(
                                     Number(this.props.option.transaction.output.amount),
-                                    this.state.formatFull
+                                    this.state.formatFull,
                                 )}
                             </button>
                         </div>

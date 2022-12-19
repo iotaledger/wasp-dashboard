@@ -18,7 +18,7 @@ export class FetchHelper {
         method: "get" | "post" | "put" | "delete",
         payload?: T,
         headers?: { [id: string]: string },
-        timeout?: number
+        timeout?: number,
     ): Promise<U> {
         headers ??= {};
         headers["Content-Type"] = "application/json";
@@ -40,7 +40,7 @@ export class FetchHelper {
                 method,
                 headers,
                 body: payload ? JSON.stringify(payload) : undefined,
-                signal: controller ? controller.signal : undefined
+                signal: controller ? controller.signal : undefined,
             });
 
             const json =
@@ -80,7 +80,7 @@ export class FetchHelper {
         method: "get" | "post" | "put" | "delete",
         payload?: T,
         headers?: { [id: string]: string },
-        timeout?: number
+        timeout?: number,
     ): Promise<U> {
         headers ??= {};
         headers["Content-Type"] = "text/plain";
@@ -102,7 +102,7 @@ export class FetchHelper {
                 method,
                 headers,
                 body: payload ? JSON.stringify(payload) : undefined,
-                signal: controller ? controller.signal : undefined
+                signal: controller ? controller.signal : undefined,
             });
             const json =
                 res.status === 204

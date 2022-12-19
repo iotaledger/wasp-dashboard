@@ -53,7 +53,7 @@ const Dialog: FC<DialogProps> = ({ title, children, actions, onClose }) => {
 
 Dialog.defaultProps = {
     actions: undefined,
-    onClose: undefined
+    onClose: undefined,
 };
 
 export default Dialog;

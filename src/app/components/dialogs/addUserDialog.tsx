@@ -17,9 +17,9 @@ const FORM_INITIAL_VALUES: IFormValues = {
         "dashboard",
         "node.read",
         "peering.read",
-        "api"
+        "api",
     ],
-    password: ""
+    password: "",
 };
 
 interface IFormValues {
@@ -49,7 +49,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
             const newUser: AddUserRequest = {
                 username: formValues.username,
                 permissions: formValues.permissions,
-                password: formValues.password
+                password: formValues.password,
             };
 
             await waspClientService.users().addUser({ addUserRequest: newUser });

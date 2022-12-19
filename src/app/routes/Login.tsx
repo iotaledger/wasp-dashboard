@@ -30,7 +30,7 @@ class Login extends AsyncComponent<unknown, LoginState> {
             password: "",
             isBusy: false,
             error: false,
-            redirect: this._authService.isLoggedIn() ? "/" : ""
+            redirect: this._authService.isLoggedIn() ? "/" : "",
         };
     }
 
@@ -112,16 +112,16 @@ class Login extends AsyncComponent<unknown, LoginState> {
         this.setState(
             {
                 isBusy: true,
-                error: false
+                error: false,
             },
             async () => {
                 const success = await this._authService.login(this.state.user, this.state.password);
 
                 this.setState({
                     isBusy: false,
-                    error: !success
+                    error: !success,
                 });
-            }
+            },
         );
     }
 }

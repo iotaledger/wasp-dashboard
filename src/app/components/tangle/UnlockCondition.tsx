@@ -5,7 +5,7 @@ import {
     GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
     IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE,
     STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
-    TIMELOCK_UNLOCK_CONDITION_TYPE
+    TIMELOCK_UNLOCK_CONDITION_TYPE,
 } from "@iota/iota.js";
 import classNames from "classnames";
 import React, { Component, ReactNode } from "react";
@@ -28,7 +28,7 @@ class UnlockCondition extends Component<UnlockConditionProps, UnlockCondtionStat
         super(props);
 
         this.state = {
-            showDetails: false
+            showDetails: false,
         };
     }
 
@@ -45,7 +45,7 @@ class UnlockCondition extends Component<UnlockConditionProps, UnlockCondtionStat
                 >
                     <div
                         className={classNames("margin-r-t", "card--content__input--dropdown", {
-                            opened: this.state.showDetails
+                            opened: this.state.showDetails,
                         })}
                     >
                         <DropdownIcon />

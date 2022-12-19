@@ -69,7 +69,7 @@ export class WebSocketService {
             this._subscriptions[topic] = {
                 requiresAuth,
                 isSubscribed: false,
-                subs: []
+                subs: [],
             };
         }
 
@@ -77,7 +77,7 @@ export class WebSocketService {
 
         this._subscriptions[topic].subs.push({
             subscriptionId,
-            callback
+            callback,
         });
 
         if (this._webSocket && this._webSocket.readyState === WebSocket.OPEN) {
@@ -99,7 +99,7 @@ export class WebSocketService {
     public unsubscribe(subscriptionId: string): void {
         for (const topic of Object.keys(this._subscriptions).map(Number)) {
             const subscriptionIdx = this._subscriptions[topic].subs.findIndex(
-                s => s.subscriptionId === subscriptionId
+                s => s.subscriptionId === subscriptionId,
             );
             if (subscriptionIdx >= 0) {
                 this._subscriptions[topic].subs.splice(subscriptionIdx, 1);

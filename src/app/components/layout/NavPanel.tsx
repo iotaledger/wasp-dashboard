@@ -49,7 +49,7 @@ function NavPanel(props: NavPanelProps) {
                                 className={classNames("nav-panel-button", {
                                     "nav-panel-button-selected":
                                         (b.route.length > 1 && location.pathname.startsWith(b.route)) ||
-                                        b.route === location.pathname
+                                        b.route === location.pathname,
                                 })}
                             >
                                 {b.icon}
@@ -79,7 +79,7 @@ function NavPanel(props: NavPanelProps) {
                                 className={classNames("nav-panel-button", {
                                     "nav-panel-button-selected":
                                         (b.route.length > 1 && location.pathname.startsWith(b.route)) ||
-                                        b.route === location.pathname
+                                        b.route === location.pathname,
                                 })}
                             >
                                 {b.icon}

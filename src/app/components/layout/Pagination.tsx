@@ -33,7 +33,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
         this.state = {
             paginationRange: [],
             lastPage: 0,
-            isMobile: false
+            isMobile: false,
         };
     }
 
@@ -45,7 +45,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
         if (this.props !== prevProps) {
             const paginationRange = this.updatePaginationRange();
             this.setState({ paginationRange }, () =>
-                this.setState({ lastPage: paginationRange[paginationRange.length - 1] as number })
+                this.setState({ lastPage: paginationRange[paginationRange.length - 1] as number }),
             );
         }
     }
@@ -64,7 +64,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
 
         if (this.state.isMobile !== isMobileViewPort && this._isMounted) {
             this.setState({ isMobile: isMobileViewPort }, () =>
-                this.setState({ paginationRange: this.updatePaginationRange() })
+                this.setState({ paginationRange: this.updatePaginationRange() }),
             );
         }
     }
@@ -86,13 +86,13 @@ class Pagination extends Component<PaginationProps, PaginationState> {
             <ul
                 className={classNames("pagination", {
                     [this.props.classNames as string]: this.props.classNames !== undefined,
-                    "d-none": this.props.currentPage === 0 || this.state.paginationRange.length < 2
+                    "d-none": this.props.currentPage === 0 || this.state.paginationRange.length < 2,
                 })}
             >
                 <li
                     className={classNames("pagination-item", {
                         disabled: this.props.currentPage === 1,
-                        "d-none": this.state.isMobile
+                        "d-none": this.state.isMobile,
                     })}
                     onClick={() => {
                         const page = this.props.currentPage < 11 ? 1 : this.props.currentPage - 10;
@@ -104,7 +104,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
                 </li>
                 <li
                     className={classNames("pagination-item", {
-                        disabled: this.props.currentPage === 1
+                        disabled: this.props.currentPage === 1,
                     })}
                     onClick={() => {
                         this.props.onPageChange(this.props.currentPage - 1);
@@ -125,7 +125,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
                         <li
                             key={idx}
                             className={classNames("pagination-item", {
-                                selected: pageNumber === this.props.currentPage
+                                selected: pageNumber === this.props.currentPage,
                             })}
                             onClick={() => this.props.onPageChange(pageNumber as number)}
                         >
@@ -135,7 +135,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
                 })}
                 <li
                     className={classNames("pagination-item", {
-                        disabled: this.props.currentPage === this.state.lastPage
+                        disabled: this.props.currentPage === this.state.lastPage,
                     })}
                     onClick={() => {
                         this.props.onPageChange(this.props.currentPage + 1);
@@ -146,7 +146,7 @@ class Pagination extends Component<PaginationProps, PaginationState> {
                 <li
                     className={classNames("pagination-item", {
                         disabled: this.props.currentPage === this.state.lastPage,
-                        "d-none": this.state.isMobile
+                        "d-none": this.state.isMobile,
                     })}
                     onClick={() => {
                         const page =

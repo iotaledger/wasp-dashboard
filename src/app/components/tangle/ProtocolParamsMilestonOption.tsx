@@ -19,7 +19,7 @@ class ProtocolParamsMilestonOption extends Component<
         super(props);
 
         this.state = {
-            showDetails: false
+            showDetails: false,
         };
     }
 
@@ -36,7 +36,7 @@ class ProtocolParamsMilestonOption extends Component<
                 >
                     <div
                         className={classNames("margin-r-t", "card--content__input--dropdown", {
-                            opened: this.state.showDetails
+                            opened: this.state.showDetails,
                         })}
                     >
                         <DropdownIcon />

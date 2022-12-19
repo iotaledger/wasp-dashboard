@@ -23,7 +23,7 @@ import {
     ISSUER_FEATURE_TYPE,
     METADATA_FEATURE_TYPE,
     SENDER_FEATURE_TYPE,
-    TAG_FEATURE_TYPE
+    TAG_FEATURE_TYPE,
 } from "@iota/iota.js";
 
 export class NameHelper {

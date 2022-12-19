@@ -8,7 +8,7 @@ import {
     ContractInfoResponse,
     Blob,
     BlockInfoResponse,
-    CommitteeInfoResponse
+    CommitteeInfoResponse,
 } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 import { formatEVMJSONRPCUrl } from "../../utils/evm";
@@ -307,7 +307,7 @@ const INFO_NAMES: Record<string, string> = {
     isActive: "Active",
     maxBlobSize: "Max blob size",
     maxEventSize: "Max events size",
-    maxEventsPerReq: "Max events per req"
+    maxEventsPerReq: "Max events per req",
 };
 
 export default Chain;

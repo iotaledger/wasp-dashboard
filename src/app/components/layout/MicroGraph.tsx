@@ -29,7 +29,7 @@ class MicroGraph extends Component<MicroGraphProps, MicroGraphState> {
         this._graphHeight = this.props.graphHeight ?? 10;
 
         this.state = {
-            ...this.calculateGraph()
+            ...this.calculateGraph(),
         };
     }
 
@@ -112,7 +112,7 @@ class MicroGraph extends Component<MicroGraphProps, MicroGraphState> {
             graphPoints.push({
                 type: "M",
                 x: 0,
-                y: this._graphHeight - lastY
+                y: this._graphHeight - lastY,
             });
 
             const xIncrement = (graphPointCount / lastItems.length) * 2;
@@ -121,7 +121,7 @@ class MicroGraph extends Component<MicroGraphProps, MicroGraphState> {
                 graphPoints.push({
                     type: "l",
                     x: xIncrement,
-                    y: (y - lastY) * -1
+                    y: (y - lastY) * -1,
                 });
                 lastY = y;
             }
@@ -132,7 +132,7 @@ class MicroGraph extends Component<MicroGraphProps, MicroGraphState> {
 
         return {
             graphPoints,
-            circle: { x: circleX, y: circleY }
+            circle: { x: circleX, y: circleY },
         };
     }
 }

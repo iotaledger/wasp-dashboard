@@ -17,7 +17,7 @@ class SearchInput extends Component<SearchInputProps, SearchInputState> {
         super(props);
 
         this.state = {
-            query: ""
+            query: "",
         };
     }
 
@@ -31,7 +31,7 @@ class SearchInput extends Component<SearchInputProps, SearchInputState> {
                 className={classNames(
                     "search-input",
                     { "search-input-compact": this.props.compact },
-                    this.props.className
+                    this.props.className,
                 )}
             >
                 <button type="button" className="icon-button" onClick={() => this.props.onSearch(this.state.query)}>

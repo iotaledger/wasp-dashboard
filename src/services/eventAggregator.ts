@@ -24,7 +24,7 @@ export class EventAggregator {
         eventName: string,
         subscriberId: string,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        handler: (data: any) => void | Promise<void>
+        handler: (data: any) => void | Promise<void>,
     ): void {
         EventAggregator._subscriptions[eventName] ||= {};
         EventAggregator._subscriptions[eventName][subscriberId] = handler;
