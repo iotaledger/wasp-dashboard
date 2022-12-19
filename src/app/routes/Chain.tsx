@@ -8,9 +8,11 @@ import {
     ContractInfoResponse,
     Blob,
     BlockInfoResponse,
+    CommitteeInfoResponse,
 } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 import { formatEVMJSONRPCUrl } from "../../utils/evm";
+import GoBackButton from "../components/layout/GoBackButton";
 
 interface ChainInfoValue {
     key: string;
@@ -32,6 +34,8 @@ function transformInfoIntoArray(chainInfo: ChainInfoResponse): ChainInfoValue[] 
     }) as ChainInfoValue[];
 }
 
+const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
+
 /**
  * Chain panel.
  * @returns The node to render.
@@ -43,6 +47,7 @@ function Chain() {
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
+    const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
     const { chainID } = useParams();
 
     const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
@@ -101,6 +106,14 @@ function Chain() {
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
+            .chains()
+            .getCommitteeInfo({ chainID })
+            .then((newCommitteeInfo) => {
+                setChainCommitteeInfo(newCommitteeInfo);
+            });
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
             .corecontracts()
             .blocklogGetLatestBlockInfo({ chainID })
             .then((newLatestBlock) => {
@@ -111,7 +124,10 @@ function Chain() {
     return (
         <div className="chain">
             <div className="chain-wrapper">
-                <h2>Chain {chainID}</h2>
+                <div className="middle row">
+                    <GoBackButton goTo="/chains" text="chains" />
+                    <h2 className="margin-l-s l1-details-title">Chain {chainID}</h2>
+                </div>
                 <div className="content">
                     <div className="card col fill">
                         <div className="chain-summary">
@@ -217,6 +233,45 @@ function Chain() {
                                 <span>Last updated:</span>
                                 <p className="value">{chainLatestBlock?.timestamp?.toISOString()}</p>
                             </div>
+                        </div>
+                    </div>
+                    <div className="card col fill">
+                        <div className="chain-summary">
+                            <h4>Committee</h4>
+                            {chainCommitteeInfo && (
+                                <React.Fragment>
+                                    <div className="card-item">
+                                        <span>Address:</span>
+                                        <p className="value">{chainCommitteeInfo.stateAddress}</p>
+                                    </div>
+                                    <div className="card-item">
+                                        <span>Status:</span>
+                                        <p className="value">{getStatus(chainCommitteeInfo.active ?? false)}</p>
+                                    </div>
+                                </React.Fragment>
+                            )}
+                            <br />
+                            <h4>Peers</h4>
+                            {chainCommitteeInfo?.candidateNodes && (
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Index</th>
+                                            <th>Pubkey</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {chainCommitteeInfo.committeeNodes?.map(({ node }, i) => (
+                                            <tr key={node?.publicKey}>
+                                                <td>{i}</td>
+                                                <td>{node?.publicKey}</td>
+                                                <td>{getStatus(node?.isAlive ?? false)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
                         </div>
                     </div>
                     <div className="card col fill">

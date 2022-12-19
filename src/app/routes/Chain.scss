@@ -20,7 +20,6 @@
     max-width: $content-width-desktop;
 
     h2 {
-      margin-bottom: 16px;
       text-transform: uppercase;
     }
   }
@@ -43,6 +42,7 @@
     flex-direction: column;
     flex-wrap: wrap;
     max-width: $content-width-desktop;
+    margin-top: $spacing-small;
     color: var(--text-color-primary);
 
     .card-item {
@@ -55,18 +55,19 @@
       @include font-size(14px);
 
       span {
-          margin-right: 10px;
+        margin-right: 10px;
       }
 
       p {
-          &.value {
+        &.value {
           color: var(--text-color-primary);
-          }
+        }
       }
-    }       
+    }
 
     ul {
       margin-left: 20px;
+
       li {
         margin: 5px 0px;
       }

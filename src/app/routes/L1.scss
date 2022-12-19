@@ -22,6 +22,10 @@
     h2 {
       margin-bottom: 16px;
       text-transform: uppercase;
+
+      &.l1-details-title {
+        margin-bottom: 0;
+      }
     }
   }
 
