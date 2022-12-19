@@ -1,9 +1,9 @@
-
+@use "../../scss/card" as *;
 @use "../../scss/fonts" as *;
 @use "../../scss/media-queries" as *;
-@use "../../scss/variables" as *;
+@use '../../scss/variables' as *;
 
-.chain {
+.block {
   display: flex;
   flex: 1;
   justify-content: center;
@@ -14,7 +14,7 @@
     padding: $spacing-small;
   }
 
-  .chain-wrapper {
+  .block-wrapper {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -29,7 +29,7 @@
     margin-bottom: 16px;
   }
 
-  .chain-summary {
+  .block-summary {
     padding: 16px;
 
     h4 {
@@ -40,7 +40,8 @@
   .content {
     display: inline-flex;
     flex: 1;
-    flex-flow: column wrap;
+    flex-direction: column;
+    flex-wrap: wrap;
     max-width: $content-width-desktop;
     margin-top: $spacing-small;
     color: var(--text-color-primary);
@@ -62,28 +63,6 @@
         &.value {
           color: var(--text-color-primary);
         }
-      }
-      a {
-        color: var(--accent-primary);
-         p.value {
-          color: inherit;
-         }
-      }
-    }
-
-    ul {
-      margin-left: 20px;
-
-      li {
-        margin: 5px 0px;
-      }
-    }
-
-    a {
-      color: var(--accent-primary);
-      border: none;
-      &:hover{
-        text-decoration: underline;
       }
     }
   }

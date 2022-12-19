@@ -91,7 +91,7 @@ export interface RequestDetail {
      * @type {{ [key: string]: Array<number>; }}
      * @memberof RequestDetail
      */
-    params?: { [key: string]: Array<number>; };
+    params?: { [key: string]: Array<{ Key: string, Value: string}>; };
     /**
      * 
      * @type {string}
