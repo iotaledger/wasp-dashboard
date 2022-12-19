@@ -1,12 +1,14 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Chain from "./Chain";
+import Chains from "./Chains";
 import Configuration from "./Configuration";
 import Home from "./Home";
 import L1 from "./L1";
+import L1Chain from "./L1Chain";
 import Login from "./Login";
-import Peer from "./Peer";
-import { PeerRouteProps } from "./PeerRouteProps";
 import Peers from "./Peers";
+import Users from "./Users";
 
 /**
  *
@@ -16,37 +18,32 @@ import Peers from "./Peers";
  */
 function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
     return (
-        <Switch>
-            <Route exact={true} path="/login" component={() => <Login />} key="home" />
+        <Routes>
             {isLoggedIn ? (
                 <React.Fragment>
-                    <Route exact={true} path="/" component={() => <Home />} key="home" />
-                    <Route exact={true} path="/peers" component={() => <Peers />} key="peers" />
-                    <Route
-                        exact={true}
+                    <Route path="/" element={<Home />} key="home" />
+                    <Route path="/peers" element={<Peers />} key="peers" />
+                    {/* <Route
+
                         path="/peers/:peerId"
                         component={(props: PeerRouteProps) => <Peer {...props} />}
                         key="peer"
-                    />
-                    {/* <Route
-                        exact={true}
-                        path="/chains"
-                        component={() => (<Chains />)}
-                        key="home"
-                    /> */}
-                    <Route exact={true} path="/configuration" component={() => <Configuration />} key="configuration" />
-                    <Route exact={true} path="/l1" component={() => <L1 />} key="l1" />
-                    {/* <Route
-                        exact={true}
-                        path="/users"
-                        component={() => (<Users />)}
-                        key="home"
-                    /> */}
+                    >*/}
+                    <Route path="/chains/:chainID" element={<Chain />} key="chain" />
+                    <Route path="/chains" element={<Chains />} key="chains" />
+                    <Route path="/configuration" element={<Configuration />} key="configuration" />
+                    <Route path="/l1" element={<L1 />} key="l1" />
+                    <Route path="/l1/:chainID" element={<L1Chain />} key="l1-chain" />
+                    <Route path="/users" element={<Users />} key="users" />
+                    <Route path="*" element={<Navigate to="/" />} key="redirect-to-home" />
                 </React.Fragment>
             ) : (
-                <Redirect exact={true} from="*" to="/login" />
+                <React.Fragment>
+                    <Route path="/login" element={<Login />} key="login" />
+                    <Route path="*" element={<Navigate to="/login" />} key="redirect-to-login" />
+                </React.Fragment>
             )}
-        </Switch>
+        </Routes>
     );
 }
 

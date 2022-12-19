@@ -1,6 +1,5 @@
 import moment from "moment";
-import React, { ReactNode } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import React, { Component, ReactNode } from "react";
 import { ReactComponent as ChainsIcon } from "../assets/chains.svg";
 import { ReactComponent as ConfigurationIcon } from "../assets/configuration.svg";
 import { ReactComponent as HomeIcon } from "../assets/home.svg";
@@ -22,7 +21,6 @@ import { BrandHelper } from "../utils/brandHelper";
 import isNodeOnline from "../utils/nodeStatus";
 import "./App.scss";
 import { AppState } from "./AppState";
-import AsyncComponent from "./components/layout/AsyncComponent";
 import Breakpoint from "./components/layout/Breakpoint";
 import NavPanel from "./components/layout/NavPanel";
 import RoutesSwitcher from "./routes/RoutesSwitcher";
@@ -30,7 +28,7 @@ import RoutesSwitcher from "./routes/RoutesSwitcher";
 /**
  * Main application class.
  */
-class App extends AsyncComponent<RouteComponentProps, AppState> {
+class App extends Component<object, AppState> {
     /**
      * The theme service.
      */
@@ -105,7 +103,7 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
      * Create a new instance of App.
      * @param props The props.
      */
-    constructor(props: RouteComponentProps) {
+    constructor(props: object) {
         super(props);
         this._themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
         this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
@@ -118,7 +116,9 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
             isLoggedIn: Boolean(this._authService.isLoggedIn()),
             theme: this._themeService.get(),
             online: false,
+            // eslint-disable-next-line react/no-unused-state
             syncHealth: false,
+            // eslint-disable-next-line react/no-unused-state
             nodeHealth: false,
         };
 
@@ -129,8 +129,6 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
      * The component mounted.
      */
     public async componentDidMount(): Promise<void> {
-        super.componentDidMount();
-
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         isNodeOnline().then((online) => {
             this.setState({
@@ -220,8 +218,6 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
      * The component will unmount.
      */
     public componentWillUnmount(): void {
-        super.componentWillUnmount();
-
         EventAggregator.unsubscribe("auth-state", "app");
         EventAggregator.unsubscribe("theme", "app");
 
@@ -408,4 +404,4 @@ class App extends AsyncComponent<RouteComponentProps, AppState> {
     }
 }
 
-export default withRouter(App);
+export default App;

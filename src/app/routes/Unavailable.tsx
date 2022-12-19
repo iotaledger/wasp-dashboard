@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ReactComponent as ChevronLeftIcon } from "../../assets/chevron-left.svg";
 import AsyncComponent from "../components/layout/AsyncComponent";
 import "./Unavailable.scss";
@@ -7,12 +7,12 @@ import "./Unavailable.scss";
 /**
  * Component which will show the unavailable page.
  */
-class Unavailable extends AsyncComponent<RouteComponentProps<never>> {
+class Unavailable extends AsyncComponent<never> {
     /**
      * Create a new instance of Unavailable.
      * @param props The props.
      */
-    constructor(props: RouteComponentProps<never>) {
+    constructor(props: never) {
         super(props);
 
         this.state = {};
@@ -26,10 +26,7 @@ class Unavailable extends AsyncComponent<RouteComponentProps<never>> {
         return (
             <div className="unavailable">
                 <div className="content">
-                    <Link
-                        to="/explorer"
-                        className="row middle inline"
-                    >
+                    <Link to="/explorer" className="row middle inline">
                         <ChevronLeftIcon className="secondary" />
                         <h3 className="secondary margin-l-s">Back to Explorer</h3>
                     </Link>

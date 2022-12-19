@@ -2,7 +2,7 @@ import { Environment } from "../environment";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { EventAggregator } from "./eventAggregator";
 import { LocalStorageService } from "./localStorageService";
-import { ChainsApi, Configuration, NodeApi, RequestsApi, UsersApi } from "./wasp_client";
+import { ChainsApi, Configuration, CorecontractsApi, MetricsApi, NodeApi, RequestsApi, UsersApi } from "./wasp_client";
 
 /**
  * Class to manage the wasp API.
@@ -15,6 +15,8 @@ export class WaspClientService {
         node: NodeApi;
         chains: ChainsApi;
         requests: RequestsApi;
+        metrics: MetricsApi;
+        corecontracts: CorecontractsApi;
     };
 
     constructor() {
@@ -37,6 +39,8 @@ export class WaspClientService {
             chains: new ChainsApi(config),
             node: new NodeApi(config),
             requests: new RequestsApi(config),
+            metrics: new MetricsApi(config),
+            corecontracts: new CorecontractsApi(config),
         };
     }
 
@@ -54,5 +58,13 @@ export class WaspClientService {
 
     public requests(): RequestsApi {
         return this._apiClients?.requests as RequestsApi;
+    }
+
+    public metrics(): MetricsApi {
+        return this._apiClients?.metrics as MetricsApi;
+    }
+
+    public corecontracts(): CorecontractsApi {
+        return this._apiClients?.corecontracts as CorecontractsApi;
     }
 }
