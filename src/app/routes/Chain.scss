@@ -74,7 +74,7 @@
     }
 
     a {
-      color: unset;
+      color: var(--accent-primary);
       border: none;
       &:hover{
         text-decoration: underline;
