@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
 import {
@@ -147,7 +147,9 @@ function Chain() {
                             <h4>Contracts</h4>
                             {chainContracts.map(({ name, hName, description, programHash }) => (
                                 <div key={name} className="card-item">
-                                    <span>{name}:</span>
+                                    <Link to={`/chain/${chainID}/contract/${hName}`}>
+                                        <span>{name}:</span>
+                                    </Link>
                                     <p className="value">{description}</p>
                                 </div>
                             ))}
