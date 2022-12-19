@@ -14,7 +14,7 @@ interface ChainMessagesTableProps {
  */
 function ChainMessagesTable(props: ChainMessagesTableProps) {
     return (
-        <table cellSpacing={0} className="chainMessagesTable">
+        <table cellSpacing={0} className="chain-messages-table">
             <thead>
                 <tr>
                     <th>Message name</th>
@@ -70,8 +70,8 @@ const METRICS_NAMES: Record<string, string> = {
 
 /**
  *
- * @param date
- * @returns
+ * @param date The date to format.
+ * @returns The formatted date.
  */
 function formatDate(date?: Date | null): string {
     if (!date) {

@@ -1,39 +1,39 @@
-@import '../../../scss/fonts';
-@import '../../../scss/media-queries';
+@use "../../../scss/fonts" as *;
+@use "../../../scss/media-queries" as *;
 
 .tooltip {
-    position: relative;
     display: flex;
+    position: relative;
 
-    .tooltip__wrapper {
+    .tooltip-wrapper {
         visibility: hidden;
         position: absolute;
+        z-index: 1;
         top: 100%;
+        right: 0;
+        width: 300px;
         margin-top: 10px;
         margin-left: 20px;
         padding: 12px;
-        border-radius: 0.25rem;
-        background: var(--tooltip-background);
-        white-space: nowrap;
-        color: var(--tooltip-text);
-        z-index: 1;
-        opacity: 0;
         transition: all 250ms;
-        right: 0;
-        width: 300px;
-        text-align: center;
-        white-space: break-spaces;
+        border-radius: 0.25rem;
+        opacity: 0;
+        background: var(--tooltip-background);
+        color: var(--tooltip-text);
         font-family: $font-sans;
+        text-align: center;
         word-break: keep-all;
+        white-space: nowrap;
+        white-space: break-spaces;
 
-        .tooltip__arrow {
-            background: var(--tooltip-background);
-            width: 12px;
-            height: 12px;
+        .tooltip-arrow {
             position: absolute;
             top: -6px;
             right: 150px;
+            width: 12px;
+            height: 12px;
             transform: rotate(45deg);
+            background: var(--tooltip-background);
         }
 
         @include desktop-down {
@@ -43,15 +43,15 @@
         @include tablet-down {
             display: none;
         }
-      
+
         @include phone-down {
             display: none;
         }
     }
 
-    .tooltip__children {
-        white-space: nowrap;
+    .tooltip-children {
         font-weight: 600;
+        white-space: nowrap;
         cursor: pointer;
 
         @include desktop-down {
@@ -61,7 +61,7 @@
         @include tablet-down {
             cursor: text;
         }
-      
+
         @include phone-down {
             cursor: text;
         }

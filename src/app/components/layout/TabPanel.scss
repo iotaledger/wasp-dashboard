@@ -1,59 +1,58 @@
-@import '../../../scss/fonts';
-@import '../../../scss/variables';
-@import '../../../scss/media-queries';
+@use "../../../scss/fonts" as *;
+@use "../../../scss/variables" as *;
+@use "../../../scss/media-queries" as *;
 
 .tab-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-
-  .tab-panel--buttons {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-bottom: $spacing-tiny;
+    flex-direction: column;
+    align-items: stretch;
 
-    @include desktop-down {
-      margin-bottom: 0;
-    }
+    .tab-panel-buttons {
+        display: flex;
+        flex-flow: row wrap;
+        margin-bottom: $spacing-tiny;
 
-    .tab-panel--button {
-      @include font-size(18px);
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-right: 60px;
-      margin-bottom: $spacing-small;
-      border: 0;
-      outline: 0;
-      background: none;
-      color: var(--text-color-secondary);
-      font-family: $font-sans;
-      font-weight: bold;
-      text-decoration: none;
-      cursor: pointer;
-
-      .underline {
-        width: 60%;
-        height: 2px;
-        margin-top: 4px;
-        background-color: transparent;
-      }
-
-      &:focus {
-        .underline {
-          background-color: var(--accent-primary);
+        @include desktop-down {
+            margin-bottom: 0;
         }
-      }
 
-      &.tab-panel--button__selected {
-        color: var(--text-color-primary);
+        .tab-panel-button {
+            @include font-size(18px);
 
-        .underline {
-          background-color: var(--accent-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 60px;
+            margin-bottom: $spacing-small;
+            border: 0;
+            outline: 0;
+            background: none;
+            color: var(--text-color-secondary);
+            font-family: $font-sans;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+
+            .underline {
+                width: 60%;
+                height: 2px;
+                margin-top: 4px;
+                background-color: transparent;
+            }
+
+            &:focus {
+                .underline {
+                    background-color: var(--accent-primary);
+                }
+            }
+
+            &.tab-panel-button-selected {
+                color: var(--text-color-primary);
+
+                .underline {
+                    background-color: var(--accent-primary);
+                }
+            }
         }
-      }
     }
-  }
 }

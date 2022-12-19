@@ -91,7 +91,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
                         publicKey: this._nodeConfigService.getPublicKey(),
                     });
                 })
-                .catch((e) => console.log(e));
+                .catch(e => console.log(e));
         }
 
         EventAggregator.subscribe("theme", "home", async (theme: string) => {
@@ -100,11 +100,11 @@ class Home extends AsyncComponent<unknown, HomeState> {
             });
         });
 
-        EventAggregator.subscribe("settings.blindMode", "home", (blindMode) => {
+        EventAggregator.subscribe("settings.blindMode", "home", blindMode => {
             this.setState({ blindMode });
         });
 
-        EventAggregator.subscribe("peers-state", "home", (peers) => {
+        EventAggregator.subscribe("peers-state", "home", peers => {
             this.setState({ peersList: peers });
         });
     }
@@ -158,7 +158,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
                                     <button
                                         type="button"
                                         onClick={this.handleBlindMode}
-                                        className="peers-summary--blind-button"
+                                        className="peers-summary-blind-button"
                                     >
                                         {this.state.blindMode ? <EyeIcon /> : <EyeClosedIcon />}
                                     </button>

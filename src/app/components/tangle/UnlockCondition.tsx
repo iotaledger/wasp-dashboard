@@ -1,4 +1,12 @@
-import { ADDRESS_UNLOCK_CONDITION_TYPE, EXPIRATION_UNLOCK_CONDITION_TYPE, STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE, GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE, IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE, STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE, TIMELOCK_UNLOCK_CONDITION_TYPE } from "@iota/iota.js";
+import {
+    ADDRESS_UNLOCK_CONDITION_TYPE,
+    EXPIRATION_UNLOCK_CONDITION_TYPE,
+    STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE,
+    GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE,
+    IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE,
+    STORAGE_DEPOSIT_RETURN_UNLOCK_CONDITION_TYPE,
+    TIMELOCK_UNLOCK_CONDITION_TYPE,
+} from "@iota/iota.js";
 import classNames from "classnames";
 import React, { Component, ReactNode } from "react";
 import { FormatHelper } from "../../../utils/formatHelper";
@@ -11,16 +19,16 @@ import { UnlockCondtionState } from "./UnlockConditionState";
 /**
  * Component which will display an unlock condition.
  */
-class UnlockCondition extends Component<UnlockConditionProps, UnlockCondtionState > {
+class UnlockCondition extends Component<UnlockConditionProps, UnlockCondtionState> {
     /**
      * Create a new instance of Output.
      * @param props The props.
      */
-     constructor(props: UnlockConditionProps) {
+    constructor(props: UnlockConditionProps) {
         super(props);
 
         this.state = {
-            showDetails: false
+            showDetails: false,
         };
     }
 
@@ -35,13 +43,10 @@ class UnlockCondition extends Component<UnlockConditionProps, UnlockCondtionStat
                     className="card--content__input"
                     onClick={() => this.setState({ showDetails: !this.state.showDetails })}
                 >
-
-
-                    <div className={classNames(
-                            "margin-r-t",
-                            "card--content__input--dropdown",
-                            { "opened": this.state.showDetails }
-                        )}
+                    <div
+                        className={classNames("margin-r-t", "card--content__input--dropdown", {
+                            opened: this.state.showDetails,
+                        })}
                     >
                         <DropdownIcon />
                     </div>
@@ -53,9 +58,9 @@ class UnlockCondition extends Component<UnlockConditionProps, UnlockCondtionStat
                 {this.state.showDetails && (
                     <div className="card--content--border-l">
                         {(this.props.unlockCondition.type === ADDRESS_UNLOCK_CONDITION_TYPE ||
-                        this.props.unlockCondition.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE ||
-                        this.props.unlockCondition.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE ||
-                        this.props.unlockCondition.type === IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) && (
+                            this.props.unlockCondition.type === STATE_CONTROLLER_ADDRESS_UNLOCK_CONDITION_TYPE ||
+                            this.props.unlockCondition.type === GOVERNOR_ADDRESS_UNLOCK_CONDITION_TYPE ||
+                            this.props.unlockCondition.type === IMMUTABLE_ALIAS_UNLOCK_CONDITION_TYPE) && (
                             <Bech32Address
                                 activeLinks={true}
                                 showHexAddress={false}
@@ -69,16 +74,12 @@ class UnlockCondition extends Component<UnlockConditionProps, UnlockCondtionStat
                                     showHexAddress={false}
                                     address={this.props.unlockCondition.returnAddress}
                                 />
-                                <div className="card--label">
-                                    Amount:
-                                </div>
-                                <div className="card--value row">
-                                    {this.props.unlockCondition.amount}
-                                </div>
+                                <div className="card--label">Amount:</div>
+                                <div className="card--value row">{this.props.unlockCondition.amount}</div>
                             </React.Fragment>
                         )}
                         {(this.props.unlockCondition.type === TIMELOCK_UNLOCK_CONDITION_TYPE ||
-                        this.props.unlockCondition.type === EXPIRATION_UNLOCK_CONDITION_TYPE) && (
+                            this.props.unlockCondition.type === EXPIRATION_UNLOCK_CONDITION_TYPE) && (
                             <React.Fragment>
                                 {this.props.unlockCondition.type === EXPIRATION_UNLOCK_CONDITION_TYPE && (
                                     <Bech32Address
@@ -89,9 +90,7 @@ class UnlockCondition extends Component<UnlockConditionProps, UnlockCondtionStat
                                 )}
                                 {this.props.unlockCondition.unixTime && (
                                     <React.Fragment>
-                                        <div className="card--label">
-                                            Unix time
-                                        </div>
+                                        <div className="card--label">Unix time</div>
                                         <div className="card--value row">
                                             {FormatHelper.date(this.props.unlockCondition.unixTime * 1000)}
                                         </div>
@@ -99,12 +98,8 @@ class UnlockCondition extends Component<UnlockConditionProps, UnlockCondtionStat
                                 )}
                             </React.Fragment>
                         )}
-                        <div className="card--label">
-                            Type:
-                        </div>
-                        <div className="card--value row">
-                            {this.props.unlockCondition.type}
-                        </div>
+                        <div className="card--label">Type:</div>
+                        <div className="card--value row">{this.props.unlockCondition.type}</div>
                     </div>
                 )}
             </div>

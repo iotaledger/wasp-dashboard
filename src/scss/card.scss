@@ -1,203 +1,203 @@
 /* stylelint-disable selector-class-pattern, function-no-unknown */
-@import "./fonts";
-@import "./variables";
-@import "./media-queries";
+@use "./fonts" as *;
+@use "./variables" as *;
+@use "./media-queries" as *;
 
 .card {
-  padding: 10px;
-  border: 1px solid var(--panel-border);
-  border-radius: 16px;
-  background-color: var(--panel-background);
+    padding: 10px;
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    background-color: var(--panel-background);
 
-  &.card__flat {
-    border-radius: 0;
-  }
-
-  .card--header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    color: var(--text-color-primary);
-  }
-
-  .card--header-count {
-    @include font-size(12px);
-
-    display: flex;
-    align-items: center;
-    height: 24px;
-    margin-left: 20px;
-    padding: 0 8px;
-    border-radius: 6px;
-    background-color: var(--background);
-    color: var(--accent-primary);
-    font-family: $font-sans;
-    font-weight: bold;
-    white-space: nowrap;
-  }
-
-  .card--label {
-    @include font-size(10px);
-
-    margin-top: $spacing-small;
-    margin-bottom: calc($spacing-tiny / 2);
-    color: var(--text-color-secondary);
-    font-family: $font-sans;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
-
-  .card--value {
-    @include font-size(14px);
-
-    color: var(--text-color-primary);
-    font-family: $font-sans;
-    word-break: break-all;
-
-    a {
-      color: var(--accent-primary);
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
+    &.card__flat {
+        border-radius: 0;
     }
 
-    .card--value--button {
-      border: 0;
-      outline: 0;
-      background: none;
-      color: var(--accent-primary);
-      cursor: pointer;
+    .card--header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: var(--text-color-primary);
     }
 
-    &.card--value__mono {
-      font-family: $font-mono;
-    }
+    .card--header-count {
+        @include font-size(12px);
 
-    &.card--value-textarea {
-      @include font-size(12px);
-
-      min-height: 150px;
-      max-height: 150px;
-      padding: 10px;
-      overflow: auto;
-      background: var(--panel-border);
-      font-family: $font-mono;
-
-      &.card--value-textarea__utf8 {
-        max-height: 350px;
-        white-space: pre-wrap;
-      }
-
-      &.card--value-textarea__hex {
-        max-height: 350px;
-        word-break: break-word;
-        white-space: pre-wrap;
-      }
-
-      &.card--value-textarea__json {
-        max-height: 350px;
-        white-space: pre-wrap;
-      }
-
-      &.card--value-textarea__fit {
-        min-height: auto;
-      }
-    }
-  }
-
-  .card--content {
-    padding: 0 30px 20px;
-
-    @include phone-down {
-      padding: 15px 20px;
-    }
-
-    input {
-      padding: 0 20px;
-    }
-
-    .card--content--border-l {
-      padding-left: 16px;
-      border-left: 1px solid var(--text-color-primary);
-    }
-
-    .card--content__input {
-      display: flex;
-      align-items: center;
-
-      .card--content__input--dropdown {
-        margin-left: -2px;
-        cursor: pointer;
-
-        svg {
-          transition: transform 0.25s ease;
-
-          path {
-            fill: var(--text-color-primary);
-          }
-        }
-
-        &.opened > svg {
-          transform: rotate(90deg);
-        }
-      }
-
-      .card--content__input--label {
-        cursor: pointer;
-      }
-    }
-  }
-
-  .card--action {
-    @include font-size(14px);
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 6px 12px;
-    border: 1px solid var(--text-color-secondary);
-    border-radius: $form-input-radius;
-    outline: 0;
-    background: none;
-    color: var(--text-color-primary);
-    font-family: $font-sans;
-    cursor: pointer;
-
-    &:hover {
-      color: var(--accent-primary);
-    }
-
-    &:focus {
-      box-shadow: 0 0 3px 0 var(--accent-primary);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    &.card--action-plain {
-      border: 0;
-      color: var(--text-color-secondary);
-
-      &:hover {
+        display: flex;
+        align-items: center;
+        height: 24px;
+        margin-left: 20px;
+        padding: 0 8px;
+        border-radius: 6px;
+        background-color: var(--background);
         color: var(--accent-primary);
-      }
+        font-family: $font-sans;
+        font-weight: bold;
+        white-space: nowrap;
     }
 
-    &.card--action-danger {
-      background-color: transparentize($danger, 0.9);
+    .card--label {
+        @include font-size(10px);
+
+        margin-top: $spacing-small;
+        margin-bottom: calc($spacing-tiny / 2);
+        color: var(--text-color-secondary);
+        font-family: $font-sans;
+        font-weight: 500;
+        text-transform: uppercase;
     }
 
-    &.card--action-primary {
-      background-color: var(--accent-primary);
-      color: #ffffff;
+    .card--value {
+        @include font-size(14px);
 
-      &:hover {
-        color: #ffffff;
-      }
+        color: var(--text-color-primary);
+        font-family: $font-sans;
+        word-break: break-all;
+
+        a {
+            color: var(--accent-primary);
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .card--value--button {
+            border: 0;
+            outline: 0;
+            background: none;
+            color: var(--accent-primary);
+            cursor: pointer;
+        }
+
+        &.card--value__mono {
+            font-family: $font-mono;
+        }
+
+        &.card--value-textarea {
+            @include font-size(12px);
+
+            min-height: 150px;
+            max-height: 150px;
+            padding: 10px;
+            overflow: auto;
+            background: var(--panel-border);
+            font-family: $font-mono;
+
+            &.card--value-textarea__utf8 {
+                max-height: 350px;
+                white-space: pre-wrap;
+            }
+
+            &.card--value-textarea__hex {
+                max-height: 350px;
+                word-break: break-word;
+                white-space: pre-wrap;
+            }
+
+            &.card--value-textarea__json {
+                max-height: 350px;
+                white-space: pre-wrap;
+            }
+
+            &.card--value-textarea__fit {
+                min-height: auto;
+            }
+        }
     }
-  }
+
+    .card--content {
+        padding: 0 30px 20px;
+
+        @include phone-down {
+            padding: 15px 20px;
+        }
+
+        input {
+            padding: 0 20px;
+        }
+
+        .card--content--border-l {
+            padding-left: 16px;
+            border-left: 1px solid var(--text-color-primary);
+        }
+
+        .card--content__input {
+            display: flex;
+            align-items: center;
+
+            .card--content__input--dropdown {
+                margin-left: -2px;
+                cursor: pointer;
+
+                svg {
+                    transition: transform 0.25s ease;
+
+                    path {
+                        fill: var(--text-color-primary);
+                    }
+                }
+
+                &.opened > svg {
+                    transform: rotate(90deg);
+                }
+            }
+
+            .card--content__input--label {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .card--action {
+        @include font-size(14px);
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 6px 12px;
+        border: 1px solid var(--text-color-secondary);
+        border-radius: $form-input-radius;
+        outline: 0;
+        background: none;
+        color: var(--text-color-primary);
+        font-family: $font-sans;
+        cursor: pointer;
+
+        &:hover {
+            color: var(--accent-primary);
+        }
+
+        &:focus {
+            box-shadow: 0 0 3px 0 var(--accent-primary);
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        &.card--action-plain {
+            border: 0;
+            color: var(--text-color-secondary);
+
+            &:hover {
+                color: var(--accent-primary);
+            }
+        }
+
+        &.card--action-danger {
+            background-color: transparentize($danger, 0.9);
+        }
+
+        &.card--action-primary {
+            background-color: var(--accent-primary);
+            color: #ffffff;
+
+            &:hover {
+                color: #ffffff;
+            }
+        }
+    }
 }

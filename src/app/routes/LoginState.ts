@@ -1,4 +1,3 @@
-
 export interface LoginState {
     /**
      * The user.

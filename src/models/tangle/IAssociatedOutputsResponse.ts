@@ -15,7 +15,7 @@ export enum AssociationType {
     NFT_EXPIRATION_RETURN,
     NFT_SENDER,
     NFT_ISSUER,
-    TAG
+    TAG,
 }
 
 export interface IAssociatedOutput {

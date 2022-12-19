@@ -51,6 +51,7 @@ export class DataHelper {
         if (parts && parts.length === 3) {
             return `${parts[1]}:${parts[2]}`;
         }
+        return undefined;
     }
 
     /**
@@ -64,6 +65,7 @@ export class DataHelper {
         if (parts && parts.length === 3) {
             return `${parts[1]}:${parts[2]}`;
         }
+        return undefined;
     }
 
     /**
@@ -77,6 +79,7 @@ export class DataHelper {
         if (parts && parts.length === 3) {
             return `${parts[1]}:${parts[2]}`;
         }
+        return undefined;
     }
 
     /**
@@ -105,9 +108,12 @@ export class DataHelper {
         let health = 0;
 
         if (peer.connected) {
-            health = (DataHelper.calculateIsSynced(peer, latestMilestoneIndex) &&
-                    peer.gossip?.heartbeat &&
-                    peer.gossip?.heartbeat?.prunedMilestoneIndex < confirmedMilestoneIndex) ? 2 : 1;
+            health =
+                DataHelper.calculateIsSynced(peer, latestMilestoneIndex) &&
+                peer.gossip?.heartbeat &&
+                peer.gossip?.heartbeat?.prunedMilestoneIndex < confirmedMilestoneIndex
+                    ? 2
+                    : 1;
         }
 
         return health;
@@ -123,10 +129,12 @@ export class DataHelper {
         let isSynced = false;
 
         if (peer.gossip?.heartbeat) {
-            const latestKnownMilestoneIndex = (latestMilestoneIndex < peer.gossip.heartbeat.latestMilestoneIndex)
-            ? peer.gossip.heartbeat.latestMilestoneIndex : latestMilestoneIndex;
+            const latestKnownMilestoneIndex =
+                latestMilestoneIndex < peer.gossip.heartbeat.latestMilestoneIndex
+                    ? peer.gossip.heartbeat.latestMilestoneIndex
+                    : latestMilestoneIndex;
 
-            if (peer.gossip.heartbeat.solidMilestoneIndex >= (latestKnownMilestoneIndex - 2)) {
+            if (peer.gossip.heartbeat.solidMilestoneIndex >= latestKnownMilestoneIndex - 2) {
                 isSynced = true;
             }
         }

@@ -120,8 +120,11 @@ export class SearchQueryBuilder {
         const hexNoPrefix = HexHelper.stripPrefix(this.queryLower);
         // if the hex without prefix is 76 characters and first byte is 08,
         // it can be a FoundryId or TokenId
-        if (Converter.isHex(hexWithPrefix, true) &&
-            Number.parseInt(hexNoPrefix.slice(0, 2), 16) === ALIAS_ADDRESS_TYPE && hexNoPrefix.length === 76) {
+        if (
+            Converter.isHex(hexWithPrefix, true) &&
+            Number.parseInt(hexNoPrefix.slice(0, 2), 16) === ALIAS_ADDRESS_TYPE &&
+            hexNoPrefix.length === 76
+        ) {
             foundryId = hexWithPrefix;
         }
 
@@ -147,7 +150,7 @@ export class SearchQueryBuilder {
             aliasId,
             nftId,
             foundryId,
-            tag
+            tag,
         };
     }
 }

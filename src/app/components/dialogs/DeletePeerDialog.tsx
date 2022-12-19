@@ -58,7 +58,7 @@ const DeletePeerDialog: React.FC<IDeletePeerDialog> = ({ onClose, peer }) => {
             }
         >
             <p className="margin-t-t">Are you sure you want to delete the peer? </p>
-            {error && <p className="dialog--error">{error}</p>}
+            {error && <p className="dialog-content-error">{error}</p>}
         </Dialog>
     );
 };

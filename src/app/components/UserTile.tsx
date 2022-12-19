@@ -23,7 +23,7 @@ interface UserTileProps {
 const UserTile: React.FC<UserTileProps> = ({ user, refreshUsers, moreThanOneUser }) => {
     const [showDeleteUserDialog, setShowDeleteUserDialog] = useState<boolean>(false);
     return (
-        <div className="user-panel--item card">
+        <div className="user-panel-item card">
             <div className="col user-data">
                 <h4>Username</h4>
                 <p>{user?.username}</p>

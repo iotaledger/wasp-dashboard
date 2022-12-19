@@ -3,7 +3,7 @@ import { IBech32AddressDetails } from "./IBech32AddressDetails";
 /**
  * Address details.
  */
- export interface IAddressDetails extends IBech32AddressDetails {
+export interface IAddressDetails extends IBech32AddressDetails {
     /**
      * The balance of the address.
      */

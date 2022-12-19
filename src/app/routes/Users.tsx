@@ -8,12 +8,6 @@ import UsersList from "../components/UsersList";
 
 const Users: React.FC = () => {
     /**
-     * The users service.
-     * @private
-     * @type {UsersService}
-     */
-
-    /**
      * The users state.
      */
     const [usersList, setUsersList] = useState<User[]>([]);
@@ -40,7 +34,7 @@ const Users: React.FC = () => {
         waspClientService
             .users()
             .getUsers()
-            .then((allUsers) => {
+            .then(allUsers => {
                 setUsersList(allUsers);
             });
     }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
 import {
@@ -64,7 +64,7 @@ function Chain() {
         waspClientService
             .chains()
             .getChainInfo({ chainID })
-            .then((newChainInfo) => {
+            .then(newChainInfo => {
                 setChainInfo(transformInfoIntoArray(newChainInfo));
             });
 
@@ -72,7 +72,7 @@ function Chain() {
         waspClientService
             .chains()
             .getContracts({ chainID })
-            .then((newChainContracts) => {
+            .then(newChainContracts => {
                 setChainContracts(newChainContracts);
             });
 
@@ -80,7 +80,7 @@ function Chain() {
         waspClientService
             .corecontracts()
             .accountsGetAccounts({ chainID })
-            .then((newAccounts) => {
+            .then(newAccounts => {
                 if (newAccounts.accounts) {
                     setChainAccounts(newAccounts.accounts);
                 }
@@ -90,7 +90,7 @@ function Chain() {
         waspClientService
             .corecontracts()
             .accountsGetTotalAssets({ chainID })
-            .then((newTotalAssets) => {
+            .then(newTotalAssets => {
                 setChainAssets(newTotalAssets);
             });
 
@@ -98,7 +98,7 @@ function Chain() {
         waspClientService
             .corecontracts()
             .blobsGetAllBlobs({ chainID })
-            .then((newBlobs) => {
+            .then(newBlobs => {
                 if (newBlobs.blobs) {
                     setChainBlobs(newBlobs.blobs);
                 }
@@ -108,7 +108,7 @@ function Chain() {
         waspClientService
             .chains()
             .getCommitteeInfo({ chainID })
-            .then((newCommitteeInfo) => {
+            .then(newCommitteeInfo => {
                 setChainCommitteeInfo(newCommitteeInfo);
             });
 
@@ -116,7 +116,7 @@ function Chain() {
         waspClientService
             .corecontracts()
             .blocklogGetLatestBlockInfo({ chainID })
-            .then((newLatestBlock) => {
+            .then(newLatestBlock => {
                 setChainLatestBlock(newLatestBlock);
             });
     }, []);
@@ -147,7 +147,9 @@ function Chain() {
                             <h4>Contracts</h4>
                             {chainContracts.map(({ name, hName, description, programHash }) => (
                                 <div key={name} className="card-item">
-                                    <span>{name}:</span>
+                                    <Link to={`/chain/${chainID}/contract/${hName}`}>
+                                        <span>{name}:</span>
+                                    </Link>
                                     <p className="value">{description}</p>
                                 </div>
                             ))}
@@ -157,7 +159,7 @@ function Chain() {
                         <div className="chain-summary">
                             <h4>On-chain accounts</h4>
                             <ul>
-                                {chainAccounts.map((account) => (
+                                {chainAccounts.map(account => (
                                     <li key={account}>{account}</li>
                                 ))}
                             </ul>
@@ -184,7 +186,7 @@ function Chain() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {chainAssets?.tokens?.map((token) => (
+                                        {chainAssets?.tokens?.map(token => (
                                             <tr key={token.iD}>
                                                 <td>{token.iD}</td>
                                                 <td>{token.amount}</td>
@@ -207,7 +209,7 @@ function Chain() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {chainBlobs.map((blob) => (
+                                        {chainBlobs.map(blob => (
                                             <tr key={blob.hash}>
                                                 <td>{blob.hash}</td>
                                                 <td>{blob.size}</td>
