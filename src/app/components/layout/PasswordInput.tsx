@@ -9,7 +9,9 @@ interface PasswordInputProps {
 
 /**
  *
- * @param goTo
+ * @param disabled
+ * @param onChange
+ * @param inputValue
  */
 
 const PasswordInput = ({ disabled, onChange, inputValue }: PasswordInputProps) => {
