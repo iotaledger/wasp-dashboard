@@ -60,7 +60,7 @@ const Users: React.FC = () => {
                     <AddUserDialog onClose={() => setShowAddUserDialog(false)} onUserAdded={loadAllUsers} />
                 )}
                 <div className="users-panel">
-                    <UsersList users={usersList} />
+                    <UsersList users={usersList} refreshUsers={loadAllUsers} moreThanOneUser={usersList.length > 1} />
                 </div>
             </div>
         </div>
