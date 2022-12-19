@@ -63,6 +63,12 @@
           color: var(--text-color-primary);
         }
       }
+      a {
+        color: var(--accent-primary);
+         p.value {
+          color: inherit;
+         }
+      }
     }
 
     ul {
