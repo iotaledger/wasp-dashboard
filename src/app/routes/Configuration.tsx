@@ -78,7 +78,7 @@ function Configuration() {
                                 const key = Object.keys(item)[0];
                                 const value = Object.values(item)[0] as any;
                                 return (
-                                    <InfoBox title={key} key={index} titleClassName="key">
+                                    <InfoBox title={key} key={index}>
                                         {Object.entries(value).map(([keyVal, val], valueIndex) =>
                                             (typeof val === "boolean" ? (
                                                 val ? (

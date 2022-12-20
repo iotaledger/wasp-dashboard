@@ -1,4 +1,3 @@
-
 @use "../../scss/fonts" as *;
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
@@ -125,21 +124,20 @@
             @include desktop-down {
                 width: unset;
             }
+            .title{
+                margin-bottom: 0;
+            }
 
-            .peers-summary {
-                padding: $spacing-small;
+            /* stylelint-disable-next-line selector-class-pattern */
+            .peers-summary-blind-button {
+                border: 0;
+                outline: 0;
+                background: none;
+                color: var(--text-color-secondary);
+                cursor: pointer;
 
-                /* stylelint-disable-next-line selector-class-pattern */
-                .peers-summary-blind-button {
-                    border: 0;
-                    outline: 0;
-                    background: none;
-                    color: var(--text-color-secondary);
-                    cursor: pointer;
-
-                    &:hover {
-                        color: var(--accent-primary);
-                    }
+                &:hover {
+                    color: var(--accent-primary);
                 }
             }
         }

@@ -155,6 +155,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
                         <InfoBox
                             title="Peers"
                             cardClassName="col peers-summary-col"
+                            titleClassName="title"
                             titleWithIcon={true}
                             icon={
                                 <button
