@@ -27,7 +27,7 @@ function Block() {
         waspClientService
             .corecontracts()
             .blocklogGetBlockInfo({ chainID, blockIndex })
-            .then((newBlockInfo) => {
+            .then(newBlockInfo => {
                 setBlockInfo(newBlockInfo);
             });
 
@@ -35,7 +35,7 @@ function Block() {
         waspClientService
             .corecontracts()
             .blocklogGetRequestReceiptsOfBlock({ chainID, blockIndex })
-            .then(async (newBlockReceipts) => {
+            .then(async newBlockReceipts => {
                 if (newBlockReceipts.receipts) {
                     setBlockRequests(newBlockReceipts.receipts);
                 }
@@ -68,7 +68,7 @@ function Block() {
                     <h2 className="margin-l-s l1-details-title">Requests</h2>
                 </div>
                 <div className="content">
-                    {blockRequests.map((receipt) => {
+                    {blockRequests.map(receipt => {
                         const params = receipt?.request?.params?.Items;
                         const senderAccount = receipt.request?.senderAccount;
                         const attachedBaseTokens = receipt?.request?.fungibleTokens?.baseTokens;
