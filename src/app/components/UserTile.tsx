@@ -29,6 +29,23 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
     const [showDeleteUserDialog, setShowDeleteUserDialog] = useState<boolean>(false);
     const [showEditUserDialog, setShowEditUserDialog] = useState<boolean>(false);
 
+    /**
+     *
+     */
+    function handleDeleteSuccess(): void {
+        setShowDeleteUserDialog(false);
+        if (onDeleteSuccess && typeof onDeleteSuccess === "function") {
+            onDeleteSuccess();
+        }
+    }
+
+    /**
+     *
+     */
+    function handleEditSuccess(): void {
+        setShowEditUserDialog(false);
+    }
+
     return (
         <div className="user-panel-item card">
             <div className="col user-data">
@@ -65,17 +82,12 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
                         setShowDeleteUserDialog(false);
                     }}
                     user={user}
-                    onSuccess={onDeleteSuccess}
+                    onSuccess={handleDeleteSuccess}
                     onError={onDeleteError}
                 />
             )}
             {showEditUserDialog && (
-                <EditUserDialog
-                    onClose={() => {
-                        setShowEditUserDialog(false);
-                    }}
-                    user={user}
-                />
+                <EditUserDialog onClose={handleEditSuccess} user={user} onSuccess={handleEditSuccess} />
             )}
         </div>
     );
