@@ -12,6 +12,7 @@ import { ThemeService } from "../../services/themeService";
 import { BrandHelper } from "../../utils/brandHelper";
 import { PeersList } from "../components";
 import AsyncComponent from "../components/layout/AsyncComponent";
+import InfoBox from "../components/layout/InfoBox";
 import "./Home.scss";
 import { HomeState } from "./HomeState";
 
@@ -151,21 +152,22 @@ class Home extends AsyncComponent<unknown, HomeState> {
                         </div>
                     </div>
                     <div className="row fill margin-t-s desktop-down-column">
-                        <div className="card col peers-summary-col">
-                            <div className="peers-summary">
-                                <div className="row middle spread margin-b-m">
-                                    <h4>Peers</h4>
-                                    <button
-                                        type="button"
-                                        onClick={this.handleBlindMode}
-                                        className="peers-summary-blind-button"
-                                    >
-                                        {this.state.blindMode ? <EyeIcon /> : <EyeClosedIcon />}
-                                    </button>
-                                </div>
-                                <PeersList peers={this.state.peersList} blindMode={this.state.blindMode} />
-                            </div>
-                        </div>
+                        <InfoBox
+                            title="Peers"
+                            titleClassName="title"
+                            titleWithIcon={true}
+                            icon={
+                                <button
+                                    type="button"
+                                    onClick={this.handleBlindMode}
+                                    className="peers-summary-blind-button"
+                                >
+                                    {this.state.blindMode ? <EyeIcon /> : <EyeClosedIcon />}
+                                </button>
+                            }
+                        >
+                            <PeersList peers={this.state.peersList} blindMode={this.state.blindMode} />
+                        </InfoBox>
                     </div>
                 </div>
             </div>

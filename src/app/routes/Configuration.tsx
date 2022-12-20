@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Configuration.scss";
 import { WaspClientService } from "../../services/waspClientService";
+import InfoBox from "../components/layout/InfoBox";
 
 interface ConfigMap {
     [key: string]: never;
@@ -77,8 +78,7 @@ function Configuration() {
                                 const key = Object.keys(item)[0];
                                 const value = Object.values(item)[0] as any;
                                 return (
-                                    <div className="card" key={index}>
-                                        <h4 className="key">{key} </h4>
+                                    <InfoBox title={key} key={index}>
                                         {Object.entries(value).map(([keyVal, val], valueIndex) =>
                                             (typeof val === "boolean" ? (
                                                 val ? (
@@ -104,7 +104,7 @@ function Configuration() {
                                                 </div>
                                             ))),
                                         )}
-                                    </div>
+                                    </InfoBox>
                                 );
                             })}
                         </div>

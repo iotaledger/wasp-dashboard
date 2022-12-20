@@ -129,8 +129,8 @@ export class AuthService {
      */
     public getUsername(): string | undefined {
         if (!this._jwt) {
-return undefined;
-}
+            return undefined;
+        }
         try {
             const { sub } = decodeJWTPayload(this._jwt);
             return sub as string;

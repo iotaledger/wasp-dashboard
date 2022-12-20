@@ -1,4 +1,3 @@
-
 @use "../../scss/fonts" as *;
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
@@ -118,32 +117,21 @@
             }
         }
 
-        .peers-summary-col {
-            width: 100%;
-            overflow: hidden;
-
-            @include desktop-down {
-                width: unset;
-            }
-
-            .peers-summary {
-                padding: $spacing-small;
-
-                /* stylelint-disable-next-line selector-class-pattern */
-                .peers-summary-blind-button {
-                    border: 0;
-                    outline: 0;
-                    background: none;
-                    color: var(--text-color-secondary);
-                    cursor: pointer;
-
-                    &:hover {
-                        color: var(--accent-primary);
-                    }
-                }
-            }
+        .title {
+            margin-bottom: 0;
         }
 
+        .peers-summary-blind-button {
+            border: 0;
+            outline: 0;
+            background: none;
+            color: var(--text-color-secondary);
+            cursor: pointer;
+
+            &:hover {
+                color: var(--accent-primary);
+            }
+        }
         .info-panel + .info-panel {
             margin-left: $spacing-small;
 
