@@ -1,9 +1,9 @@
 import React, { SetStateAction, useState } from "react";
 import { Dialog } from "../";
-import { EyeIcon, EyeClosedIcon } from "../../../assets";
 import { ServiceFactory } from "../../../factories/serviceFactory";
 import { ChangeUserPasswordRequest, User } from "../../../services/wasp_client";
 import { WaspClientService } from "../../../services/waspClientService";
+import PasswordInput from "../layout/PasswordInput";
 interface IEditUserDialog {
     onClose: () => void;
     user: User;
@@ -14,7 +14,6 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user }) => {
     const [error, setError] = useState<string | null>(null);
     const [newPassword, setNewPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
-    const [blindMode, setBlindMode] = useState<boolean>(true);
     /**
      *
      */
@@ -34,12 +33,6 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user }) => {
         } finally {
             setIsBusy(false);
         }
-    }
-    /**
-     * Toggle the blind mode.
-     */
-    function toggleBlindMode(): void {
-        setBlindMode(!blindMode);
     }
     return (
         <Dialog
@@ -63,67 +56,26 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user }) => {
         >
             <React.Fragment>
                 <p>Please enter a new password.</p>
-                <div className="dialog--label">New password</div>
-                <div className="dialog--value">
-                    <input
-                        type={blindMode ? "password" : "text"}
-                        className="input--stretch"
-                        placeholder="e.g. user1"
-                        name="username"
-                        value={newPassword}
-                        disabled={isBusy}
+                <div className="dialog-content-label">New password</div>
+                <div className="dialog-content-value">
+                    <PasswordInput
+                        inputValue={newPassword}
                         onChange={(e: { target: { value: SetStateAction<string> } }) => setNewPassword(e.target.value)}
-                        autoComplete="new-password"
-                    />
-                    <button
-                        type="button"
-                        onClick={toggleBlindMode}
-                        style={{
-                            position: "absolute",
-                            right: "10px",
-                            top: "-5px",
-                            transform: "translateY(50%)",
-                            border: "none",
-                            background: "transparent",
-                            color: "var(--text-color-secondary)",
-                        }}
-                    >
-                        {blindMode ? <EyeClosedIcon /> : <EyeIcon />}
-                    </button>
-                </div>
-                <div className="dialog--label">Repeat new password</div>
-                <div className="dialog--value">
-                    <input
-                        type={blindMode ? "password" : "text"}
-                        className="input--stretch"
-                        placeholder="e.g. user1"
-                        name="username"
-                        value={confirmPassword}
                         disabled={isBusy}
-                        onChange={(e: { target: { value: SetStateAction<string> } }) =>
-                            setConfirmPassword(e.target.value)
-                        }
-                        autoComplete="new-password"
                     />
-                    <button
-                        type="button"
-                        onClick={toggleBlindMode}
-                        style={{
-                            position: "absolute",
-                            right: "10px",
-                            top: "-5px",
-                            transform: "translateY(50%)",
-                            border: "none",
-                            background: "transparent",
-                            color: "var(--text-color-secondary)",
-                        }}
-                    >
-                        {blindMode ? <EyeClosedIcon /> : <EyeIcon />}
-                    </button>
+                </div>
+                <div className="dialog-content-label">Repeat new password</div>
+                <div className="dialog-content-value">
+                    <PasswordInput
+                        inputValue={confirmPassword}
+                        onChange={(e: { target: { value: SetStateAction<string> } }) =>
+                            setConfirmPassword(e.target.value)}
+                        disabled={isBusy}
+                    />
                     {confirmPassword !== "" && confirmPassword !== newPassword && (
-                        <p className="dialog--error">Passwords do not match!</p>
+                        <p className="dialog-content-error">Passwords do not match!</p>
                     )}
-                    {error && <p className="dialog--error">{error}</p>}
+                    {error && <p className="dialog-content-error">{error}</p>}
                 </div>
             </React.Fragment>
         </Dialog>
