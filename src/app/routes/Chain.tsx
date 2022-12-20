@@ -19,6 +19,11 @@ interface ChainInfoValue {
     val: string;
 }
 
+interface ConsensusMetric {
+    status: string;
+    triggerTime: Date;
+}
+
 /**
  * Transforms a ChainInfoResponse into an array of key-value pairs
  *
@@ -48,6 +53,7 @@ function Chain() {
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
+    const [chainConsensusMetrics, setChainConsensusMetrics] = useState<Record<string, ConsensusMetric> | null>(null);
     const { chainID } = useParams();
 
     const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
@@ -118,6 +124,24 @@ function Chain() {
             .blocklogGetLatestBlockInfo({ chainID })
             .then(newLatestBlock => {
                 setChainLatestBlock(newLatestBlock);
+            });
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .metrics()
+            .getChainWorkflowMetrics({ chainID })
+            .then(data => {
+                const newConsensusMetrics = data as Record<string, string>;
+                const metrics: Record<string, ConsensusMetric> = {};
+                const keys = Object.keys(newConsensusMetrics).filter(k => !k.startsWith("time"));
+                for (const key of keys) {
+                    const flagName = key.replace("flag", "");
+                    metrics[flagName] = {
+                        status: newConsensusMetrics[key],
+                        triggerTime: newConsensusMetrics[`time${flagName}`] as unknown as Date,
+                    };
+                }
+                setChainConsensusMetrics(metrics);
             });
     }, []);
 
@@ -293,6 +317,38 @@ function Chain() {
                             )}
                         </div>
                     </div>
+                    <div className="card col fill">
+                        <div className="chain-summary">
+                            <h4>Consensus metrics</h4>
+                            {ChainID && (
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Flag name</th>
+                                            <th>Status</th>
+                                            <th>Trigger time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {chainConsensusMetrics &&
+                                            Object.entries(chainConsensusMetrics).map(([key, val]) => (
+                                                <tr key={key}>
+                                                    <td>{METRICS_NAMES[key]}</td>
+                                                    <td>
+                                                        {typeof val.status === "boolean" ? (
+                                                            <input type="checkbox" checked={val.status} readOnly />
+                                                        ) : (
+                                                            val.status.toString()
+                                                        )}
+                                                    </td>
+                                                    <td>{val.triggerTime?.toISOString() ?? "NEVER"}</td>
+                                                </tr>
+                                            ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -312,6 +368,19 @@ const INFO_NAMES: Record<string, string> = {
     maxBlobSize: "Max blob size",
     maxEventSize: "Max events size",
     maxEventsPerReq: "Max events per req",
+};
+
+const METRICS_NAMES: Record<string, string> = {
+    currentStateIndex: "Current State Index",
+    BatchProposalSent: "Batch Proposal Sent",
+    ConsensusBatchKnown: "Consensus Batch Known",
+    InProgress: "In Progress",
+    StateReceived: "State Received",
+    TransactionFinalized: "Transaction Finalized",
+    TransactionPosted: "Transaction Posted",
+    TransactionSeen: "Transaction Seen",
+    VMResultSigned: "VM Result Signed",
+    VMStarted: "VM Started",
 };
 
 export default Chain;
