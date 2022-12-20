@@ -1,6 +1,7 @@
 import { Environment } from "../environment";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { FetchHelper } from "../utils/fetchHelper";
+import { decodeJWTPayload } from "../utils/jwt";
 import { EventAggregator } from "./eventAggregator";
 import { LocalStorageService } from "./localStorageService";
 
@@ -120,6 +121,22 @@ export class AuthService {
      */
     public isLoggedIn(): string | undefined {
         return this._jwt;
+    }
+
+    /**
+     * Get the username.
+     * @returns The username if logged in.
+     */
+    public getUsername(): string | undefined {
+        if (!this._jwt) {
+return undefined;
+}
+        try {
+            const { sub } = decodeJWTPayload(this._jwt);
+            return sub as string;
+        } catch {
+            return undefined;
+        }
     }
 
     /**

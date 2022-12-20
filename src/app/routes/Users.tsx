@@ -1,6 +1,7 @@
 import "./Users.scss";
 import React, { useEffect, useState } from "react";
 import { ServiceFactory } from "../../factories/serviceFactory";
+import { AuthService } from "../../services/authService";
 import { User } from "../../services/wasp_client/models";
 import { WaspClientService } from "../../services/waspClientService";
 import AddUserDialog from "../components/dialogs/addUserDialog";
@@ -39,6 +40,21 @@ const Users: React.FC = () => {
             });
     }
 
+    /**
+     * Log out if the user deleted itself, otherwise just refresh the users list
+     * @param deletedUser The deleted user.
+     */
+    function onDeleteSuccess(deletedUser: User) {
+        const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
+        const loggedUsername = authService.getUsername();
+
+        if (loggedUsername === deletedUser.username) {
+            authService.logout();
+        } else {
+            loadAllUsers();
+        }
+    }
+
     return (
         <div className="users">
             <div className="content">
@@ -54,7 +70,11 @@ const Users: React.FC = () => {
                     <AddUserDialog onClose={() => setShowAddUserDialog(false)} onUserAdded={loadAllUsers} />
                 )}
                 <div className="users-panel">
-                    <UsersList users={usersList} onDeleteSuccess={loadAllUsers} canBeDeleted={usersList.length > 1} />
+                    <UsersList
+                        users={usersList}
+                        onDeleteSuccess={onDeleteSuccess}
+                        canBeDeleted={usersList.length > 1}
+                    />
                 </div>
             </div>
         </div>
