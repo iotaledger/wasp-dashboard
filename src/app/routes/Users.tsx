@@ -44,7 +44,7 @@ const Users: React.FC = () => {
      * Log out if the user deleted itself, otherwise just refresh the users list
      * @param deletedUser The deleted user.
      */
-    function onDeleteSuccess(deletedUser: User) {
+    function onDeleteSuccess(deletedUser: User): void {
         const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
         const loggedUsername = authService.getUsername();
 
