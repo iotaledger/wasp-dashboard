@@ -38,7 +38,7 @@ function Contract() {
             <div className="contract-wrapper">
                 <h2>Contract {contractInfo?.name}</h2>
                 <div className="content">
-                    <InfoBox title="Info" categoryClassName="contract">
+                    <InfoBox title="Info">
                         {contractInfo &&
                             Object.entries(contractInfo).map(([key, val]) => (
                                 <div key={key} className="card-item">

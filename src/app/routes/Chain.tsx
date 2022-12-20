@@ -154,7 +154,7 @@ function Chain() {
                     <h2 className="margin-l-s l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
-                    <InfoBox title="Info" categoryClassName="chain">
+                    <InfoBox title="Info">
                         {chainInfo
                             .filter(({ key }) => !INFO_SKIP_NAMES.has(key))
                             .map(({ key, val }) => (
@@ -164,7 +164,7 @@ function Chain() {
                                 </div>
                             ))}
                     </InfoBox>
-                    <InfoBox title="Contracts" categoryClassName="chain">
+                    <InfoBox title="Contracts">
                         {chainContracts.map(({ name, hName, description, programHash }) => (
                             <div key={name} className="card-item">
                                 <Link to={`/chain/${chainID}/contract/${hName}`}>
@@ -174,14 +174,14 @@ function Chain() {
                             </div>
                         ))}
                     </InfoBox>
-                    <InfoBox title="On-chain accounts" categoryClassName="chain">
+                    <InfoBox title="On-chain accounts">
                         <ul>
                             {chainAccounts.map(account => (
                                 <li key={account}>{account}</li>
                             ))}
                         </ul>
                     </InfoBox>
-                    <InfoBox title="Total Assets" categoryClassName="chain">
+                    <InfoBox title="Total Assets">
                         {chainAssets?.baseTokens && (
                             <React.Fragment>
                                 <div className="card-item">
@@ -210,7 +210,7 @@ function Chain() {
                             </table>
                         )}
                     </InfoBox>
-                    <InfoBox title="Blobs" categoryClassName="chain">
+                    <InfoBox title="Blobs">
                         {chainBlobs.length > 0 ? (
                             <table>
                                 <thead>
@@ -232,7 +232,7 @@ function Chain() {
                             <p>No blobs found.</p>
                         )}
                     </InfoBox>
-                    <InfoBox title="Latest block" categoryClassName="chain">
+                    <InfoBox title="Latest block">
                         <div className="card-item">
                             <span>Block index:</span>
                             <Link to={`blocks/${chainLatestBlock?.blockIndex}`}>
@@ -244,7 +244,7 @@ function Chain() {
                             <p className="value">{chainLatestBlock?.timestamp?.toISOString()}</p>
                         </div>
                     </InfoBox>
-                    <InfoBox title="Committee" categoryClassName="chain">
+                    <InfoBox title="Committee">
                         {chainCommitteeInfo && (
                             <React.Fragment>
                                 <div className="card-item">
@@ -280,7 +280,7 @@ function Chain() {
                             </table>
                         )}
                     </InfoBox>
-                    <InfoBox title="EVM" categoryClassName="chain">
+                    <InfoBox title="EVM">
                         {ChainID && (
                             <React.Fragment>
                                 <div className="card-item">
@@ -294,7 +294,7 @@ function Chain() {
                             </React.Fragment>
                         )}
                     </InfoBox>
-                    <InfoBox title="Consensus metrics" categoryClassName="chain">
+                    <InfoBox title="Consensus metrics">
                         {ChainID && (
                             <table>
                                 <thead>

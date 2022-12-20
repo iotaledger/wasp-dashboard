@@ -27,15 +27,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .key {
-                margin-bottom: 20px;
-            }
-
-            .card {
-                display: flex;
-                flex-direction: column;
-                padding: 20px;
-
+           
                 .card-item {
                     display: flex;
                     align-items: flex-start;
@@ -55,7 +47,7 @@
                         }
                     }
                 }
-            }
+            
         }
     }
 }

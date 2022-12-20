@@ -54,7 +54,7 @@ function L1() {
                 <h2>L1</h2>
                 <div className="content">
                     {l1Params && (
-                        <InfoBox title="L1 params" categoryClassName="l1" cardClassName="first-card">
+                        <InfoBox title="L1 params" cardClassName="first-card">
                             {Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
                                 const isObject = typeof val === "object";
                                 return (
@@ -86,7 +86,7 @@ function L1() {
                             })}
                         </InfoBox>
                     )}
-                    <InfoBox title="Chains" categoryClassName="l1">
+                    <InfoBox title="Chains">
                         {chains?.map(chain => (
                             <Link key={chain.chainID} to={`/l1/${chain.chainID}`}>
                                 <div className="l1-summary-item">
@@ -100,7 +100,7 @@ function L1() {
                             </Link>
                         ))}
                     </InfoBox>
-                    <InfoBox title="L1 global metrics" categoryClassName="l1" cardClassName="last-card">
+                    <InfoBox title="L1 global metrics" cardClassName="last-card">
                         {l1Metrics && <ChainMessagesTable chainMetrics={l1Metrics} />}
                     </InfoBox>
                 </div>

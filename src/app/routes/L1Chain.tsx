@@ -40,7 +40,7 @@ function L1Chain() {
                     <h2 className="margin-l-s l1-details-title">L1 Chain {chainID}</h2>
                 </div>
                 <div className="content">
-                    <InfoBox title="L1 Chain metrics" categoryClassName="l1" cardClassName="last-card">
+                    <InfoBox title="L1 Chain metrics" cardClassName="last-card">
                         {l1ChainMetrics && <ChainMessagesTable chainMetrics={l1ChainMetrics} />}
                     </InfoBox>
                 </div>
