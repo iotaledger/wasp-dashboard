@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { EyeClosedIcon, EyeIcon } from "../../../assets";
-
+import "./PasswordInput.scss";
 interface PasswordInputProps {
     disabled?: boolean;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -25,7 +25,7 @@ const PasswordInput = ({ disabled, onChange, inputValue }: PasswordInputProps) =
     }
 
     return (
-        <React.Fragment>
+        <div className="blindmode">
             <input
                 type={blindMode ? "password" : "text"}
                 className="input--stretch blindmode-input"
@@ -39,7 +39,7 @@ const PasswordInput = ({ disabled, onChange, inputValue }: PasswordInputProps) =
             <button type="button" className="blindmode-input-button" onClick={toggleBlindMode}>
                 {blindMode ? <EyeIcon /> : <EyeClosedIcon />}
             </button>
-        </React.Fragment>
+        </div>
     );
 };
 PasswordInput.defaultProps = {
