@@ -20,6 +20,7 @@ import { MetricsService } from "../services/metricsService";
 import { ThemeService } from "../services/themeService";
 import { WaspClientService } from "../services/waspClientService";
 import { BrandHelper } from "../utils/brandHelper";
+import { decodeJWTPayload } from "../utils/jwt";
 import isNodeOnline from "../utils/nodeStatus";
 import { AppState } from "./AppState";
 import Breakpoint from "./components/layout/Breakpoint";
@@ -383,14 +384,8 @@ class App extends Component<object, AppState> {
      * @returns The expiry time.
      */
     private getTokenExpiry(token: string) {
-        const [header, payload, signature] = token.split(".");
-        if (header.length !== 43 || signature.length !== 43) {
-            throw new Error("Malformed JWT");
-        }
-        const decodedToken = window.atob(payload);
-        const parsedToken = JSON.parse(decodedToken);
-        const expiryTimestamp = parsedToken.exp * 1000;
-
+        const { exp } = decodeJWTPayload(token);
+        const expiryTimestamp = (exp as number) * 1000;
         return expiryTimestamp;
     }
 
