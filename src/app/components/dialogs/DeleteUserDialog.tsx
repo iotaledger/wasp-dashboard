@@ -27,7 +27,6 @@ const DeleteUserDialog: React.FC<IDeleteUserDialog> = ({ onClose, user, onSucces
             if (onSuccess && typeof onSuccess === "function") {
                 onSuccess();
             }
-            onClose();
         } catch (e) {
             if (e instanceof Error) {
                 setError(e.message);

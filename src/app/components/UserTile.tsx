@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { User } from "../../services/wasp_client";
 import DeleteUserDialog from "./dialogs/DeleteUserDialog";
+import EditUserDialog from "./dialogs/EditUserDialog";
 import "./UserTile.scss";
 
 interface UserTileProps {
@@ -26,6 +27,25 @@ interface UserTileProps {
 
 const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess, onDeleteError }) => {
     const [showDeleteUserDialog, setShowDeleteUserDialog] = useState<boolean>(false);
+    const [showEditUserDialog, setShowEditUserDialog] = useState<boolean>(false);
+
+    /**
+     *
+     */
+    function handleDeleteSuccess(): void {
+        setShowDeleteUserDialog(false);
+        if (onDeleteSuccess && typeof onDeleteSuccess === "function") {
+            onDeleteSuccess();
+        }
+    }
+
+    /**
+     *
+     */
+    function handleEditSuccess(): void {
+        setShowEditUserDialog(false);
+    }
+
     return (
         <div className="user-panel-item card">
             <div className="col user-data">
@@ -43,7 +63,7 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
                 </div>
             </div>
             <div className="buttons-wrapper">
-                <button type="button" className="edit-button" onClick={() => console.log("edit")}>
+                <button type="button" className="edit-button" onClick={() => setShowEditUserDialog(true)}>
                     Edit
                 </button>
                 {canBeDeleted && (
@@ -62,14 +82,16 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
                         setShowDeleteUserDialog(false);
                     }}
                     user={user}
-                    onSuccess={onDeleteSuccess}
+                    onSuccess={handleDeleteSuccess}
                     onError={onDeleteError}
                 />
+            )}
+            {showEditUserDialog && (
+                <EditUserDialog onClose={handleEditSuccess} user={user} onSuccess={handleEditSuccess} />
             )}
         </div>
     );
 };
-
 UserTile.defaultProps = {
     onDeleteError: () => {},
     onDeleteSuccess: () => {},
