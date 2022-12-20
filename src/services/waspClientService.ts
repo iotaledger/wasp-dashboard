@@ -22,7 +22,7 @@ export class WaspClientService {
     constructor() {
         this.initialize();
 
-        EventAggregator.subscribe("auth-state", "waspClient", (isLoggedIn) => {
+        EventAggregator.subscribe("auth-state", "waspClient", isLoggedIn => {
             this.initialize();
         });
     }

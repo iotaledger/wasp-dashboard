@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { User } from "../../services/wasp_client";
-import { EditUserDialog } from "./dialogs";
+import DeleteUserDialog from "./dialogs/DeleteUserDialog";
+import EditUserDialog from "./dialogs/EditUserDialog";
 import "./UserTile.scss";
 
 interface UserTileProps {
@@ -9,12 +10,27 @@ interface UserTileProps {
      * @type {User}
      */
     user: User;
+    /**
+     * Whether there is more than one user.
+     * @type {boolean}
+     */
+    canBeDeleted: boolean;
+    /**
+     * Success callback when the user is deleted.
+     */
+    onDeleteSuccess?: () => void;
+    /**
+     * Error callback when the user is deleted.
+     */
+    onDeleteError?: () => void;
 }
 
-const UserTile: React.FC<UserTileProps> = ({ user }) => {
+const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess, onDeleteError }) => {
+    const [showDeleteUserDialog, setShowDeleteUserDialog] = useState<boolean>(false);
     const [showEditUserDialog, setShowEditUserDialog] = useState<boolean>(false);
+
     return (
-        <div className="user-panel--item card">
+        <div className="user-panel-item card">
             <div className="col user-data">
                 <h4>Username</h4>
                 <p>{user?.username}</p>
@@ -33,14 +49,26 @@ const UserTile: React.FC<UserTileProps> = ({ user }) => {
                 <button type="button" className="edit-button" onClick={() => setShowEditUserDialog(true)}>
                     Edit
                 </button>
-                <button
-                    type="button"
-                    className="delete-button card--action card--action-danger"
-                    onClick={() => console.log("delete")}
-                >
-                    Delete
-                </button>
+                {canBeDeleted && (
+                    <button
+                        type="button"
+                        className="delete-button card--action card--action-danger"
+                        onClick={() => setShowDeleteUserDialog(true)}
+                    >
+                        Delete
+                    </button>
+                )}
             </div>
+            {showDeleteUserDialog && (
+                <DeleteUserDialog
+                    onClose={() => {
+                        setShowDeleteUserDialog(false);
+                    }}
+                    user={user}
+                    onSuccess={onDeleteSuccess}
+                    onError={onDeleteError}
+                />
+            )}
             {showEditUserDialog && (
                 <EditUserDialog
                     onClose={() => {
@@ -51,6 +79,10 @@ const UserTile: React.FC<UserTileProps> = ({ user }) => {
             )}
         </div>
     );
+};
+UserTile.defaultProps = {
+    onDeleteError: () => {},
+    onDeleteSuccess: () => {},
 };
 
 export default UserTile;

@@ -19,12 +19,8 @@ class Dialog extends Component<DialogProps> {
                         <div className="dialog-header">
                             <h1>{this.props.title}</h1>
                         </div>
-                        <div className="dialog-content">
-                            {this.props.children}
-                        </div>
-                        <div className="dialog-footer">
-                            {this.props.actions}
-                        </div>
+                        <div className="dialog-content">{this.props.children}</div>
+                        <div className="dialog-footer">{this.props.actions}</div>
                     </div>
                 </div>
             </React.Fragment>

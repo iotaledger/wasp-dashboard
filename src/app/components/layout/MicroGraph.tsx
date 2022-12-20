@@ -29,7 +29,7 @@ class MicroGraph extends Component<MicroGraphProps, MicroGraphState> {
         this._graphHeight = this.props.graphHeight ?? 10;
 
         this.state = {
-            ...this.calculateGraph()
+            ...this.calculateGraph(),
         };
     }
 
@@ -53,10 +53,7 @@ class MicroGraph extends Component<MicroGraphProps, MicroGraphState> {
                 <span className="label">{this.props.label}</span>
                 <span className="value">{this.props.value}</span>
                 <span className="canvas">
-                    <svg
-                        width={this._graphWidth}
-                        height={this._graphHeight}
-                    >
+                    <svg width={this._graphWidth} height={this._graphHeight}>
                         {this.state.graphPoints && this.state.graphPoints.length > 0 && (
                             <path
                                 d={this.state.graphPoints.map(g => `${g.type} ${g.x} ${g.y}`).join(" ")}
@@ -66,12 +63,7 @@ class MicroGraph extends Component<MicroGraphProps, MicroGraphState> {
                             />
                         )}
                         {this.state.circle && this.state.circle.x >= 0 && (
-                            <circle
-                                cx={this.state.circle.x}
-                                cy={this.state.circle.y}
-                                r="3"
-                                fill="currentColor"
-                            />
+                            <circle cx={this.state.circle.x} cy={this.state.circle.y} r="3" fill="currentColor" />
                         )}
                     </svg>
                 </span>
@@ -120,7 +112,7 @@ class MicroGraph extends Component<MicroGraphProps, MicroGraphState> {
             graphPoints.push({
                 type: "M",
                 x: 0,
-                y: this._graphHeight - lastY
+                y: this._graphHeight - lastY,
             });
 
             const xIncrement = (graphPointCount / lastItems.length) * 2;
@@ -129,7 +121,7 @@ class MicroGraph extends Component<MicroGraphProps, MicroGraphState> {
                 graphPoints.push({
                     type: "l",
                     x: xIncrement,
-                    y: (y - lastY) * -1
+                    y: (y - lastY) * -1,
                 });
                 lastY = y;
             }
@@ -140,7 +132,7 @@ class MicroGraph extends Component<MicroGraphProps, MicroGraphState> {
 
         return {
             graphPoints,
-            circle: { x: circleX, y: circleY }
+            circle: { x: circleX, y: circleY },
         };
     }
 }
