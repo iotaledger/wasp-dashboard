@@ -23,7 +23,7 @@ const Dialog: FC<DialogProps> = ({ title, children, actions, onClose }) => {
 
     useEffect(() => {
         if (onClose) {
-            dialogRef.current?.addEventListener("click", (e) => {
+            dialogRef.current?.addEventListener("click", e => {
                 if (e.target === dialogRef.current && onClose) {
                     onClose();
                 }
@@ -38,7 +38,7 @@ const Dialog: FC<DialogProps> = ({ title, children, actions, onClose }) => {
                     <div className="dialog-header row">
                         <h1>{title}</h1>
                         {onClose && (
-                            <button type="button" className="icon-button dialog-header--close" onClick={onClose}>
+                            <button type="button" className="icon-button dialog-header-close" onClick={onClose}>
                                 &#x2715;
                             </button>
                         )}

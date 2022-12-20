@@ -21,7 +21,7 @@ function Chains() {
         waspClientService
             .chains()
             .getChains()
-            .then((newChains) => {
+            .then(newChains => {
                 setChains(newChains);
             });
     }, []);
@@ -31,9 +31,9 @@ function Chains() {
             <div className="chains-wrapper">
                 <h2>Chains</h2>
                 <div className="content">
-                    {chains?.map((chain) => (
+                    {chains?.map(chain => (
                         <Link key={chain.chainID} to={`/chains/${chain.chainID}`} className="fill">
-                            <div className="chains-summary--item">
+                            <div className="chains-summary-item">
                                 <div className="chains-health-icon">
                                     {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
                                 </div>

@@ -1,70 +1,69 @@
-@import '../../scss/card';
-@import '../../scss/fonts';
-@import '../../scss/media-queries';
+
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
 
 .peers {
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  padding: 60px;
-
-  @include desktop-down {
-    padding: $spacing-small;
-  }
-
-  .content {
+    display: flex;
     flex: 1;
-    max-width: $content-width-desktop;
+    justify-content: center;
+    padding: 60px;
 
-    .peers--blind-icon-button {
-      margin-right: $spacing-small;
-      border: 0;
-      outline: 0;
-      background: none;
-      color: var(--text-color-secondary);
-      cursor: pointer;
-
-      &:hover {
-        color: var(--accent-primary);
-      }
+    @include desktop-down {
+        padding: $spacing-small;
     }
 
-    .add-button {
-      @include font-size(14px);
+    .content {
+        flex: 1;
+        max-width: $content-width-desktop;
 
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding: 6px 12px;
-      border: 1px solid var(--text-color-secondary);
-      border-radius: $form-input-radius;
-      outline: 0;
-      background: var(--bar-color-2);
-      color: var(--text-color-primary);
-      font-family: $font-sans;
-      cursor: pointer;
+        .peers-blind-icon-button {
+            margin-right: $spacing-small;
+            border: 0;
+            outline: 0;
+            background: none;
+            color: var(--text-color-secondary);
+            cursor: pointer;
 
-      &:hover {
-        color: var(--accent-primary);
-      }
+            &:hover {
+                color: var(--accent-primary);
+            }
+        }
 
-      &:focus {
-        box-shadow: 0 0 3px 0 var(--accent-primary);
-      }
+        .add-button {
+            @include font-size(14px);
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 6px 12px;
+            border: 1px solid var(--text-color-secondary);
+            border-radius: $form-input-radius;
+            outline: 0;
+            background: var(--bar-color-2);
+            color: var(--text-color-primary);
+            font-family: $font-sans;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--accent-primary);
+            }
+
+            &:focus {
+                box-shadow: 0 0 3px 0 var(--accent-primary);
+            }
+        }
+
+        .peers-panel {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+            margin-top: $spacing-medium;
+
+            @media (max-width: 1340px) {
+                flex-flow: column nowrap;
+                justify-content: flex-start;
+            }
+        }
     }
-
-    .peers-panel {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin-top: $spacing-medium;
-
-      @media (max-width: 1340px) {
-        flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-      }
-    }
-  }
 }

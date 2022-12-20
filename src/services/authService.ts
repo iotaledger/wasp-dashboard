@@ -35,7 +35,7 @@ export class AuthService {
         if (document.cookie) {
             const cookies = document.cookie.split(";");
 
-            const csrf = cookies.find((c) => c.trim().startsWith("_csrf"));
+            const csrf = cookies.find(c => c.trim().startsWith("_csrf"));
 
             if (csrf) {
                 const parts = csrf.split("=");
@@ -88,7 +88,7 @@ export class AuthService {
                     password,
                     jwt,
                 },
-                headers
+                headers,
             );
 
             if (response.jwt) {

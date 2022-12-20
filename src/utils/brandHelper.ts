@@ -24,6 +24,7 @@ export class BrandHelper {
 
             return BrandHelper._brandConfiguration;
         }
+        return undefined;
     }
 
     /**

@@ -8,12 +8,6 @@ import UsersList from "../components/UsersList";
 
 const Users: React.FC = () => {
     /**
-     * The users service.
-     * @private
-     * @type {UsersService}
-     */
-
-    /**
      * The users state.
      */
     const [usersList, setUsersList] = useState<User[]>([]);
@@ -40,7 +34,7 @@ const Users: React.FC = () => {
         waspClientService
             .users()
             .getUsers()
-            .then((allUsers) => {
+            .then(allUsers => {
                 setUsersList(allUsers);
             });
     }
@@ -60,7 +54,7 @@ const Users: React.FC = () => {
                     <AddUserDialog onClose={() => setShowAddUserDialog(false)} onUserAdded={loadAllUsers} />
                 )}
                 <div className="users-panel">
-                    <UsersList users={usersList} />
+                    <UsersList users={usersList} onDeleteSuccess={loadAllUsers} canBeDeleted={usersList.length > 1} />
                 </div>
             </div>
         </div>

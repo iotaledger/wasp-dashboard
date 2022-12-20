@@ -1,5 +1,1 @@
-export type BlockTangleStatus =
-    "unknown" |
-    "pending" |
-    "referenced" |
-    "milestone";
+export type BlockTangleStatus = "unknown" | "pending" | "referenced" | "milestone";

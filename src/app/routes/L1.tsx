@@ -34,7 +34,7 @@ function L1() {
         waspClientService
             .chains()
             .getChains()
-            .then((newChains) => {
+            .then(newChains => {
                 setChains(newChains);
             });
 
@@ -42,7 +42,7 @@ function L1() {
         waspClientService
             .metrics()
             .getL1Metrics()
-            .then((metrics) => {
+            .then(metrics => {
                 setl1Metrics(metrics);
             });
     }, []);
@@ -60,12 +60,12 @@ function L1() {
                                 {Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
                                     const isObject = typeof val === "object";
                                     return (
-                                        <div key={key} className="l1-info--item">
+                                        <div key={key} className="l1-info-item">
                                             <h4>{key}</h4>
                                             {isObject ? (
                                                 <div>
                                                     {Object.entries(val).map(([prop, propVal]) => (
-                                                        <div className="info--item" key={prop}>
+                                                        <div className="info-item" key={prop}>
                                                             <span>{prop}:</span>
 
                                                             {typeof propVal === "boolean" ? (
@@ -92,9 +92,9 @@ function L1() {
                     <div className="card col fill">
                         <div className="l1-summary">
                             <h4>Chains</h4>
-                            {chains?.map((chain) => (
+                            {chains?.map(chain => (
                                 <Link key={chain.chainID} to={`/l1/${chain.chainID}`}>
-                                    <div className="l1-summary--item">
+                                    <div className="l1-summary-item">
                                         <div className="l1-health-icon">
                                             {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
                                         </div>

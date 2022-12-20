@@ -1,4 +1,3 @@
-
 /**
  * The state for the Breakpoint component.
  */

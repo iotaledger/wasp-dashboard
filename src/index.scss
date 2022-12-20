@@ -1,60 +1,60 @@
-@import './scss/layout';
-@import './scss/forms';
-@import './scss/standard';
-@import './scss/media-queries';
-@import './scss/themes/dark';
-@import './scss/themes/light';
-@import './scss/variables';
+@use './scss/layout' as *;
+@use './scss/forms' as *;
+@use './scss/standard' as *;
+@use './scss/media-queries' as *;
+@use './scss/themes/dark' as *;
+@use './scss/themes/light' as *;
+@use './scss/variables' as *;
 
 html {
-  height: 100%;
+    height: 100%;
 }
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-  background-color: var(--background);
-
-  #root {
     display: flex;
-    flex: 1;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--background);
 
-    .success {
-      color: $success;
-    }
+    #root {
+        display: flex;
+        flex: 1;
 
-    .warning {
-      color: $warning;
-    }
+        .success {
+            color: $success;
+        }
 
-    .danger {
-      color: $danger;
-    }
+        .warning {
+            color: $warning;
+        }
 
-    .info {
-      color: $info;
+        .danger {
+            color: $danger;
+        }
+
+        .info {
+            color: $info;
+        }
     }
-  }
 }
 
 ::-webkit-scrollbar-track {
-  border-radius: 0;
-  background-color: var(--scroll-background);
+    border-radius: 0;
+    background-color: var(--scroll-background);
 }
 
 ::-webkit-scrollbar {
-  width: 12px;
-  background-color: var(--scroll-background);
+    width: 12px;
+    background-color: var(--scroll-background);
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 0;
-  background-color: var(--scroll-thumb);
+    border-radius: 0;
+    background-color: var(--scroll-thumb);
 }

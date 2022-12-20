@@ -1,38 +1,39 @@
 import React, { useState } from "react";
 import { Dialog } from "../";
 import { ServiceFactory } from "../../../factories/serviceFactory";
-import { PeersService } from "../../../services/peersService";
-import { PeeringNodeStatusResponse } from "../../../services/wasp_client";
+import { DeleteUserRequest, User } from "../../../services/wasp_client";
+import { WaspClientService } from "../../../services/waspClientService";
 
-interface IDeletePeerDialog {
+interface IDeleteUserDialog {
     onClose: () => void;
-    peer: PeeringNodeStatusResponse;
+    user: User;
+    onError?: () => void;
+    onSuccess?: () => void;
 }
 
-const DeletePeerDialog: React.FC<IDeletePeerDialog> = ({ onClose, peer }) => {
-    /**
-     * The peers service.
-     */
-    const peerService: PeersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
-
+const DeleteUserDialog: React.FC<IDeleteUserDialog> = ({ onClose, user, onSuccess, onError }) => {
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     /**
-     * Delete the peer.
+     * Delete the user.
      */
-    async function handleDeletePeer(): Promise<void> {
+    async function handleDeleteUser(): Promise<void> {
         setIsBusy(true);
         setError(null);
         try {
-            const success = await peerService.distrustPeer(peer);
-            if (!success) {
-                throw new Error("Failed to delete peer");
+            const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+            await waspClientService.users().deleteUser(user as DeleteUserRequest);
+            if (onSuccess && typeof onSuccess === "function") {
+                onSuccess();
             }
             onClose();
         } catch (e) {
             if (e instanceof Error) {
                 setError(e.message);
+            }
+            if (onError && typeof onError === "function") {
+                onError();
             }
         }
         setIsBusy(false);
@@ -46,7 +47,7 @@ const DeletePeerDialog: React.FC<IDeletePeerDialog> = ({ onClose, peer }) => {
                     <button
                         type="button"
                         className="button button--primary"
-                        onClick={handleDeletePeer}
+                        onClick={handleDeleteUser}
                         disabled={isBusy}
                     >
                         Yes
@@ -57,10 +58,14 @@ const DeletePeerDialog: React.FC<IDeletePeerDialog> = ({ onClose, peer }) => {
                 </React.Fragment>
             }
         >
-            <p className="margin-t-t">Are you sure you want to delete the peer? </p>
-            {error && <p className="dialog-content-error">{error}</p>}
+            <p className="margin-t-t">Are you sure you want to delete the user? </p>
+            {error && <p className="dialog--error">{error}</p>}
         </Dialog>
     );
 };
 
-export default DeletePeerDialog;
+DeleteUserDialog.defaultProps = {
+    onError: () => {},
+    onSuccess: () => {},
+};
+export default DeleteUserDialog;

@@ -1,21 +1,55 @@
 /* stylelint-disable selector-class-pattern */
-@import "./fonts";
-@import "./variables";
+@use "./fonts" as *;
+@use "./variables" as *;
 
 .select-wrapper {
-  display: inline-block;
-  position: relative;
+    display: inline-block;
+    position: relative;
 
-  svg {
-    position: absolute;
-    z-index: 2;
-    top: 16px;
-    right: 18px;
-    color: var(--text-color-primary);
-    pointer-events: none;
-  }
+    svg {
+        position: absolute;
+        z-index: 2;
+        top: 16px;
+        right: 18px;
+        color: var(--text-color-primary);
+        pointer-events: none;
+    }
 
-  select {
+    select {
+        @include font-size(14px);
+
+        height: 40px;
+        margin: 0;
+        padding: 0 48px 0 20px;
+        border: 1px solid var(--text-color-secondary);
+        border-radius: $form-input-radius;
+        outline: none;
+        background-color: transparent;
+        color: var(--text-color-primary);
+        font-family: $font-sans;
+        appearance: none;
+
+        &:focus {
+            box-shadow: 0 0 3px 0 var(--accent-primary);
+        }
+
+        &:-ms-expand {
+            display: none;
+        }
+
+        &:-moz-focusring {
+            color: transparent;
+            text-shadow: 0 0 0 var(--text-color-primary);
+        }
+
+        option {
+            background-color: var(--panel-background);
+            color: var(--text-color-primary);
+        }
+    }
+}
+
+input {
     @include font-size(14px);
 
     height: 40px;
@@ -30,103 +64,74 @@
     appearance: none;
 
     &:focus {
-      box-shadow: 0 0 3px 0 var(--accent-primary);
+        box-shadow: 0 0 3px 0 var(--accent-primary);
     }
 
-    &:-ms-expand {
-      display: none;
+    &:disabled {
+        opacity: 0.5;
     }
 
-    &:-moz-focusring {
-      color: transparent;
-      text-shadow: 0 0 0 var(--text-color-primary);
+    &.input--stretch {
+        width: 100%;
     }
 
     option {
-      background-color: var(--panel-background);
-      color: var(--text-color-primary);
+        background-color: var(--panel-background);
+        color: var(--text-color-primary);
     }
-  }
-}
-
-input {
-  @include font-size(14px);
-
-  height: 40px;
-  margin: 0;
-  padding: 0 20px;
-  border: 1px solid var(--text-color-secondary);
-  border-radius: $form-input-radius;
-  outline: none;
-  background-color: transparent;
-  color: var(--text-color-primary);
-  font-family: $font-sans;
-  appearance: none;
-
-  &:focus {
-    box-shadow: 0 0 3px 0 var(--accent-primary);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-  }
-
-  &.input--stretch {
-    width: 100%;
-  }
 }
 
 input[type="file"]::file-selector-button {
-  display: none;
+    display: none;
 }
 
 .file-wrapper {
-  display: inline-block;
-  position: relative;
+    display: inline-block;
+    position: relative;
 
-  input {
-    padding-left: 30px;
-  }
+    input {
+        padding-left: 30px;
+    }
 
-  svg {
-    position: absolute;
-    top: 5px;
-    left: 0;
-  }
+    svg {
+        position: absolute;
+        top: 5px;
+        left: 0;
+    }
 }
 
 input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  margin: 0;
-  padding: 0;
-  border: 1px solid var(--text-color-secondary);
-  border-radius: 3px;
-  background-color: transparent;
-  color: var(--text-color-primary);
-  appearance: none;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--text-color-secondary);
+    border-radius: 3px;
+    background-color: transparent;
+    color: var(--text-color-primary);
+    appearance: none;
 
-  &:focus {
-    box-shadow: 0 0 3px 0 var(--accent-primary);
-  }
+    &:focus {
+        box-shadow: 0 0 3px 0 var(--accent-primary);
+    }
 
-  &:disabled {
-    opacity: 0.8;
-  }
+    &:disabled {
+        opacity: 0.8;
+    }
 
-  &:checked {
-    padding: 2px;
-    background-color: var(--panel-background);
-  }
+    &:checked {
+        padding: 2px;
+        background-color: var(--panel-background);
+    }
 
-  &:checked::before {
-    content: "\2713";
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 10px;
-    height: 10px;
-    color: var(--accent-primary);
-    font-weight: 800;
-  }
+    &:checked::before {
+        content: "\2713";
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 10px;
+        height: 10px;
+        color: var(--accent-primary);
+        font-weight: 800;
+    }
 }

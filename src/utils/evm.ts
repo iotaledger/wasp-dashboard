@@ -1,9 +1,10 @@
 import { Environment } from "../environment";
 
 /**
- *
- * @param chainID
+ * Format the EVM JSON RPC URL.
+ * @param chainID The chain ID.
+ * @returns The formatted URL.
  */
-export function formatEVMJSONRPCUrl(chainID: string) {
+export function formatEVMJSONRPCUrl(chainID: string): string {
     return `${Environment.WaspApiUrl}:9090/chain/${chainID}/evm/jsonrpc`;
 }

@@ -19,7 +19,7 @@ function NavMenu(props: NavMenuProps) {
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        BrandHelper.getLogoNavigation(themeService.get()).then((logo) => {
+        BrandHelper.getLogoNavigation(themeService.get()).then(logo => {
             setLogoSrc(logo);
         });
 

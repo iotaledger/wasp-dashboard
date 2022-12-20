@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-operators */
+
 import { OutputTypes } from "@iota/iota.js";
 import React, { Component, ReactNode } from "react";
 import Pagination from "../layout/Pagination";
@@ -18,7 +20,7 @@ class Outputs extends Component<OutputsProps, OutputsState> {
         super(props);
 
         this.state = {
-          currentPage: this.props.currentPage
+            currentPage: this.props.currentPage,
         };
     }
 
@@ -53,16 +55,12 @@ class Outputs extends Component<OutputsProps, OutputsState> {
                     <div className="row spread">
                         <div className="card--header">
                             <h2 className="card--header__title">{this.props.title}</h2>
-                            <span className="card--header-count">
-                                {this.props.outputs.length}
-                            </span>
+                            <span className="card--header-count">{this.props.outputs.length}</span>
                         </div>
                         {this.props.statusBusy && (
                             <div className="card--header">
                                 <Spinner compact={true} />
-                                <p className="status margin-l-s">
-                                    Loading outputs...
-                                </p>
+                                <p className="status margin-l-s">Loading outputs...</p>
                             </div>
                         )}
                     </div>
@@ -70,9 +68,9 @@ class Outputs extends Component<OutputsProps, OutputsState> {
                     {this.currentPageOutputs.map((output, idx) => (
                         <Output
                             key={output.outputId}
-                            index={((this.state.currentPage - 1) * this.props.pageSize) + idx + 1}
+                            index={(this.state.currentPage - 1) * this.props.pageSize + idx + 1}
                             outputId={output.outputId}
-                            output={output.outputType ?? (output.outputDetails?.output ?? {} as OutputTypes)}
+                            output={output.outputType ?? output.outputDetails?.output ?? ({} as OutputTypes)}
                             metadata={output.outputDetails?.metadata}
                         />
                     ))}
@@ -84,22 +82,18 @@ class Outputs extends Component<OutputsProps, OutputsState> {
                         extraPageRangeLimit={this.props.extraPageRangeLimit}
                         siblingsCount={this.props.siblingsCount}
                         onPageChange={(page: number) =>
-                            this.setState({ currentPage: page },
-                                () => {
-                                    if (this.props.onPageChange) {
-                                        this.props.onPageChange(this.state.currentPage, ...this.getPageIndexes());
-                                    }
+                            this.setState({ currentPage: page }, () => {
+                                if (this.props.onPageChange) {
+                                    this.props.onPageChange(this.state.currentPage, ...this.getPageIndexes());
                                 }
-                            )}
+                            })}
                     />
                 </div>
                 {this.props.outputs.length === 0 && (
                     <div className="card margin-t-m padding-l">
                         <h2 className="margin-b-s">{this.props.title}</h2>
                         {this.props.outputs && (
-                            <div className="card--value">
-                                There are no outputs for this address.
-                            </div>
+                            <div className="card--value">There are no outputs for this address.</div>
                         )}
                     </div>
                 )}
@@ -114,9 +108,9 @@ class Outputs extends Component<OutputsProps, OutputsState> {
     private getPageIndexes() {
         const firstPageIndex = (this.state.currentPage - 1) * this.props.pageSize;
         const lastPageIndex =
-            (this.state.currentPage === Math.ceil(this.props.outputs.length / this.props.pageSize))
-            ? this.props.outputs.length
-            : firstPageIndex + this.props.pageSize;
+            this.state.currentPage === Math.ceil(this.props.outputs.length / this.props.pageSize)
+                ? this.props.outputs.length
+                : firstPageIndex + this.props.pageSize;
         return [firstPageIndex, lastPageIndex] as const;
     }
 }

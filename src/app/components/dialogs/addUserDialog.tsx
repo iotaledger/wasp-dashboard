@@ -95,8 +95,8 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
         >
             <React.Fragment>
                 <p>Please enter the username and the password.</p>
-                <div className="dialog--label">Username</div>
-                <div className="dialog--value">
+                <div className="dialog-content-label">Username</div>
+                <div className="dialog-value">
                     <input
                         type="text"
                         className="input--stretch"
@@ -107,12 +107,12 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                         onChange={onChange}
                     />
                 </div>
-                <div className="dialog--label">Password</div>
-                <div className="dialog--value">
+                <div className="dialog-content-label">Password</div>
+                <div className="dialog-value">
                     <PasswordInput inputValue={formValues.password} onChange={onChange} disabled={isBusy} />
                 </div>
-                <div className="dialog--label">Permissions</div>
-                <div className="dialog--value">
+                <div className="dialog-content-label">Permissions</div>
+                <div className="dialog-content-value">
                     <input
                         type="textarea"
                         className="input--stretch"
@@ -121,7 +121,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                         value={formValues.permissions.join(", ")}
                         disabled
                     />
-                    {error && <p className="dialog--error">{error}</p>}
+                    {error && <p className="dialog-error">{error}</p>}
                 </div>
             </React.Fragment>
         </Dialog>
