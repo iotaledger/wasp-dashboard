@@ -6,6 +6,7 @@ import { ChainMetrics } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 import ChainMessagesTable from "../components/layout/ChainMessagesTable";
 import GoBackButton from "../components/layout/GoBackButton";
+import InfoBox from "../components/layout/InfoBox";
 
 /**
  * L1 chain panel.
@@ -39,12 +40,9 @@ function L1Chain() {
                     <h2 className="margin-l-s l1-details-title">L1 Chain {chainID}</h2>
                 </div>
                 <div className="content">
-                    <div className="card col fill last-card">
-                        <div className="l1-summary">
-                            <h4>L1 Chain metrics</h4>
-                            {l1ChainMetrics && <ChainMessagesTable chainMetrics={l1ChainMetrics} />}
-                        </div>
-                    </div>
+                    <InfoBox title="L1 Chain metrics" categoryClassName="l1" cardClassName="last-card">
+                        {l1ChainMetrics && <ChainMessagesTable chainMetrics={l1ChainMetrics} />}
+                    </InfoBox>
                 </div>
             </div>
         </div>

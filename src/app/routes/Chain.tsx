@@ -13,6 +13,7 @@ import {
 import { WaspClientService } from "../../services/waspClientService";
 import { formatEVMJSONRPCUrl } from "../../utils/evm";
 import GoBackButton from "../components/layout/GoBackButton";
+import InfoBox from "../components/layout/InfoBox";
 
 interface ChainInfoValue {
     key: string;
@@ -129,170 +130,146 @@ function Chain() {
                     <h2 className="margin-l-s l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
-                    <div className="card col fill">
-                        <div className="chain-summary">
-                            <h4>Info</h4>
-                            {chainInfo
-                                .filter(({ key }) => !INFO_SKIP_NAMES.has(key))
-                                .map(({ key, val }) => (
-                                    <div key={key} className="card-item">
-                                        <span>{INFO_NAMES[key]}:</span>
-                                        <p className="value">{val.toString()}</p>
-                                    </div>
-                                ))}
-                        </div>
-                    </div>
-                    <div className="card col fill">
-                        <div className="chain-summary">
-                            <h4>Contracts</h4>
-                            {chainContracts.map(({ name, hName, description, programHash }) => (
-                                <div key={name} className="card-item">
-                                    <Link to={`/chain/${chainID}/contract/${hName}`}>
-                                        <span>{name}:</span>
-                                    </Link>
-                                    <p className="value">{description}</p>
+                    <InfoBox title="Info" categoryClassName="chain">
+                        {chainInfo
+                            .filter(({ key }) => !INFO_SKIP_NAMES.has(key))
+                            .map(({ key, val }) => (
+                                <div key={key} className="card-item">
+                                    <span>{INFO_NAMES[key]}:</span>
+                                    <p className="value">{val.toString()}</p>
                                 </div>
                             ))}
-                        </div>
-                    </div>
-                    <div className="card col fill">
-                        <div className="chain-summary">
-                            <h4>On-chain accounts</h4>
-                            <ul>
-                                {chainAccounts.map(account => (
-                                    <li key={account}>{account}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="card col fill">
-                        <div className="chain-summary">
-                            <h4>Total Assets</h4>
-                            {chainAssets?.baseTokens && (
-                                <React.Fragment>
-                                    <div className="card-item">
-                                        <span>Base Tokens:</span>
-                                        <p className="value">{chainAssets?.baseTokens}</p>
-                                    </div>
-                                    <br />
-                                </React.Fragment>
-                            )}
-                            {chainAssets?.tokens && chainAssets.tokens.length > 0 && (
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {chainAssets?.tokens?.map(token => (
-                                            <tr key={token.iD}>
-                                                <td>{token.iD}</td>
-                                                <td>{token.amount}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            )}
-                        </div>
-                    </div>
-                    <div className="card col fill">
-                        <div className="chain-summary">
-                            <h4>Blobs</h4>
-                            {chainBlobs.length > 0 ? (
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Hash</th>
-                                            <th>Size (bytes)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {chainBlobs.map(blob => (
-                                            <tr key={blob.hash}>
-                                                <td>{blob.hash}</td>
-                                                <td>{blob.size}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            ) : (
-                                <p>No blobs found.</p>
-                            )}
-                        </div>
-                    </div>
-                    <div className="card col fill">
-                        <div className="chain-summary">
-                            <h4>Latest block</h4>
-                            <div className="card-item">
-                                <span>Block index:</span>
-                                <Link to={`blocks/${chainLatestBlock?.blockIndex}`}>
-                                    <p className="value">{chainLatestBlock?.blockIndex}</p>
+                    </InfoBox>
+                    <InfoBox title="Contracts" categoryClassName="chain">
+                        {chainContracts.map(({ name, hName, description, programHash }) => (
+                            <div key={name} className="card-item">
+                                <Link to={`/chain/${chainID}/contract/${hName}`}>
+                                    <span>{name}:</span>
                                 </Link>
+                                <p className="value">{description}</p>
                             </div>
-                            <div className="card-item">
-                                <span>Last updated:</span>
-                                <p className="value">{chainLatestBlock?.timestamp?.toISOString()}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card col fill">
-                        <div className="chain-summary">
-                            <h4>Committee</h4>
-                            {chainCommitteeInfo && (
-                                <React.Fragment>
-                                    <div className="card-item">
-                                        <span>Address:</span>
-                                        <p className="value">{chainCommitteeInfo.stateAddress}</p>
-                                    </div>
-                                    <div className="card-item">
-                                        <span>Status:</span>
-                                        <p className="value">{getStatus(chainCommitteeInfo.active ?? false)}</p>
-                                    </div>
-                                </React.Fragment>
-                            )}
-                            <br />
-                            <h4>Peers</h4>
-                            {chainCommitteeInfo?.candidateNodes && (
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Index</th>
-                                            <th>Pubkey</th>
-                                            <th>Status</th>
+                        ))}
+                    </InfoBox>
+                    <InfoBox title="On-chain accounts" categoryClassName="chain">
+                        <ul>
+                            {chainAccounts.map(account => (
+                                <li key={account}>{account}</li>
+                            ))}
+                        </ul>
+                    </InfoBox>
+                    <InfoBox title="Total Assets" categoryClassName="chain">
+                        {chainAssets?.baseTokens && (
+                            <React.Fragment>
+                                <div className="card-item">
+                                    <span>Base Tokens:</span>
+                                    <p className="value">{chainAssets?.baseTokens}</p>
+                                </div>
+                                <br />
+                            </React.Fragment>
+                        )}
+                        {chainAssets?.tokens && chainAssets.tokens.length > 0 && (
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {chainAssets?.tokens?.map(token => (
+                                        <tr key={token.iD}>
+                                            <td>{token.iD}</td>
+                                            <td>{token.amount}</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {chainCommitteeInfo.committeeNodes?.map(({ node }, i) => (
-                                            <tr key={node?.publicKey}>
-                                                <td>{i}</td>
-                                                <td>{node?.publicKey}</td>
-                                                <td>{getStatus(node?.isAlive ?? false)}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            )}
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </InfoBox>
+                    <InfoBox title="Blobs" categoryClassName="chain">
+                        {chainBlobs.length > 0 ? (
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Hash</th>
+                                        <th>Size (bytes)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {chainBlobs.map(blob => (
+                                        <tr key={blob.hash}>
+                                            <td>{blob.hash}</td>
+                                            <td>{blob.size}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <p>No blobs found.</p>
+                        )}
+                    </InfoBox>
+                    <InfoBox title="Latest block" categoryClassName="chain">
+                        <div className="card-item">
+                            <span>Block index:</span>
+                            <Link to={`blocks/${chainLatestBlock?.blockIndex}`}>
+                                <p className="value">{chainLatestBlock?.blockIndex}</p>
+                            </Link>
                         </div>
-                    </div>
-                    <div className="card col fill">
-                        <div className="chain-summary">
-                            <h4>EVM</h4>
-                            {ChainID && (
-                                <React.Fragment>
-                                    <div className="card-item">
-                                        <span>EVM ChainID:</span>
-                                        <p className="value">{EVMChainID?.val}</p>
-                                    </div>
-                                    <div className="card-item">
-                                        <span>JSON-RPC URL:</span>
-                                        <p className="value">{formatEVMJSONRPCUrl(ChainID?.val)}</p>
-                                    </div>
-                                </React.Fragment>
-                            )}
+                        <div className="card-item">
+                            <span>Last updated:</span>
+                            <p className="value">{chainLatestBlock?.timestamp?.toISOString()}</p>
                         </div>
-                    </div>
+                    </InfoBox>
+                    <InfoBox title="Committee" categoryClassName="chain">
+                        {chainCommitteeInfo && (
+                            <React.Fragment>
+                                <div className="card-item">
+                                    <span>Address:</span>
+                                    <p className="value">{chainCommitteeInfo.stateAddress}</p>
+                                </div>
+                                <div className="card-item">
+                                    <span>Status:</span>
+                                    <p className="value">{getStatus(chainCommitteeInfo.active ?? false)}</p>
+                                </div>
+                            </React.Fragment>
+                        )}
+                        <br />
+                        <h4>Peers</h4>
+                        {chainCommitteeInfo?.candidateNodes && (
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Index</th>
+                                        <th>Pubkey</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {chainCommitteeInfo.committeeNodes?.map(({ node }, i) => (
+                                        <tr key={node?.publicKey}>
+                                            <td>{i}</td>
+                                            <td>{node?.publicKey}</td>
+                                            <td>{getStatus(node?.isAlive ?? false)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </InfoBox>
+                    <InfoBox title="EVM" categoryClassName="chain">
+                        {ChainID && (
+                            <React.Fragment>
+                                <div className="card-item">
+                                    <span>EVM ChainID:</span>
+                                    <p className="value">{EVMChainID?.val}</p>
+                                </div>
+                                <div className="card-item">
+                                    <span>JSON-RPC URL:</span>
+                                    <p className="value">{formatEVMJSONRPCUrl(ChainID?.val)}</p>
+                                </div>
+                            </React.Fragment>
+                        )}
+                    </InfoBox>
                 </div>
             </div>
         </div>

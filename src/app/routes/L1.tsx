@@ -8,6 +8,7 @@ import { NodeConfigService } from "../../services/nodeConfigService";
 import { ChainInfoResponse, ChainMetrics, L1Params } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 import ChainMessagesTable from "../components/layout/ChainMessagesTable";
+import InfoBox from "../components/layout/InfoBox";
 
 /**
  * L1 panel.
@@ -53,65 +54,55 @@ function L1() {
                 <h2>L1</h2>
                 <div className="content">
                     {l1Params && (
-                        <div className="card col fill first-card">
-                            <div className="l1-summary">
-                                <h4>L1 params</h4>
+                        <InfoBox title="L1 params" categoryClassName="l1" cardClassName="first-card">
+                            {Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
+                                const isObject = typeof val === "object";
+                                return (
+                                    <div key={key} className="l1-info-item">
+                                        <h4>{key}</h4>
+                                        {isObject ? (
+                                            <div>
+                                                {Object.entries(val).map(([prop, propVal]) => (
+                                                    <div className="info-item" key={prop}>
+                                                        <span>{prop}:</span>
 
-                                {Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
-                                    const isObject = typeof val === "object";
-                                    return (
-                                        <div key={key} className="l1-info-item">
-                                            <h4>{key}</h4>
-                                            {isObject ? (
-                                                <div>
-                                                    {Object.entries(val).map(([prop, propVal]) => (
-                                                        <div className="info-item" key={prop}>
-                                                            <span>{prop}:</span>
-
-                                                            {typeof propVal === "boolean" ? (
-                                                                propVal ? (
-                                                                    <input type="checkbox" checked disabled />
-                                                                ) : (
-                                                                    <input type="checkbox" disabled />
-                                                                )
+                                                        {typeof propVal === "boolean" ? (
+                                                            propVal ? (
+                                                                <input type="checkbox" checked disabled />
                                                             ) : (
-                                                                <p> {`${propVal}`}</p>
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <p>{val}</p>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    )}
-                    <div className="card col fill">
-                        <div className="l1-summary">
-                            <h4>Chains</h4>
-                            {chains?.map(chain => (
-                                <Link key={chain.chainID} to={`/l1/${chain.chainID}`}>
-                                    <div className="l1-summary-item">
-                                        <div className="l1-health-icon">
-                                            {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
-                                        </div>
-                                        <p className="l1-id" title={chain.chainID}>
-                                            {chain.chainID}
-                                        </p>
+                                                                <input type="checkbox" disabled />
+                                                            )
+                                                        ) : (
+                                                            <p> {`${propVal}`}</p>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <p>{val}</p>
+                                        )}
                                     </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="card col fill last-card">
-                        <div className="l1-summary">
-                            <h4>L1 global metrics</h4>
-                            {l1Metrics && <ChainMessagesTable chainMetrics={l1Metrics} />}
-                        </div>
-                    </div>
+                                );
+                            })}
+                        </InfoBox>
+                    )}
+                    <InfoBox title="Chains" categoryClassName="l1">
+                        {chains?.map(chain => (
+                            <Link key={chain.chainID} to={`/l1/${chain.chainID}`}>
+                                <div className="l1-summary-item">
+                                    <div className="l1-health-icon">
+                                        {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
+                                    </div>
+                                    <p className="l1-id" title={chain.chainID}>
+                                        {chain.chainID}
+                                    </p>
+                                </div>
+                            </Link>
+                        ))}
+                    </InfoBox>
+                    <InfoBox title="L1 global metrics" categoryClassName="l1" cardClassName="last-card">
+                        {l1Metrics && <ChainMessagesTable chainMetrics={l1Metrics} />}
+                    </InfoBox>
                 </div>
             </div>
         </div>

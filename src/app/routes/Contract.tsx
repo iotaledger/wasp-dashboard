@@ -4,6 +4,7 @@ import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Contract.scss";
 import { ContractInfoResponse } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
+import InfoBox from "../components/layout/InfoBox";
 
 /**
  * Contract panel.
@@ -37,18 +38,15 @@ function Contract() {
             <div className="contract-wrapper">
                 <h2>Contract {contractInfo?.name}</h2>
                 <div className="content">
-                    <div className="card col fill">
-                        <div className="contract-summary">
-                            <h4>INFO</h4>
-                            {contractInfo &&
-                                Object.entries(contractInfo).map(([key, val]) => (
-                                    <div key={key} className="card-item">
-                                        <span>{key}:</span>
-                                        <p className="value">{val.toString()}</p>
-                                    </div>
-                                ))}
-                        </div>
-                    </div>
+                    <InfoBox title="Info" categoryClassName="contract">
+                        {contractInfo &&
+                            Object.entries(contractInfo).map(([key, val]) => (
+                                <div key={key} className="card-item">
+                                    <span>{key}:</span>
+                                    <p className="value">{val.toString()}</p>
+                                </div>
+                            ))}
+                    </InfoBox>
                 </div>
             </div>
         </div>

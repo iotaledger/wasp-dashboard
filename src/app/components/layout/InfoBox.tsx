@@ -3,9 +3,9 @@ import React from "react";
 interface InfoBoxProps {
     title: string;
     children: React.ReactNode;
-    classNameCategory?: string;
-    classNameTitle?: string;
-    classNameCard?: string;
+    categoryClassName?: string;
+    titleClassName?: string;
+    cardClassName?: string;
     titleWithIcon?: boolean;
     icon?: React.ReactNode;
 }
@@ -15,37 +15,37 @@ interface InfoBoxProps {
  * @param title.title
  * @param title
  * @param children
- * @param classNameCategory
- * @param classNameTitle
- * @param classNameCard
+ * @param categoryClassName
+ * @param titleClassName
+ * @param cardClassName
  * @param titleWithIcon
  * @param icon
  * @param title.children
- * @param title.classNameCategory
- * @param title.classNameTitle
- * @param title.classNameCard
+ * @param title.categoryClassName
+ * @param title.titleClassName
+ * @param title.cardClassName
  * @param title.titleWithIcon
  * @param title.icon
  */
 function InfoBox({
     title,
     children,
-    classNameCategory,
-    classNameTitle,
-    classNameCard,
+    categoryClassName,
+    titleClassName,
+    cardClassName,
     titleWithIcon,
     icon,
 }: InfoBoxProps) {
     return (
-        <div className={classNameCard ? `${classNameCard} card col fill` : "card col fill"}>
-            <div className={classNameCategory ? `${classNameCategory}-summary` : ""}>
+        <div className={cardClassName ? `${cardClassName} card col fill` : "card col fill"}>
+            <div className={categoryClassName ? `${categoryClassName}-summary` : ""}>
                 {titleWithIcon ? (
                     <div className="row middle spread margin-b-m">
-                        <h4 className={classNameTitle ?? ""}>{title}</h4>
+                        <h4 className={titleClassName ?? ""}>{title}</h4>
                         {titleWithIcon && icon}
                     </div>
                 ) : (
-                    <h4 className={classNameTitle ?? ""}>{title}</h4>
+                    <h4 className={titleClassName ?? ""}>{title}</h4>
                 )}
                 {children}
             </div>
@@ -54,10 +54,10 @@ function InfoBox({
 }
 
 InfoBox.defaultProps = {
-    classNameCard: "",
-    classNameCategory: "",
-    classNameTitle: "",
+    cardClassName: "",
+    categoryClassName: "",
     icon: null,
+    titleClassName: "",
     titleWithIcon: false,
 };
 export default InfoBox;
