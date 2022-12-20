@@ -2,6 +2,93 @@
 @use "./fonts" as *;
 @use "./variables" as *;
 
+input {
+    @include font-size(14px);
+
+    height: 40px;
+    margin: 0;
+    padding: 0 48px 0 20px;
+    border: 1px solid var(--text-color-secondary);
+    border-radius: $form-input-radius;
+    outline: none;
+    background-color: transparent;
+    color: var(--text-color-primary);
+    font-family: $font-sans;
+    appearance: none;
+
+    &:focus {
+        box-shadow: 0 0 3px 0 var(--accent-primary);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+    }
+
+    &.input--stretch {
+        width: 100%;
+    }
+
+    option {
+        background-color: var(--panel-background);
+        color: var(--text-color-primary);
+    }
+}
+
+input[type="file"]::file-selector-button {
+    display: none;
+}
+
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--text-color-secondary);
+    border-radius: 3px;
+    background-color: transparent;
+    color: var(--text-color-primary);
+    appearance: none;
+
+    &:focus {
+        box-shadow: 0 0 3px 0 var(--accent-primary);
+    }
+
+    &:disabled {
+        opacity: 0.8;
+    }
+
+    &:checked {
+        padding: 2px;
+        background-color: var(--panel-background);
+    }
+
+    &:checked::before {
+        content: "\2713";
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 10px;
+        height: 10px;
+        color: var(--accent-primary);
+        font-weight: 800;
+    }
+}
+
+.file-wrapper {
+    display: inline-block;
+    position: relative;
+
+    input {
+        padding-left: 30px;
+    }
+
+    svg {
+        position: absolute;
+        top: 5px;
+        left: 0;
+    }
+}
+
 .select-wrapper {
     display: inline-block;
     position: relative;
@@ -46,92 +133,5 @@
             background-color: var(--panel-background);
             color: var(--text-color-primary);
         }
-    }
-}
-
-input {
-    @include font-size(14px);
-
-    height: 40px;
-    margin: 0;
-    padding: 0 48px 0 20px;
-    border: 1px solid var(--text-color-secondary);
-    border-radius: $form-input-radius;
-    outline: none;
-    background-color: transparent;
-    color: var(--text-color-primary);
-    font-family: $font-sans;
-    appearance: none;
-
-    &:focus {
-        box-shadow: 0 0 3px 0 var(--accent-primary);
-    }
-
-    &:disabled {
-        opacity: 0.5;
-    }
-
-    &.input--stretch {
-        width: 100%;
-    }
-
-    option {
-        background-color: var(--panel-background);
-        color: var(--text-color-primary);
-    }
-}
-
-input[type="file"]::file-selector-button {
-    display: none;
-}
-
-.file-wrapper {
-    display: inline-block;
-    position: relative;
-
-    input {
-        padding-left: 30px;
-    }
-
-    svg {
-        position: absolute;
-        top: 5px;
-        left: 0;
-    }
-}
-
-input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    padding: 0;
-    border: 1px solid var(--text-color-secondary);
-    border-radius: 3px;
-    background-color: transparent;
-    color: var(--text-color-primary);
-    appearance: none;
-
-    &:focus {
-        box-shadow: 0 0 3px 0 var(--accent-primary);
-    }
-
-    &:disabled {
-        opacity: 0.8;
-    }
-
-    &:checked {
-        padding: 2px;
-        background-color: var(--panel-background);
-    }
-
-    &:checked::before {
-        content: "\2713";
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 10px;
-        height: 10px;
-        color: var(--accent-primary);
-        font-weight: 800;
     }
 }
