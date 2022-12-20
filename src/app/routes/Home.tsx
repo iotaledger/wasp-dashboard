@@ -154,7 +154,6 @@ class Home extends AsyncComponent<unknown, HomeState> {
                     <div className="row fill margin-t-s desktop-down-column">
                         <InfoBox
                             title="Peers"
-                            cardClassName="col peers-summary-col"
                             titleClassName="title"
                             titleWithIcon={true}
                             icon={
