@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { Dialog } from "../";
 import { ServiceFactory } from "../../../factories/serviceFactory";
 import { ChangeUserPasswordRequest, User } from "../../../services/wasp_client";
@@ -7,9 +7,11 @@ import PasswordInput from "../layout/PasswordInput";
 interface IEditUserDialog {
     onClose: () => void;
     user: User;
+    onError?: () => void;
+    onSuccess?: () => void;
 }
 
-const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user }) => {
+const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, onError }) => {
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [newPassword, setNewPassword] = useState<string>("");
@@ -25,15 +27,29 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user }) => {
                 ...user,
                 updateUserPasswordRequest: { password: confirmPassword },
             } as ChangeUserPasswordRequest);
+            if (onSuccess && typeof onSuccess === "function") {
+                onSuccess();
+            }
             onClose();
         } catch (e) {
             if (e instanceof Error) {
                 setError(e.message);
             }
+            if (onError && typeof onError === "function") {
+                onError();
+            }
         } finally {
             setIsBusy(false);
         }
     }
+
+    useEffect(() => {
+        if (confirmPassword !== "" && confirmPassword !== newPassword) {
+            setError("Passwords do not match!");
+        } else {
+            setError(null);
+        }
+    }, [confirmPassword, newPassword]);
     return (
         <Dialog
             onClose={onClose}
@@ -72,9 +88,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user }) => {
                             setConfirmPassword(e.target.value)}
                         disabled={isBusy}
                     />
-                    {confirmPassword !== "" && confirmPassword !== newPassword && (
-                        <p className="dialog-content-error">Passwords do not match!</p>
-                    )}
+
                     {error && <p className="dialog-content-error">{error}</p>}
                 </div>
             </React.Fragment>
@@ -82,4 +96,8 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user }) => {
     );
 };
 
+EditUserDialog.defaultProps = {
+    onError: () => {},
+    onSuccess: () => {},
+};
 export default EditUserDialog;
