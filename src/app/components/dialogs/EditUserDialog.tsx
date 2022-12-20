@@ -30,7 +30,6 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
             if (onSuccess && typeof onSuccess === "function") {
                 onSuccess();
             }
-            onClose();
         } catch (e) {
             if (e instanceof Error) {
                 setError(e.message);
