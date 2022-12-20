@@ -10,23 +10,7 @@ interface InfoBoxProps {
     icon?: React.ReactNode;
 }
 
-/**
- *
- * @param title.title
- * @param title
- * @param children
- * @param categoryClassName
- * @param titleClassName
- * @param cardClassName
- * @param titleWithIcon
- * @param icon
- * @param title.children
- * @param title.categoryClassName
- * @param title.titleClassName
- * @param title.cardClassName
- * @param title.titleWithIcon
- * @param title.icon
- */
+// eslint-disable-next-line jsdoc/require-jsdoc
 function InfoBox({
     title,
     children,
