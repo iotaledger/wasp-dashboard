@@ -2,7 +2,7 @@
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
 
-.peers-panel-item {
+.detailed-peer {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -10,28 +10,17 @@
     min-height: 90px;
     padding: $spacing-large;
 
-    &.detailed {
-        padding: $spacing-large;
-
-        .peer-id {
-            font-weight: 700;
-        }
+    .detailed-peer-id {
+        font-weight: 700;
     }
 
-    &.summary {
-        padding: $spacing-small;
-        border: none;
-        border-radius: $spacing-small;
-        background-color: var(--panel-background-highlight);
-    }
-
-    .peer-health {
+    .detailed-peer-health {
         width: 16px;
         height: 16px;
         margin-right: $spacing-small;
     }
 
-    .peer-data {
+    .detailed-peer-data {
         @include font-size(14px);
 
         @media (max-width: 1340px) {
@@ -50,7 +39,7 @@
             font-weight: 400;
         }
 
-        .peer-id {
+        .detailed-peer-id {
             @include font-size(14px);
 
             color: var(--text-color-primary);
@@ -59,7 +48,7 @@
         }
     }
 
-    .peer-actions {
+    .detailed-peer-actions {
         margin-left: auto;
 
         > button:not(:first-child) {

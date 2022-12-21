@@ -14,6 +14,7 @@ import { WaspClientService } from "../../services/waspClientService";
 import { formatEVMJSONRPCUrl } from "../../utils/evm";
 import GoBackButton from "../components/layout/GoBackButton";
 import InfoBox from "../components/layout/InfoBox";
+import Tile from "../components/Tile";
 
 interface ChainInfoValue {
     key: string;
@@ -175,11 +176,9 @@ function Chain() {
                         ))}
                     </InfoBox>
                     <InfoBox title="On-chain accounts">
-                        <ul>
-                            {chainAccounts.map(account => (
-                                <li key={account}>{account}</li>
-                            ))}
-                        </ul>
+                        {chainAccounts.map(account => (
+                            <Tile key={account} id={account} />
+                        ))}
                     </InfoBox>
                     <InfoBox title="Total Assets">
                         {chainAssets?.baseTokens && (

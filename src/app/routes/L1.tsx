@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { ReactComponent as HealthBadIcon } from "../../assets/health-bad.svg";
-import { ReactComponent as HealthGoodIcon } from "../../assets/health-good.svg";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./L1.scss";
 import { NodeConfigService } from "../../services/nodeConfigService";
@@ -9,6 +6,7 @@ import { ChainInfoResponse, ChainMetrics, L1Params } from "../../services/wasp_c
 import { WaspClientService } from "../../services/waspClientService";
 import ChainMessagesTable from "../components/layout/ChainMessagesTable";
 import InfoBox from "../components/layout/InfoBox";
+import Tile from "../components/Tile";
 
 /**
  * L1 panel.
@@ -88,16 +86,7 @@ function L1() {
                     )}
                     <InfoBox title="Chains">
                         {chains?.map(chain => (
-                            <Link key={chain.chainID} to={`/l1/${chain.chainID}`}>
-                                <div className="l1-summary-item">
-                                    <div className="l1-health-icon">
-                                        {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
-                                    </div>
-                                    <p className="l1-id" title={chain.chainID}>
-                                        {chain.chainID}
-                                    </p>
-                                </div>
-                            </Link>
+                            <Tile iconToggle={chain.isActive} key={chain.chainID} id={chain.chainID} path="l1" />
                         ))}
                     </InfoBox>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">

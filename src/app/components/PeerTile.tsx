@@ -1,9 +1,9 @@
 import "./PeerTile.scss";
-
 import React, { useState } from "react";
 import { HealthGood, HealthWarning } from "../../assets";
 import { PeeringNodeStatusResponse } from "../../services/wasp_client";
 import { DeletePeerDialog } from "./dialogs";
+import Tile from "./Tile";
 
 interface PeerTileProps {
     /**
@@ -26,22 +26,22 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
     return (
         <React.Fragment>
-            <div className={`peers-panel-item card ${detailed ? "detailed" : "summary"}`}>
-                <span className="peer-health">
-                    <div className="peer-health-icon">{peer.isAlive ? <HealthGood /> : <HealthWarning />}</div>
-                </span>
-                <div className="col peer-data">
-                    <span className="peer-id">
-                        {blindMode ? "*".repeat((peer.publicKey ?? "Unknown").length) : peer.publicKey ?? "Unknown"}
+            {detailed ? (
+                <div className="card detailed-peer">
+                    <span className="detailed-peer-health">
+                        <div className="peer-health-icon">{peer.isAlive ? <HealthGood /> : <HealthWarning />}</div>
                     </span>
-                    {detailed && (
-                        <p className="secondary">
-                            {blindMode ? "*".repeat((peer.netID ?? "Unknown").length) : peer.netID ?? "Unknown"}
-                        </p>
-                    )}
-                </div>
-                {detailed && (
-                    <div className="col peer-actions">
+                    <div className="col detailed-peer-data">
+                        <span className="detailed-peer-id">
+                            {blindMode ? "*".repeat((peer.publicKey ?? "Unknown").length) : peer.publicKey ?? "Unknown"}
+                        </span>
+                        {detailed && (
+                            <p className="secondary">
+                                {blindMode ? "*".repeat((peer.netID ?? "Unknown").length) : peer.netID ?? "Unknown"}
+                            </p>
+                        )}
+                    </div>
+                    <div className="col detailed-peer-actions">
                         <button
                             className="card--action card--action-danger"
                             type="button"
@@ -52,8 +52,10 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
                             Delete
                         </button>
                     </div>
-                )}
-            </div>
+                </div>
+            ) : (
+                <Tile iconToggle={peer.isAlive} id={peer.publicKey} path="peers" />
+            )}
             {showDeleteDialog && (
                 <DeletePeerDialog
                     onClose={() => {
