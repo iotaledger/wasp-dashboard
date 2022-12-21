@@ -1,0 +1,28 @@
+@use "../../scss/fonts" as *;
+@use "../../scss/variables" as *;
+
+.info-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 4px;
+
+  span {
+    margin-right: 10px;
+    color: var(--text-color-secondary);
+    @include font-size(14px);
+    font-family: $font-mono;
+
+    &.link {
+      color: var(--accent-primary);
+    }
+  }
+
+  p {
+    color: var(--text-color-primary);
+    
+    &.link {
+      color: var(--accent-primary);
+    }
+  }
+}
