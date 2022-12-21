@@ -70,25 +70,6 @@
       overflow: hidden;
       border-radius: $spacing-small;
       background-color: var(--panel-background-highlight);
-
-      .info-item {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-bottom: 4px;
-
-        span {
-          margin-right: 10px;
-          color: var(--text-color-secondary);
-          @include font-size(14px);
-
-          font-family: $font-mono;
-        }
-
-        p {
-          color: var(--text-color-primary);
-        }
-      }
     }
   }
 }

@@ -4,6 +4,7 @@ import "./L1.scss";
 import { NodeConfigService } from "../../services/nodeConfigService";
 import { ChainInfoResponse, ChainMetrics, L1Params } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
+import InfoItem from "../components/InfoItem";
 import ChainMessagesTable from "../components/layout/ChainMessagesTable";
 import InfoBox from "../components/layout/InfoBox";
 import Tile from "../components/Tile";
@@ -61,19 +62,7 @@ function L1() {
                                         {isObject ? (
                                             <div>
                                                 {Object.entries(val).map(([prop, propVal]) => (
-                                                    <div className="info-item" key={prop}>
-                                                        <span>{prop}:</span>
-
-                                                        {typeof propVal === "boolean" ? (
-                                                            propVal ? (
-                                                                <input type="checkbox" checked disabled />
-                                                            ) : (
-                                                                <input type="checkbox" disabled />
-                                                            )
-                                                        ) : (
-                                                            <p> {`${propVal}`}</p>
-                                                        )}
-                                                    </div>
+                                                    <InfoItem key={prop} keyValue={prop} value={propVal} />
                                                 ))}
                                             </div>
                                         ) : (

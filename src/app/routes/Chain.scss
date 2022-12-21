@@ -36,32 +36,6 @@
     max-width: $content-width-desktop;
     margin-top: $spacing-small;
     color: var(--text-color-primary);
-
-    .card-item {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 4px;
-      color: var(--text-color-secondary);
-      font-family: $font-mono;
-
-      @include font-size(14px);
-
-      span {
-        margin-right: 10px;
-      }
-
-      p {
-        &.value {
-          color: var(--text-color-primary);
-        }
-      }
-      a {
-        color: var(--accent-primary);
-         p.value {
-          color: inherit;
-         }
-      }
-    }
     
     a {
       color: var(--accent-primary);

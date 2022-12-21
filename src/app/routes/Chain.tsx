@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
 import {
@@ -12,6 +12,7 @@ import {
 } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 import { formatEVMJSONRPCUrl } from "../../utils/evm";
+import InfoItem from "../components/InfoItem";
 import GoBackButton from "../components/layout/GoBackButton";
 import InfoBox from "../components/layout/InfoBox";
 import Tile from "../components/Tile";
@@ -159,20 +160,18 @@ function Chain() {
                         {chainInfo
                             .filter(({ key }) => !INFO_SKIP_NAMES.has(key))
                             .map(({ key, val }) => (
-                                <div key={key} className="card-item">
-                                    <span>{INFO_NAMES[key]}:</span>
-                                    <p className="value">{val.toString()}</p>
-                                </div>
+                                <InfoItem key={key} keyValue={INFO_NAMES[key]} value={val.toString()} />
                             ))}
                     </InfoBox>
                     <InfoBox title="Contracts">
                         {chainContracts.map(({ name, hName, description, programHash }) => (
-                            <div key={name} className="card-item">
-                                <Link to={`/chain/${chainID}/contract/${hName}`}>
-                                    <span>{name}:</span>
-                                </Link>
-                                <p className="value">{description}</p>
-                            </div>
+                            <InfoItem
+                                isKeyALink
+                                key={name}
+                                keyValue={name}
+                                value={description}
+                                url={`/chain/${chainID}/contract/${hName}`}
+                            />
                         ))}
                     </InfoBox>
                     <InfoBox title="On-chain accounts">
@@ -182,13 +181,11 @@ function Chain() {
                     </InfoBox>
                     <InfoBox title="Total Assets">
                         {chainAssets?.baseTokens && (
-                            <React.Fragment>
-                                <div className="card-item">
-                                    <span>Base Tokens:</span>
-                                    <p className="value">{chainAssets?.baseTokens}</p>
-                                </div>
-                                <br />
-                            </React.Fragment>
+                            <InfoItem
+                                key={chainAssets?.baseTokens}
+                                keyValue="Base Tokens"
+                                value={chainAssets?.baseTokens}
+                            />
                         )}
                         {chainAssets?.tokens && chainAssets.tokens.length > 0 && (
                             <table>
@@ -232,28 +229,19 @@ function Chain() {
                         )}
                     </InfoBox>
                     <InfoBox title="Latest block">
-                        <div className="card-item">
-                            <span>Block index:</span>
-                            <Link to={`blocks/${chainLatestBlock?.blockIndex}`}>
-                                <p className="value">{chainLatestBlock?.blockIndex}</p>
-                            </Link>
-                        </div>
-                        <div className="card-item">
-                            <span>Last updated:</span>
-                            <p className="value">{chainLatestBlock?.timestamp?.toISOString()}</p>
-                        </div>
+                        <InfoItem
+                            isValueALink
+                            keyValue="Block index"
+                            value={chainLatestBlock?.blockIndex}
+                            url={`blocks/${chainLatestBlock?.blockIndex}`}
+                        />
+                        <InfoItem keyValue="Last updated" value={chainLatestBlock?.timestamp?.toISOString()} />
                     </InfoBox>
                     <InfoBox title="Committee">
                         {chainCommitteeInfo && (
                             <React.Fragment>
-                                <div className="card-item">
-                                    <span>Address:</span>
-                                    <p className="value">{chainCommitteeInfo.stateAddress}</p>
-                                </div>
-                                <div className="card-item">
-                                    <span>Status:</span>
-                                    <p className="value">{getStatus(chainCommitteeInfo.active ?? false)}</p>
-                                </div>
+                                <InfoItem keyValue="Address" value={chainCommitteeInfo.stateAddress} />
+                                <InfoItem keyValue="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
                             </React.Fragment>
                         )}
                         <br />
@@ -282,14 +270,8 @@ function Chain() {
                     <InfoBox title="EVM">
                         {ChainID && (
                             <React.Fragment>
-                                <div className="card-item">
-                                    <span>EVM ChainID:</span>
-                                    <p className="value">{EVMChainID?.val}</p>
-                                </div>
-                                <div className="card-item">
-                                    <span>JSON-RPC URL:</span>
-                                    <p className="value">{formatEVMJSONRPCUrl(ChainID?.val)}</p>
-                                </div>
+                                <InfoItem keyValue="EVM ChainID" value={EVMChainID?.val} />
+                                <InfoItem keyValue="JSON-RPC URL" value={formatEVMJSONRPCUrl(ChainID?.val)} />
                             </React.Fragment>
                         )}
                     </InfoBox>

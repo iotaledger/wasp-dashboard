@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Configuration.scss";
 import { WaspClientService } from "../../services/waspClientService";
+import InfoItem from "../components/InfoItem";
 import InfoBox from "../components/layout/InfoBox";
 
 interface ConfigMap {
@@ -82,26 +83,18 @@ function Configuration() {
                                         {Object.entries(value).map(([keyVal, val], valueIndex) =>
                                             (typeof val === "boolean" ? (
                                                 val ? (
-                                                    <div key={valueIndex} className="card-item">
-                                                        <span>{keyVal}:</span>
-                                                        <input type="checkbox" checked disabled />
-                                                    </div>
+                                                    <InfoItem key={valueIndex} keyValue={keyVal} value={val} />
                                                 ) : (
-                                                    <div key={valueIndex} className="card-item">
-                                                        <span>{keyVal}:</span>
-                                                        <input type="checkbox" disabled />
-                                                    </div>
+                                                    <InfoItem key={valueIndex} keyValue={keyVal} value={val} />
                                                 )
                                             ) : (typeof val === "string" ? (
-                                                <div key={valueIndex} className="card-item">
-                                                    <span>{keyVal}:</span>
-                                                    <p className="value">{val}</p>
-                                                </div>
+                                                <InfoItem key={valueIndex} keyValue={keyVal} value={val} />
                                             ) : (
-                                                <div key={valueIndex} className="card-item">
-                                                    <span>{keyVal}:</span>
-                                                    <p className="value">{JSON.stringify(val)}</p>
-                                                </div>
+                                                <InfoItem
+                                                    key={valueIndex}
+                                                    keyValue={keyVal}
+                                                    value={JSON.stringify(val)}
+                                                />
                                             ))),
                                         )}
                                     </InfoBox>

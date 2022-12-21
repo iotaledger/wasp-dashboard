@@ -4,6 +4,7 @@ import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Block.scss";
 import { BlockInfoResponse, RequestReceiptResponse } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
+import InfoItem from "../components/InfoItem";
 import GoBackButton from "../components/layout/GoBackButton";
 
 /**
@@ -56,10 +57,7 @@ function Block() {
                         <div className="block-summary">
                             <h4>Info</h4>
                             {info?.map(([k, v]) => (
-                                <div key={k} className="card-item">
-                                    <span>{BLOCK_DATA_NAMES[k]}:</span>
-                                    <p className="value">{JSON.stringify(v)}</p>
-                                </div>
+                                <InfoItem key={k} keyValue={BLOCK_DATA_NAMES[k]} value={JSON.stringify(v)} />
                             ))}
                         </div>
                     </div>
@@ -80,35 +78,27 @@ function Block() {
                                     {Object.entries(receipt)
                                         .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
                                         .map(([k, v]) => (
-                                            <div key={k} className="card-item">
-                                                <span>{BLOCK_REQUEST_NAMES[k]}:</span>
-                                                <p className="value">{JSON.stringify(v)}</p>
-                                            </div>
+                                            <InfoItem
+                                                key={k}
+                                                keyValue={BLOCK_REQUEST_NAMES[k]}
+                                                value={JSON.stringify(v)}
+                                            />
                                         ))}
-                                    <div className="card-item">
-                                        <span>Sender:</span>
-                                        <p className="value">{senderAccount}</p>
-                                    </div>
+                                    <InfoItem keyValue="Sender" value={senderAccount} />
+
                                     <br />
                                     <h4 className="1-details-title">Parameters</h4>
                                     {params?.map(({ Key, Value }: Record<string, string>) => (
-                                        <div key={Key} className="card-item">
-                                            <span>{Key}:</span>
-                                            <p className="value">{JSON.stringify(Value)}</p>
-                                        </div>
+                                        <InfoItem key={Key} keyValue={Key} value={JSON.stringify(Value)} />
                                     ))}
                                     <br />
                                     <h4 className="1-details-title">Attached tokens</h4>
-                                    <div className="card-item">
-                                        <span>Base tokens:</span>
-                                        <p className="value">{attachedBaseTokens}</p>
-                                    </div>
+
+                                    <InfoItem keyValue="Base tokens" value={attachedBaseTokens} />
+
                                     <br />
                                     <h4 className="1-details-title">Allowance</h4>
-                                    <div className="card-item">
-                                        <span>Base tokens:</span>
-                                        <p className="value">{allowanceBaseTokens}</p>
-                                    </div>
+                                    <InfoItem keyValue="Base tokens" value={allowanceBaseTokens} />
                                 </div>
                             </div>
                         );
