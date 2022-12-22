@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
+import { METRICS_NAMES } from "../../lib/constants";
 import "./L1.scss";
+import { StandardMessage } from "../../lib/interfaces";
+import { formatDate } from "../../lib/utils";
 import { ChainMetrics } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
-import ChainMessagesTable from "../components/layout/ChainMessagesTable";
 import GoBackButton from "../components/layout/GoBackButton";
 import InfoBox from "../components/layout/InfoBox";
+import Table from "../components/layout/Table";
 
 /**
  * L1 chain panel.
@@ -14,6 +17,7 @@ import InfoBox from "../components/layout/InfoBox";
  */
 function L1Chain() {
     const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null>(null);
+    const [newL1MetricsArrayBasedOnKeys, setNewL1MetricsArrayBasedOnKeys] = useState<unknown[]>([]);
     const { chainID } = useParams();
 
     React.useEffect(() => {
@@ -31,7 +35,21 @@ function L1Chain() {
                 setChainL1Metrics(metrics);
             });
     }, []);
-
+    React.useEffect(() => {
+        if (l1ChainMetrics) {
+            const chainMetricsArray = Object.entries(l1ChainMetrics as ChainMetrics | null[]).map(
+                ([key, val]: [string, StandardMessage]) => {
+                    const name = METRICS_NAMES[key];
+                    const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
+                    const totalMessages = val.messages ?? 0;
+                    const lastTime = val.timestamp.valueOf() > 0 ? formatDate(val.timestamp) : "-";
+                    const lastMessage = val.lastMessage ? JSON.stringify(val.lastMessage, null, 2) : "";
+                    return { name, typeInOrOut, totalMessages, lastTime, lastMessage };
+                },
+            );
+            setNewL1MetricsArrayBasedOnKeys(chainMetricsArray);
+        }
+    }, [l1ChainMetrics]);
     return (
         <div className="l1">
             <div className="l1-wrapper">
@@ -41,7 +59,13 @@ function L1Chain() {
                 </div>
                 <div className="content">
                     <InfoBox title="L1 Chain metrics" cardClassName="last-card">
-                        {l1ChainMetrics && <ChainMessagesTable chainMetrics={l1ChainMetrics} />}
+                        {l1ChainMetrics && (
+                            <Table
+                                tBody={newL1MetricsArrayBasedOnKeys}
+                                tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
+                                classNames="chain-messages-table"
+                            />
+                        )}
                     </InfoBox>
                 </div>
             </div>

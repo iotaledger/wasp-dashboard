@@ -15,6 +15,7 @@ import { formatEVMJSONRPCUrl } from "../../utils/evm";
 import InfoItem from "../components/InfoItem";
 import GoBackButton from "../components/layout/GoBackButton";
 import InfoBox from "../components/layout/InfoBox";
+import Table from "../components/layout/Table";
 import Tile from "../components/Tile";
 
 interface ChainInfoValue {
@@ -58,7 +59,7 @@ function Chain() {
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<Record<string, ConsensusMetric> | null>(null);
     const { chainID } = useParams();
-
+    const [newChainConsensusMetrics, setNewChainConsensusMetrics] = useState<unknown[]>([]);
     const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
 
@@ -147,6 +148,18 @@ function Chain() {
                 setChainConsensusMetrics(metrics);
             });
     }, []);
+    React.useEffect(() => {
+        if (chainConsensusMetrics) {
+            const chainConsensusMetricsArray = Object.entries(chainConsensusMetrics).map(([key, value]) => {
+                const flagName = METRICS_NAMES[key];
+                const status = typeof value.status === "boolean" ? value.status : value.status.toString();
+                const triggerTime = value.triggerTime?.toISOString() ?? "NEVER";
+                return { flagName, status, triggerTime };
+            });
+            setNewChainConsensusMetrics(chainConsensusMetricsArray as unknown[]);
+            console.log("newChainConsensusMetrics", newChainConsensusMetrics);
+        }
+    }, [chainConsensusMetrics]);
 
     return (
         <div className="chain">
@@ -188,42 +201,12 @@ function Chain() {
                             />
                         )}
                         {chainAssets?.tokens && chainAssets.tokens.length > 0 && (
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {chainAssets?.tokens?.map(token => (
-                                        <tr key={token.iD}>
-                                            <td>{token.iD}</td>
-                                            <td>{token.amount}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            <Table tHead={["ID", "Amount"]} tBody={chainAssets.tokens} />
                         )}
                     </InfoBox>
                     <InfoBox title="Blobs">
                         {chainBlobs.length > 0 ? (
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Hash</th>
-                                        <th>Size (bytes)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {chainBlobs.map(blob => (
-                                        <tr key={blob.hash}>
-                                            <td>{blob.hash}</td>
-                                            <td>{blob.size}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs} />
                         ) : (
                             <p>No blobs found.</p>
                         )}
@@ -246,25 +229,15 @@ function Chain() {
                         )}
                         <br />
                         <h4>Peers</h4>
-                        {chainCommitteeInfo?.candidateNodes && (
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Index</th>
-                                        <th>Pubkey</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {chainCommitteeInfo.committeeNodes?.map(({ node }, i) => (
-                                        <tr key={node?.publicKey}>
-                                            <td>{i}</td>
-                                            <td>{node?.publicKey}</td>
-                                            <td>{getStatus(node?.isAlive ?? false)}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                        {chainCommitteeInfo?.committeeNodes && (
+                            <Table
+                                tHead={["Index", "Pubkey", "Status"]}
+                                tBody={chainCommitteeInfo?.committeeNodes.map(({ node }, i) => [
+                                    i,
+                                    node?.publicKey,
+                                    getStatus(node?.isAlive ?? false),
+                                ])}
+                            />
                         )}
                     </InfoBox>
                     <InfoBox title="EVM">
@@ -277,31 +250,7 @@ function Chain() {
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
                         {ChainID && (
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Flag name</th>
-                                        <th>Status</th>
-                                        <th>Trigger time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {chainConsensusMetrics &&
-                                        Object.entries(chainConsensusMetrics).map(([key, val]) => (
-                                            <tr key={key}>
-                                                <td>{METRICS_NAMES[key]}</td>
-                                                <td>
-                                                    {typeof val.status === "boolean" ? (
-                                                        <input type="checkbox" checked={val.status} readOnly />
-                                                    ) : (
-                                                        val.status.toString()
-                                                    )}
-                                                </td>
-                                                <td>{val.triggerTime?.toISOString() ?? "NEVER"}</td>
-                                            </tr>
-                                        ))}
-                                </tbody>
-                            </table>
+                            <Table tHead={["Flag name", "Status", "Trigger time"]} tBody={newChainConsensusMetrics} />
                         )}
                     </InfoBox>
                 </div>

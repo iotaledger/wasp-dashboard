@@ -10,13 +10,7 @@ interface TableProps {
     tHead: string[];
 }
 
-/**
- *
- * @param root0
- * @param root0.tBody
- * @param root0.classNames
- * @param root0.tHead
- */
+// eslint-disable-next-line jsdoc/require-jsdoc
 function Table({ tBody, classNames, tHead }: TableProps) {
     return (
         <table cellSpacing={0} className={classNames ?? ""} style={{ width: "100%" }}>

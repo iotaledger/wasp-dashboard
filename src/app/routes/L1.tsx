@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./L1.scss";
+import { METRICS_NAMES } from "../../lib/constants";
+import { StandardMessage } from "../../lib/interfaces";
+import { formatDate } from "../../lib/utils";
 import { NodeConfigService } from "../../services/nodeConfigService";
 import { ChainInfoResponse, ChainMetrics, L1Params } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 import InfoItem from "../components/InfoItem";
-import ChainMessagesTable from "../components/layout/ChainMessagesTable";
 import InfoBox from "../components/layout/InfoBox";
+import Table from "../components/layout/Table";
 import Tile from "../components/Tile";
 
 /**
@@ -17,6 +20,7 @@ function L1() {
     const [l1Params, setL1Params] = useState<L1Params | null>(null);
     const [chains, setChains] = useState<ChainInfoResponse[] | null>(null);
     const [l1Metrics, setl1Metrics] = useState<ChainMetrics | null>(null);
+    const [newL1MetricsArrayBasedOnKeys, setNewL1MetricsArrayBasedOnKeys] = useState<unknown[]>([]);
 
     React.useEffect(() => {
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
@@ -46,7 +50,28 @@ function L1() {
                 setl1Metrics(metrics);
             });
     }, []);
-
+    useEffect(() => {
+        if (l1Metrics) {
+            const chainMetricsArray = Object.entries(l1Metrics as ChainMetrics | null[]).map(
+                ([key, val]: [string, StandardMessage]) => {
+                    const name = METRICS_NAMES[key];
+                    const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
+                    const totalMessages = val.messages ?? 0;
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                    const date = val.timestamp.valueOf() > 0 ? formatDate(val.timestamp) : "-";
+                    const lastMessage = val.lastMessage ? JSON.stringify(val.lastMessage, null, 2) : "";
+                    return {
+                        name,
+                        typeInOrOut,
+                        totalMessages,
+                        date,
+                        lastMessage,
+                    };
+                },
+            );
+            setNewL1MetricsArrayBasedOnKeys(chainMetricsArray);
+        }
+    }, [l1Metrics]);
     return (
         <div className="l1">
             <div className="l1-wrapper">
@@ -79,7 +104,13 @@ function L1() {
                         ))}
                     </InfoBox>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
-                        {l1Metrics && <ChainMessagesTable chainMetrics={l1Metrics} />}
+                        {l1Metrics && (
+                            <Table
+                                tBody={newL1MetricsArrayBasedOnKeys}
+                                tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
+                                classNames="chain-messages-table"
+                            />
+                        )}
                     </InfoBox>
                 </div>
             </div>
