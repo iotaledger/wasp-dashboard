@@ -50,7 +50,7 @@ function Block() {
             <div className="block-wrapper">
                 <div className="middle row">
                     <GoBackButton goTo={`/chains/${chainID}`} text="chain" />
-                    <h2 className="margin-l-s l1-details-title">Block {blockID}</h2>
+                    <h2 className="margin-l-s">Block {blockID}</h2>
                 </div>
                 <div className="content">
                     <div className="card col fill">
@@ -63,7 +63,7 @@ function Block() {
                     </div>
                 </div>
                 <div className="middle row">
-                    <h2 className="margin-l-s l1-details-title">Requests</h2>
+                    <h2 className="margin-l-s">Requests</h2>
                 </div>
                 <div className="content">
                     {blockRequests.map(receipt => {
@@ -74,7 +74,7 @@ function Block() {
                         return (
                             <div key={receipt.request?.requestID} className="card col fill">
                                 <div className="block-summary">
-                                    <h4 className="1-details-title">REQUEST INFO</h4>
+                                    <h4>REQUEST INFO</h4>
                                     {Object.entries(receipt)
                                         .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
                                         .map(([k, v]) => (
@@ -87,17 +87,17 @@ function Block() {
                                     <InfoItem keyValue="Sender" value={senderAccount} />
 
                                     <br />
-                                    <h4 className="1-details-title">Parameters</h4>
+                                    <h4>Parameters</h4>
                                     {params?.map(({ Key, Value }: Record<string, string>) => (
                                         <InfoItem key={Key} keyValue={Key} value={JSON.stringify(Value)} />
                                     ))}
                                     <br />
-                                    <h4 className="1-details-title">Attached tokens</h4>
+                                    <h4>Attached tokens</h4>
 
                                     <InfoItem keyValue="Base tokens" value={attachedBaseTokens} />
 
                                     <br />
-                                    <h4 className="1-details-title">Allowance</h4>
+                                    <h4>Allowance</h4>
                                     <InfoItem keyValue="Base tokens" value={allowanceBaseTokens} />
                                 </div>
                             </div>
