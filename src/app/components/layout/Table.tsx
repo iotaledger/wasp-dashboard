@@ -1,7 +1,6 @@
 /* eslint-disable unicorn/no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import "./Table.scss";
 import React from "react";
 
 interface TableProps {
