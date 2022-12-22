@@ -1,42 +1,78 @@
+/* eslint-disable react/no-unused-prop-types */
+/* eslint-disable react/require-default-props */
+/* eslint-disable react/no-multi-comp */
 /* eslint-disable react/jsx-no-useless-fragment */
 import "./Tile.scss";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as HealthGoodIcon } from "../../assets/health-good.svg";
 import { ReactComponent as HealthWarning } from "../../assets/health-warning.svg";
+import { IAction } from "../../lib/interfaces";
 
 interface TileProps {
-    healthy?: boolean;
-    id?: string;
-    path?: string;
+    displayHealth?: boolean | undefined;
+    healthy?: boolean | undefined;
+    primaryText: string | undefined;
+    secondaryText?: string | undefined;
+    url?: string | undefined;
+    actions?: IAction[] | undefined;
 }
 
-const Tile: React.FC<TileProps> = ({ healthy, id, path }) => (
+const TileContent: React.FC<TileProps> = ({
+    actions,
+    displayHealth,
+    healthy,
+    primaryText,
+    secondaryText,
+}: TileProps) => (
+    <div className="tile-content">
+        {displayHealth && <div className="health-icon">{healthy ? <HealthGoodIcon /> : <HealthWarning />}</div>}
+        <div className="text">
+            <p className="primary">{primaryText}</p>
+            {secondaryText && <p className="primary">{secondaryText}</p>}
+        </div>
+        {actions?.length && (
+            <div className="actions">
+                {actions.map(action => (
+                    <button type="button" key={action.text} onClick={action.handleAction}>
+                        {action.text}
+                    </button>
+                ))}
+            </div>
+        )}
+    </div>
+);
+
+const Tile: React.FC<TileProps> = ({ actions, displayHealth, healthy, primaryText, secondaryText, url }) => (
     <React.Fragment>
-        {path ? (
-            <Link key={id} to={`/${path}/${id}`}>
-                <div className="summary-item">
-                    <div className="health-icon">{healthy ? <HealthGoodIcon /> : <HealthWarning />}</div>
-                    <p className="id" title={id}>
-                        {id}
-                    </p>
-                </div>
+        {url ? (
+            <Link to={url}>
+                <TileContent
+                    actions={actions}
+                    displayHealth={displayHealth}
+                    healthy={healthy}
+                    primaryText={primaryText}
+                    secondaryText={secondaryText}
+                />
             </Link>
         ) : (
-            <div className="summary-item">
-                <div className="health-icon">{healthy ? <HealthGoodIcon /> : <HealthWarning />}</div>
-                <p className="id" title={id}>
-                    {id}
-                </p>
-            </div>
+            <TileContent
+                actions={actions}
+                displayHealth={displayHealth}
+                healthy={healthy}
+                primaryText={primaryText}
+                secondaryText={secondaryText}
+            />
         )}
     </React.Fragment>
 );
 
 Tile.defaultProps = {
+    actions: undefined,
+    displayHealth: false,
     healthy: false,
-    id: "",
-    path: "",
+    secondaryText: undefined,
+    url: undefined,
 };
 
 export default Tile;

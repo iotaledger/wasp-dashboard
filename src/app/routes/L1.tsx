@@ -100,7 +100,13 @@ function L1() {
                     )}
                     <InfoBox title="Chains">
                         {chains?.map(chain => (
-                            <Tile healthy={chain.isActive} key={chain.chainID} id={chain.chainID} path="l1" />
+                            <Tile
+                                key={chain.chainID}
+                                primaryText={chain.chainID}
+                                url={`/l1/${chain.chainID}`}
+                                displayHealth
+                                healthy={chain.isActive}
+                            />
                         ))}
                     </InfoBox>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">

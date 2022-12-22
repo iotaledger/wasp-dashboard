@@ -30,7 +30,13 @@ function Chains() {
                 <h2>Chains</h2>
                 <div className="content">
                     {chains?.map(chain => (
-                        <Tile key={chain.chainID} id={chain.chainID} path="chains" healthy={chain.isActive} />
+                        <Tile
+                            key={chain.chainID}
+                            primaryText={chain.chainID}
+                            url={`/chains/${chain.chainID}`}
+                            displayHealth
+                            healthy={chain.isActive}
+                        />
                     ))}
                 </div>
             </div>
