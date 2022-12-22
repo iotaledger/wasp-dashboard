@@ -4,7 +4,7 @@ import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Contract.scss";
 import { ContractInfoResponse } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
-import InfoItem from "../components/InfoItem";
+import KeyValueRow from "../components/KeyValueRow";
 import InfoBox from "../components/layout/InfoBox";
 
 /**
@@ -42,7 +42,7 @@ function Contract() {
                     <InfoBox title="Info">
                         {contractInfo &&
                             Object.entries(contractInfo).map(([key, val]) => (
-                                <InfoItem key={key} keyText={key} value={val.toString()} />
+                                <KeyValueRow key={key} keyText={key} value={val.toString()} />
                             ))}
                     </InfoBox>
                 </div>

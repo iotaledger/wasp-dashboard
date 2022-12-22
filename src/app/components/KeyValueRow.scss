@@ -12,16 +12,14 @@
     color: var(--text-color-secondary);
     @include font-size(14px);
     font-family: $font-mono;
-
-    &.link {
-      color: var(--accent-primary);
-    }
   }
 
   p {
     color: var(--text-color-primary);
     
-    &.link {
+  }
+  a {
+    span {
       color: var(--accent-primary);
     }
   }

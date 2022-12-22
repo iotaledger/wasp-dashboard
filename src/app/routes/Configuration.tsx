@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Configuration.scss";
 import { WaspClientService } from "../../services/waspClientService";
-import InfoItem from "../components/InfoItem";
+import KeyValueRow from "../components/KeyValueRow";
 import InfoBox from "../components/layout/InfoBox";
 
 interface ConfigMap {
@@ -83,14 +83,14 @@ function Configuration() {
                                         {Object.entries(value).map(([keyVal, val], valueIndex) =>
                                             (typeof val === "boolean" ? (
                                                 val ? (
-                                                    <InfoItem key={valueIndex} keyText={keyVal} value={val} />
+                                                    <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
                                                 ) : (
-                                                    <InfoItem key={valueIndex} keyText={keyVal} value={val} />
+                                                    <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
                                                 )
                                             ) : (typeof val === "string" ? (
-                                                <InfoItem key={valueIndex} keyText={keyVal} value={val} />
+                                                <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
                                             ) : (
-                                                <InfoItem
+                                                <KeyValueRow
                                                     key={valueIndex}
                                                     keyText={keyVal}
                                                     value={JSON.stringify(val)}

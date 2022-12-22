@@ -4,7 +4,7 @@ import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Block.scss";
 import { BlockInfoResponse, RequestReceiptResponse } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
-import InfoItem from "../components/InfoItem";
+import KeyValueRow from "../components/KeyValueRow";
 import GoBackButton from "../components/layout/GoBackButton";
 
 /**
@@ -57,7 +57,7 @@ function Block() {
                         <div className="block-summary">
                             <h4>Info</h4>
                             {info?.map(([k, v]) => (
-                                <InfoItem key={k} keyText={BLOCK_DATA_NAMES[k]} value={JSON.stringify(v)} />
+                                <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={JSON.stringify(v)} />
                             ))}
                         </div>
                     </div>
@@ -78,27 +78,27 @@ function Block() {
                                     {Object.entries(receipt)
                                         .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
                                         .map(([k, v]) => (
-                                            <InfoItem
+                                            <KeyValueRow
                                                 key={k}
                                                 keyText={BLOCK_REQUEST_NAMES[k]}
                                                 value={JSON.stringify(v)}
                                             />
                                         ))}
-                                    <InfoItem keyText="Sender" value={senderAccount} />
+                                    <KeyValueRow keyText="Sender" value={senderAccount} />
 
                                     <br />
                                     <h4>Parameters</h4>
                                     {params?.map(({ Key, Value }: Record<string, string>) => (
-                                        <InfoItem key={Key} keyText={Key} value={JSON.stringify(Value)} />
+                                        <KeyValueRow key={Key} keyText={Key} value={JSON.stringify(Value)} />
                                     ))}
                                     <br />
                                     <h4>Attached tokens</h4>
 
-                                    <InfoItem keyText="Base tokens" value={attachedBaseTokens} />
+                                    <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
 
                                     <br />
                                     <h4>Allowance</h4>
-                                    <InfoItem keyText="Base tokens" value={allowanceBaseTokens} />
+                                    <KeyValueRow keyText="Base tokens" value={allowanceBaseTokens} />
                                 </div>
                             </div>
                         );
