@@ -83,16 +83,16 @@ function Configuration() {
                                         {Object.entries(value).map(([keyVal, val], valueIndex) =>
                                             (typeof val === "boolean" ? (
                                                 val ? (
-                                                    <InfoItem key={valueIndex} keyValue={keyVal} value={val} />
+                                                    <InfoItem key={valueIndex} keyText={keyVal} value={val} />
                                                 ) : (
-                                                    <InfoItem key={valueIndex} keyValue={keyVal} value={val} />
+                                                    <InfoItem key={valueIndex} keyText={keyVal} value={val} />
                                                 )
                                             ) : (typeof val === "string" ? (
-                                                <InfoItem key={valueIndex} keyValue={keyVal} value={val} />
+                                                <InfoItem key={valueIndex} keyText={keyVal} value={val} />
                                             ) : (
                                                 <InfoItem
                                                     key={valueIndex}
-                                                    keyValue={keyVal}
+                                                    keyText={keyVal}
                                                     value={JSON.stringify(val)}
                                                 />
                                             ))),

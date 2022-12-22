@@ -6,17 +6,17 @@ import { ReactComponent as HealthGoodIcon } from "../../assets/health-good.svg";
 import { ReactComponent as HealthWarning } from "../../assets/health-warning.svg";
 
 interface TileProps {
-    iconToggle?: boolean;
+    healthy?: boolean;
     id?: string;
     path?: string;
 }
 
-const Tile: React.FC<TileProps> = ({ iconToggle, id, path }) => (
+const Tile: React.FC<TileProps> = ({ healthy, id, path }) => (
     <React.Fragment>
         {path ? (
             <Link key={id} to={`/${path}/${id}`}>
                 <div className="summary-item">
-                    <div className="health-icon">{iconToggle ? <HealthGoodIcon /> : <HealthWarning />}</div>
+                    <div className="health-icon">{healthy ? <HealthGoodIcon /> : <HealthWarning />}</div>
                     <p className="id" title={id}>
                         {id}
                     </p>
@@ -24,7 +24,7 @@ const Tile: React.FC<TileProps> = ({ iconToggle, id, path }) => (
             </Link>
         ) : (
             <div className="summary-item">
-                <div className="health-icon">{iconToggle ? <HealthGoodIcon /> : <HealthWarning />}</div>
+                <div className="health-icon">{healthy ? <HealthGoodIcon /> : <HealthWarning />}</div>
                 <p className="id" title={id}>
                     {id}
                 </p>
@@ -34,7 +34,7 @@ const Tile: React.FC<TileProps> = ({ iconToggle, id, path }) => (
 );
 
 Tile.defaultProps = {
-    iconToggle: false,
+    healthy: false,
     id: "",
     path: "",
 };

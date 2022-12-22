@@ -4,32 +4,32 @@ import { Link } from "react-router-dom";
 import "./InfoItem.scss";
 
 interface InfoItemProps {
-    keyValue: string | undefined;
+    keyText: string | undefined;
     value: string | number | null | undefined | boolean;
     url?: string;
     isKeyALink?: boolean;
     isValueALink?: boolean;
 }
 
-const InfoItem: React.FC<InfoItemProps> = ({ keyValue, value, url, isKeyALink, isValueALink }) => (
+const InfoItem: React.FC<InfoItemProps> = ({ keyText, value, url, isKeyALink, isValueALink }) => (
     <React.Fragment>
         {isKeyALink && url ? (
-            <div key={keyValue} className="info-item">
+            <div key={keyText} className="info-item">
                 <Link to={url}>
-                    <span className="link">{keyValue}:</span>
+                    <span className="link">{keyText}:</span>
                 </Link>
                 <p className="value">{value}</p>
             </div>
         ) : (isValueALink && url ? (
             <div className="info-item">
-                <span>{keyValue}:</span>
+                <span>{keyText}:</span>
                 <Link to={url}>
                     <p className="value link">{value}</p>
                 </Link>
             </div>
         ) : (
-            <div className="info-item" key={keyValue}>
-                <span>{keyValue}:</span>
+            <div className="info-item" key={keyText}>
+                <span>{keyText}:</span>
 
                 {typeof value === "boolean" ? (
                     value ? (
@@ -48,6 +48,6 @@ const InfoItem: React.FC<InfoItemProps> = ({ keyValue, value, url, isKeyALink, i
 InfoItem.defaultProps = {
     isKeyALink: false,
     isValueALink: false,
-    url: "",
+    url: undefined,
 };
 export default InfoItem;

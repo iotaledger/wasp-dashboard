@@ -57,7 +57,7 @@ function Block() {
                         <div className="block-summary">
                             <h4>Info</h4>
                             {info?.map(([k, v]) => (
-                                <InfoItem key={k} keyValue={BLOCK_DATA_NAMES[k]} value={JSON.stringify(v)} />
+                                <InfoItem key={k} keyText={BLOCK_DATA_NAMES[k]} value={JSON.stringify(v)} />
                             ))}
                         </div>
                     </div>
@@ -80,25 +80,25 @@ function Block() {
                                         .map(([k, v]) => (
                                             <InfoItem
                                                 key={k}
-                                                keyValue={BLOCK_REQUEST_NAMES[k]}
+                                                keyText={BLOCK_REQUEST_NAMES[k]}
                                                 value={JSON.stringify(v)}
                                             />
                                         ))}
-                                    <InfoItem keyValue="Sender" value={senderAccount} />
+                                    <InfoItem keyText="Sender" value={senderAccount} />
 
                                     <br />
                                     <h4>Parameters</h4>
                                     {params?.map(({ Key, Value }: Record<string, string>) => (
-                                        <InfoItem key={Key} keyValue={Key} value={JSON.stringify(Value)} />
+                                        <InfoItem key={Key} keyText={Key} value={JSON.stringify(Value)} />
                                     ))}
                                     <br />
                                     <h4>Attached tokens</h4>
 
-                                    <InfoItem keyValue="Base tokens" value={attachedBaseTokens} />
+                                    <InfoItem keyText="Base tokens" value={attachedBaseTokens} />
 
                                     <br />
                                     <h4>Allowance</h4>
-                                    <InfoItem keyValue="Base tokens" value={allowanceBaseTokens} />
+                                    <InfoItem keyText="Base tokens" value={allowanceBaseTokens} />
                                 </div>
                             </div>
                         );

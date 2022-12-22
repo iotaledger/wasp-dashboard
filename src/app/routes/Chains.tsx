@@ -30,7 +30,7 @@ function Chains() {
                 <h2>Chains</h2>
                 <div className="content">
                     {chains?.map(chain => (
-                        <Tile key={chain.chainID} id={chain.chainID} path="chains" iconToggle={chain.isActive} />
+                        <Tile key={chain.chainID} id={chain.chainID} path="chains" healthy={chain.isActive} />
                     ))}
                 </div>
             </div>

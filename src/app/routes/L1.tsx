@@ -87,7 +87,7 @@ function L1() {
                                         {isObject ? (
                                             <div>
                                                 {Object.entries(val).map(([prop, propVal]) => (
-                                                    <InfoItem key={prop} keyValue={prop} value={propVal} />
+                                                    <InfoItem key={prop} keyText={prop} value={propVal} />
                                                 ))}
                                             </div>
                                         ) : (
@@ -100,7 +100,7 @@ function L1() {
                     )}
                     <InfoBox title="Chains">
                         {chains?.map(chain => (
-                            <Tile iconToggle={chain.isActive} key={chain.chainID} id={chain.chainID} path="l1" />
+                            <Tile healthy={chain.isActive} key={chain.chainID} id={chain.chainID} path="l1" />
                         ))}
                     </InfoBox>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">

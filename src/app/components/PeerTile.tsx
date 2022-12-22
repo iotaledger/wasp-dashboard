@@ -54,7 +54,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
                     </div>
                 </div>
             ) : (
-                <Tile iconToggle={peer.isAlive} id={peer.publicKey} path="peers" />
+                <Tile healthy={peer.isAlive} id={peer.publicKey} path="peers" />
             )}
             {showDeleteDialog && (
                 <DeletePeerDialog

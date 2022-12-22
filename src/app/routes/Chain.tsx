@@ -157,7 +157,6 @@ function Chain() {
                 return { flagName, status, triggerTime };
             });
             setNewChainConsensusMetrics(chainConsensusMetricsArray as unknown[]);
-            console.log("newChainConsensusMetrics", newChainConsensusMetrics);
         }
     }, [chainConsensusMetrics]);
 
@@ -173,7 +172,7 @@ function Chain() {
                         {chainInfo
                             .filter(({ key }) => !INFO_SKIP_NAMES.has(key))
                             .map(({ key, val }) => (
-                                <InfoItem key={key} keyValue={INFO_NAMES[key]} value={val.toString()} />
+                                <InfoItem key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
                             ))}
                     </InfoBox>
                     <InfoBox title="Contracts">
@@ -181,7 +180,7 @@ function Chain() {
                             <InfoItem
                                 isKeyALink
                                 key={name}
-                                keyValue={name}
+                                keyText={name}
                                 value={description}
                                 url={`/chain/${chainID}/contract/${hName}`}
                             />
@@ -196,7 +195,7 @@ function Chain() {
                         {chainAssets?.baseTokens && (
                             <InfoItem
                                 key={chainAssets?.baseTokens}
-                                keyValue="Base Tokens"
+                                keyText="Base Tokens"
                                 value={chainAssets?.baseTokens}
                             />
                         )}
@@ -214,17 +213,17 @@ function Chain() {
                     <InfoBox title="Latest block">
                         <InfoItem
                             isValueALink
-                            keyValue="Block index"
+                            keyText="Block index"
                             value={chainLatestBlock?.blockIndex}
                             url={`blocks/${chainLatestBlock?.blockIndex}`}
                         />
-                        <InfoItem keyValue="Last updated" value={chainLatestBlock?.timestamp?.toISOString()} />
+                        <InfoItem keyText="Last updated" value={chainLatestBlock?.timestamp?.toISOString()} />
                     </InfoBox>
                     <InfoBox title="Committee">
                         {chainCommitteeInfo && (
                             <React.Fragment>
-                                <InfoItem keyValue="Address" value={chainCommitteeInfo.stateAddress} />
-                                <InfoItem keyValue="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
+                                <InfoItem keyText="Address" value={chainCommitteeInfo.stateAddress} />
+                                <InfoItem keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
                             </React.Fragment>
                         )}
                         <br />
@@ -243,8 +242,8 @@ function Chain() {
                     <InfoBox title="EVM">
                         {ChainID && (
                             <React.Fragment>
-                                <InfoItem keyValue="EVM ChainID" value={EVMChainID?.val} />
-                                <InfoItem keyValue="JSON-RPC URL" value={formatEVMJSONRPCUrl(ChainID?.val)} />
+                                <InfoItem keyText="EVM ChainID" value={EVMChainID?.val} />
+                                <InfoItem keyText="JSON-RPC URL" value={formatEVMJSONRPCUrl(ChainID?.val)} />
                             </React.Fragment>
                         )}
                     </InfoBox>
