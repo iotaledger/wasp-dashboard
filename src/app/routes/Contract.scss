@@ -26,10 +26,6 @@
     }
   }
 
-  .card {
-    margin-bottom: 16px;
-  }
-
   .content {
     display: inline-flex;
     flex: 1;
@@ -37,12 +33,5 @@
     flex-wrap: wrap;
     max-width: $content-width-desktop;
     color: var(--text-color-primary);
-
-    ul {
-      margin-left: 20px;
-      li {
-        margin: 5px 0px;
-      }
-    }
   }
 }
