@@ -54,6 +54,13 @@ const Peers: React.FC = () => {
         setBlindMode(newBlindMode);
         settingsService.setBlindMode(newBlindMode);
     }
+
+    /**
+     *
+     */
+    function handleAddPeer() {
+        setShowAddPeerDialog(false);
+    }
     return (
         <div className="peers">
             <div className="content">
@@ -72,7 +79,7 @@ const Peers: React.FC = () => {
                 <div className="peers-panel">
                     <PeersList peers={peersList} blindMode={blindMode} detailedList />
                 </div>
-                {showAddPeerDialog && <AddPeerDialog onClose={() => setShowAddPeerDialog(false)} />}
+                {showAddPeerDialog && <AddPeerDialog onClose={handleAddPeer} onSuccess={handleAddPeer} />}
             </div>
         </div>
     );
