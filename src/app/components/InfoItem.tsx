@@ -32,11 +32,7 @@ const InfoItem: React.FC<InfoItemProps> = ({ keyText, value, url, isKeyALink, is
                 <span>{keyText}:</span>
 
                 {typeof value === "boolean" ? (
-                    value ? (
-                        <input type="checkbox" checked disabled />
-                    ) : (
-                        <input type="checkbox" disabled />
-                    )
+                    <input type="checkbox" checked={Boolean(value)} disabled />
                 ) : (
                     <p> {`${value}`}</p>
                 )}
