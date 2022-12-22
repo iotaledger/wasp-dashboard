@@ -55,6 +55,14 @@ const Users: React.FC = () => {
         }
     }
 
+    /**
+     *
+     */
+    function handleAddUser(): void {
+        loadAllUsers();
+        setShowAddUserDialog(false);
+    }
+
     return (
         <div className="users">
             <div className="content">
@@ -67,7 +75,7 @@ const Users: React.FC = () => {
                     </div>
                 </div>
                 {showAddUserDialog && (
-                    <AddUserDialog onClose={() => setShowAddUserDialog(false)} onUserAdded={loadAllUsers} />
+                    <AddUserDialog onClose={() => setShowAddUserDialog(false)} onSuccess={handleAddUser} />
                 )}
                 <div className="users-panel">
                     <UsersList

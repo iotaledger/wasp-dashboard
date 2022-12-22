@@ -31,10 +31,11 @@ interface IFormValues {
 
 interface IAddUserDialog {
     onClose: () => void;
-    onUserAdded: () => void;
+    onSuccess?: () => void;
+    onError?: () => void;
 }
 
-const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
+const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }) => {
     const [formValues, setFormValues] = useState<IFormValues>(FORM_INITIAL_VALUES);
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -53,12 +54,15 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
             };
 
             await waspClientService.users().addUser({ addUserRequest: newUser });
-
-            onUserAdded();
-            onClose();
+            if (onSuccess && typeof onSuccess === "function") {
+                onSuccess();
+            }
         } catch (e) {
             if (e instanceof Error) {
                 setError(e.message);
+            }
+            if (onError && typeof onError === "function") {
+                onError();
             }
         } finally {
             setIsBusy(false);
@@ -127,5 +131,8 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
         </Dialog>
     );
 };
-
+AddUserDialog.defaultProps = {
+    onError: () => {},
+    onSuccess: () => {},
+};
 export default AddUserDialog;
