@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import zxcvbn from "zxcvbn";
 import { Dialog } from "../";
 import { ServiceFactory } from "../../../factories/serviceFactory";
 import { AddUserRequest } from "../../../services/wasp_client";
@@ -73,6 +74,24 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
         setFormValues({ ...formValues, [e.target.name]: e.target.value });
     }
 
+    /**
+     *
+     * @param e
+     */
+    function handlePasswordOnChange(e: React.ChangeEvent<HTMLInputElement>): void {
+        const passwordStrength = zxcvbn(e.target.value);
+        if (formValues.password !== "" && passwordStrength.score < 2) {
+            setError(passwordStrength.feedback.suggestions.join(" "));
+        } else {
+            setError(null);
+        }
+        setFormValues({ ...formValues, password: e.target.value });
+    }
+
+    useEffect(() => {
+        handlePasswordOnChange({ target: { value: formValues.password } } as React.ChangeEvent<HTMLInputElement>);
+    }, [formValues.password]);
+
     return (
         <Dialog
             onClose={onClose}
@@ -109,7 +128,11 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                 </div>
                 <div className="dialog-content-label">Password</div>
                 <div className="dialog-value">
-                    <PasswordInput inputValue={formValues.password} onChange={onChange} disabled={isBusy} />
+                    <PasswordInput
+                        inputValue={formValues.password}
+                        onChange={handlePasswordOnChange}
+                        disabled={isBusy}
+                    />
                 </div>
                 <div className="dialog-content-label">Permissions</div>
                 <div className="dialog-content-value">
@@ -121,8 +144,8 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                         value={formValues.permissions.join(", ")}
                         disabled
                     />
-                    {error && <p className="dialog-error">{error}</p>}
                 </div>
+                {error && <p className="dialog-content-error">{error}</p>}
             </React.Fragment>
         </Dialog>
     );
