@@ -24,6 +24,12 @@ interface PeerTileProps {
 
 const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+    /**
+     *
+     */
+    function handleDeletePeer(): void {
+        setShowDeleteDialog(false);
+    }
     return (
         <React.Fragment>
             <div className={`peers-panel-item card ${detailed ? "detailed" : "summary"}`}>
@@ -55,12 +61,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
                 )}
             </div>
             {showDeleteDialog && (
-                <DeletePeerDialog
-                    onClose={() => {
-                        setShowDeleteDialog(false);
-                    }}
-                    peer={peer}
-                />
+                <DeletePeerDialog onClose={handleDeletePeer} onSuccess={handleDeletePeer} peer={peer} />
             )}
         </React.Fragment>
     );
