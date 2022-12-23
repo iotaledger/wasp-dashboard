@@ -49,10 +49,6 @@ p {
 a {
     outline: 0;
     text-decoration: none;
-
-    &:focus {
-        border-bottom: 1px solid var(--accent-primary);
-    }
 }
 
 hr {
@@ -100,32 +96,30 @@ hr {
 }
 
 table {
-  border-collapse: collapse;
+    border-collapse: collapse;
 
-  & tr {
-    height: 40px;
-    border-bottom: 1px solid var(--panel-background-highlight);
-  }
-
-  & th {
-    border-bottom: 1px solid var(--text-color-secondary);
-    color: var(--text-color-secondary);
-    font-family: $font-mono;
-    font-weight: normal;
-    text-align: left;
-
-    @include font-size(14px);
-  }
-
-  td,
-  th {
-    padding: 8px;
-
-    code {
-      word-break: break-all;
-      white-space: break-spaces;
+    & tr {
+        height: 40px;
+        border-bottom: 1px solid var(--panel-background-highlight);
     }
-  }
 
+    & th {
+        border-bottom: 1px solid var(--text-color-secondary);
+        color: var(--text-color-secondary);
+        font-family: $font-mono;
+        font-weight: normal;
+        text-align: left;
+
+        @include font-size(14px);
+    }
+
+    td,
+    th {
+        padding: 8px;
+
+        code {
+            word-break: break-all;
+            white-space: break-spaces;
+        }
+    }
 }
-
