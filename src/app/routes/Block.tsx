@@ -74,9 +74,10 @@ function Block() {
                         return (
                             <div key={receipt.request?.requestID} className="card col fill">
                                 <div className="block-summary">
-                                    <h4>REQUEST INFO</h4>
+                                    <h4 className="1-details-title">REQUEST #{index}</h4>
                                     <div className="block-info-content">
                                         <div key={index} className="block-info-item">
+                                            <h4>info</h4>
                                             {Object.entries(receipt)
                                                 .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
                                                 .map(([k, v]) => (
