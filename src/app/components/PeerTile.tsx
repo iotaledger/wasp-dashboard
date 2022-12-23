@@ -1,5 +1,5 @@
-import "./PeerTile.scss";
 import React, { useState } from "react";
+import { Action } from "../../lib/enums";
 import { PeeringNodeStatusResponse } from "../../services/wasp_client";
 import { DeletePeerDialog } from "./dialogs";
 import Tile from "./Tile";
@@ -34,6 +34,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
             handleAction: () => {
                 setShowDeleteDialog(true);
             },
+            type: Action.Delete,
         },
     ];
 

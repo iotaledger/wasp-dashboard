@@ -26,15 +26,20 @@ const TileContent: React.FC<TileProps> = ({
     secondaryText,
 }: TileProps) => (
     <div className="tile-content">
-        {displayHealth && <div className="health-icon">{healthy ? <HealthGoodIcon /> : <HealthWarning />}</div>}
         <div className="text">
+            {displayHealth && <div className="health-icon">{healthy ? <HealthGoodIcon /> : <HealthWarning />}</div>}
             <p className="primary">{primaryText}</p>
             {secondaryText && <p className="primary">{secondaryText}</p>}
         </div>
         {actions?.length && (
             <div className="actions">
                 {actions.map(action => (
-                    <button type="button" key={action.text} onClick={action.handleAction}>
+                    <button
+                        className={`${action.type ? `${action.type}-button` : ""}`}
+                        type="button"
+                        key={action.text}
+                        onClick={action.handleAction}
+                    >
                         {action.text}
                     </button>
                 ))}

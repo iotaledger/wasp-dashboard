@@ -1,3 +1,5 @@
+import { Action } from "./enums";
+
 export interface StandardMessage {
     messages?: number;
     timestamp: Date;
@@ -12,6 +14,7 @@ export interface ILink {
 export interface IAction {
     text: string | undefined | null;
     handleAction: () => unknown;
+    type?: Action;
 }
 
 export interface ITable {
