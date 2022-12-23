@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import { Dialog } from "../";
 import { ServiceFactory } from "../../../factories/serviceFactory";
 import { ChangeUserPasswordRequest, User } from "../../../services/wasp_client";
@@ -42,13 +42,6 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
         }
     }
 
-    useEffect(() => {
-        if (confirmPassword !== "" && confirmPassword !== newPassword) {
-            setError("Passwords do not match!");
-        } else {
-            setError(null);
-        }
-    }, [confirmPassword, newPassword]);
     return (
         <Dialog
             onClose={onClose}
@@ -77,6 +70,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                         inputValue={newPassword}
                         onChange={(e: { target: { value: SetStateAction<string> } }) => setNewPassword(e.target.value)}
                         disabled={isBusy}
+                        error={setError}
                     />
                 </div>
                 <div className="dialog-content-label">Repeat new password</div>

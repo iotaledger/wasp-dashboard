@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
+import zxcvbn from "zxcvbn";
 import { EyeClosedIcon, EyeIcon } from "../../../assets";
 import "./PasswordInput.scss";
+
 interface PasswordInputProps {
     disabled?: boolean;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     inputValue: string;
+    error?: Dispatch<SetStateAction<string | null>>;
 }
 
 /**
@@ -14,7 +17,7 @@ interface PasswordInputProps {
  * @param inputValue
  */
 
-const PasswordInput = ({ disabled, onChange, inputValue }: PasswordInputProps) => {
+const PasswordInput = ({ disabled, onChange, inputValue, error }: PasswordInputProps) => {
     const [blindMode, setBlindMode] = useState<boolean>(true);
 
     /**
@@ -22,6 +25,20 @@ const PasswordInput = ({ disabled, onChange, inputValue }: PasswordInputProps) =
      */
     function toggleBlindMode(): void {
         setBlindMode(!blindMode);
+    }
+
+    /**
+     *
+     * @param e
+     */
+    function handlePasswordOnChange(e: React.ChangeEvent<HTMLInputElement>): void {
+        const passwordStrength = zxcvbn(e.target.value);
+        if (e.target.value !== "" && passwordStrength.score < 2) {
+            error?.(passwordStrength.feedback.suggestions.join(" "));
+        } else {
+            error?.(null);
+        }
+        onChange(e);
     }
 
     return (
@@ -33,7 +50,7 @@ const PasswordInput = ({ disabled, onChange, inputValue }: PasswordInputProps) =
                 name="password"
                 value={inputValue}
                 disabled={disabled}
-                onChange={onChange}
+                onChange={handlePasswordOnChange}
                 autoComplete="new-password"
             />
             <button type="button" className="blindmode-input-button" onClick={toggleBlindMode}>
@@ -44,6 +61,7 @@ const PasswordInput = ({ disabled, onChange, inputValue }: PasswordInputProps) =
 };
 PasswordInput.defaultProps = {
     disabled: false,
+    error: null,
 };
 
 export default PasswordInput;
