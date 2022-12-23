@@ -9,3 +9,5 @@ export const METRICS_NAMES: Record<string, string> = {
     outPullOutputByID: "Pull output by ID",
     outPullTxInclusionState: "Pull tx inclusion state",
 };
+
+export const MIN_PASSWORD_STRENGTH = 2;

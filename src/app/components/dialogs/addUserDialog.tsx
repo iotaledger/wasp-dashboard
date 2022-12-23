@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import zxcvbn from "zxcvbn";
 import { Dialog } from "../";
 import { ServiceFactory } from "../../../factories/serviceFactory";
+import { MIN_PASSWORD_STRENGTH } from "../../../lib/constants";
 import { AddUserRequest } from "../../../services/wasp_client";
 import { WaspClientService } from "../../../services/waspClientService";
 import PasswordInput from "../layout/PasswordInput";
@@ -38,6 +40,12 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
     const [formValues, setFormValues] = useState<IFormValues>(FORM_INITIAL_VALUES);
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [validForm, setValidForm] = useState<boolean>(false);
+
+    useEffect(() => {
+        validateForm();
+    }, [formValues]);
+
     /**
      *
      */
@@ -73,6 +81,24 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
         setFormValues({ ...formValues, [e.target.name]: e.target.value });
     }
 
+    /**
+     * Validate the form.
+     */
+    function validateForm(): void {
+        if (formValues?.username?.length <= 0 || formValues?.password?.length <= 0) {
+            setValidForm(false);
+        } else {
+            const passwordStrength = zxcvbn(formValues?.password);
+            if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
+                setValidForm(false);
+                setError(passwordStrength.feedback.suggestions.join(" "));
+            } else {
+                setValidForm(true);
+                setError(null);
+            }
+        }
+    }
+
     return (
         <Dialog
             onClose={onClose}
@@ -83,7 +109,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                         type="button"
                         className="button button--primary"
                         onClick={handleAddUser}
-                        disabled={isBusy || !formValues.username || !formValues.password}
+                        disabled={isBusy || !validForm}
                     >
                         Add
                     </button>
@@ -121,8 +147,8 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                         value={formValues.permissions.join(", ")}
                         disabled
                     />
-                    {error && <p className="dialog-error">{error}</p>}
                 </div>
+                {error && <p className="dialog-content-error">{error}</p>}
             </React.Fragment>
         </Dialog>
     );
