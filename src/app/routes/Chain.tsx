@@ -57,9 +57,10 @@ function Chain() {
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
-    const [chainConsensusMetrics, setChainConsensusMetrics] = useState<Record<string, ConsensusMetric> | null>(null);
+    const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
+        Record<string, ConsensusMetric> | null | unknown[]
+    >(null);
     const { chainID } = useParams();
-    const [newChainConsensusMetrics, setNewChainConsensusMetrics] = useState<unknown[]>([]);
     const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
 
@@ -145,20 +146,15 @@ function Chain() {
                         triggerTime: newConsensusMetrics[`time${flagName}`] as unknown as Date,
                     };
                 }
-                setChainConsensusMetrics(metrics);
+                const chainConsensusMetricsArray = Object.entries(metrics).map(([key, value]) => {
+                    const flagName = METRICS_NAMES[key];
+                    const status = typeof value.status === "boolean" ? value.status : value.status.toString();
+                    const triggerTime = value.triggerTime?.toISOString() ?? "NEVER";
+                    return { flagName, status, triggerTime };
+                });
+                setChainConsensusMetrics(chainConsensusMetricsArray);
             });
     }, []);
-    React.useEffect(() => {
-        if (chainConsensusMetrics) {
-            const chainConsensusMetricsArray = Object.entries(chainConsensusMetrics).map(([key, value]) => {
-                const flagName = METRICS_NAMES[key];
-                const status = typeof value.status === "boolean" ? value.status : value.status.toString();
-                const triggerTime = value.triggerTime?.toISOString() ?? "NEVER";
-                return { flagName, status, triggerTime };
-            });
-            setNewChainConsensusMetrics(chainConsensusMetricsArray as unknown[]);
-        }
-    }, [chainConsensusMetrics]);
 
     return (
         <div className="chain">
@@ -248,7 +244,7 @@ function Chain() {
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
                         {ChainID && (
-                            <Table tHead={["Flag name", "Status", "Trigger time"]} tBody={newChainConsensusMetrics} />
+                            <Table tHead={["Flag name", "Status", "Trigger time"]} tBody={chainConsensusMetrics} />
                         )}
                     </InfoBox>
                 </div>

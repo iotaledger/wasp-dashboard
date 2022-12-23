@@ -16,8 +16,7 @@ import Table from "../components/layout/Table";
  * @returns The node to render.
  */
 function L1Chain() {
-    const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null>(null);
-    const [newL1MetricsArrayBasedOnKeys, setNewL1MetricsArrayBasedOnKeys] = useState<unknown[]>([]);
+    const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null | unknown[]>(null);
     const { chainID } = useParams();
 
     React.useEffect(() => {
@@ -32,24 +31,20 @@ function L1Chain() {
             .metrics()
             .getChainMetrics({ chainID })
             .then(metrics => {
-                setChainL1Metrics(metrics);
+                const chainMetricsArray = Object.entries(metrics as ChainMetrics | null[]).map(
+                    ([key, val]: [string, StandardMessage]) => {
+                        const name = METRICS_NAMES[key];
+                        const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
+                        const totalMessages = val.messages ?? 0;
+                        const lastTime = val.timestamp.valueOf() > 0 ? formatDate(val.timestamp) : "-";
+                        const lastMessage = val.lastMessage ? JSON.stringify(val.lastMessage, null, 2) : "";
+                        return { name, typeInOrOut, totalMessages, lastTime, lastMessage };
+                    },
+                );
+                setChainL1Metrics(chainMetricsArray);
             });
     }, []);
-    React.useEffect(() => {
-        if (l1ChainMetrics) {
-            const chainMetricsArray = Object.entries(l1ChainMetrics as ChainMetrics | null[]).map(
-                ([key, val]: [string, StandardMessage]) => {
-                    const name = METRICS_NAMES[key];
-                    const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
-                    const totalMessages = val.messages ?? 0;
-                    const lastTime = val.timestamp.valueOf() > 0 ? formatDate(val.timestamp) : "-";
-                    const lastMessage = val.lastMessage ? JSON.stringify(val.lastMessage, null, 2) : "";
-                    return { name, typeInOrOut, totalMessages, lastTime, lastMessage };
-                },
-            );
-            setNewL1MetricsArrayBasedOnKeys(chainMetricsArray);
-        }
-    }, [l1ChainMetrics]);
+
     return (
         <div className="l1">
             <div className="l1-wrapper">
@@ -61,7 +56,7 @@ function L1Chain() {
                     <InfoBox title="L1 Chain metrics" cardClassName="last-card">
                         {l1ChainMetrics && (
                             <Table
-                                tBody={newL1MetricsArrayBasedOnKeys}
+                                tBody={l1ChainMetrics}
                                 tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
                                 classNames="chain-messages-table"
                             />
