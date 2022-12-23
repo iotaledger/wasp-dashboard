@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dialog } from "../";
 import { ServiceFactory } from "../../../factories/serviceFactory";
+import { checkPasswordStrength } from "../../../lib/utils";
 import { AddUserRequest } from "../../../services/wasp_client";
 import { WaspClientService } from "../../../services/waspClientService";
 import PasswordInput from "../layout/PasswordInput";
@@ -73,6 +74,24 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
         setFormValues({ ...formValues, [e.target.name]: e.target.value });
     }
 
+    /**
+     *
+     * @param e
+     */
+    function handlePasswordOnChange(e: React.ChangeEvent<HTMLInputElement>): void {
+        const newError = checkPasswordStrength(e.target.value);
+        if (newError) {
+            setError(newError);
+        } else {
+            setError(null);
+        }
+        setFormValues({ ...formValues, password: e.target.value });
+    }
+
+    useEffect(() => {
+        handlePasswordOnChange({ target: { value: formValues.password } } as React.ChangeEvent<HTMLInputElement>);
+    }, [formValues.password]);
+
     return (
         <Dialog
             onClose={onClose}
@@ -83,7 +102,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                         type="button"
                         className="button button--primary"
                         onClick={handleAddUser}
-                        disabled={isBusy || !formValues.username || !formValues.password}
+                        disabled={isBusy || !formValues.username || !formValues.password || Boolean(error)}
                     >
                         Add
                     </button>
@@ -111,9 +130,8 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                 <div className="dialog-value">
                     <PasswordInput
                         inputValue={formValues.password}
-                        onChange={onChange}
+                        onChange={handlePasswordOnChange}
                         disabled={isBusy}
-                        error={setError}
                     />
                 </div>
                 <div className="dialog-content-label">Permissions</div>
