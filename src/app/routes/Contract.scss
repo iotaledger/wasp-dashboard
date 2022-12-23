@@ -1,7 +1,7 @@
 @use "../../scss/card" as *;
 @use "../../scss/fonts" as *;
 @use "../../scss/media-queries" as *;
-@use '../../scss/variables' as *;
+@use "../../scss/variables" as *;
 
 .contract {
   display: flex;
@@ -26,10 +26,6 @@
     }
   }
 
-  .card {
-    margin-bottom: 16px;
-  }
-
   .content {
     display: inline-flex;
     flex: 1;
@@ -37,26 +33,5 @@
     flex-wrap: wrap;
     max-width: $content-width-desktop;
     color: var(--text-color-primary);
-
-    .card-item {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 4px;
-      color: var(--text-color-secondary);
-      font-family: $font-mono;
-
-      @include font-size(14px);
-
-      span {
-        margin-right: 10px;
-      }
-    }       
-
-    ul {
-      margin-left: 20px;
-      li {
-        margin: 5px 0px;
-      }
-    }
   }
 }

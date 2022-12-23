@@ -53,7 +53,7 @@ const PasswordInput = ({ disabled, onChange, inputValue, error }: PasswordInputP
                 onChange={handlePasswordOnChange}
                 autoComplete="new-password"
             />
-            <button type="button" className="blindmode-input-button" onClick={toggleBlindMode}>
+            <button tabIndex={-1} type="button" className="blindmode-input-button" onClick={toggleBlindMode}>
                 {blindMode ? <EyeIcon /> : <EyeClosedIcon />}
             </button>
         </div>

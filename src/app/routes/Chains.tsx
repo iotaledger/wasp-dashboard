@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { ReactComponent as HealthBadIcon } from "../../assets/health-bad.svg";
-import { ReactComponent as HealthGoodIcon } from "../../assets/health-good.svg";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chains.scss";
 import { ChainInfoResponse } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
+import Tile from "../components/Tile";
 
 /**
  * Chains panel.
@@ -32,16 +30,13 @@ function Chains() {
                 <h2>Chains</h2>
                 <div className="content">
                     {chains?.map(chain => (
-                        <Link key={chain.chainID} to={`/chains/${chain.chainID}`} className="fill">
-                            <div className="chains-summary-item">
-                                <div className="chains-health-icon">
-                                    {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
-                                </div>
-                                <p className="chains-id" title={chain.chainID}>
-                                    {chain.chainID}
-                                </p>
-                            </div>
-                        </Link>
+                        <Tile
+                            key={chain.chainID}
+                            primaryText={chain.chainID}
+                            url={`/chains/${chain.chainID}`}
+                            displayHealth
+                            healthy={chain.isActive}
+                        />
                     ))}
                 </div>
             </div>

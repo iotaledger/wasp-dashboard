@@ -1,9 +1,8 @@
-import "./PeerTile.scss";
-
 import React, { useState } from "react";
-import { HealthGood, HealthWarning } from "../../assets";
+import { Action } from "../../lib/enums";
 import { PeeringNodeStatusResponse } from "../../services/wasp_client";
 import { DeletePeerDialog } from "./dialogs";
+import Tile from "./Tile";
 
 interface PeerTileProps {
     /**
@@ -24,36 +23,30 @@ interface PeerTileProps {
 
 const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+
+    const primaryText = blindMode ? "*".repeat((peer.publicKey ?? "Unknown").length) : peer.publicKey ?? "Unknown";
+    const secondaryText = blindMode ? "*".repeat((peer.netID ?? "Unknown").length) : peer.netID ?? "Unknown";
+    const healthy = peer.isAlive;
+
+    const actions = [
+        {
+            text: "Delete",
+            handleAction: () => {
+                setShowDeleteDialog(true);
+            },
+            type: Action.Delete,
+        },
+    ];
+
     return (
         <React.Fragment>
-            <div className={`peers-panel-item card ${detailed ? "detailed" : "summary"}`}>
-                <span className="peer-health">
-                    <div className="peer-health-icon">{peer.isAlive ? <HealthGood /> : <HealthWarning />}</div>
-                </span>
-                <div className="col peer-data">
-                    <span className="peer-id">
-                        {blindMode ? "*".repeat((peer.publicKey ?? "Unknown").length) : peer.publicKey ?? "Unknown"}
-                    </span>
-                    {detailed && (
-                        <p className="secondary">
-                            {blindMode ? "*".repeat((peer.netID ?? "Unknown").length) : peer.netID ?? "Unknown"}
-                        </p>
-                    )}
-                </div>
-                {detailed && (
-                    <div className="col peer-actions">
-                        <button
-                            className="card--action card--action-danger"
-                            type="button"
-                            onClick={() => {
-                                setShowDeleteDialog(true);
-                            }}
-                        >
-                            Delete
-                        </button>
-                    </div>
-                )}
-            </div>
+            <Tile
+                displayHealth
+                healthy={healthy}
+                primaryText={primaryText}
+                secondaryText={detailed ? secondaryText : undefined}
+                actions={detailed ? actions : undefined}
+            />
             {showDeleteDialog && (
                 <DeletePeerDialog
                     onClose={() => {

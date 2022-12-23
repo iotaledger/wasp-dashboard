@@ -1,0 +1,94 @@
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
+
+.tile-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 90px;
+  margin-bottom: $spacing-small;
+  padding: $spacing-large;
+  overflow: hidden;
+  border-radius: $spacing-small;
+  background-color: var(--panel-background-highlight);
+
+  &:focus {
+    border: 0;
+  }
+
+  .text-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: var(--text-color-primary);
+    @include font-size(14px);
+
+    word-break: break-all;
+    overflow-wrap: anywhere;
+
+    .health-icon {
+      width: 16px;
+      margin-right: $spacing-small;
+    }
+
+    .text {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .secondary {
+      @include font-size(12px);
+
+      margin-top: 6px;
+      color: var(--text-color-secondary);
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include desktop-down {
+      flex-direction: row;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 6px 12px;
+      border: 1px solid var(--text-color-secondary);
+      border-radius: $form-input-radius;
+      outline: 0;
+      background: var(--bar-color-2);
+      color: var(--text-color-primary);
+      font-family: $font-sans;
+      cursor: pointer;
+
+      @include desktop-down {
+        width: auto;
+      }
+
+      &:hover {
+        color: var(--accent-primary);
+      }
+
+      > button:not(:first-child) {
+        margin-top: $spacing-tiny;
+      }
+
+      &.delete-button {
+        margin-top: 8px;
+        background-color: transparentize($danger, 0.9);
+
+        @include desktop-down {
+          margin-top: 0;
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+}

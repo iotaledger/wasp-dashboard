@@ -1,4 +1,3 @@
-
 @use "../../scss/fonts" as *;
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
@@ -26,28 +25,6 @@
             @include desktop-down {
                 grid-template-columns: 1fr;
             }
-
-           
-                .card-item {
-                    display: flex;
-                    align-items: flex-start;
-                    margin-bottom: 4px;
-                    color: var(--text-color-secondary);
-                    font-family: $font-mono;
-
-                    @include font-size(14px);
-
-                    span {
-                        margin-right: 10px;
-                    }
-
-                    p {
-                        &.value {
-                            color: var(--text-color-primary);
-                        }
-                    }
-                }
-            
         }
     }
 }

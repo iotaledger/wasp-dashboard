@@ -1,0 +1,24 @@
+@use "../../scss/fonts" as *;
+@use "../../scss/variables" as *;
+
+.info-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 4px;
+
+    span {
+        margin-right: 10px;
+        color: var(--text-color-secondary);
+        @include font-size(14px);
+        font-family: $font-mono;
+        &.value {
+          color: var(--text-color-primary);
+        }
+    }
+    a {
+        span {
+            color: var(--accent-primary);
+        }
+    }
+}
