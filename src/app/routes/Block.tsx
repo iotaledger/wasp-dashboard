@@ -66,7 +66,7 @@ function Block() {
                     <h2 className="margin-l-s">Requests</h2>
                 </div>
                 <div className="content">
-                    {blockRequests.map(receipt => {
+                    {blockRequests.map((receipt, index) => {
                         const params = receipt?.request?.params?.Items;
                         const senderAccount = receipt.request?.senderAccount;
                         const attachedBaseTokens = receipt?.request?.fungibleTokens?.baseTokens;
@@ -74,31 +74,37 @@ function Block() {
                         return (
                             <div key={receipt.request?.requestID} className="card col fill">
                                 <div className="block-summary">
-                                    <h4>REQUEST INFO</h4>
-                                    {Object.entries(receipt)
-                                        .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
-                                        .map(([k, v]) => (
-                                            <KeyValueRow
-                                                key={k}
-                                                keyText={BLOCK_REQUEST_NAMES[k]}
-                                                value={JSON.stringify(v)}
-                                            />
-                                        ))}
-                                    <KeyValueRow keyText="Sender" value={senderAccount} />
+                                    <h4>REQUEST #{receipt?.requestIndex}</h4>
+                                    <div className="block-info-content">
+                                        <div key={index} className="block-info-item">
+                                            <h4>info</h4>
+                                            {Object.entries(receipt)
+                                                .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
+                                                .map(([k, v]) => (
+                                                    <KeyValueRow
+                                                        key={k}
+                                                        keyText={BLOCK_REQUEST_NAMES[k]}
+                                                        value={JSON.stringify(v)}
+                                                    />
+                                                ))}
+                                            <KeyValueRow keyText="Sender" value={senderAccount} />
+                                        </div>
+                                        <div key={index} className="block-info-item">
+                                            <h4>Parameters</h4>
+                                            {params?.map(({ Key, Value }: Record<string, string>) => (
+                                                <KeyValueRow key={Key} keyText={Key} value={JSON.stringify(Value)} />
+                                            ))}
+                                        </div>
+                                        <div key={index} className="block-info-item">
+                                            <h4>Attached tokens</h4>
 
-                                    <br />
-                                    <h4>Parameters</h4>
-                                    {params?.map(({ Key, Value }: Record<string, string>) => (
-                                        <KeyValueRow key={Key} keyText={Key} value={JSON.stringify(Value)} />
-                                    ))}
-                                    <br />
-                                    <h4>Attached tokens</h4>
-
-                                    <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
-
-                                    <br />
-                                    <h4>Allowance</h4>
-                                    <KeyValueRow keyText="Base tokens" value={allowanceBaseTokens} />
+                                            <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
+                                        </div>
+                                        <div key={index} className="block-info-item">
+                                            <h4>Allowance</h4>
+                                            <KeyValueRow keyText="Base tokens" value={allowanceBaseTokens} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         );

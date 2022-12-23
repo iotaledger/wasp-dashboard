@@ -4,7 +4,7 @@
 .info-item {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 4px;
 
     span {
