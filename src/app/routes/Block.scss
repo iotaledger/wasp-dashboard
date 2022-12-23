@@ -51,6 +51,7 @@
     max-width: $content-width-desktop;
     margin-top: $spacing-small;
     color: var(--text-color-primary);
+
     .block-info-item {
       min-height: 90px;
       padding: $spacing-small;
@@ -58,24 +59,11 @@
       border-radius: $spacing-small;
       background-color: var(--panel-background-highlight);
     }
-    .card-item {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 4px;
-      color: var(--text-color-secondary);
-      font-family: $font-mono;
 
-      @include font-size(14px);
-
-      span {
-        margin-right: 10px;
-      }
-
-      p {
-        &.value {
-          color: var(--text-color-primary);
-          word-break: break-all;
-        }
+    span {
+      &.value {
+        color: var(--text-color-primary);
+        word-break: break-all;
       }
     }
   }

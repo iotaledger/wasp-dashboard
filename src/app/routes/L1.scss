@@ -52,15 +52,19 @@
 
     .last-card {
       margin-top: $spacing-small;
-    }
 
-    & ul {
-      margin-block-start: 10px;
-      margin-inline-start: 20px;
-    }
+      .chain-messages-table {
+        th:nth-of-type(1),
+        th:nth-of-type(4),
+        th:nth-of-type(5) {
+          min-width: 180px;
+        }
 
-    & a {
-      color: var(--text-color-primary);
+        th:nth-of-type(2),
+        th:nth-of-type(3) {
+          min-width: 110px;
+        }
+      }
     }
 
     .l1-info-item {
@@ -70,54 +74,6 @@
       overflow: hidden;
       border-radius: $spacing-small;
       background-color: var(--panel-background-highlight);
-
-      .info-item {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-bottom: 4px;
-
-        span {
-          margin-right: 10px;
-          color: var(--text-color-secondary);
-          @include font-size(14px);
-
-          font-family: $font-mono;
-        }
-
-        p {
-          color: var(--text-color-primary);
-        }
-      }
-    }
-
-    .l1-summary-item {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      min-height: 90px;
-      margin-bottom: $spacing-small;
-      padding: $spacing-large;
-      overflow: hidden;
-      border-radius: $spacing-small;
-      background-color: var(--panel-background-highlight);
-
-      &:focus {
-        border: 0;
-      }
-
-      .l1-health-icon {
-        width: 16px;
-      }
-
-      .l1-id {
-        @include font-size(14px);
-
-        margin-left: $spacing-small;
-        color: var(--text-color-primary);
-        word-break: break-all;
-        overflow-wrap: anywhere;
-      }
     }
   }
 }
