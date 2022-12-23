@@ -2,9 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React from "react";
+import { ITableRow } from "../../../lib/interfaces";
 
 interface TableProps {
-    tBody: any;
+    tBody: ITableRow[];
     classNames?: string;
     tHead: string[];
 }
@@ -22,7 +23,7 @@ function Table({ tBody, classNames, tHead }: TableProps) {
             </thead>
             <tbody>
                 {tBody?.length > 0 &&
-                    tBody?.map((row: any, index: number) => (
+                    tBody?.map((row: ITableRow, index: number) => (
                         <tr key={index}>
                             {Object.keys(row).map((key: string, rowIndex: number) => (
                                 <td key={rowIndex}>

@@ -17,6 +17,6 @@ export interface IAction {
     type?: Action;
 }
 
-export interface ITable {
+export interface ITableRow {
     [key: string]: string | number | boolean | undefined | null;
 }

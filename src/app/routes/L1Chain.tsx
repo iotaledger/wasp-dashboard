@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import { METRICS_NAMES } from "../../lib/constants";
 import "./L1.scss";
-import { ITable, StandardMessage } from "../../lib/interfaces";
+import { ITableRow, StandardMessage } from "../../lib/interfaces";
 import { formatDate } from "../../lib/utils";
 import { ChainMetrics } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
@@ -16,7 +16,7 @@ import Table from "../components/layout/Table";
  * @returns The node to render.
  */
 function L1Chain() {
-    const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null | ITable[]>(null);
+    const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null | ITableRow[]>(null);
     const { chainID } = useParams();
 
     React.useEffect(() => {
@@ -56,7 +56,7 @@ function L1Chain() {
                     <InfoBox title="L1 Chain metrics" cardClassName="last-card">
                         {l1ChainMetrics && (
                             <Table
-                                tBody={l1ChainMetrics}
+                                tBody={l1ChainMetrics as ITableRow[]}
                                 tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
                                 classNames="chain-messages-table"
                             />

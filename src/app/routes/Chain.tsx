@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
-import { ITable } from "../../lib/interfaces";
+import { ITableRow } from "../../lib/interfaces";
 import {
     AssetsResponse,
     ChainInfoResponse,
@@ -59,7 +59,7 @@ function Chain() {
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
-        Record<string, ConsensusMetric> | null | ITable[]
+        Record<string, ConsensusMetric> | null | ITableRow[]
     >(null);
     const { chainID } = useParams();
     const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
@@ -195,12 +195,12 @@ function Chain() {
                             />
                         )}
                         {chainAssets?.tokens && chainAssets.tokens.length > 0 && (
-                            <Table tHead={["ID", "Amount"]} tBody={chainAssets.tokens} />
+                            <Table tHead={["ID", "Amount"]} tBody={chainAssets.tokens as ITableRow[]} />
                         )}
                     </InfoBox>
                     <InfoBox title="Blobs">
                         {chainBlobs.length > 0 ? (
-                            <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs} />
+                            <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
                         ) : (
                             <p>No blobs found.</p>
                         )}
@@ -227,11 +227,13 @@ function Chain() {
                         {chainCommitteeInfo?.committeeNodes && (
                             <Table
                                 tHead={["Index", "Pubkey", "Status"]}
-                                tBody={chainCommitteeInfo?.committeeNodes.map(({ node }, i) => [
-                                    i,
-                                    node?.publicKey,
-                                    getStatus(node?.isAlive ?? false),
-                                ])}
+                                tBody={
+                                    chainCommitteeInfo?.committeeNodes.map(({ node }, i) => [
+                                        i,
+                                        node?.publicKey,
+                                        getStatus(node?.isAlive ?? false),
+                                    ]) as unknown as ITableRow[]
+                                }
                             />
                         )}
                     </InfoBox>
@@ -245,7 +247,10 @@ function Chain() {
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
                         {ChainID && (
-                            <Table tHead={["Flag name", "Status", "Trigger time"]} tBody={chainConsensusMetrics} />
+                            <Table
+                                tHead={["Flag name", "Status", "Trigger time"]}
+                                tBody={chainConsensusMetrics as ITableRow[]}
+                            />
                         )}
                     </InfoBox>
                 </div>

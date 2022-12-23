@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./L1.scss";
 import { METRICS_NAMES } from "../../lib/constants";
-import { ITable, StandardMessage } from "../../lib/interfaces";
+import { ITableRow, StandardMessage } from "../../lib/interfaces";
 import { formatDate } from "../../lib/utils";
 import { NodeConfigService } from "../../services/nodeConfigService";
 import { ChainInfoResponse, ChainMetrics, L1Params } from "../../services/wasp_client";
@@ -19,7 +19,7 @@ import Tile from "../components/Tile";
 function L1() {
     const [l1Params, setL1Params] = useState<L1Params | null>(null);
     const [chains, setChains] = useState<ChainInfoResponse[] | null>(null);
-    const [l1Metrics, setl1Metrics] = useState<ChainMetrics | null | ITable[]>(null);
+    const [l1Metrics, setl1Metrics] = useState<ChainMetrics | null | ITableRow[]>(null);
 
     React.useEffect(() => {
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
@@ -107,7 +107,7 @@ function L1() {
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
                         {l1Metrics && (
                             <Table
-                                tBody={l1Metrics}
+                                tBody={l1Metrics as ITableRow[]}
                                 tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
                                 classNames="chain-messages-table"
                             />
