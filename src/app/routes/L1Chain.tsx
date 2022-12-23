@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import { METRICS_NAMES } from "../../lib/constants";
 import "./L1.scss";
-import { StandardMessage } from "../../lib/interfaces";
+import { ITable, StandardMessage } from "../../lib/interfaces";
 import { formatDate } from "../../lib/utils";
 import { ChainMetrics } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
@@ -16,7 +16,7 @@ import Table from "../components/layout/Table";
  * @returns The node to render.
  */
 function L1Chain() {
-    const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null | unknown[]>(null);
+    const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null | ITable[]>(null);
     const { chainID } = useParams();
 
     React.useEffect(() => {

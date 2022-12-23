@@ -13,3 +13,7 @@ export interface IAction {
     text: string | undefined | null;
     handleAction: () => unknown;
 }
+
+export interface ITable {
+    [key: string]: string | number | boolean | undefined | null;
+}

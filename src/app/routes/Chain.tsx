@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
+import { ITable } from "../../lib/interfaces";
 import {
     AssetsResponse,
     ChainInfoResponse,
@@ -58,7 +59,7 @@ function Chain() {
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
-        Record<string, ConsensusMetric> | null | unknown[]
+        Record<string, ConsensusMetric> | null | ITable[]
     >(null);
     const { chainID } = useParams();
     const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
