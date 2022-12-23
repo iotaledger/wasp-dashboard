@@ -33,7 +33,7 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
      *
      */
     function handleDeleteSuccess(): void {
-        setShowDeleteUserDialog(false);
+        closeDeleteDialog();
         if (onDeleteSuccess && typeof onDeleteSuccess === "function") {
             onDeleteSuccess();
         }
@@ -42,8 +42,15 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
     /**
      *
      */
-    function handleEditSuccess(): void {
+    function closeEditDialog(): void {
         setShowEditUserDialog(false);
+    }
+
+    /**
+     *
+     */
+    function closeDeleteDialog(): void {
+        setShowDeleteUserDialog(false);
     }
 
     return (
@@ -78,17 +85,13 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
             </div>
             {showDeleteUserDialog && (
                 <DeleteUserDialog
-                    onClose={() => {
-                        setShowDeleteUserDialog(false);
-                    }}
+                    onClose={closeDeleteDialog}
                     user={user}
                     onSuccess={handleDeleteSuccess}
                     onError={onDeleteError}
                 />
             )}
-            {showEditUserDialog && (
-                <EditUserDialog onClose={handleEditSuccess} user={user} onSuccess={handleEditSuccess} />
-            )}
+            {showEditUserDialog && <EditUserDialog onClose={closeEditDialog} user={user} onSuccess={closeEditDialog} />}
         </div>
     );
 };

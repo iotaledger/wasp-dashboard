@@ -23,6 +23,12 @@ interface PeerTileProps {
 
 const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+    /**
+     *
+     */
+    function closeDeletePeerDialog(): void {
+        setShowDeleteDialog(false);
+    }
 
     const primaryText = blindMode ? "*".repeat((peer.publicKey ?? "Unknown").length) : peer.publicKey ?? "Unknown";
     const secondaryText = blindMode ? "*".repeat((peer.netID ?? "Unknown").length) : peer.netID ?? "Unknown";
@@ -48,12 +54,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
                 actions={detailed ? actions : undefined}
             />
             {showDeleteDialog && (
-                <DeletePeerDialog
-                    onClose={() => {
-                        setShowDeleteDialog(false);
-                    }}
-                    peer={peer}
-                />
+                <DeletePeerDialog onClose={closeDeletePeerDialog} onSuccess={closeDeletePeerDialog} peer={peer} />
             )}
         </React.Fragment>
     );
