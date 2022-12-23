@@ -4,6 +4,7 @@ import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Block.scss";
 import { BlockInfoResponse, RequestReceiptResponse } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
+import KeyValueRow from "../components/KeyValueRow";
 import GoBackButton from "../components/layout/GoBackButton";
 
 /**
@@ -49,23 +50,20 @@ function Block() {
             <div className="block-wrapper">
                 <div className="middle row">
                     <GoBackButton goTo={`/chains/${chainID}`} text="chain" />
-                    <h2 className="margin-l-s l1-details-title">Block {blockID}</h2>
+                    <h2 className="margin-l-s">Block {blockID}</h2>
                 </div>
                 <div className="content">
                     <div className="card col fill">
                         <div className="block-summary">
                             <h4>Info</h4>
                             {info?.map(([k, v]) => (
-                                <div key={k} className="card-item">
-                                    <span>{BLOCK_DATA_NAMES[k]}:</span>
-                                    <p className="value">{JSON.stringify(v)}</p>
-                                </div>
+                                <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={JSON.stringify(v)} />
                             ))}
                         </div>
                     </div>
                 </div>
                 <div className="middle row">
-                    <h2 className="margin-l-s l1-details-title">Requests</h2>
+                    <h2 className="margin-l-s">Requests</h2>
                 </div>
                 <div className="content">
                     {blockRequests.map(receipt => {
@@ -76,39 +74,31 @@ function Block() {
                         return (
                             <div key={receipt.request?.requestID} className="card col fill">
                                 <div className="block-summary">
-                                    <h4 className="1-details-title">REQUEST INFO</h4>
+                                    <h4>REQUEST INFO</h4>
                                     {Object.entries(receipt)
                                         .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
                                         .map(([k, v]) => (
-                                            <div key={k} className="card-item">
-                                                <span>{BLOCK_REQUEST_NAMES[k]}:</span>
-                                                <p className="value">{JSON.stringify(v)}</p>
-                                            </div>
+                                            <KeyValueRow
+                                                key={k}
+                                                keyText={BLOCK_REQUEST_NAMES[k]}
+                                                value={JSON.stringify(v)}
+                                            />
                                         ))}
-                                    <div className="card-item">
-                                        <span>Sender:</span>
-                                        <p className="value">{senderAccount}</p>
-                                    </div>
+                                    <KeyValueRow keyText="Sender" value={senderAccount} />
+
                                     <br />
-                                    <h4 className="1-details-title">Parameters</h4>
+                                    <h4>Parameters</h4>
                                     {params?.map(({ Key, Value }: Record<string, string>) => (
-                                        <div key={Key} className="card-item">
-                                            <span>{Key}:</span>
-                                            <p className="value">{JSON.stringify(Value)}</p>
-                                        </div>
+                                        <KeyValueRow key={Key} keyText={Key} value={JSON.stringify(Value)} />
                                     ))}
                                     <br />
-                                    <h4 className="1-details-title">Attached tokens</h4>
-                                    <div className="card-item">
-                                        <span>Base tokens:</span>
-                                        <p className="value">{attachedBaseTokens}</p>
-                                    </div>
+                                    <h4>Attached tokens</h4>
+
+                                    <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
+
                                     <br />
-                                    <h4 className="1-details-title">Allowance</h4>
-                                    <div className="card-item">
-                                        <span>Base tokens:</span>
-                                        <p className="value">{allowanceBaseTokens}</p>
-                                    </div>
+                                    <h4>Allowance</h4>
+                                    <KeyValueRow keyText="Base tokens" value={allowanceBaseTokens} />
                                 </div>
                             </div>
                         );
