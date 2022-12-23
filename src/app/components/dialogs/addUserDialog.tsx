@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import zxcvbn from "zxcvbn";
 import { Dialog } from "../";
 import { ServiceFactory } from "../../../factories/serviceFactory";
-import { checkPasswordStrength } from "../../../lib/utils";
+import { MIN_PASSWORD_STRENGTH } from "../../../lib/constants";
 import { AddUserRequest } from "../../../services/wasp_client";
 import { WaspClientService } from "../../../services/waspClientService";
 import PasswordInput from "../layout/PasswordInput";
@@ -39,6 +40,12 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
     const [formValues, setFormValues] = useState<IFormValues>(FORM_INITIAL_VALUES);
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [validForm, setValidForm] = useState<boolean>(false);
+
+    useEffect(() => {
+        validateForm();
+    }, [formValues]);
+
     /**
      *
      */
@@ -75,22 +82,22 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
     }
 
     /**
-     *
-     * @param e
+     * Validate the form.
      */
-    function handlePasswordOnChange(e: React.ChangeEvent<HTMLInputElement>): void {
-        const newError = checkPasswordStrength(e.target.value);
-        if (newError) {
-            setError(newError);
+    function validateForm(): void {
+        if (formValues?.username?.length <= 0 || formValues?.password?.length <= 0) {
+            setValidForm(false);
         } else {
-            setError(null);
+            const passwordStrength = zxcvbn(formValues?.password);
+            if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
+                setValidForm(false);
+                setError(passwordStrength.feedback.suggestions.join(" "));
+            } else {
+                setValidForm(true);
+                setError(null);
+            }
         }
-        setFormValues({ ...formValues, password: e.target.value });
     }
-
-    useEffect(() => {
-        handlePasswordOnChange({ target: { value: formValues.password } } as React.ChangeEvent<HTMLInputElement>);
-    }, [formValues.password]);
 
     return (
         <Dialog
@@ -102,7 +109,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                         type="button"
                         className="button button--primary"
                         onClick={handleAddUser}
-                        disabled={isBusy || !formValues.username || !formValues.password || Boolean(error)}
+                        disabled={isBusy || !validForm}
                     >
                         Add
                     </button>
@@ -128,11 +135,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onUserAdded }) => {
                 </div>
                 <div className="dialog-content-label">Password</div>
                 <div className="dialog-value">
-                    <PasswordInput
-                        inputValue={formValues.password}
-                        onChange={handlePasswordOnChange}
-                        disabled={isBusy}
-                    />
+                    <PasswordInput inputValue={formValues.password} onChange={onChange} disabled={isBusy} />
                 </div>
                 <div className="dialog-content-label">Permissions</div>
                 <div className="dialog-content-value">
