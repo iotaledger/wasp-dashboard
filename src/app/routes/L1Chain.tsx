@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
+import { METRICS_NAMES } from "../../lib/constants";
 import "./L1.scss";
+import { ITableRow, StandardMessage } from "../../lib/interfaces";
+import { formatDate } from "../../lib/utils";
 import { ChainMetrics } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
-import ChainMessagesTable from "../components/layout/ChainMessagesTable";
 import GoBackButton from "../components/layout/GoBackButton";
 import InfoBox from "../components/layout/InfoBox";
+import Table from "../components/layout/Table";
 
 /**
  * L1 chain panel.
  * @returns The node to render.
  */
 function L1Chain() {
-    const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null>(null);
+    const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null | ITableRow[]>(null);
     const { chainID } = useParams();
 
     React.useEffect(() => {
@@ -28,7 +31,17 @@ function L1Chain() {
             .metrics()
             .getChainMetrics({ chainID })
             .then(metrics => {
-                setChainL1Metrics(metrics);
+                const chainMetricsArray = Object.entries(metrics as ChainMetrics | null[]).map(
+                    ([key, val]: [string, StandardMessage]) => {
+                        const name = METRICS_NAMES[key];
+                        const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
+                        const totalMessages = val.messages ?? 0;
+                        const lastTime = val.timestamp.valueOf() > 0 ? formatDate(val.timestamp) : "-";
+                        const lastMessage = val.lastMessage ? JSON.stringify(val.lastMessage, null, 2) : "";
+                        return { name, typeInOrOut, totalMessages, lastTime, lastMessage };
+                    },
+                );
+                setChainL1Metrics(chainMetricsArray);
             });
     }, []);
 
@@ -41,7 +54,13 @@ function L1Chain() {
                 </div>
                 <div className="content">
                     <InfoBox title="L1 Chain metrics" cardClassName="last-card">
-                        {l1ChainMetrics && <ChainMessagesTable chainMetrics={l1ChainMetrics} />}
+                        {l1ChainMetrics && (
+                            <Table
+                                tBody={l1ChainMetrics as ITableRow[]}
+                                tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
+                                classNames="chain-messages-table"
+                            />
+                        )}
                     </InfoBox>
                 </div>
             </div>

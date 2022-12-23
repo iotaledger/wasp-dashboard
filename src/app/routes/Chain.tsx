@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
+import { ITableRow } from "../../lib/interfaces";
 import {
     AssetsResponse,
     ChainInfoResponse,
@@ -12,8 +13,11 @@ import {
 } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 import { formatEVMJSONRPCUrl } from "../../utils/evm";
+import KeyValueRow from "../components/KeyValueRow";
 import GoBackButton from "../components/layout/GoBackButton";
 import InfoBox from "../components/layout/InfoBox";
+import Table from "../components/layout/Table";
+import Tile from "../components/Tile";
 
 interface ChainInfoValue {
     key: string;
@@ -54,9 +58,10 @@ function Chain() {
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
-    const [chainConsensusMetrics, setChainConsensusMetrics] = useState<Record<string, ConsensusMetric> | null>(null);
+    const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
+        Record<string, ConsensusMetric> | null | ITableRow[]
+    >(null);
     const { chainID } = useParams();
-
     const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
 
@@ -142,7 +147,13 @@ function Chain() {
                         triggerTime: newConsensusMetrics[`time${flagName}`] as unknown as Date,
                     };
                 }
-                setChainConsensusMetrics(metrics);
+                const chainConsensusMetricsArray = Object.entries(metrics).map(([key, value]) => {
+                    const flagName = METRICS_NAMES[key];
+                    const status = typeof value.status === "boolean" ? value.status : value.status.toString();
+                    const triggerTime = value.triggerTime?.toISOString() ?? "NEVER";
+                    return { flagName, status, triggerTime };
+                });
+                setChainConsensusMetrics(chainConsensusMetricsArray);
             });
     }, []);
 
@@ -158,169 +169,88 @@ function Chain() {
                         {chainInfo
                             .filter(({ key }) => !INFO_SKIP_NAMES.has(key))
                             .map(({ key, val }) => (
-                                <div key={key} className="card-item">
-                                    <span>{INFO_NAMES[key]}:</span>
-                                    <p className="value">{val.toString()}</p>
-                                </div>
+                                <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
                             ))}
                     </InfoBox>
                     <InfoBox title="Contracts">
                         {chainContracts.map(({ name, hName, description, programHash }) => (
-                            <div key={name} className="card-item">
-                                <Link to={`/chain/${chainID}/contract/${hName}`}>
-                                    <span>{name}:</span>
-                                </Link>
-                                <p className="value">{description}</p>
-                            </div>
+                            <KeyValueRow
+                                key={name}
+                                keyText={{ text: name, url: `/chain/${chainID}/contract/${hName}` }}
+                                value={description}
+                            />
                         ))}
                     </InfoBox>
                     <InfoBox title="On-chain accounts">
-                        <ul>
-                            {chainAccounts.map(account => (
-                                <li key={account}>{account}</li>
-                            ))}
-                        </ul>
+                        {chainAccounts.map(account => (
+                            <Tile key={account} primaryText={account} />
+                        ))}
                     </InfoBox>
                     <InfoBox title="Total Assets">
                         {chainAssets?.baseTokens && (
-                            <React.Fragment>
-                                <div className="card-item">
-                                    <span>Base Tokens:</span>
-                                    <p className="value">{chainAssets?.baseTokens}</p>
-                                </div>
-                                <br />
-                            </React.Fragment>
+                            <KeyValueRow
+                                key={chainAssets?.baseTokens}
+                                keyText="Base Tokens"
+                                value={chainAssets?.baseTokens}
+                            />
                         )}
                         {chainAssets?.tokens && chainAssets.tokens.length > 0 && (
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {chainAssets?.tokens?.map(token => (
-                                        <tr key={token.iD}>
-                                            <td>{token.iD}</td>
-                                            <td>{token.amount}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            <Table tHead={["ID", "Amount"]} tBody={chainAssets.tokens as ITableRow[]} />
                         )}
                     </InfoBox>
                     <InfoBox title="Blobs">
                         {chainBlobs.length > 0 ? (
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Hash</th>
-                                        <th>Size (bytes)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {chainBlobs.map(blob => (
-                                        <tr key={blob.hash}>
-                                            <td>{blob.hash}</td>
-                                            <td>{blob.size}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
                         ) : (
                             <p>No blobs found.</p>
                         )}
                     </InfoBox>
                     <InfoBox title="Latest block">
-                        <div className="card-item">
-                            <span>Block index:</span>
-                            <Link to={`blocks/${chainLatestBlock?.blockIndex}`}>
-                                <p className="value">{chainLatestBlock?.blockIndex}</p>
-                            </Link>
-                        </div>
-                        <div className="card-item">
-                            <span>Last updated:</span>
-                            <p className="value">{chainLatestBlock?.timestamp?.toISOString()}</p>
-                        </div>
+                        <KeyValueRow
+                            keyText="Block index"
+                            value={{
+                                text: chainLatestBlock?.blockIndex?.toString(),
+                                url: `blocks/${chainLatestBlock?.blockIndex}`,
+                            }}
+                        />
+                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp?.toISOString()} />
                     </InfoBox>
                     <InfoBox title="Committee">
                         {chainCommitteeInfo && (
                             <React.Fragment>
-                                <div className="card-item">
-                                    <span>Address:</span>
-                                    <p className="value">{chainCommitteeInfo.stateAddress}</p>
-                                </div>
-                                <div className="card-item">
-                                    <span>Status:</span>
-                                    <p className="value">{getStatus(chainCommitteeInfo.active ?? false)}</p>
-                                </div>
+                                <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
+                                <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
                             </React.Fragment>
                         )}
                         <br />
                         <h4>Peers</h4>
-                        {chainCommitteeInfo?.candidateNodes && (
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Index</th>
-                                        <th>Pubkey</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {chainCommitteeInfo.committeeNodes?.map(({ node }, i) => (
-                                        <tr key={node?.publicKey}>
-                                            <td>{i}</td>
-                                            <td>{node?.publicKey}</td>
-                                            <td>{getStatus(node?.isAlive ?? false)}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                        {chainCommitteeInfo?.committeeNodes && (
+                            <Table
+                                tHead={["Index", "Pubkey", "Status"]}
+                                tBody={
+                                    chainCommitteeInfo?.committeeNodes.map(({ node }, i) => [
+                                        i,
+                                        node?.publicKey,
+                                        getStatus(node?.isAlive ?? false),
+                                    ]) as unknown as ITableRow[]
+                                }
+                            />
                         )}
                     </InfoBox>
                     <InfoBox title="EVM">
                         {ChainID && (
                             <React.Fragment>
-                                <div className="card-item">
-                                    <span>EVM ChainID:</span>
-                                    <p className="value">{EVMChainID?.val}</p>
-                                </div>
-                                <div className="card-item">
-                                    <span>JSON-RPC URL:</span>
-                                    <p className="value">{formatEVMJSONRPCUrl(ChainID?.val)}</p>
-                                </div>
+                                <KeyValueRow keyText="EVM ChainID" value={EVMChainID?.val} />
+                                <KeyValueRow keyText="JSON-RPC URL" value={formatEVMJSONRPCUrl(ChainID?.val)} />
                             </React.Fragment>
                         )}
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
                         {ChainID && (
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Flag name</th>
-                                        <th>Status</th>
-                                        <th>Trigger time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {chainConsensusMetrics &&
-                                        Object.entries(chainConsensusMetrics).map(([key, val]) => (
-                                            <tr key={key}>
-                                                <td>{METRICS_NAMES[key]}</td>
-                                                <td>
-                                                    {typeof val.status === "boolean" ? (
-                                                        <input type="checkbox" checked={val.status} readOnly />
-                                                    ) : (
-                                                        val.status.toString()
-                                                    )}
-                                                </td>
-                                                <td>{val.triggerTime?.toISOString() ?? "NEVER"}</td>
-                                            </tr>
-                                        ))}
-                                </tbody>
-                            </table>
+                            <Table
+                                tHead={["Flag name", "Status", "Trigger time"]}
+                                tBody={chainConsensusMetrics as ITableRow[]}
+                            />
                         )}
                     </InfoBox>
                 </div>

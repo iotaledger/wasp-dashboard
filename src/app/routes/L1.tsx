@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { ReactComponent as HealthBadIcon } from "../../assets/health-bad.svg";
-import { ReactComponent as HealthGoodIcon } from "../../assets/health-good.svg";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./L1.scss";
+import { METRICS_NAMES } from "../../lib/constants";
+import { ITableRow, StandardMessage } from "../../lib/interfaces";
+import { formatDate } from "../../lib/utils";
 import { NodeConfigService } from "../../services/nodeConfigService";
 import { ChainInfoResponse, ChainMetrics, L1Params } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
-import ChainMessagesTable from "../components/layout/ChainMessagesTable";
+import KeyValueRow from "../components/KeyValueRow";
 import InfoBox from "../components/layout/InfoBox";
+import Table from "../components/layout/Table";
+import Tile from "../components/Tile";
 
 /**
  * L1 panel.
@@ -17,7 +19,7 @@ import InfoBox from "../components/layout/InfoBox";
 function L1() {
     const [l1Params, setL1Params] = useState<L1Params | null>(null);
     const [chains, setChains] = useState<ChainInfoResponse[] | null>(null);
-    const [l1Metrics, setl1Metrics] = useState<ChainMetrics | null>(null);
+    const [l1Metrics, setl1Metrics] = useState<ChainMetrics | null | ITableRow[]>(null);
 
     React.useEffect(() => {
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
@@ -44,7 +46,24 @@ function L1() {
             .metrics()
             .getL1Metrics()
             .then(metrics => {
-                setl1Metrics(metrics);
+                const chainMetricsArray = Object.entries(metrics as ChainMetrics | null[]).map(
+                    ([key, val]: [string, StandardMessage]) => {
+                        const name = METRICS_NAMES[key];
+                        const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
+                        const totalMessages = val.messages ?? 0;
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                        const date = val.timestamp.valueOf() > 0 ? formatDate(val.timestamp) : "-";
+                        const lastMessage = val.lastMessage ? JSON.stringify(val.lastMessage, null, 2) : "";
+                        return {
+                            name,
+                            typeInOrOut,
+                            totalMessages,
+                            date,
+                            lastMessage,
+                        };
+                    },
+                );
+                setl1Metrics(chainMetricsArray);
             });
     }, []);
 
@@ -63,19 +82,7 @@ function L1() {
                                         {isObject ? (
                                             <div>
                                                 {Object.entries(val).map(([prop, propVal]) => (
-                                                    <div className="info-item" key={prop}>
-                                                        <span>{prop}:</span>
-
-                                                        {typeof propVal === "boolean" ? (
-                                                            propVal ? (
-                                                                <input type="checkbox" checked disabled />
-                                                            ) : (
-                                                                <input type="checkbox" disabled />
-                                                            )
-                                                        ) : (
-                                                            <p> {`${propVal}`}</p>
-                                                        )}
-                                                    </div>
+                                                    <KeyValueRow key={prop} keyText={prop} value={propVal} />
                                                 ))}
                                             </div>
                                         ) : (
@@ -88,20 +95,23 @@ function L1() {
                     )}
                     <InfoBox title="Chains">
                         {chains?.map(chain => (
-                            <Link key={chain.chainID} to={`/l1/${chain.chainID}`}>
-                                <div className="l1-summary-item">
-                                    <div className="l1-health-icon">
-                                        {chain.isActive ? <HealthGoodIcon /> : <HealthBadIcon />}
-                                    </div>
-                                    <p className="l1-id" title={chain.chainID}>
-                                        {chain.chainID}
-                                    </p>
-                                </div>
-                            </Link>
+                            <Tile
+                                key={chain.chainID}
+                                primaryText={chain.chainID}
+                                url={`/l1/${chain.chainID}`}
+                                displayHealth
+                                healthy={chain.isActive}
+                            />
                         ))}
                     </InfoBox>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
-                        {l1Metrics && <ChainMessagesTable chainMetrics={l1Metrics} />}
+                        {l1Metrics && (
+                            <Table
+                                tBody={l1Metrics as ITableRow[]}
+                                tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
+                                classNames="chain-messages-table"
+                            />
+                        )}
                     </InfoBox>
                 </div>
             </div>
