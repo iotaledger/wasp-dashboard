@@ -27,7 +27,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
     const primaryText = blindMode ? "*".repeat((peer.publicKey ?? "Unknown").length) : peer.publicKey ?? "Unknown";
     const secondaryText = blindMode ? "*".repeat((peer.netID ?? "Unknown").length) : peer.netID ?? "Unknown";
     const healthy = peer.isAlive;
-    const url = `peers/${peer.publicKey}`;
+
     const actions = [
         {
             text: "Delete",
@@ -45,7 +45,6 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
                 healthy={healthy}
                 primaryText={primaryText}
                 secondaryText={detailed ? secondaryText : undefined}
-                url={detailed ? url : undefined}
                 actions={detailed ? actions : undefined}
             />
             {showDeleteDialog && (
