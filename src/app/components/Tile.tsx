@@ -26,10 +26,12 @@ const TileContent: React.FC<TileProps> = ({
     secondaryText,
 }: TileProps) => (
     <div className="tile-content">
-        <div className="text">
+        <div className="text-content">
             {displayHealth && <div className="health-icon">{healthy ? <HealthGoodIcon /> : <HealthWarning />}</div>}
-            <p className="primary">{primaryText}</p>
-            {secondaryText && <p className="primary">{secondaryText}</p>}
+            <div className="text">
+                <p className="primary">{primaryText}</p>
+                {secondaryText && <p className="secondary">{secondaryText}</p>}
+            </div>
         </div>
         {actions?.length && (
             <div className="actions">

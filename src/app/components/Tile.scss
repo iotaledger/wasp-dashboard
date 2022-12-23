@@ -18,18 +18,31 @@
     border: 0;
   }
 
-  .text {
+  .text-content {
     display: flex;
     flex-direction: row;
     align-items: center;
-    @include font-size(14px);
     color: var(--text-color-primary);
+    @include font-size(14px);
+
     word-break: break-all;
     overflow-wrap: anywhere;
 
     .health-icon {
       width: 16px;
       margin-right: $spacing-small;
+    }
+
+    .text {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .secondary {
+      @include font-size(12px);
+
+      margin-top: 6px;
+      color: var(--text-color-secondary);
     }
   }
 
