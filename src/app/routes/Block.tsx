@@ -74,7 +74,7 @@ function Block() {
                         return (
                             <div key={receipt.request?.requestID} className="card col fill">
                                 <div className="block-summary">
-                                    <h4 className="1-details-title">REQUEST #{index}</h4>
+                                    <h4>REQUEST #{receipt?.requestIndex}</h4>
                                     <div className="block-info-content">
                                         <div key={index} className="block-info-item">
                                             <h4>info</h4>
