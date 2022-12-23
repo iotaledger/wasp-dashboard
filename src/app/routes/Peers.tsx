@@ -58,7 +58,7 @@ const Peers: React.FC = () => {
     /**
      *
      */
-    function handleAddPeer() {
+    function closeAddPeerDialog() {
         setShowAddPeerDialog(false);
     }
     return (
@@ -79,7 +79,7 @@ const Peers: React.FC = () => {
                 <div className="peers-panel">
                     <PeersList peers={peersList} blindMode={blindMode} detailedList />
                 </div>
-                {showAddPeerDialog && <AddPeerDialog onClose={handleAddPeer} onSuccess={handleAddPeer} />}
+                {showAddPeerDialog && <AddPeerDialog onClose={closeAddPeerDialog} onSuccess={closeAddPeerDialog} />}
             </div>
         </div>
     );
