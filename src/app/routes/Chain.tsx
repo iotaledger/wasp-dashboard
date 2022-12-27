@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
 import { ITableRow } from "../../lib/interfaces";
+import { formatDate } from "../../lib/utils";
 import {
     AssetsResponse,
     ChainInfoResponse,
@@ -150,7 +151,7 @@ function Chain() {
                 const chainConsensusMetricsArray = Object.entries(metrics).map(([key, value]) => {
                     const flagName = METRICS_NAMES[key];
                     const status = typeof value.status === "boolean" ? value.status : value.status.toString();
-                    const triggerTime = value.triggerTime?.toISOString() ?? "NEVER";
+                    const triggerTime = value.triggerTime ? formatDate(value.triggerTime) : "-";
                     return { flagName, status, triggerTime };
                 });
                 setChainConsensusMetrics(chainConsensusMetricsArray);
@@ -213,7 +214,10 @@ function Chain() {
                                 url: `blocks/${chainLatestBlock?.blockIndex}`,
                             }}
                         />
-                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp?.toISOString()} />
+                        <KeyValueRow
+                            keyText="Last updated"
+                            value={chainLatestBlock?.timestamp ? formatDate(chainLatestBlock?.timestamp) : "-"}
+                        />
                     </InfoBox>
                     <InfoBox title="Committee">
                         {chainCommitteeInfo && (
