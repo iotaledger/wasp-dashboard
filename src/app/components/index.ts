@@ -1,4 +1,3 @@
-export { default as Dialog } from "./Dialog";
 export { default as KeyValueRow } from "./KeyValueRow";
 export { default as Tile } from "./Tile";
 export { default as AsyncComponent } from "./AsyncComponent";
