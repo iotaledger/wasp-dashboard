@@ -4,8 +4,7 @@ import { ServiceFactory } from "../../factories/serviceFactory";
 import { AuthService } from "../../services/authService";
 import { User } from "../../services/wasp_client/models";
 import { WaspClientService } from "../../services/waspClientService";
-import AddUserDialog from "../components/dialogs/addUserDialog";
-import UsersList from "../components/UsersList";
+import { AddUserDialog, UsersList } from "../components";
 
 const Users: React.FC = () => {
     /**

@@ -3,7 +3,7 @@ import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chains.scss";
 import { ChainInfoResponse } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
-import Tile from "../components/Tile";
+import { Tile } from "../components";
 
 /**
  * Chains panel.

@@ -7,9 +7,7 @@ import { ITableRow, StandardMessage } from "../../lib/interfaces";
 import { formatDate } from "../../lib/utils";
 import { ChainMetrics } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
-import GoBackButton from "../components/layout/GoBackButton";
-import InfoBox from "../components/layout/InfoBox";
-import Table from "../components/layout/Table";
+import { GoBackButton, InfoBox, Table } from "../components";
 
 /**
  * L1 chain panel.

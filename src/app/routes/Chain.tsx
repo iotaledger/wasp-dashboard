@@ -13,11 +13,7 @@ import {
 } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 import { formatEVMJSONRPCUrl } from "../../utils/evm";
-import KeyValueRow from "../components/KeyValueRow";
-import GoBackButton from "../components/layout/GoBackButton";
-import InfoBox from "../components/layout/InfoBox";
-import Table from "../components/layout/Table";
-import Tile from "../components/Tile";
+import { KeyValueRow, GoBackButton, InfoBox, Table, Tile } from "../components";
 
 interface ChainInfoValue {
     key: string;
