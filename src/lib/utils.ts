@@ -6,8 +6,16 @@ import moment from "moment";
  * @returns The formatted date.
  */
 export function formatDate(date?: Date | null): string {
-    if (!date) {
+    const year = moment().year();
+    const month = moment().month();
+    const day = moment().date();
+    const hours = moment().hours();
+    const minutes = moment().minutes();
+    const seconds = moment().seconds();
+    const newformattedDate = moment(`${year}-${month}-${day} ${hours}:${minutes}:${seconds}`);
+
+    if (!date || year < 2000) {
         return "-";
     }
-    return moment(date).format("YYYY-MM-DD HH:mm:ss");
+    return newformattedDate.format("YYYY-MM-DD HH:mm:ss");
 }
