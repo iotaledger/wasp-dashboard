@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ServiceFactory } from "../../../factories/serviceFactory";
-import { EventAggregator } from "../../../services/eventAggregator";
-import { ThemeService } from "../../../services/themeService";
+import { ServiceFactory, ThemeService, EventAggregator } from "../../../lib/classes";
 import { BrandHelper } from "../../../utils/brandHelper";
 import "./NavMenu.scss";
 import { NavMenuProps } from "./NavMenuProps";

@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import React, { ReactNode } from "react";
-import { ServiceFactory } from "../../../factories/serviceFactory";
-import { TangleService } from "../../../services/tangleService";
+import { TangleService, ServiceFactory } from "../../../lib/classes";
 import { FormatHelper } from "../../../utils/formatHelper";
 import AsyncComponent from "../layout/AsyncComponent";
 import "./BlockTangleState.scss";

@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ServiceFactory } from "../../../factories/serviceFactory";
+import { AuthService, EventAggregator, MetricsService, ServiceFactory } from "../../../lib/classes";
 import { IBpsMetrics } from "../../../models/websocket/IBpsMetrics";
 import { IDBSizeMetric } from "../../../models/websocket/IDBSizeMetric";
 import { INodeStatus } from "../../../models/websocket/INodeStatus";
 import { IPublicNodeStatus } from "../../../models/websocket/IPublicNodeStatus";
 import { WebSocketTopic } from "../../../models/websocket/webSocketTopic";
-import { AuthService } from "../../../services/authService";
-import { EventAggregator } from "../../../services/eventAggregator";
-import { MetricsService } from "../../../services/metricsService";
 import { FormatHelper } from "../../../utils/formatHelper";
 import Breakpoint from "./Breakpoint";
 import "./Header.scss";

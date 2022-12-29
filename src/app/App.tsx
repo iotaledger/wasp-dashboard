@@ -12,13 +12,15 @@ import { ReactComponent as PadlockIcon } from "../assets/padlock.svg";
 import { ReactComponent as PeersIcon } from "../assets/peers.svg";
 import { ReactComponent as SunIcon } from "../assets/sun.svg";
 import { ReactComponent as UsersIcon } from "../assets/users.svg";
-import { ServiceFactory } from "../factories/serviceFactory";
-import { AuthService } from "../services/authService";
-import { EventAggregator } from "../services/eventAggregator";
-import { LocalStorageService } from "../services/localStorageService";
-import { MetricsService } from "../services/metricsService";
-import { ThemeService } from "../services/themeService";
-import { WaspClientService } from "../services/waspClientService";
+import {
+    ServiceFactory,
+    AuthService,
+    EventAggregator,
+    LocalStorageService,
+    MetricsService,
+    ThemeService,
+    WaspClientService,
+} from "../lib/classes";
 import { BrandHelper } from "../utils/brandHelper";
 import { decodeJWTPayload } from "../utils/jwt";
 import isNodeOnline from "../utils/nodeStatus";

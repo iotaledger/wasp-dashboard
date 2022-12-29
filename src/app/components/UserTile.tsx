@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { User } from "../../services/wasp_client";
+import { User } from "../../lib/classes";
 import DeleteUserDialog from "./dialogs/DeleteUserDialog";
 import EditUserDialog from "./dialogs/EditUserDialog";
 import "./UserTile.scss";

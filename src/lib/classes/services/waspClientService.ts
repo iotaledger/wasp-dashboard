@@ -1,9 +1,16 @@
-import { Environment } from "../environment";
-import { ServiceFactory } from "../factories/serviceFactory";
-import { EventAggregator } from "./eventAggregator";
-import { LocalStorageService } from "./localStorageService";
-import { ChainsApi, Configuration, CorecontractsApi, MetricsApi, NodeApi, RequestsApi, UsersApi } from "./wasp_client";
-
+import { Environment } from "../../../environment";
+import {
+    EventAggregator,
+    ServiceFactory,
+    LocalStorageService,
+    ChainsApi,
+    Configuration,
+    CorecontractsApi,
+    MetricsApi,
+    NodeApi,
+    RequestsApi,
+    UsersApi,
+} from "../../classes";
 /**
  * Class to manage the wasp API.
  */

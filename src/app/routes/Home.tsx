@@ -2,13 +2,15 @@
 import React, { ReactNode } from "react";
 import { EyeClosedIcon, EyeIcon } from "../../assets";
 import { ReactComponent as BannerCurve } from "../../assets/banner-curve.svg";
-import { ServiceFactory } from "../../factories/serviceFactory";
-import { AuthService } from "../../services/authService";
-import { EventAggregator } from "../../services/eventAggregator";
-import { NodeConfigService } from "../../services/nodeConfigService";
-import { PeersService } from "../../services/peersService";
-import { SettingsService } from "../../services/settingsService";
-import { ThemeService } from "../../services/themeService";
+import {
+    ServiceFactory,
+    AuthService,
+    EventAggregator,
+    NodeConfigService,
+    PeersService,
+    SettingsService,
+    ThemeService,
+} from "../../lib/classes";
 import { BrandHelper } from "../../utils/brandHelper";
 import { PeersList } from "../components";
 import AsyncComponent from "../components/layout/AsyncComponent";
@@ -115,9 +117,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
      */
     public componentWillUnmount(): void {
         super.componentWillUnmount();
-
         EventAggregator.unsubscribe("theme", "home");
-
         EventAggregator.unsubscribe("settings.blindMode", "home");
     }
 

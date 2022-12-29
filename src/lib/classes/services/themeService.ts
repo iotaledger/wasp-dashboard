@@ -1,6 +1,4 @@
-import { ServiceFactory } from "../factories/serviceFactory";
-import { EventAggregator } from "./eventAggregator";
-import { LocalStorageService } from "./localStorageService";
+import { ServiceFactory, LocalStorageService, EventAggregator } from "../../classes";
 
 /**
  * Class the help with themes.

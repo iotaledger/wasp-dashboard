@@ -1,6 +1,6 @@
 import "./UsersList.scss";
 import React from "react";
-import { User } from "../../services/wasp_client";
+import { User } from "../../lib/classes";
 import UserTile from "./UserTile";
 
 interface UsersListProps {

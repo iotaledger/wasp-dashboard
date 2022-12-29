@@ -1,8 +1,5 @@
 import { INodeInfoBaseToken } from "@iota/iota.js";
-import { ServiceFactory } from "../factories/serviceFactory";
-import { SessionStorageService } from "./sessionStorageService";
-import { L1Params } from "./wasp_client";
-import { WaspClientService } from "./waspClientService";
+import { L1Params, WaspClientService, SessionStorageService, ServiceFactory } from "../../classes";
 
 /**
  * Service to handle getting confiuration from the node.

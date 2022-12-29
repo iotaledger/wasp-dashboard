@@ -1,9 +1,11 @@
-import { ServiceFactory } from "../factories/serviceFactory";
-import { AuthService } from "./authService";
-import { EventAggregator } from "./eventAggregator";
-import { PeeringNodeStatusResponse, PeeringTrustRequest } from "./wasp_client";
-import { WaspClientService } from "./waspClientService";
-
+import {
+    AuthService,
+    EventAggregator,
+    PeeringNodeStatusResponse,
+    PeeringTrustRequest,
+    WaspClientService,
+    ServiceFactory,
+} from "../../classes";
 /**
  * Class to manage peers.
  */

@@ -1,8 +1,7 @@
 import { ALIAS_ADDRESS_TYPE, ED25519_ADDRESS_TYPE } from "@iota/iota.js";
 import React, { Component, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ServiceFactory } from "../../../factories/serviceFactory";
-import { NodeConfigService } from "../../../services/nodeConfigService";
+import { NodeConfigService, ServiceFactory } from "../../../lib/classes";
 import { Bech32AddressHelper } from "../../../utils/bech32AddressHelper";
 import { ClipboardHelper } from "../../../utils/clipboardHelper";
 import { NameHelper } from "../../../utils/nameHelper";

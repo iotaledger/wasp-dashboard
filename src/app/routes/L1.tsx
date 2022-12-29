@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { ServiceFactory } from "../../factories/serviceFactory";
+import {
+    ServiceFactory,
+    NodeConfigService,
+    ChainInfoResponse,
+    ChainMetrics,
+    L1Params,
+    WaspClientService,
+} from "../../lib/classes";
 import "./L1.scss";
 import { METRICS_NAMES } from "../../lib/constants";
 import { ITableRow, StandardMessage } from "../../lib/interfaces";
 import { formatDate } from "../../lib/utils";
-import { NodeConfigService } from "../../services/nodeConfigService";
-import { ChainInfoResponse, ChainMetrics, L1Params } from "../../services/wasp_client";
-import { WaspClientService } from "../../services/waspClientService";
 import KeyValueRow from "../components/KeyValueRow";
 import InfoBox from "../components/layout/InfoBox";
 import Table from "../components/layout/Table";

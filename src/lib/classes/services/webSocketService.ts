@@ -1,10 +1,9 @@
 /* eslint-disable unicorn/prefer-add-event-listener, unicorn/prefer-node-protocol*/
 import { Converter, RandomHelper } from "@iota/util.js";
 import { Buffer } from "buffer";
-import { ServiceFactory } from "../factories/serviceFactory";
-import { IWebSocketMessage } from "../models/websocket/IWebSocketMessage";
-import { WebSocketTopic } from "../models/websocket/webSocketTopic";
-import { AuthService } from "./authService";
+import { IWebSocketMessage } from "../../../models/websocket/IWebSocketMessage";
+import { WebSocketTopic } from "../../../models/websocket/webSocketTopic";
+import { ServiceFactory, AuthService } from "../../classes";
 
 /**
  * Service to handle the websocket connection.

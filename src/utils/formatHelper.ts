@@ -3,8 +3,7 @@ import { HexHelper } from "@iota/util.js";
 import bigInt from "big-integer";
 import humanize from "humanize-duration";
 import moment from "moment";
-import { ServiceFactory } from "../factories/serviceFactory";
-import { NodeConfigService } from "../services/nodeConfigService";
+import { NodeConfigService, ServiceFactory } from "../lib/classes";
 
 /**
  * Class to help formatting values.

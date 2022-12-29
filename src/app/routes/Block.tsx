@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { ServiceFactory } from "../../factories/serviceFactory";
+import { ServiceFactory, WaspClientService, BlockInfoResponse, RequestReceiptResponse } from "../../lib/classes";
 import "./Block.scss";
-import { BlockInfoResponse, RequestReceiptResponse } from "../../services/wasp_client";
-import { WaspClientService } from "../../services/waspClientService";
 import KeyValueRow from "../components/KeyValueRow";
 import GoBackButton from "../components/layout/GoBackButton";
 

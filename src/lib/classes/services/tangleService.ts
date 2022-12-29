@@ -13,14 +13,13 @@ import {
     ALIAS_ADDRESS_TYPE,
     NFT_ADDRESS_TYPE,
 } from "@iota/iota.js";
-import { ServiceFactory } from "../factories/serviceFactory";
-import { IAssociatedOutput } from "../models/tangle/IAssociatedOutputsResponse";
-import { ISearchRequest } from "../models/tangle/ISearchRequest";
-import { ISearchResponse } from "../models/tangle/ISearchResponse";
-import { Bech32AddressHelper } from "../utils/bech32AddressHelper";
-import { OutputsHelper } from "../utils/outputsHelper";
-import { SearchQuery, SearchQueryBuilder } from "../utils/searchQueryBuilder";
-import { AuthService } from "./authService";
+import { IAssociatedOutput } from "../../../models/tangle/IAssociatedOutputsResponse";
+import { ISearchRequest } from "../../../models/tangle/ISearchRequest";
+import { ISearchResponse } from "../../../models/tangle/ISearchResponse";
+import { Bech32AddressHelper } from "../../../utils/bech32AddressHelper";
+import { OutputsHelper } from "../../../utils/outputsHelper";
+import { SearchQuery, SearchQueryBuilder } from "../../../utils/searchQueryBuilder";
+import { AuthService, ServiceFactory } from "../../classes";
 
 /**
  * Service to handle api requests.

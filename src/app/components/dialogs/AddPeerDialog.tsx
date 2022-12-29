@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Dialog } from "../";
-import { ServiceFactory } from "../../../factories/serviceFactory";
-import { PeersService } from "../../../services/peersService";
-import { PeeringTrustRequest } from "../../../services/wasp_client";
+import { ServiceFactory, PeeringTrustRequest, PeersService } from "../../../lib/classes";
 
 const FORM_INITIAL_VALUES: IFormValues = {
     publicKey: "",

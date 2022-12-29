@@ -2,11 +2,13 @@ import "./Peers.scss";
 
 import React, { useEffect, useState } from "react";
 import { EyeClosedIcon, EyeIcon } from "../../assets";
-import { ServiceFactory } from "../../factories/serviceFactory";
-import { EventAggregator } from "../../services/eventAggregator";
-import { PeersService } from "../../services/peersService";
-import { SettingsService } from "../../services/settingsService";
-import { PeeringNodeStatusResponse } from "../../services/wasp_client";
+import {
+    ServiceFactory,
+    EventAggregator,
+    PeersService,
+    SettingsService,
+    PeeringNodeStatusResponse,
+} from "../../lib/classes";
 import { PeersList, AddPeerDialog } from "../components";
 
 const Peers: React.FC = () => {

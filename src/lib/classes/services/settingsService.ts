@@ -1,6 +1,4 @@
-import { ServiceFactory } from "../factories/serviceFactory";
-import { EventAggregator } from "./eventAggregator";
-import { LocalStorageService } from "./localStorageService";
+import { EventAggregator, LocalStorageService, ServiceFactory } from "../../classes";
 
 /**
  * Class to use for storing settings.
