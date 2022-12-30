@@ -1,7 +1,7 @@
 import { Environment } from "../../../environment";
-import { FetchHelper } from "../../../utils/fetchHelper";
-import { decodeJWTPayload } from "../../../utils/jwt";
 import { ServiceFactory } from "../../classes";
+import { decodeJWTPayload } from "../../utils/jwt";
+import { FetchHelper } from "../helpers";
 import { EventAggregator } from "./eventAggregator";
 import { LocalStorageService } from "./localStorageService";
 
