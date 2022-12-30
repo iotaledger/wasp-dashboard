@@ -4,8 +4,7 @@ import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Contract.scss";
 import { ContractInfoResponse } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
-import KeyValueRow from "../components/KeyValueRow";
-import InfoBox from "../components/layout/InfoBox";
+import { KeyValueRow, InfoBox } from "../components";
 
 /**
  * Contract panel.

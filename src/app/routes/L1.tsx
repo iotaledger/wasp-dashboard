@@ -7,10 +7,7 @@ import { formatDate } from "../../lib/utils";
 import { NodeConfigService } from "../../services/nodeConfigService";
 import { ChainInfoResponse, ChainMetrics, L1Params } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
-import KeyValueRow from "../components/KeyValueRow";
-import InfoBox from "../components/layout/InfoBox";
-import Table from "../components/layout/Table";
-import Tile from "../components/Tile";
+import { KeyValueRow, InfoBox, Table, Tile } from "../components";
 
 /**
  * L1 panel.

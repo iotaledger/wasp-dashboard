@@ -1,0 +1,11 @@
+@use "../../../scss/variables" as *;
+
+.users-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .user-panel-item:not(:first-child) {
+        margin-top: $spacing-tiny;
+    }
+}

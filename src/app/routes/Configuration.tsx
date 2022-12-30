@@ -5,9 +5,7 @@ import React, { useEffect, useState } from "react";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Configuration.scss";
 import { WaspClientService } from "../../services/waspClientService";
-import KeyValueRow from "../components/KeyValueRow";
-import InfoBox from "../components/layout/InfoBox";
-
+import { KeyValueRow, InfoBox } from "../components";
 interface ConfigMap {
     [key: string]: never;
 }

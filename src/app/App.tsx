@@ -23,8 +23,7 @@ import { BrandHelper } from "../utils/brandHelper";
 import { decodeJWTPayload } from "../utils/jwt";
 import isNodeOnline from "../utils/nodeStatus";
 import { AppState } from "./AppState";
-import Breakpoint from "./components/layout/Breakpoint";
-import NavPanel from "./components/layout/NavPanel";
+import { Breakpoint, NavPanel } from "./components";
 import RoutesSwitcher from "./routes/RoutesSwitcher";
 
 /**
