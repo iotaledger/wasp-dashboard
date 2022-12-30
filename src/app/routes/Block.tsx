@@ -80,9 +80,9 @@ function Block() {
                                             <h4>info</h4>
                                             {Object.entries(receipt)
                                                 .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
-                                                .map(([k, v], keyIndex) => (
+                                                .map(([k, v]) => (
                                                     <KeyValueRow
-                                                        key={keyIndex}
+                                                        key={k}
                                                         keyText={BLOCK_REQUEST_NAMES[k]}
                                                         value={JSON.stringify(v)}
                                                     />
@@ -91,12 +91,8 @@ function Block() {
                                         </div>
                                         <div className="block-info-item">
                                             <h4>Parameters</h4>
-                                            {params?.map(({ Key, Value }: Record<string, string>, valueIndex) => (
-                                                <KeyValueRow
-                                                    key={valueIndex}
-                                                    keyText={Key}
-                                                    value={JSON.stringify(Value)}
-                                                />
+                                            {params?.map(({ Key, Value }: Record<string, string>) => (
+                                                <KeyValueRow key={Key} keyText={Key} value={JSON.stringify(Value)} />
                                             ))}
                                         </div>
                                         <div className="block-info-item">
