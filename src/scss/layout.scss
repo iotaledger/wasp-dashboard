@@ -30,6 +30,10 @@
         justify-content: space-between;
     }
 
+    &.spread-centered {
+        justify-content:space-around;
+    }
+
     &.wrap {
         flex-wrap: wrap;
     }

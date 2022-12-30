@@ -1,5 +1,6 @@
+/* eslint-disable react/no-multi-comp */
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Block.scss";
 import { BlockInfoResponse, RequestReceiptResponse } from "../../services/wasp_client";
@@ -13,6 +14,7 @@ import { KeyValueRow, GoBackButton } from "../components";
 function Block() {
     const [blockInfo, setBlockInfo] = useState<BlockInfoResponse | null>(null);
     const [blockRequests, setBlockRequests] = useState<RequestReceiptResponse[]>([]);
+    const [latestBlock, setLatestBlock] = useState<number>();
     const { chainID, blockID } = useParams();
     const blockIndex = Number(blockID);
 
@@ -40,9 +42,35 @@ function Block() {
                     setBlockRequests(newBlockReceipts.receipts);
                 }
             });
-    }, []);
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .blocklogGetLatestBlockInfo({ chainID })
+            .then(newLatestBlock => {
+                if (newLatestBlock.blockIndex) {
+                    setLatestBlock(newLatestBlock.blockIndex);
+                }
+            });
+    }, [blockID]);
 
     const info = blockInfo?.gasFeeCharged ? Object.entries(blockInfo).filter(([k]) => BLOCK_DATA_VALUES.has(k)) : null;
+
+    const previousBlock = (() => {
+        if (blockIndex > 1) {
+            return blockIndex - 1;
+        }
+    })();
+
+    const nextBlock = (() => {
+        if (!latestBlock) {
+return;
+}
+
+        if (blockIndex < latestBlock) {
+            return blockIndex + 1;
+        }
+    })();
 
     return (
         <div className="block">
@@ -108,11 +136,59 @@ function Block() {
                             </div>
                         );
                     })}
+                    <div className="card fill">
+                        <div className="block-summary row spread-centered">
+                            {chainID && blockIndex && previousBlock && latestBlock && nextBlock && (
+                                <React.Fragment>
+                                    <BlockLink
+                                        chainID={chainID}
+                                        disabled={blockIndex === 1}
+                                        blockIndex={1}
+                                        label="⏮️ First"
+                                    />
+                                    <BlockLink
+                                        chainID={chainID}
+                                        disabled={!previousBlock}
+                                        blockIndex={previousBlock}
+                                        label="⬅️ Previous"
+                                    />
+                                    <BlockLink
+                                        chainID={chainID}
+                                        disabled={!nextBlock}
+                                        blockIndex={nextBlock}
+                                        label="Next ➡️"
+                                    />
+                                    <BlockLink
+                                        chainID={chainID}
+                                        disabled={latestBlock === blockIndex}
+                                        blockIndex={latestBlock}
+                                        label="Latest ⏭️"
+                                    />
+                                </React.Fragment>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
+
+const BlockLink = ({
+    label,
+    chainID,
+    blockIndex,
+    disabled,
+}: {
+    label: string;
+    chainID: string;
+    blockIndex: number;
+    disabled: boolean;
+}) => (
+    <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
+        {label}
+    </Link>
+    );
 
 const BLOCK_DATA_NAMES: Record<string, string> = {
     blockIndex: "Block Index",
