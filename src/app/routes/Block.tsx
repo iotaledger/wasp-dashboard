@@ -64,8 +64,8 @@ function Block() {
 
     const nextBlock = (() => {
         if (!latestBlock) {
-return;
-}
+            return;
+        }
 
         if (blockIndex < latestBlock) {
             return blockIndex + 1;
@@ -188,7 +188,7 @@ const BlockLink = ({
     <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
         {label}
     </Link>
-    );
+);
 
 const BLOCK_DATA_NAMES: Record<string, string> = {
     blockIndex: "Block Index",
