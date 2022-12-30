@@ -138,34 +138,20 @@ function Block() {
                     })}
                     <div className="card fill">
                         <div className="block-summary row spread-centered">
-                            {chainID && blockIndex && previousBlock && latestBlock && nextBlock && (
-                                <React.Fragment>
-                                    <BlockLink
-                                        chainID={chainID}
-                                        disabled={blockIndex === 1}
-                                        blockIndex={1}
-                                        label="⏮️ First"
-                                    />
-                                    <BlockLink
-                                        chainID={chainID}
-                                        disabled={!previousBlock}
-                                        blockIndex={previousBlock}
-                                        label="⬅️ Previous"
-                                    />
-                                    <BlockLink
-                                        chainID={chainID}
-                                        disabled={!nextBlock}
-                                        blockIndex={nextBlock}
-                                        label="Next ➡️"
-                                    />
-                                    <BlockLink
-                                        chainID={chainID}
-                                        disabled={latestBlock === blockIndex}
-                                        blockIndex={latestBlock}
-                                        label="Latest ⏭️"
-                                    />
-                                </React.Fragment>
-                            )}
+                            <BlockLink chainID={chainID} disabled={blockIndex === 1} blockIndex={1} label="⏮️ First" />
+                            <BlockLink
+                                chainID={chainID}
+                                disabled={!previousBlock}
+                                blockIndex={previousBlock}
+                                label="⬅️ Previous"
+                            />
+                            <BlockLink chainID={chainID} disabled={!nextBlock} blockIndex={nextBlock} label="Next ➡️" />
+                            <BlockLink
+                                chainID={chainID}
+                                disabled={latestBlock === blockIndex}
+                                blockIndex={latestBlock}
+                                label="Latest ⏭️"
+                            />
                         </div>
                     </div>
                 </div>
@@ -174,21 +160,37 @@ function Block() {
     );
 }
 
-const BlockLink = ({
+BlockLink.defaultProps = {
+    blockIndex: 1,
+    chainID: "",
+};
+
+/**
+ *
+ * @param param0 BlockLink options
+ * @param param0.label
+ * @param param0.chainID
+ * @param param0.blockIndex
+ * @param param0.disabled
+ * @returns The Node to render.
+ */
+function BlockLink({
     label,
     chainID,
     blockIndex,
     disabled,
 }: {
     label: string;
-    chainID: string;
-    blockIndex: number;
+    chainID?: string;
+    blockIndex?: number;
     disabled: boolean;
-}) => (
-    <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
-        {label}
-    </Link>
-);
+}) {
+    return (
+        <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
+            {label}
+        </Link>
+    );
+}
 
 const BLOCK_DATA_NAMES: Record<string, string> = {
     blockIndex: "Block Index",
