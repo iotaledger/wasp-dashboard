@@ -172,7 +172,7 @@ function Chain() {
                         {chainContracts.map(({ name, hName, description, programHash }) => (
                             <KeyValueRow
                                 key={name}
-                                keyText={{ text: name, url: `/chain/${chainID}/contract/${hName}` }}
+                                keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
                                 value={description}
                             />
                         ))}
