@@ -19,7 +19,7 @@ export class BrandHelper {
      */
     public static initialize(): IBrandConfiguration | undefined {
         if (BrandHelper._brandId) {
-            BrandHelper._brandConfiguration = require(`../assets/${BrandHelper._brandId}/brand.json`);
+            BrandHelper._brandConfiguration = require(`../../assets/${BrandHelper._brandId}/brand.json`);
             document.title = `${BrandHelper._brandConfiguration.name} Dashboard`;
 
             return BrandHelper._brandConfiguration;
@@ -41,7 +41,7 @@ export class BrandHelper {
      * @returns The navigation panel logo.
      */
     public static async getLogoNavigation(theme: string): Promise<string> {
-        const logo = await import(`../assets/${BrandHelper._brandId}/themes/${theme}/logo-navigation.svg`);
+        const logo = await import(`../../assets/${BrandHelper._brandId}/themes/${theme}/logo-navigation.svg`);
         return logo.default;
     }
 
@@ -51,7 +51,7 @@ export class BrandHelper {
      * @returns The banner panel logo.
      */
     public static async getBanner(theme: string): Promise<string> {
-        const banner = await import(`../assets/${BrandHelper._brandId}/themes/${theme}/banner.svg`);
+        const banner = await import(`../../assets/${BrandHelper._brandId}/themes/${theme}/banner.svg`);
         return banner.default;
     }
 }
