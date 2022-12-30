@@ -12,7 +12,7 @@ import {
 } from "../../lib/classes";
 import "./Chain.scss";
 import { ITableRow } from "../../lib/interfaces";
-import { formatEVMJSONRPCUrl } from "../../utils/evm";
+import { formatEVMJSONRPCUrl } from "../../lib/utils";
 import { KeyValueRow, GoBackButton, InfoBox, Table, Tile } from "../components";
 
 interface ChainInfoValue {

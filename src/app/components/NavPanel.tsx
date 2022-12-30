@@ -1,8 +1,7 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ThemeService, EventAggregator, ServiceFactory } from "../../lib/classes";
-import { BrandHelper } from "../../utils/brandHelper";
+import { ThemeService, EventAggregator, ServiceFactory, BrandHelper } from "../../lib/classes";
 import "./NavPanel.scss";
 import { NavPanelProps } from "./NavPanelProps";
 

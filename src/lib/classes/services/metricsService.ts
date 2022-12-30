@@ -1,6 +1,6 @@
 import { Converter, RandomHelper } from "@iota/util.js";
 import { ServiceFactory, WebSocketService } from "../";
-import { WebSocketTopic } from "../../../models/websocket/webSocketTopic";
+import { WebSocketTopic } from "../../enums/webSocket";
 
 /**
  * Service to handle the websocket connection.

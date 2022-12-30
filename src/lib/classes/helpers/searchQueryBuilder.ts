@@ -1,6 +1,6 @@
 import { ALIAS_ADDRESS_TYPE, NFT_ADDRESS_TYPE } from "@iota/iota.js";
 import { Converter, HexHelper } from "@iota/util.js";
-import { IBech32AddressDetails } from "../models/IBech32AddressDetails";
+import { IBech32AddressDetails } from "../../interfaces";
 import { Bech32AddressHelper } from "./bech32AddressHelper";
 
 export interface SearchQuery {

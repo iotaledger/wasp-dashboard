@@ -1,4 +1,4 @@
-import { Environment } from "../environment";
+import { Environment } from "../../environment";
 
 /**
  * Format the EVM JSON RPC URL.

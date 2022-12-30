@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { IBrandConfiguration } from "../models/IBrandConfiguration";
+import { IBrandConfiguration } from "../interfaces";
 
 export class BrandHelper {
     /**

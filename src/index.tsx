@@ -18,9 +18,9 @@ import {
     ThemeService,
     WaspClientService,
     WebSocketService,
+    BrandHelper,
 } from "./lib/classes";
-import { IBrandConfiguration } from "./models/IBrandConfiguration";
-import { BrandHelper } from "./utils/brandHelper";
+import { IBrandConfiguration } from "./lib/interfaces";
 
 initServices()
     .then(brandConfiguration => {

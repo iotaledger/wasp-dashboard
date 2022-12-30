@@ -1,6 +1,7 @@
 import { IndexerPluginClient, IOutputsResponse, IClient } from "@iota/iota.js";
 import { Converter } from "@iota/util.js";
-import { AssociationType, IAssociatedOutput } from "../models/tangle/IAssociatedOutputsResponse";
+import { AssociationType } from "../../../lib/enums";
+import { IAssociatedOutput } from "../../../lib/types";
 
 /**
  * Helper class to fetch outputs of an query on stardust.

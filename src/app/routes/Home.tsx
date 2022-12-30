@@ -10,8 +10,8 @@ import {
     PeersService,
     SettingsService,
     ThemeService,
+    BrandHelper,
 } from "../../lib/classes";
-import { BrandHelper } from "../../utils/brandHelper";
 import { PeersList, AsyncComponent, InfoBox } from "../components";
 import "./Home.scss";
 import { HomeState } from "./HomeState";

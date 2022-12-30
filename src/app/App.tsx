@@ -20,10 +20,9 @@ import {
     MetricsService,
     ThemeService,
     WaspClientService,
+    BrandHelper,
 } from "../lib/classes";
-import { BrandHelper } from "../utils/brandHelper";
-import { decodeJWTPayload } from "../utils/jwt";
-import isNodeOnline from "../utils/nodeStatus";
+import { decodeJWTPayload, isNodeOnline } from "../lib/utils";
 import { AppState } from "./AppState";
 import { Breakpoint, NavPanel } from "./components";
 import RoutesSwitcher from "./routes/RoutesSwitcher";
