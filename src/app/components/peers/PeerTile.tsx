@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import { PeeringNodeStatusResponse } from "../../../lib/classes";
 import { Action } from "../../../lib/enums";
-import { PeeringNodeStatusResponse } from "../../../services/wasp_client";
 import { DeletePeerDialog, Tile } from "../../components";
 
 interface PeerTileProps {

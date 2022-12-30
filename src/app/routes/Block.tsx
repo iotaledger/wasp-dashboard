@@ -1,10 +1,8 @@
 /* eslint-disable react/no-multi-comp */
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ServiceFactory } from "../../factories/serviceFactory";
+import { ServiceFactory, WaspClientService, BlockInfoResponse, RequestReceiptResponse } from "../../lib/classes";
 import "./Block.scss";
-import { BlockInfoResponse, RequestReceiptResponse } from "../../services/wasp_client";
-import { WaspClientService } from "../../services/waspClientService";
 import { KeyValueRow, GoBackButton } from "../components";
 
 /**

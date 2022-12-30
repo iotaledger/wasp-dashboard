@@ -1,4 +1,4 @@
-import { PeeringNodeStatusResponse } from "../../services/wasp_client";
+import { PeeringNodeStatusResponse } from "../../lib/classes";
 
 export interface HomeState {
     /**

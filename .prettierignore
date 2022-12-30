@@ -1,2 +1,2 @@
 node_modules/
-src/services/wasp_client
+src/lib/classes/services/wasp_client

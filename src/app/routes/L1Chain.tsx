@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { ServiceFactory } from "../../factories/serviceFactory";
+import { ServiceFactory, ChainMetrics, WaspClientService } from "../../lib/classes";
 import { METRICS_NAMES } from "../../lib/constants";
 import "./L1.scss";
 import { ITableRow, StandardMessage } from "../../lib/interfaces";
 import { formatDate } from "../../lib/utils";
-import { ChainMetrics } from "../../services/wasp_client";
-import { WaspClientService } from "../../services/waspClientService";
 import { GoBackButton, InfoBox, Table } from "../components";
 
 /**

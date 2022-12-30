@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { ServiceFactory } from "../../factories/serviceFactory";
-import "./Chain.scss";
-import { ITableRow } from "../../lib/interfaces";
 import {
     AssetsResponse,
     ChainInfoResponse,
@@ -10,9 +7,12 @@ import {
     Blob,
     BlockInfoResponse,
     CommitteeInfoResponse,
-} from "../../services/wasp_client";
-import { WaspClientService } from "../../services/waspClientService";
-import { formatEVMJSONRPCUrl } from "../../utils/evm";
+    WaspClientService,
+    ServiceFactory,
+} from "../../lib/classes";
+import "./Chain.scss";
+import { ITableRow } from "../../lib/interfaces";
+import { formatEVMJSONRPCUrl } from "../../lib/utils";
 import { KeyValueRow, GoBackButton, InfoBox, Table, Tile } from "../components";
 
 interface ChainInfoValue {

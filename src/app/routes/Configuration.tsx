@@ -2,9 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React, { useEffect, useState } from "react";
-import { ServiceFactory } from "../../factories/serviceFactory";
+import { WaspClientService, ServiceFactory } from "../../lib/classes";
 import "./Configuration.scss";
-import { WaspClientService } from "../../services/waspClientService";
 import { KeyValueRow, InfoBox } from "../components";
 interface ConfigMap {
     [key: string]: never;

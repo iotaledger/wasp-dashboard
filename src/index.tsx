@@ -5,20 +5,22 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./app/App";
-import { ServiceFactory } from "./factories/serviceFactory";
-import { IBrandConfiguration } from "./models/IBrandConfiguration";
-import { AuthService } from "./services/authService";
-import { EventAggregator } from "./services/eventAggregator";
-import { LocalStorageService } from "./services/localStorageService";
-import { MetricsService } from "./services/metricsService";
-import { NodeConfigService } from "./services/nodeConfigService";
-import { PeersService } from "./services/peersService";
-import { SessionStorageService } from "./services/sessionStorageService";
-import { SettingsService } from "./services/settingsService";
-import { ThemeService } from "./services/themeService";
-import { WaspClientService } from "./services/waspClientService";
-import { WebSocketService } from "./services/webSocketService";
-import { BrandHelper } from "./utils/brandHelper";
+import {
+    ServiceFactory,
+    AuthService,
+    EventAggregator,
+    LocalStorageService,
+    MetricsService,
+    NodeConfigService,
+    PeersService,
+    SessionStorageService,
+    SettingsService,
+    ThemeService,
+    WaspClientService,
+    WebSocketService,
+    BrandHelper,
+} from "./lib/classes";
+import { IBrandConfiguration } from "./lib/interfaces";
 
 initServices()
     .then(brandConfiguration => {
