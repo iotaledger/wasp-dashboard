@@ -13,7 +13,7 @@ interface GoBackButtonProps {
  */
 
 const GoBackButton = ({ goTo, text }: GoBackButtonProps) => (
-    <Link className="back-link" to={goTo}>
+    <Link className="nav-link" to={goTo}>
         <ChevronLeft />
         <span>Back {text ? `to ${text}` : ""}</span>
     </Link>

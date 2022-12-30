@@ -1,5 +1,6 @@
+/* eslint-disable react/no-multi-comp */
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { ServiceFactory, WaspClientService, BlockInfoResponse, RequestReceiptResponse } from "../../lib/classes";
 import "./Block.scss";
 import { KeyValueRow, GoBackButton } from "../components";
@@ -11,6 +12,7 @@ import { KeyValueRow, GoBackButton } from "../components";
 function Block() {
     const [blockInfo, setBlockInfo] = useState<BlockInfoResponse | null>(null);
     const [blockRequests, setBlockRequests] = useState<RequestReceiptResponse[]>([]);
+    const [latestBlock, setLatestBlock] = useState<number>();
     const { chainID, blockID } = useParams();
     const blockIndex = Number(blockID);
 
@@ -38,9 +40,35 @@ function Block() {
                     setBlockRequests(newBlockReceipts.receipts);
                 }
             });
-    }, []);
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .blocklogGetLatestBlockInfo({ chainID })
+            .then(newLatestBlock => {
+                if (newLatestBlock.blockIndex) {
+                    setLatestBlock(newLatestBlock.blockIndex);
+                }
+            });
+    }, [blockID]);
 
     const info = blockInfo?.gasFeeCharged ? Object.entries(blockInfo).filter(([k]) => BLOCK_DATA_VALUES.has(k)) : null;
+
+    const previousBlock = (() => {
+        if (blockIndex > 1) {
+            return blockIndex - 1;
+        }
+    })();
+
+    const nextBlock = (() => {
+        if (!latestBlock) {
+            return;
+        }
+
+        if (blockIndex < latestBlock) {
+            return blockIndex + 1;
+        }
+    })();
 
     return (
         <div className="block">
@@ -106,9 +134,59 @@ function Block() {
                             </div>
                         );
                     })}
+                    <div className="card fill">
+                        <div className="block-summary row spread-centered">
+                            <BlockLink chainID={chainID} disabled={blockIndex === 1} blockIndex={1} label="⏮️ First" />
+                            <BlockLink
+                                chainID={chainID}
+                                disabled={!previousBlock}
+                                blockIndex={previousBlock}
+                                label="⬅️ Previous"
+                            />
+                            <BlockLink chainID={chainID} disabled={!nextBlock} blockIndex={nextBlock} label="Next ➡️" />
+                            <BlockLink
+                                chainID={chainID}
+                                disabled={latestBlock === blockIndex}
+                                blockIndex={latestBlock}
+                                label="Latest ⏭️"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    );
+}
+
+BlockLink.defaultProps = {
+    blockIndex: 1,
+    chainID: "",
+};
+
+/**
+ * A Link to navigate between blocks.
+ * @param param0 BlockLink options
+ * @param param0.label Label.
+ * @param param0.chainID ChainID.
+ * @param param0.blockIndex The destination block index.
+ * @param param0.disabled Disabled or not.
+ * @returns The Node to render.
+ */
+function BlockLink({
+    label,
+    chainID,
+    blockIndex,
+    disabled,
+}: {
+    label: string;
+    chainID?: string;
+    blockIndex?: number;
+    disabled: boolean;
+}) {
+    return (
+        <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
+            {label}
+        </Link>
     );
 }
 
