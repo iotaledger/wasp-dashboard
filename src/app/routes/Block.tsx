@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Block.scss";
-import { generateRandomId } from "../../lib/utils";
 import { BlockInfoResponse, RequestReceiptResponse } from "../../services/wasp_client";
 import { WaspClientService } from "../../services/waspClientService";
 import KeyValueRow from "../components/KeyValueRow";
@@ -77,35 +76,35 @@ function Block() {
                                 <div className="block-summary">
                                     <h4>REQUEST #{receipt?.requestIndex}</h4>
                                     <div className="block-info-content">
-                                        <div key={generateRandomId()} className="block-info-item">
+                                        <div className="block-info-item">
                                             <h4>info</h4>
                                             {Object.entries(receipt)
                                                 .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
-                                                .map(([k, v]) => (
+                                                .map(([k, v], keyIndex) => (
                                                     <KeyValueRow
-                                                        key={generateRandomId()}
+                                                        key={keyIndex}
                                                         keyText={BLOCK_REQUEST_NAMES[k]}
                                                         value={JSON.stringify(v)}
                                                     />
                                                 ))}
                                             <KeyValueRow keyText="Sender" value={senderAccount} />
                                         </div>
-                                        <div key={generateRandomId()} className="block-info-item">
+                                        <div className="block-info-item">
                                             <h4>Parameters</h4>
-                                            {params?.map(({ Key, Value }: Record<string, string>) => (
+                                            {params?.map(({ Key, Value }: Record<string, string>, valueIndex) => (
                                                 <KeyValueRow
-                                                    key={generateRandomId()}
+                                                    key={valueIndex}
                                                     keyText={Key}
                                                     value={JSON.stringify(Value)}
                                                 />
                                             ))}
                                         </div>
-                                        <div key={generateRandomId()} className="block-info-item">
+                                        <div className="block-info-item">
                                             <h4>Attached tokens</h4>
 
                                             <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
                                         </div>
-                                        <div key={generateRandomId()} className="block-info-item">
+                                        <div className="block-info-item">
                                             <h4>Allowance</h4>
                                             <KeyValueRow keyText="Base tokens" value={allowanceBaseTokens} />
                                         </div>

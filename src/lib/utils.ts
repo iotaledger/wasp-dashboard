@@ -12,11 +12,3 @@ export function formatDate(date?: Date | null): string {
     }
     return moment(date).format("YYYY-MM-DD HH:mm:ss");
 }
-
-/**
- *
- * @returns A random id.
- */
-export function generateRandomId(): string {
-    return Math.floor(Math.random() * 100000).toString();
-}
