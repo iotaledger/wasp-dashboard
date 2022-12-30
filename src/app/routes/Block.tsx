@@ -166,12 +166,12 @@ BlockLink.defaultProps = {
 };
 
 /**
- *
+ * A Link to navigate between blocks.
  * @param param0 BlockLink options
- * @param param0.label
- * @param param0.chainID
- * @param param0.blockIndex
- * @param param0.disabled
+ * @param param0.label Label.
+ * @param param0.chainID ChaiNID.
+ * @param param0.blockIndex The destination block index.
+ * @param param0.disabled Disabled or not.
  * @returns The Node to render.
  */
 function BlockLink({
