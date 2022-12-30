@@ -232,7 +232,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
      * Toggle blind mode in peers list.
      */
     private readonly handleBlindMode = (): void => {
-        this.setState({ blindMode: !this.state.blindMode });
+        this._settingsService.setBlindMode(!this.state.blindMode);
     };
 }
 
