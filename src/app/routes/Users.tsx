@@ -1,8 +1,7 @@
 import "./Users.scss";
 import React, { useEffect, useState } from "react";
 import { WaspClientService, ServiceFactory, AuthService, User } from "../../lib/classes";
-import AddUserDialog from "../components/dialogs/addUserDialog";
-import UsersList from "../components/UsersList";
+import { AddUserDialog, UsersList } from "../components";
 
 const Users: React.FC = () => {
     /**

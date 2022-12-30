@@ -11,10 +11,7 @@ import "./L1.scss";
 import { METRICS_NAMES } from "../../lib/constants";
 import { ITableRow, StandardMessage } from "../../lib/interfaces";
 import { formatDate } from "../../lib/utils";
-import KeyValueRow from "../components/KeyValueRow";
-import InfoBox from "../components/layout/InfoBox";
-import Table from "../components/layout/Table";
-import Tile from "../components/Tile";
+import { KeyValueRow, InfoBox, Table, Tile } from "../components";
 
 /**
  * L1 panel.

@@ -1,8 +1,7 @@
 import React, { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthService, ServiceFactory } from "../../lib/classes";
-import AsyncComponent from "../components/layout/AsyncComponent";
-import Spinner from "../components/layout/Spinner";
+import { AsyncComponent, Spinner } from "../components";
 import "./Login.scss";
 import { LoginState } from "./LoginState";
 

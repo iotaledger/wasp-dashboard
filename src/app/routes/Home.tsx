@@ -12,9 +12,7 @@ import {
     ThemeService,
 } from "../../lib/classes";
 import { BrandHelper } from "../../utils/brandHelper";
-import { PeersList } from "../components";
-import AsyncComponent from "../components/layout/AsyncComponent";
-import InfoBox from "../components/layout/InfoBox";
+import { PeersList, AsyncComponent, InfoBox } from "../components";
 import "./Home.scss";
 import { HomeState } from "./HomeState";
 

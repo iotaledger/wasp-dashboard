@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as ChevronLeftIcon } from "../../assets/chevron-left.svg";
-import AsyncComponent from "../components/layout/AsyncComponent";
+import { AsyncComponent } from "../components";
 import "./Unavailable.scss";
 
 /**

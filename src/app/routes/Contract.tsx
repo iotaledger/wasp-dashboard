@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { WaspClientService, ContractInfoResponse, ServiceFactory } from "../../lib/classes";
 import "./Contract.scss";
-import KeyValueRow from "../components/KeyValueRow";
-import InfoBox from "../components/layout/InfoBox";
+import { KeyValueRow, InfoBox } from "../components";
 
 /**
  * Contract panel.

@@ -5,9 +5,7 @@ import { METRICS_NAMES } from "../../lib/constants";
 import "./L1.scss";
 import { ITableRow, StandardMessage } from "../../lib/interfaces";
 import { formatDate } from "../../lib/utils";
-import GoBackButton from "../components/layout/GoBackButton";
-import InfoBox from "../components/layout/InfoBox";
-import Table from "../components/layout/Table";
+import { GoBackButton, InfoBox, Table } from "../components";
 
 /**
  * L1 chain panel.
