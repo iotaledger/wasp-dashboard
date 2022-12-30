@@ -1,4 +1,3 @@
-import { INodeInfoBaseToken } from "@iota/iota.js";
 import { ServiceFactory } from "../factories/serviceFactory";
 import { SessionStorageService } from "./sessionStorageService";
 import { L1Params } from "./wasp_client";
@@ -31,11 +30,6 @@ export class NodeConfigService {
     private _l1Params?: L1Params;
 
     /**
-     * The base token.
-     */
-    private readonly _baseToken: INodeInfoBaseToken;
-
-    /**
      * The bech32 hrp.
      */
     private readonly _bech32Hrp: string;
@@ -52,14 +46,6 @@ export class NodeConfigService {
         this._storageService = ServiceFactory.get<SessionStorageService>(SessionStorageService.ServiceName);
         this._networkId = "";
         this._bech32Hrp = "iota";
-        this._baseToken = {
-            name: "IOTA",
-            tickerSymbol: "MIOTA",
-            unit: "i",
-            decimals: 0,
-            subunit: undefined,
-            useMetricPrefix: true,
-        };
     }
 
     /**
@@ -109,14 +95,6 @@ export class NodeConfigService {
      */
     public getVersion(): string | undefined {
         return this._version;
-    }
-
-    /**
-     * Get the node base token.
-     * @returns The node base token.
-     */
-    public getBaseToken(): INodeInfoBaseToken {
-        return this._baseToken;
     }
 
     /**
