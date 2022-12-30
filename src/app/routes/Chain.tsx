@@ -214,10 +214,7 @@ function Chain() {
                                 url: `blocks/${chainLatestBlock?.blockIndex}`,
                             }}
                         />
-                        <KeyValueRow
-                            keyText="Last updated"
-                            value={chainLatestBlock?.timestamp ? formatDate(chainLatestBlock?.timestamp) : "-"}
-                        />
+                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp ?? "-"} />
                     </InfoBox>
                     <InfoBox title="Committee">
                         {chainCommitteeInfo && (

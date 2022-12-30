@@ -57,7 +57,7 @@ function Block() {
                         <div className="block-summary">
                             <h4>Info</h4>
                             {info?.map(([k, v]) => (
-                                <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={JSON.stringify(v)} />
+                                <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={v} />
                             ))}
                         </div>
                     </div>

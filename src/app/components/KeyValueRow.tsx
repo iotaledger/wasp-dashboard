@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable react/jsx-no-useless-fragment */
+/* eslint-disable unicorn/no-nested-ternary */
 import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -12,7 +13,7 @@ import { formatDate } from "../../lib/utils";
 
 interface KeyValueRowProps {
     keyText: string | ILink | undefined | null;
-    value: string | number | boolean | ILink | undefined | null;
+    value: string | number | boolean | ILink | Date | undefined | null;
 }
 
 const KeyValueRow: React.FC<KeyValueRowProps> = ({ keyText, value }) => {
@@ -29,12 +30,12 @@ const KeyValueRow: React.FC<KeyValueRowProps> = ({ keyText, value }) => {
                     <span className="key">{keyText?.text}:</span>
                 </Link>
             )}
-            {typeof value === "string" || typeof value === "number" || typeof value === "boolean" ? (
-                typeof value === "boolean" ? (
-                    <input type="checkbox" checked={Boolean(value)} disabled />
-                ) : (
-                    <span className="value">{isValid ? formatDate(value as any) : valueWithoutQuotes}</span>
-                )
+            {value instanceof Date ? (
+                <span className="value">{isValid ? formatDate(value) : valueWithoutQuotes}</span>
+            ) : typeof value === "boolean" ? (
+                <input type="checkbox" checked={Boolean(value)} disabled />
+            ) : typeof value === "string" || typeof value === "number" ? (
+                <span className="value">{value}</span>
             ) : (
                 <Link to={value?.url!}>
                     <span className="key">{value?.text}</span>
