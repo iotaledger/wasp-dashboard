@@ -5,7 +5,7 @@ import { METRICS_NAMES } from "../../lib/constants";
 import "./L1.scss";
 import { ITableRow, StandardMessage } from "../../lib/interfaces";
 import { formatDate } from "../../lib/utils";
-import { GoBackButton, InfoBox, Table } from "../components";
+import { Breadcrumb, InfoBox, Table } from "../components";
 
 /**
  * L1 chain panel.
@@ -14,7 +14,10 @@ import { GoBackButton, InfoBox, Table } from "../components";
 function L1Chain() {
     const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null | ITableRow[]>(null);
     const { chainID } = useParams();
-
+    const l1ChainBreadcrumbs = [
+        { goTo: "/l1", text: "L1" },
+        { goTo: `/l1/${chainID}`, text: `L1 Chain ${chainID}` },
+    ];
     React.useEffect(() => {
         if (!chainID) {
             return;
@@ -44,9 +47,9 @@ function L1Chain() {
     return (
         <div className="l1">
             <div className="l1-wrapper">
+                <Breadcrumb breadcrumbs={l1ChainBreadcrumbs} />
                 <div className="l1-header middle row">
-                    <GoBackButton goTo="/l1" text="L1" />
-                    <h2 className="margin-l-s l1-details-title">L1 Chain {chainID}</h2>
+                    <h2 className="l1-details-title">L1 Chain {chainID}</h2>
                 </div>
                 <div className="content">
                     <InfoBox title="L1 Chain metrics" cardClassName="last-card">

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ServiceFactory, WaspClientService, BlockInfoResponse, RequestReceiptResponse } from "../../lib/classes";
 import "./Block.scss";
-import { KeyValueRow, GoBackButton } from "../components";
+import { KeyValueRow, Breadcrumb } from "../components";
 
 /**
  * Block panel.
@@ -15,7 +15,11 @@ function Block() {
     const [latestBlock, setLatestBlock] = useState<number>();
     const { chainID, blockID } = useParams();
     const blockIndex = Number(blockID);
-
+    const blockBreadcrumbs = [
+        { goTo: "/chains", text: "Chains" },
+        { goTo: `/chains/${chainID}`, text: `Chain ${chainID}` },
+        { goTo: `/chains/${chainID}/blocks/${blockID}`, text: `Block ${blockID}` },
+    ];
     React.useEffect(() => {
         if (!blockID || !chainID) {
             return;
@@ -73,9 +77,9 @@ function Block() {
     return (
         <div className="block">
             <div className="block-wrapper">
+                <Breadcrumb breadcrumbs={blockBreadcrumbs} />
                 <div className="middle row">
-                    <GoBackButton goTo={`/chains/${chainID}`} text="chain" />
-                    <h2 className="margin-l-s">Block {blockID}</h2>
+                    <h2>Block {blockID}</h2>
                 </div>
                 <div className="content">
                     <div className="card col fill">
