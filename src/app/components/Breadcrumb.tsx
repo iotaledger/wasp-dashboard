@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ReactComponent as ChevronRight } from "../../assets/chevron-right.svg";
+import "./Breadcrumb.scss";
 interface BreadcrumbProps {
     breadcrumbs: Breadcrumb[];
 }
