@@ -17,7 +17,7 @@ interface Breadcrumb {
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
     const location = useLocation();
-    console.log("pathname", location);
+
     return (
         <div className="row middle">
             {breadcrumbs.map((breadcrumb, index) => (
