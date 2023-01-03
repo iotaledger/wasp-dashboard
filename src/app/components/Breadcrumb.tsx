@@ -14,10 +14,10 @@ interface Breadcrumb {
 
 /**
  * Breadcrumbs.
+ * @param breadcrumbs.breadcrumbs
  * @param breadcrumbs The breadcrumbs to render.
  * @returns The node to render.
  */
-
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
     const location = useLocation();
 
