@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-param */
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ReactComponent as ChevronRight } from "../../assets/chevron-right.svg";
@@ -14,7 +15,6 @@ interface Breadcrumb {
 
 /**
  * Breadcrumbs.
- * @param breadcrumbs.breadcrumbs
  * @param breadcrumbs The breadcrumbs to render.
  * @returns The node to render.
  */
