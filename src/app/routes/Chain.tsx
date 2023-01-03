@@ -13,7 +13,7 @@ import {
 import "./Chain.scss";
 import { ITableRow } from "../../lib/interfaces";
 import { formatEVMJSONRPCUrl } from "../../lib/utils";
-import { KeyValueRow, GoBackButton, InfoBox, Table, Tile } from "../components";
+import { KeyValueRow, InfoBox, Table, Tile, Breadcrumb } from "../components";
 
 interface ChainInfoValue {
     key: string;
@@ -61,6 +61,10 @@ function Chain() {
     const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
 
+    const chainBreadcrumbs = [
+        { goTo: "/chains", text: "Chains" },
+        { goTo: `/chains/${ChainID?.val}`, text: `Chain ${chainID}` },
+    ];
     React.useEffect(() => {
         if (!chainID) {
             return;
@@ -156,9 +160,9 @@ function Chain() {
     return (
         <div className="chain">
             <div className="chain-wrapper">
+                <Breadcrumb breadcrumbs={chainBreadcrumbs} />
                 <div className="middle row">
-                    <GoBackButton goTo="/chains" text="chains" />
-                    <h2 className="margin-l-s l1-details-title">Chain {chainID}</h2>
+                    <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
                     <InfoBox title="Info">
