@@ -2,13 +2,16 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ReactComponent as ChevronRight } from "../../assets/chevron-right.svg";
 import "./Breadcrumb.scss";
+
 interface BreadcrumbProps {
     breadcrumbs: Breadcrumb[];
 }
+
 interface Breadcrumb {
     goTo: string;
     text: string;
 }
+
 /**
  *
  * @param breadcrumbs The breadcrumbs to render.
@@ -35,4 +38,5 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
         </div>
     );
 };
+
 export default Breadcrumb;
