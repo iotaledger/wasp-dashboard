@@ -30,7 +30,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
     }
 
     const primaryText = blindMode ? "*".repeat((peer.publicKey ?? "Unknown").length) : peer.publicKey ?? "Unknown";
-    const secondaryText = blindMode ? "*".repeat((peer.netID ?? "Unknown").length) : peer.netID ?? "Unknown";
+    const secondaryText = blindMode ? "*".repeat((peer.netId ?? "Unknown").length) : peer.netId ?? "Unknown";
     const healthy = peer.isAlive;
 
     const actions = [

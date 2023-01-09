@@ -96,12 +96,12 @@ function Block() {
                 </div>
                 <div className="content">
                     {blockRequests.map((receipt, index) => {
-                        const params = receipt?.request?.params?.Items;
+                        const params = receipt?.request?.params?.items;
                         const senderAccount = receipt.request?.senderAccount;
                         const attachedBaseTokens = receipt?.request?.fungibleTokens?.baseTokens;
                         const allowanceBaseTokens = receipt?.request?.allowance?.fungibleTokens?.baseTokens;
                         return (
-                            <div key={receipt.request?.requestID} className="card col fill">
+                            <div key={receipt.request?.requestId} className="card col fill">
                                 <div className="block-summary">
                                     <h4>REQUEST #{receipt?.requestIndex}</h4>
                                     <div className="block-info-content">
@@ -120,8 +120,12 @@ function Block() {
                                         </div>
                                         <div className="block-info-item">
                                             <h4>Parameters</h4>
-                                            {params?.map(({ Key, Value }: Record<string, string>) => (
-                                                <KeyValueRow key={Key} keyText={Key} value={JSON.stringify(Value)} />
+                                            {params?.map(x => (
+                                                <KeyValueRow
+                                                    key={x.key}
+                                                    keyText={x.key}
+                                                    value={JSON.stringify(x.value)}
+                                                />
                                             ))}
                                         </div>
                                         <div className="block-info-item">

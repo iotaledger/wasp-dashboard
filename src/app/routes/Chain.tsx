@@ -194,8 +194,8 @@ function Chain() {
                                 value={chainAssets?.baseTokens}
                             />
                         )}
-                        {chainAssets?.tokens && chainAssets.tokens.length > 0 && (
-                            <Table tHead={["ID", "Amount"]} tBody={chainAssets.tokens as ITableRow[]} />
+                        {chainAssets?.nativeTokens && chainAssets.nativeTokens.length > 0 && (
+                            <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
                         )}
                     </InfoBox>
                     <InfoBox title="Blobs">
