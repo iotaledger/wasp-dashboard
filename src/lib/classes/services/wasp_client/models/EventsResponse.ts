@@ -16,41 +16,41 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface AccountNFTsResponse
+ * @interface EventsResponse
  */
-export interface AccountNFTsResponse {
+export interface EventsResponse {
     /**
      * 
      * @type {Array<string>}
-     * @memberof AccountNFTsResponse
+     * @memberof EventsResponse
      */
-    nftIds?: Array<string>;
+    events?: Array<string>;
 }
 
 /**
- * Check if a given object implements the AccountNFTsResponse interface.
+ * Check if a given object implements the EventsResponse interface.
  */
-export function instanceOfAccountNFTsResponse(value: object): boolean {
+export function instanceOfEventsResponse(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function AccountNFTsResponseFromJSON(json: any): AccountNFTsResponse {
-    return AccountNFTsResponseFromJSONTyped(json, false);
+export function EventsResponseFromJSON(json: any): EventsResponse {
+    return EventsResponseFromJSONTyped(json, false);
 }
 
-export function AccountNFTsResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): AccountNFTsResponse {
+export function EventsResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): EventsResponse {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'nftIds': !exists(json, 'nftIds') ? undefined : json['nftIds'],
+        'events': !exists(json, 'events') ? undefined : json['events'],
     };
 }
 
-export function AccountNFTsResponseToJSON(value?: AccountNFTsResponse | null): any {
+export function EventsResponseToJSON(value?: EventsResponse | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -59,7 +59,7 @@ export function AccountNFTsResponseToJSON(value?: AccountNFTsResponse | null): a
     }
     return {
         
-        'nftIds': value.nftIds,
+        'events': value.events,
     };
 }
 

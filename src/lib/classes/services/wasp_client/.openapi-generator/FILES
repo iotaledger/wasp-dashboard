@@ -41,6 +41,7 @@ models/ControlAddressesResponse.ts
 models/DKSharesInfo.ts
 models/DKSharesPostRequest.ts
 models/ErrorMessageFormatResponse.ts
+models/EventsResponse.ts
 models/FoundryOutputResponse.ts
 models/FungibleTokens.ts
 models/GasFeePolicy.ts
@@ -67,6 +68,7 @@ models/OffLedgerRequestBody.ts
 models/OnLedgerRequest.ts
 models/OnLedgerRequestMetricItem.ts
 models/Output.ts
+models/OutputID.ts
 models/PeeringNodeIdentityResponse.ts
 models/PeeringNodeStatus.ts
 models/PeeringNodeStatusResponse.ts
@@ -85,7 +87,6 @@ models/TransactionIDMetricItem.ts
 models/TransactionMetricItem.ts
 models/TxInclusionStateMsg.ts
 models/TxInclusionStateMsgMetricItem.ts
-models/UTXOInput.ts
 models/UTXOInputMetricItem.ts
 models/UpdateUserPasswordRequest.ts
 models/UpdateUserPermissionsRequest.ts

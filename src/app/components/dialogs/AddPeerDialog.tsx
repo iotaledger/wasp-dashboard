@@ -37,7 +37,7 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose, onSuccess, onError }
             setIsBusy(true);
             const newPeer: PeeringTrustRequest = {
                 publicKey: formValues.publicKey,
-                netID: formValues.netID,
+                netId: formValues.netID,
             };
             const success = await peersService.trustPeer(newPeer);
             if (!success) {
