@@ -150,7 +150,7 @@ function Chain() {
                 const chainConsensusMetricsArray = Object.entries(metrics).map(([key, value]) => {
                     const flagName = METRICS_NAMES[key];
                     const status = typeof value.status === "boolean" ? value.status : value.status.toString();
-                    const triggerTime = value.triggerTime ? formatDate(value.triggerTime) : "-";
+                    const triggerTime = formatDate(value.triggerTime);
                     return { flagName, status, triggerTime };
                 });
                 setChainConsensusMetrics(chainConsensusMetricsArray);
@@ -213,7 +213,7 @@ function Chain() {
                                 url: `blocks/${chainLatestBlock?.blockIndex}`,
                             }}
                         />
-                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp ?? "-"} />
+                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp} />
                     </InfoBox>
                     <InfoBox title="Committee">
                         {chainCommitteeInfo && (
