@@ -259,13 +259,13 @@ function Chain() {
     );
 }
 
-const INFO_SKIP_NAMES = new Set(["eVMChainID"]);
+const INFO_SKIP_NAMES = new Set(["evmChainId"]);
 
 const INFO_NAMES: Record<string, string> = {
     chainID: "Chain ID",
-    chainOwnerID: "Owner ID",
+    chainOwnerId: "Owner ID",
     description: "Description",
-    gasFeeTokenID: "Gas fee token ID",
+    gasFeeTokenId: "Gas fee token ID",
     gasPerToken: "Gas per token",
     validatorFeeShare: "Validator fee share",
     isActive: "Active",
