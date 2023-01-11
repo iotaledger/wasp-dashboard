@@ -35,7 +35,7 @@ const KeyValueRow: React.FC<KeyValueRowProps> = ({ keyText, value }) => {
             ) : typeof value === "boolean" ? (
                 <input type="checkbox" checked={Boolean(value)} disabled />
             ) : typeof value === "string" || typeof value === "number" ? (
-                <span className="value">{value}</span>
+                <span className="value">{valueWithoutQuotes}</span>
             ) : (
                 <Link to={value?.url!}>
                     <span className="key">{value?.text}</span>
