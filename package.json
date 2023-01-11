@@ -17,7 +17,8 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.4.5",
-        "vivagraphjs": "^0.12.0"
+        "vivagraphjs": "^0.12.0",
+        "zxcvbn": "^4.4.2"
     },
     "engines": {
         "node": ">=14 <=16.16"
@@ -50,6 +51,7 @@
         "@types/react-dom": "^18.0.9",
         "@types/react-helmet": "^6.1.6",
         "@types/react-router-dom": "^5.3.3",
+        "@types/zxcvbn": "^4.4.1",
         "@typescript-eslint/eslint-plugin": "^5.46.1",
         "@typescript-eslint/parser": "^5.46.1",
         "buffer": "^6.0.3",

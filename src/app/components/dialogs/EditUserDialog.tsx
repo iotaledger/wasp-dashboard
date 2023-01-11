@@ -1,9 +1,10 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import React, { SetStateAction, useEffect, useState } from "react";
-import { Dialog } from "../";
-import { ServiceFactory } from "../../../factories/serviceFactory";
-import { ChangeUserPasswordRequest, User } from "../../../services/wasp_client";
-import { WaspClientService } from "../../../services/waspClientService";
-import PasswordInput from "../layout/PasswordInput";
+import zxcvbn from "zxcvbn";
+import { ServiceFactory, WaspClientService, ChangeUserPasswordRequest, User } from "../../../lib/classes";
+import { MIN_PASSWORD_STRENGTH } from "../../../lib/constants";
+import { Dialog, PasswordInput } from "../../components";
+
 interface IEditUserDialog {
     onClose: () => void;
     user: User;
@@ -15,17 +16,38 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [newPassword, setNewPassword] = useState<string>("");
-    const [confirmPassword, setConfirmPassword] = useState<string>("");
-    /**
-     *
-     */
+    const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
+    const [validForm, setValidForm] = useState<boolean>(false);
+
+    useEffect(() => {
+        validatePasswords();
+    }, [confirmNewPassword, newPassword]);
+
+    function validatePasswords(): void {
+        if (confirmNewPassword?.length <= 0 || newPassword?.length <= 0) {
+            setValidForm(false);
+        } else if (confirmNewPassword === newPassword) {
+            const passwordStrength = zxcvbn(newPassword);
+            if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
+                setValidForm(false);
+                setError(passwordStrength.feedback.suggestions.join(" "));
+            } else {
+                setValidForm(true);
+                setError(null);
+            }
+        } else {
+            setError("Passwords do not match!");
+            setValidForm(true);
+        }
+    }
+
     async function handleEditUser(): Promise<void> {
         setError(null);
         try {
             const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
             await waspClientService.users().changeUserPassword({
                 ...user,
-                updateUserPasswordRequest: { password: confirmPassword },
+                updateUserPasswordRequest: { password: confirmNewPassword },
             } as ChangeUserPasswordRequest);
             if (onSuccess && typeof onSuccess === "function") {
                 onSuccess();
@@ -42,13 +64,6 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
         }
     }
 
-    useEffect(() => {
-        if (confirmPassword !== "" && confirmPassword !== newPassword) {
-            setError("Passwords do not match!");
-        } else {
-            setError(null);
-        }
-    }, [confirmPassword, newPassword]);
     return (
         <Dialog
             onClose={onClose}
@@ -59,7 +74,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                         type="button"
                         className="button button--primary"
                         onClick={handleEditUser}
-                        disabled={isBusy || confirmPassword !== newPassword || confirmPassword === ""}
+                        disabled={isBusy || !validForm}
                     >
                         Save
                     </button>
@@ -82,9 +97,9 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                 <div className="dialog-content-label">Repeat new password</div>
                 <div className="dialog-content-value">
                     <PasswordInput
-                        inputValue={confirmPassword}
+                        inputValue={confirmNewPassword}
                         onChange={(e: { target: { value: SetStateAction<string> } }) =>
-                            setConfirmPassword(e.target.value)}
+                            setConfirmNewPassword(e.target.value)}
                         disabled={isBusy}
                     />
 

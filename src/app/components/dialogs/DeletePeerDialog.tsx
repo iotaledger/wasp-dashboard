@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Dialog } from "../";
-import { ServiceFactory } from "../../../factories/serviceFactory";
-import { PeersService } from "../../../services/peersService";
-import { PeeringNodeStatusResponse } from "../../../services/wasp_client";
+import { ServiceFactory, PeersService, PeeringNodeStatusResponse } from "../../../lib/classes";
 
 interface IDeletePeerDialog {
     onClose: () => void;
     peer: PeeringNodeStatusResponse;
+    onError?: () => void;
+    onSuccess?: () => void;
 }
 
-const DeletePeerDialog: React.FC<IDeletePeerDialog> = ({ onClose, peer }) => {
+const DeletePeerDialog: React.FC<IDeletePeerDialog> = ({ onClose, peer, onSuccess, onError }) => {
     /**
      * The peers service.
      */
@@ -29,10 +29,15 @@ const DeletePeerDialog: React.FC<IDeletePeerDialog> = ({ onClose, peer }) => {
             if (!success) {
                 throw new Error("Failed to delete peer");
             }
-            onClose();
+            if (onSuccess && typeof onSuccess === "function") {
+                onSuccess();
+            }
         } catch (e) {
             if (e instanceof Error) {
                 setError(e.message);
+            }
+            if (onError && typeof onError === "function") {
+                onError();
             }
         }
         setIsBusy(false);
@@ -62,5 +67,8 @@ const DeletePeerDialog: React.FC<IDeletePeerDialog> = ({ onClose, peer }) => {
         </Dialog>
     );
 };
-
+DeletePeerDialog.defaultProps = {
+    onError: () => {},
+    onSuccess: () => {},
+};
 export default DeletePeerDialog;

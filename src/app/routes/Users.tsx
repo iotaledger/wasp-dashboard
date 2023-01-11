@@ -1,11 +1,7 @@
 import "./Users.scss";
 import React, { useEffect, useState } from "react";
-import { ServiceFactory } from "../../factories/serviceFactory";
-import { AuthService } from "../../services/authService";
-import { User } from "../../services/wasp_client/models";
-import { WaspClientService } from "../../services/waspClientService";
-import AddUserDialog from "../components/dialogs/addUserDialog";
-import UsersList from "../components/UsersList";
+import { WaspClientService, ServiceFactory, AuthService, User } from "../../lib/classes";
+import { AddUserDialog, UsersList } from "../components";
 
 const Users: React.FC = () => {
     /**
@@ -55,6 +51,21 @@ const Users: React.FC = () => {
         }
     }
 
+    /**
+     *
+     */
+    function handleAddUserSuccess(): void {
+        loadAllUsers();
+        closeAddUserDialog();
+    }
+
+    /**
+     *
+     */
+    function closeAddUserDialog(): void {
+        setShowAddUserDialog(false);
+    }
+
     return (
         <div className="users">
             <div className="content">
@@ -66,9 +77,7 @@ const Users: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                {showAddUserDialog && (
-                    <AddUserDialog onClose={() => setShowAddUserDialog(false)} onUserAdded={loadAllUsers} />
-                )}
+                {showAddUserDialog && <AddUserDialog onClose={closeAddUserDialog} onSuccess={handleAddUserSuccess} />}
                 <div className="users-panel">
                     <UsersList
                         users={usersList}

@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { ServiceFactory } from "../../factories/serviceFactory";
 import "./Chain.scss";
-import { ITableRow } from "../../lib/interfaces";
-import { formatDate } from "../../lib/utils";
 import {
     AssetsResponse,
     ChainInfoResponse,
@@ -11,14 +8,12 @@ import {
     Blob,
     BlockInfoResponse,
     CommitteeInfoResponse,
-} from "../../services/wasp_client";
-import { WaspClientService } from "../../services/waspClientService";
-import { formatEVMJSONRPCUrl } from "../../utils/evm";
-import KeyValueRow from "../components/KeyValueRow";
-import GoBackButton from "../components/layout/GoBackButton";
-import InfoBox from "../components/layout/InfoBox";
-import Table from "../components/layout/Table";
-import Tile from "../components/Tile";
+    WaspClientService,
+    ServiceFactory,
+} from "../../lib/classes";
+import { ITableRow } from "../../lib/interfaces";
+import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
+import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
 
 interface ChainInfoValue {
     key: string;
@@ -66,6 +61,10 @@ function Chain() {
     const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
 
+    const chainBreadcrumbs = [
+        { goTo: "/chains", text: "Chains" },
+        { goTo: `/chains/${ChainID?.val}`, text: `Chain ${chainID}` },
+    ];
     React.useEffect(() => {
         if (!chainID) {
             return;
@@ -161,9 +160,9 @@ function Chain() {
     return (
         <div className="chain">
             <div className="chain-wrapper">
+                <Breadcrumb breadcrumbs={chainBreadcrumbs} />
                 <div className="middle row">
-                    <GoBackButton goTo="/chains" text="chains" />
-                    <h2 className="margin-l-s l1-details-title">Chain {chainID}</h2>
+                    <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
                     <InfoBox title="Info">
@@ -177,7 +176,7 @@ function Chain() {
                         {chainContracts.map(({ name, hName, description, programHash }) => (
                             <KeyValueRow
                                 key={name}
-                                keyText={{ text: name, url: `/chain/${chainID}/contract/${hName}` }}
+                                keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
                                 value={description}
                             />
                         ))}
@@ -195,8 +194,8 @@ function Chain() {
                                 value={chainAssets?.baseTokens}
                             />
                         )}
-                        {chainAssets?.tokens && chainAssets.tokens.length > 0 && (
-                            <Table tHead={["ID", "Amount"]} tBody={chainAssets.tokens as ITableRow[]} />
+                        {chainAssets?.nativeTokens && chainAssets.nativeTokens.length > 0 && (
+                            <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
                         )}
                     </InfoBox>
                     <InfoBox title="Blobs">

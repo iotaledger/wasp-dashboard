@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Dialog } from "../";
-import { ServiceFactory } from "../../../factories/serviceFactory";
-import { PeersService } from "../../../services/peersService";
-import { PeeringTrustRequest } from "../../../services/wasp_client";
+import { ServiceFactory, PeeringTrustRequest, PeersService } from "../../../lib/classes";
 
 const FORM_INITIAL_VALUES: IFormValues = {
     publicKey: "",
@@ -16,9 +14,11 @@ interface IFormValues {
 
 interface IAddPeerDialog {
     onClose: () => void;
+    onSuccess?: () => void;
+    onError?: () => void;
 }
 
-const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
+const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose, onSuccess, onError }) => {
     const [formValues, setFormValues] = useState<IFormValues>(FORM_INITIAL_VALUES);
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -37,16 +37,21 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
             setIsBusy(true);
             const newPeer: PeeringTrustRequest = {
                 publicKey: formValues.publicKey,
-                netID: formValues.netID,
+                netId: formValues.netID,
             };
             const success = await peersService.trustPeer(newPeer);
             if (!success) {
                 throw new Error("Failed to add peer");
             }
-            onClose();
+            if (onSuccess && typeof onSuccess === "function") {
+                onSuccess();
+            }
         } catch (e) {
             if (e instanceof Error) {
                 setError(e.message);
+            }
+            if (onError && typeof onError === "function") {
+                onError();
             }
         } finally {
             setIsBusy(false);
@@ -110,5 +115,9 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose }) => {
             </React.Fragment>
         </Dialog>
     );
+};
+AddPeerDialog.defaultProps = {
+    onError: () => {},
+    onSuccess: () => {},
 };
 export default AddPeerDialog;

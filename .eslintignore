@@ -1,3 +1,3 @@
 .eslintrc.js
 *.d.ts
-src/services/wasp_client
+src/lib/classes/services/wasp_client
