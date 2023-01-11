@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import "./Chain.scss";
 import {
     AssetsResponse,
     ChainInfoResponse,
@@ -10,10 +11,9 @@ import {
     WaspClientService,
     ServiceFactory,
 } from "../../lib/classes";
-import "./Chain.scss";
 import { ITableRow } from "../../lib/interfaces";
-import { formatEVMJSONRPCUrl } from "../../lib/utils";
-import { KeyValueRow, InfoBox, Table, Tile, Breadcrumb } from "../components";
+import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
+import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
 
 interface ChainInfoValue {
     key: string;
@@ -150,7 +150,7 @@ function Chain() {
                 const chainConsensusMetricsArray = Object.entries(metrics).map(([key, value]) => {
                     const flagName = METRICS_NAMES[key];
                     const status = typeof value.status === "boolean" ? value.status : value.status.toString();
-                    const triggerTime = value.triggerTime?.toISOString() ?? "NEVER";
+                    const triggerTime = formatDate(value.triggerTime);
                     return { flagName, status, triggerTime };
                 });
                 setChainConsensusMetrics(chainConsensusMetricsArray);
@@ -213,7 +213,7 @@ function Chain() {
                                 url: `blocks/${chainLatestBlock?.blockIndex}`,
                             }}
                         />
-                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp?.toISOString()} />
+                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp} />
                     </InfoBox>
                     <InfoBox title="Committee">
                         {chainCommitteeInfo && (
@@ -259,13 +259,13 @@ function Chain() {
     );
 }
 
-const INFO_SKIP_NAMES = new Set(["eVMChainID"]);
+const INFO_SKIP_NAMES = new Set(["evmChainId"]);
 
 const INFO_NAMES: Record<string, string> = {
     chainID: "Chain ID",
-    chainOwnerID: "Owner ID",
+    chainOwnerId: "Owner ID",
     description: "Description",
-    gasFeeTokenID: "Gas fee token ID",
+    gasFeeTokenId: "Gas fee token ID",
     gasPerToken: "Gas per token",
     validatorFeeShare: "Validator fee share",
     isActive: "Active",
