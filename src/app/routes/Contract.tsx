@@ -33,6 +33,13 @@ function Contract() {
                     setContractInfo(contract);
                 }
             });
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .blocklogGetEventsOfContract({ chainID, contractHname: contractHName })
+            .then(events => {
+                console.log(events);
+            });
     }, []);
 
     return (
