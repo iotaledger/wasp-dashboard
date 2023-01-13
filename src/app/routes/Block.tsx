@@ -61,7 +61,7 @@ function Block() {
                 }
             })
             .catch(() => {
-                setLatestBlock();
+                setLatestBlock(0);
             });
     }, [blockID]);
 
