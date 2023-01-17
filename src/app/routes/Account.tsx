@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory, WaspClientService, AssetsResponse } from "../../lib/classes";
 import "./Account.scss";
-import { Breadcrumb } from "../components";
+import { Breadcrumb, InfoBox, KeyValueRow } from "../components";
 
 /**
  * Account panel.
@@ -41,12 +41,9 @@ function Account() {
                     <h2>Account {accountID}</h2>
                 </div>
                 <div className="content">
-                    <div className="card col fill">
-                        <div className="account-summary">
-                            <h4>Info</h4>
-                            <p>Base Tokens: {accountBalance?.baseTokens}</p>
-                        </div>
-                    </div>
+                    <InfoBox title="Info">
+                        <KeyValueRow keyText="Base Tokens" value={accountBalance?.baseTokens} />
+                    </InfoBox>
                 </div>
             </div>
         </div>
