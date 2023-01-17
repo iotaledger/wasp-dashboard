@@ -40,6 +40,9 @@ function Block() {
             .blocklogGetBlockInfo({ chainID, blockIndex })
             .then(newBlockInfo => {
                 setBlockInfo(newBlockInfo);
+            })
+            .catch(() => {
+                setBlockInfo(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -50,6 +53,9 @@ function Block() {
                 if (newBlockReceipts.receipts) {
                     setBlockRequests(newBlockReceipts.receipts);
                 }
+            })
+            .catch(() => {
+                setBlockRequests([]);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -60,6 +66,9 @@ function Block() {
                 if (newLatestBlock.blockIndex) {
                     setLatestBlock(newLatestBlock.blockIndex);
                 }
+            })
+            .catch(() => {
+                setLatestBlock(0);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -70,13 +79,10 @@ function Block() {
                 setBlockEvents(events);
             });
     }, [blockID]);
-    const info = blockInfo?.gasFeeCharged ? Object.entries(blockInfo).filter(([k]) => BLOCK_DATA_VALUES.has(k)) : null;
+    
+    const info = blockInfo ? Object.entries(blockInfo).filter(([k]) => BLOCK_DATA_VALUES.has(k)) : null;
 
-    const previousBlock = (() => {
-        if (blockIndex > 1) {
-            return blockIndex - 1;
-        }
-    })();
+    const previousBlock = blockIndex - 1;
 
     const nextBlock = (() => {
         if (!latestBlock) {
@@ -173,20 +179,20 @@ function Block() {
                 </div>
                 <div className="card fill">
                     <div className="block-summary row spread-centered">
-                        <BlockLink chainID={chainID} disabled={blockIndex === 1} blockIndex={1} label="⏮️ First" />
-                        <BlockLink
-                            chainID={chainID}
-                            disabled={!previousBlock}
-                            blockIndex={previousBlock}
-                            label="⬅️ Previous"
-                        />
-                        <BlockLink chainID={chainID} disabled={!nextBlock} blockIndex={nextBlock} label="Next ➡️" />
-                        <BlockLink
-                            chainID={chainID}
-                            disabled={latestBlock === blockIndex}
-                            blockIndex={latestBlock}
-                            label="Latest ⏭️"
-                        />
+                         <BlockLink chainID={chainID} disabled={blockIndex === 0} blockIndex={0} label="⏮️ First" />
+                         <BlockLink
+                             chainID={chainID}
+                             disabled={previousBlock < 0}
+                             blockIndex={previousBlock}
+                             label="⬅️ Previous"
+                         />
+                         <BlockLink chainID={chainID} disabled={!nextBlock} blockIndex={nextBlock} label="Next ➡️" />
+                         <BlockLink
+                             chainID={chainID}
+                             disabled={latestBlock === blockIndex}
+                             blockIndex={latestBlock}
+                             label="Latest ⏭️"
+                         />
                     </div>
                 </div>
             </div>
