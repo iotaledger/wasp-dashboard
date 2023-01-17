@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { WaspClientService, ContractInfoResponse, ServiceFactory } from "../../lib/classes";
+import { WaspClientService, ContractInfoResponse, ServiceFactory, EventsResponse } from "../../lib/classes";
 import "./Contract.scss";
-import { KeyValueRow, InfoBox, Breadcrumb } from "../components";
+import { KeyValueRow, InfoBox, Breadcrumb, Tile } from "../components";
 
 /**
  * Contract panel.
@@ -11,6 +11,7 @@ import { KeyValueRow, InfoBox, Breadcrumb } from "../components";
 function Contract() {
     const [contractInfo, setContractInfo] = useState<ContractInfoResponse | null>(null);
     const { contractHName, chainID } = useParams();
+    const [contractEvents, setContractEvents] = useState<EventsResponse | null>(null);
     const contractBreadcrumbs = [
         { goTo: "/chains", text: "Chains" },
         { goTo: `/chains/${chainID}`, text: `Chain ${chainID}` },
@@ -33,6 +34,13 @@ function Contract() {
                     setContractInfo(contract);
                 }
             });
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .blocklogGetEventsOfContract({ chainID, contractHname: contractHName })
+            .then(events => {
+                setContractEvents(events);
+            });
     }, []);
 
     return (
@@ -47,6 +55,20 @@ function Contract() {
                                 <KeyValueRow key={key} keyText={key} value={val.toString()} />
                             ))}
                     </InfoBox>
+                </div>
+                <div className="middle row margin-t-m">
+                    <h2>Events</h2>
+                </div>
+                <div className="content">
+                    <div className="card fill">
+                        <div className="summary">
+                            {contractEvents?.events?.length === 0 ? (
+                                <div>No events found</div>
+                            ) : (
+                                contractEvents?.events?.map(event => <Tile key={event} primaryText={event} />)
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
