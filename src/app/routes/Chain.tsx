@@ -183,7 +183,7 @@ function Chain() {
                     </InfoBox>
                     <InfoBox title="On-chain accounts">
                         {chainAccounts.map(account => (
-                            <Tile key={account} primaryText={account} />
+                            <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
                         ))}
                     </InfoBox>
                     <InfoBox title="Total Assets">

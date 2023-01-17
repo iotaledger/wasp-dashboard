@@ -1,0 +1,49 @@
+@use "../../scss/card" as *;
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
+
+.account {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding: 40px;
+  font-family: $font-sans;
+
+  @include desktop-down {
+    padding: $spacing-small;
+  }
+
+  .account-wrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    max-width: $large-content-width-desktop;
+
+    h2 {
+      text-transform: uppercase;
+    }
+  }
+
+  .card {
+    margin-bottom: 16px;
+  }
+
+  .account-summary {
+    padding: 16px;
+
+    h4 {
+      margin-bottom: 20px;
+    }
+  }
+
+  .content {
+    display: inline-flex;
+    flex: 1;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-width: $content-width-desktop;
+    margin-top: $spacing-small;
+    color: var(--text-color-primary);
+  }
+}
