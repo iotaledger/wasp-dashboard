@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { WaspClientService, ContractInfoResponse, ServiceFactory, EventsResponse } from "../../lib/classes";
-import "./Contract.scss";
+import "./Route.scss";
 import { KeyValueRow, InfoBox, Breadcrumb, Tile } from "../components";
 
 /**
@@ -44,8 +44,8 @@ function Contract() {
     }, []);
 
     return (
-        <div className="contract">
-            <div className="contract-wrapper">
+        <div className="main">
+            <div className="main-wrapper">
                 <Breadcrumb breadcrumbs={contractBreadcrumbs} />
                 <h2>Contract {contractInfo?.name}</h2>
                 <div className="content">
@@ -60,15 +60,13 @@ function Contract() {
                     <h2>Events</h2>
                 </div>
                 <div className="content">
-                    <div className="card fill">
-                        <div className="summary">
-                            {contractEvents?.events?.length === 0 ? (
-                                <div>No events found</div>
-                            ) : (
-                                contractEvents?.events?.map(event => <Tile key={event} primaryText={event} />)
-                            )}
-                        </div>
-                    </div>
+                    <InfoBox title="Events">
+                        {contractEvents?.events?.length === 0 ? (
+                            <Tile primaryText="No events found" />
+                        ) : (
+                            contractEvents?.events?.map(event => <Tile key={event} primaryText={event} />)
+                        )}
+                    </InfoBox>
                 </div>
             </div>
         </div>

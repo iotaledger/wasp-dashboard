@@ -1,5 +1,5 @@
+import "./Route.scss";
 import "./Peers.scss";
-
 import React, { useEffect, useState } from "react";
 import { EyeClosedIcon, EyeIcon } from "../../assets";
 import {
@@ -64,8 +64,8 @@ const Peers: React.FC = () => {
         setShowAddPeerDialog(false);
     }
     return (
-        <div className="peers">
-            <div className="content">
+        <div className="main">
+            <div className="main-wrapper">
                 <div className="row spread">
                     <h2>Peers</h2>
                     <div className="row">
@@ -78,10 +78,12 @@ const Peers: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                <div className="peers-panel">
-                    <PeersList peers={peersList} blindMode={blindMode} detailedList />
+                <div className="content">
+                    <div className="peers-panel">
+                        <PeersList peers={peersList} blindMode={blindMode} detailedList />
+                    </div>
+                    {showAddPeerDialog && <AddPeerDialog onClose={closeAddPeerDialog} onSuccess={closeAddPeerDialog} />}
                 </div>
-                {showAddPeerDialog && <AddPeerDialog onClose={closeAddPeerDialog} onSuccess={closeAddPeerDialog} />}
             </div>
         </div>
     );

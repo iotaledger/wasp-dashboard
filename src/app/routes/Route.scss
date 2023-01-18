@@ -3,7 +3,7 @@
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
 
-.block {
+.main {
   display: flex;
   flex: 1;
   justify-content: center;
@@ -14,7 +14,7 @@
     padding: $spacing-small;
   }
 
-  .block-wrapper {
+  .main-wrapper {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -29,7 +29,7 @@
     margin-bottom: 16px;
   }
 
-  .block-summary {
+  .summary {
     padding: 16px;
 
     h4 {
@@ -37,7 +37,7 @@
     }
   }
 
-  .block-info-content {
+  .info-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
@@ -52,7 +52,7 @@
     margin-top: $spacing-small;
     color: var(--text-color-primary);
 
-    .block-info-item {
+    .main-info-item {
       min-height: 90px;
       padding: $spacing-small;
       overflow: hidden;

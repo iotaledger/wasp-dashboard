@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React, { useEffect, useState } from "react";
 import { WaspClientService, ServiceFactory } from "../../lib/classes";
-import "./Configuration.scss";
+import "./Route.scss";
 import { KeyValueRow, InfoBox } from "../components";
 interface ConfigMap {
     [key: string]: never;
@@ -66,39 +66,41 @@ function Configuration() {
         }
     }, [config]);
     return (
-        <div className="configuration">
-            <div className="content">
+        <div className="main">
+            <div className="main-wrapper">
                 <h2>Configuration</h2>
-                <div className="margin-t-s">
-                    {newConfigArrayBasedOnKeys && (
-                        <div className="wrapper">
-                            {newConfigArrayBasedOnKeys.map((item, index) => {
-                                const key = Object.keys(item)[0];
-                                const value = Object.values(item)[0] as any;
-                                return (
-                                    <InfoBox title={key} key={index}>
-                                        {Object.entries(value).map(([keyVal, val], valueIndex) =>
-                                            (typeof val === "boolean" ? (
-                                                val ? (
+                <div className="content">
+                    <div className="margin-t-s">
+                        {newConfigArrayBasedOnKeys && (
+                            <div className="main-wrapper">
+                                {newConfigArrayBasedOnKeys.map((item, index) => {
+                                    const key = Object.keys(item)[0];
+                                    const value = Object.values(item)[0] as any;
+                                    return (
+                                        <InfoBox title={key} key={index}>
+                                            {Object.entries(value).map(([keyVal, val], valueIndex) =>
+                                                (typeof val === "boolean" ? (
+                                                    val ? (
+                                                        <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
+                                                    ) : (
+                                                        <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
+                                                    )
+                                                ) : (typeof val === "string" ? (
                                                     <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
                                                 ) : (
-                                                    <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
-                                                )
-                                            ) : (typeof val === "string" ? (
-                                                <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
-                                            ) : (
-                                                <KeyValueRow
-                                                    key={valueIndex}
-                                                    keyText={keyVal}
-                                                    value={JSON.stringify(val)}
-                                                />
-                                            ))),
-                                        )}
-                                    </InfoBox>
-                                );
-                            })}
-                        </div>
-                    )}
+                                                    <KeyValueRow
+                                                        key={valueIndex}
+                                                        keyText={keyVal}
+                                                        value={JSON.stringify(val)}
+                                                    />
+                                                ))),
+                                            )}
+                                        </InfoBox>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
