@@ -1,4 +1,4 @@
-import { PeeringNodeStatusResponse } from "../../lib/classes";
+import { PeeringNodeStatusResponse } from "../../lib";
 
 export interface HomeState {
     /**

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import zxcvbn from "zxcvbn";
-import { ServiceFactory, AddUserRequest, WaspClientService } from "../../../lib/classes";
-import { MIN_PASSWORD_STRENGTH } from "../../../lib/constants";
+import { ServiceFactory, AddUserRequest, WaspClientService, MIN_PASSWORD_STRENGTH } from "../../../lib";
 import { PasswordInput, Dialog } from "../../components";
 
 const FORM_INITIAL_VALUES: IFormValues = {

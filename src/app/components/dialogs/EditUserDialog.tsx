@@ -1,8 +1,13 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import React, { SetStateAction, useEffect, useState } from "react";
 import zxcvbn from "zxcvbn";
-import { ServiceFactory, WaspClientService, ChangeUserPasswordRequest, User } from "../../../lib/classes";
-import { MIN_PASSWORD_STRENGTH } from "../../../lib/constants";
+import {
+    ServiceFactory,
+    WaspClientService,
+    ChangeUserPasswordRequest,
+    User,
+    MIN_PASSWORD_STRENGTH,
+} from "../../../lib";
 import { Dialog, PasswordInput } from "../../components";
 
 interface IEditUserDialog {

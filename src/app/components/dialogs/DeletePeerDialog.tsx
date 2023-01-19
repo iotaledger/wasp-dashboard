@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Dialog } from "../";
-import { ServiceFactory, PeersService, PeeringNodeStatusResponse } from "../../../lib/classes";
+import { ServiceFactory, PeersService, PeeringNodeStatusResponse } from "../../../lib";
 
 interface IDeletePeerDialog {
     onClose: () => void;

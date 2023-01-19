@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { WaspClientService, ServiceFactory, ChainInfoResponse } from "../../lib/classes";
+import { WaspClientService, ServiceFactory, ChainInfoResponse } from "../../lib";
 import "./Chains.scss";
 import { Tile } from "../components";
 

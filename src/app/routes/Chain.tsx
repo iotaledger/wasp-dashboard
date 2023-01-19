@@ -14,7 +14,7 @@ import {
     PeersService,
     PeeringNodeStatusResponse,
     EventAggregator,
-} from "../../lib/classes";
+} from "../../lib";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
 import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
