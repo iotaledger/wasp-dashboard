@@ -47,5 +47,20 @@
           color: var(--accent-primary);
       }
   }
+
+  .access-nodes-list {
+    display: flex;
+    flex-direction: column;
+
+    div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      
+      input {
+        margin-right: 6px;
+      }
+    }
+  }
   }
 }

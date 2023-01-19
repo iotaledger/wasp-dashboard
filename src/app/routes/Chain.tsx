@@ -14,7 +14,7 @@ import {
 } from "../../lib/classes";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
-import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
+import { Breadcrumb, Dialog, InfoBox, KeyValueRow, Table, Tile } from "../components";
 
 interface ChainInfoValue {
     key: string;
@@ -58,6 +58,7 @@ function Chain() {
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
         Record<string, ConsensusMetric> | null | ITableRow[]
     >(null);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const { chainID } = useParams();
     const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
@@ -158,6 +159,24 @@ function Chain() {
             });
     }, []);
 
+    // Replace DUMMY_ACCESS_NODES with chainCommitteeInfo?.accessNodes
+    const DUMMY_ACCESS_NODES = [
+        {
+            accessAPI: "accessapi",
+            node: {
+                isAlive: true,
+                publicKey: "PUBLICKEY_00",
+            },
+        },
+        {
+            accessAPI: "accessapi",
+            node: {
+                isAlive: false,
+                publicKey: "PUBLICKEY_1",
+            },
+        },
+    ];
+
     return (
         <div className="chain">
             <div className="chain-wrapper">
@@ -175,16 +194,44 @@ function Chain() {
                     </InfoBox>
                     <InfoBox
                         title="Access nodes"
-                        titleWithIcon={Boolean(chainCommitteeInfo?.accessNodes?.length)}
+                        titleWithIcon={DUMMY_ACCESS_NODES.length > 0}
                         icon={
-                            <button type="button" onClick={() => console.log("click")} className="edit-button">
+                            <button type="button" onClick={() => setIsPopupOpen(true)} className="edit-button">
                                 <EditIcon />
                             </button>
                         }
                     >
-                        {chainCommitteeInfo?.accessNodes?.length ? (
-                            chainCommitteeInfo?.accessNodes?.map(node => (
-                                <Tile key={node.node?.publicKey} primaryText={node.node?.publicKey} />
+                        {isPopupOpen && (
+                            <Dialog
+                                title="Edit access nodes"
+                                onClose={() => setIsPopupOpen(false)}
+                                actions={
+                                    <button
+                                        type="button"
+                                        className="button button--primary"
+                                        onClick={() => console.log("SAVE")}
+                                    >
+                                        Save
+                                    </button>
+                                }
+                            >
+                                <div className="access-nodes-list">
+                                    {DUMMY_ACCESS_NODES.map(node => (
+                                        <div key={node.node.publicKey}>
+                                            <input type="checkbox" />
+                                            <label>{node.node.publicKey}</label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </Dialog>
+                        )}
+                        {DUMMY_ACCESS_NODES ? (
+                            DUMMY_ACCESS_NODES?.map(node => (
+                                <Tile
+                                    key={node.node?.publicKey}
+                                    primaryText={node.node?.publicKey}
+                                    displayHealth={node.node?.isAlive}
+                                />
                             ))
                         ) : (
                             <Tile primaryText="No access nodes found." />
