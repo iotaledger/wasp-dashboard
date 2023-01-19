@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { WaspClientService, ContractInfoResponse, ServiceFactory, EventsResponse } from "../../lib/classes";
+import { WaspClientService, ContractInfoResponse, ServiceFactory, EventsResponse } from "../../lib";
 import "./Contract.scss";
 import { KeyValueRow, InfoBox, Breadcrumb, Tile } from "../components";
 

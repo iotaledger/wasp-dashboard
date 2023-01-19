@@ -1,7 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { ServiceFactory, WaspClientService, AssetsResponse } from "../../lib/classes";
+import { ServiceFactory, WaspClientService, AssetsResponse } from "../../lib";
 import "./Account.scss";
 import { Breadcrumb, InfoBox, KeyValueRow } from "../components";
 

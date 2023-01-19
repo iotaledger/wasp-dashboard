@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Dialog } from "../";
-import { DeleteUserRequest, User, WaspClientService, ServiceFactory } from "../../../lib/classes";
+import { DeleteUserRequest, User, WaspClientService, ServiceFactory } from "../../../lib";
 
 interface IDeleteUserDialog {
     onClose: () => void;

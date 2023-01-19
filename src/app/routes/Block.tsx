@@ -7,7 +7,7 @@ import {
     BlockInfoResponse,
     RequestReceiptResponse,
     EventsResponse,
-} from "../../lib/classes";
+} from "../../lib";
 import "./Block.scss";
 import { KeyValueRow, Breadcrumb, Tile } from "../components";
 
@@ -79,7 +79,7 @@ function Block() {
                 setBlockEvents(events);
             });
     }, [blockID]);
-    
+
     const info = blockInfo ? Object.entries(blockInfo).filter(([k]) => BLOCK_DATA_VALUES.has(k)) : null;
 
     const previousBlock = blockIndex - 1;
@@ -179,20 +179,20 @@ function Block() {
                 </div>
                 <div className="card fill">
                     <div className="block-summary row spread-centered">
-                         <BlockLink chainID={chainID} disabled={blockIndex === 0} blockIndex={0} label="⏮️ First" />
-                         <BlockLink
-                             chainID={chainID}
-                             disabled={previousBlock < 0}
-                             blockIndex={previousBlock}
-                             label="⬅️ Previous"
-                         />
-                         <BlockLink chainID={chainID} disabled={!nextBlock} blockIndex={nextBlock} label="Next ➡️" />
-                         <BlockLink
-                             chainID={chainID}
-                             disabled={latestBlock === blockIndex}
-                             blockIndex={latestBlock}
-                             label="Latest ⏭️"
-                         />
+                        <BlockLink chainID={chainID} disabled={blockIndex === 0} blockIndex={0} label="⏮️ First" />
+                        <BlockLink
+                            chainID={chainID}
+                            disabled={previousBlock < 0}
+                            blockIndex={previousBlock}
+                            label="⬅️ Previous"
+                        />
+                        <BlockLink chainID={chainID} disabled={!nextBlock} blockIndex={nextBlock} label="Next ➡️" />
+                        <BlockLink
+                            chainID={chainID}
+                            disabled={latestBlock === blockIndex}
+                            blockIndex={latestBlock}
+                            label="Latest ⏭️"
+                        />
                     </div>
                 </div>
             </div>
