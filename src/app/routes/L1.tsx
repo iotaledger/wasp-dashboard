@@ -6,11 +6,12 @@ import {
     ChainMetrics,
     L1Params,
     WaspClientService,
-} from "../../lib/classes";
+    METRICS_NAMES,
+    ITableRow,
+    StandardMessage,
+    formatDate,
+} from "../../lib";
 import "./L1.scss";
-import { METRICS_NAMES } from "../../lib/constants";
-import { ITableRow, StandardMessage } from "../../lib/interfaces";
-import { formatDate } from "../../lib/utils";
 import { KeyValueRow, InfoBox, Table, Tile } from "../components";
 
 /**
@@ -30,6 +31,7 @@ function L1() {
         nodeService.initialize().then(() => {
             const params = nodeService.getL1Params();
             if (params) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 setL1Params(params);
             }
         });

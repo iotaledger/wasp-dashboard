@@ -1,6 +1,6 @@
 import "./PeerList.scss";
 import React from "react";
-import { PeeringNodeStatusResponse } from "../../../lib/classes";
+import { PeeringNodeStatusResponse } from "../../../lib";
 import { PeerTile } from "./";
 
 interface PeersListProps {
