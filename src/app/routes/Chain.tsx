@@ -10,7 +10,7 @@ import {
     CommitteeInfoResponse,
     WaspClientService,
     ServiceFactory,
-} from "../../lib/classes";
+} from "../../lib";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
 import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
@@ -183,7 +183,7 @@ function Chain() {
                     </InfoBox>
                     <InfoBox title="On-chain accounts">
                         {chainAccounts.map(account => (
-                            <Tile key={account} primaryText={account} />
+                            <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
                         ))}
                     </InfoBox>
                     <InfoBox title="Total Assets">

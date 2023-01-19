@@ -7,7 +7,7 @@ import {
     BlockInfoResponse,
     RequestReceiptResponse,
     EventsResponse,
-} from "../../lib/classes";
+} from "../../lib";
 import "./Route.scss";
 import { KeyValueRow, Breadcrumb, Tile, InfoBox } from "../components";
 

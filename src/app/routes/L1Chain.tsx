@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { ServiceFactory, ChainMetrics, WaspClientService } from "../../lib/classes";
-import { METRICS_NAMES } from "../../lib/constants";
+import {
+    ServiceFactory,
+    ChainMetrics,
+    WaspClientService,
+    METRICS_NAMES,
+    ITableRow,
+    StandardMessage,
+    formatDate,
+} from "../../lib";
 import "./L1.scss";
-import { ITableRow, StandardMessage } from "../../lib/interfaces";
-import { formatDate } from "../../lib/utils";
 import { Breadcrumb, InfoBox, Table } from "../components";
 
 /**

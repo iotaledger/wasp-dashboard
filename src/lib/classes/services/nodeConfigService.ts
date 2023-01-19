@@ -1,4 +1,5 @@
-import { L1Params, WaspClientService, SessionStorageService, ServiceFactory } from "../../classes";
+import { WaspClientService, SessionStorageService, ServiceFactory } from "../../classes";
+import { L1Params } from "../../wasp_client";
 
 /**
  * Service to handle getting confiuration from the node.

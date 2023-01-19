@@ -2,13 +2,7 @@ import "./Route.scss";
 import "./Peers.scss";
 import React, { useEffect, useState } from "react";
 import { EyeClosedIcon, EyeIcon } from "../../assets";
-import {
-    ServiceFactory,
-    EventAggregator,
-    PeersService,
-    SettingsService,
-    PeeringNodeStatusResponse,
-} from "../../lib/classes";
+import { ServiceFactory, EventAggregator, PeersService, SettingsService, PeeringNodeStatusResponse } from "../../lib";
 import { PeersList, AddPeerDialog } from "../components";
 
 const Peers: React.FC = () => {
