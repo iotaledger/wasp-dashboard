@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Chain.scss";
+import { EditIcon } from "../../assets";
 import {
     AssetsResponse,
     ChainInfoResponse,
@@ -171,6 +172,23 @@ function Chain() {
                             .map(({ key, val }) => (
                                 <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
                             ))}
+                    </InfoBox>
+                    <InfoBox
+                        title="Access nodes"
+                        titleWithIcon={Boolean(chainCommitteeInfo?.accessNodes?.length)}
+                        icon={
+                            <button type="button" onClick={() => console.log("click")} className="edit-button">
+                                <EditIcon />
+                            </button>
+                        }
+                    >
+                        {chainCommitteeInfo?.accessNodes?.length ? (
+                            chainCommitteeInfo?.accessNodes?.map(node => (
+                                <Tile key={node.node?.publicKey} primaryText={node.node?.publicKey} />
+                            ))
+                        ) : (
+                            <Tile primaryText="No access nodes found." />
+                        )}
                     </InfoBox>
                     <InfoBox title="Contracts">
                         {chainContracts.map(({ name, hName, description, programHash }) => (
