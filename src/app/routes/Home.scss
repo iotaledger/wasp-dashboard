@@ -87,22 +87,6 @@
     }
 }
 
-.blocks-graph-panel {
-    .graph {
-        padding: 24px;
-    }
-}
-
-.info-col {
-    align-items: stretch;
-    width: 66%;
-    overflow: hidden;
-
-    @include desktop-down {
-        width: unset;
-    }
-}
-
 .title {
     margin-bottom: 0;
 }
@@ -116,13 +100,5 @@
 
     &:hover {
         color: var(--accent-primary);
-    }
-}
-.info-panel + .info-panel {
-    margin-left: $spacing-small;
-
-    @include tablet-down {
-        margin-top: $spacing-small;
-        margin-left: 0;
     }
 }
