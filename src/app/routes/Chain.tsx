@@ -11,10 +11,14 @@ import {
     CommitteeInfoResponse,
     WaspClientService,
     ServiceFactory,
+    PeersService,
+    PeeringNodeStatusResponse,
+    EventAggregator,
 } from "../../lib/classes";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
-import { Breadcrumb, Dialog, InfoBox, KeyValueRow, Table, Tile } from "../components";
+import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
+import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
 
 interface ChainInfoValue {
     key: string;
@@ -48,6 +52,9 @@ const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
  * @returns The node to render.
  */
 function Chain() {
+    const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+    const peersService: PeersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
+
     const [chainInfo, setChainInfo] = useState<ChainInfoValue[]>([]);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
     const [chainAccounts, setChainAccounts] = useState<string[]>([]);
@@ -60,19 +67,21 @@ function Chain() {
     >(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const { chainID } = useParams();
+    const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
+
     const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
+    const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
 
     const chainBreadcrumbs = [
         { goTo: "/chains", text: "Chains" },
         { goTo: `/chains/${ChainID?.val}`, text: `Chain ${chainID}` },
     ];
+
     React.useEffect(() => {
         if (!chainID) {
             return;
         }
-
-        const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
@@ -120,14 +129,6 @@ function Chain() {
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
-            .chains()
-            .getCommitteeInfo({ chainID })
-            .then(newCommitteeInfo => {
-                setChainCommitteeInfo(newCommitteeInfo);
-            });
-
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
             .corecontracts()
             .blocklogGetLatestBlockInfo({ chainID })
             .then(newLatestBlock => {
@@ -157,25 +158,87 @@ function Chain() {
                 });
                 setChainConsensusMetrics(chainConsensusMetricsArray);
             });
+
+        loadCommitteeInfo();
+
+        EventAggregator.subscribe("peers-state", "peers-quick", setPeersList);
     }, []);
 
-    // Replace DUMMY_ACCESS_NODES with chainCommitteeInfo?.accessNodes
-    const DUMMY_ACCESS_NODES = [
-        {
-            accessAPI: "accessapi",
-            node: {
-                isAlive: true,
-                publicKey: "PUBLICKEY_00",
-            },
-        },
-        {
-            accessAPI: "accessapi",
-            node: {
-                isAlive: false,
-                publicKey: "PUBLICKEY_1",
-            },
-        },
-    ];
+    /**
+     *
+     */
+    function loadCommitteeInfo() {
+        if (!chainID) {
+            return;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .chains()
+            .getCommitteeInfo({ chainID })
+            .then(newCommitteeInfo => {
+                setChainCommitteeInfo(newCommitteeInfo);
+            });
+    }
+
+    /**
+     * Add and remove the access nodes.
+     * @param newAccessNodes Updated access nodes.
+     */
+    async function updateAccessNodes(newAccessNodes: PeeringNodeStatusResponse[]) {
+        if (!chainID) {
+            return;
+        }
+
+        // Filter what new access nodes were not previously enabled
+        const newNodes = newAccessNodes.filter(
+            peer => !accessNodes.some(node => node.publicKey === peer.publicKey),
+        );
+        // Filter what trusted nodes are not access nodes
+        const removedNodes = peersList.filter(
+            peer => !newAccessNodes.some(node => node.publicKey === peer.publicKey),
+        );
+
+        // Add peer nodes as access nodes
+        await Promise.all(
+            newNodes.map(async ({ publicKey }) => {
+                if (!publicKey) {
+return;
+}
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                waspClientService
+                    .chains()
+                    .addAccessNode({ chainID, publicKey })
+                    .catch(() => {});
+            }),
+        );
+
+        // Remove peer nodes as access nodes
+        await Promise.all(
+            removedNodes.map(async ({ publicKey }) => {
+                if (!publicKey) {
+return;
+}
+
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                waspClientService
+                    .chains()
+                    .removeAccessNode({ chainID, publicKey })
+                    .catch(() => {});
+            }),
+        );
+    }
+
+    /**
+     * When the access nodes are edited.
+     * @param newAccessNodes Updated access nodes.
+     */
+    function onAccessNodesEdited(newAccessNodes: PeeringNodeStatusResponse[]) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        updateAccessNodes(newAccessNodes).then(() => {
+            loadCommitteeInfo();
+        });
+    }
 
     return (
         <div className="chain">
@@ -194,7 +257,7 @@ function Chain() {
                     </InfoBox>
                     <InfoBox
                         title="Access nodes"
-                        titleWithIcon={DUMMY_ACCESS_NODES.length > 0}
+                        titleWithIcon={true}
                         icon={
                             <button type="button" onClick={() => setIsPopupOpen(true)} className="edit-button">
                                 <EditIcon />
@@ -202,35 +265,20 @@ function Chain() {
                         }
                     >
                         {isPopupOpen && (
-                            <Dialog
-                                title="Edit access nodes"
+                            <EditAccessNodesDialog
+                                peerNodes={peersList}
+                                accessNodes={accessNodes}
+                                onSuccess={onAccessNodesEdited}
                                 onClose={() => setIsPopupOpen(false)}
-                                actions={
-                                    <button
-                                        type="button"
-                                        className="button button--primary"
-                                        onClick={() => console.log("SAVE")}
-                                    >
-                                        Save
-                                    </button>
-                                }
-                            >
-                                <div className="access-nodes-list">
-                                    {DUMMY_ACCESS_NODES.map(node => (
-                                        <div key={node.node.publicKey}>
-                                            <input type="checkbox" />
-                                            <label>{node.node.publicKey}</label>
-                                        </div>
-                                    ))}
-                                </div>
-                            </Dialog>
+                            />
                         )}
-                        {DUMMY_ACCESS_NODES ? (
-                            DUMMY_ACCESS_NODES?.map(node => (
+                        {accessNodes.length > 0 ? (
+                            accessNodes?.map(node => (
                                 <Tile
-                                    key={node.node?.publicKey}
-                                    primaryText={node.node?.publicKey}
-                                    displayHealth={node.node?.isAlive}
+                                    key={node.publicKey}
+                                    primaryText={node.publicKey}
+                                    healthy={node.isAlive}
+                                    displayHealth={true}
                                 />
                             ))
                         ) : (
