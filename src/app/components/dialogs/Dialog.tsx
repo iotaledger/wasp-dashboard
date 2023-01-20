@@ -15,7 +15,7 @@ interface DialogProps extends React.PropsWithChildren {
     /*
      * Extra classes for the dialog content
      */
-    dialogClassName?: string;
+    classnames?: string;
 
     /**
      * The dialog close event.
@@ -23,7 +23,7 @@ interface DialogProps extends React.PropsWithChildren {
     onClose?: () => void;
 }
 
-const Dialog: FC<DialogProps> = ({ title, children, actions, onClose, dialogClassName }) => {
+const Dialog: FC<DialogProps> = ({ title, children, actions, onClose, classnames }) => {
     const dialogRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const Dialog: FC<DialogProps> = ({ title, children, actions, onClose, dialogClas
         <React.Fragment>
             <div className="dialog-click-shield" />
             <div className="dialog-container" ref={dialogRef}>
-                <div className={`dialog ${dialogClassName}`}>
+                <div className={`dialog ${classnames}`}>
                     <div className="dialog-header row">
                         <h1>{title}</h1>
                         {onClose && (
@@ -58,7 +58,7 @@ const Dialog: FC<DialogProps> = ({ title, children, actions, onClose, dialogClas
 
 Dialog.defaultProps = {
     actions: undefined,
-    dialogClassName: "",
+    classnames: "",
     onClose: undefined,
 };
 

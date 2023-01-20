@@ -29,7 +29,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({ onClose, onSu
     return (
         <Dialog
             title="Edit access nodes"
-            dialogClassName="big"
+            classnames="big"
             onClose={onClose}
             actions={
                 <React.Fragment>

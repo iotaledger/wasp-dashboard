@@ -161,7 +161,7 @@ function Chain() {
 
         loadCommitteeInfo();
 
-        EventAggregator.subscribe("peers-state", "peers-quick", setPeersList);
+        EventAggregator.subscribe("peers-state", "chain", setPeersList);
     }, []);
 
     /**
@@ -203,8 +203,8 @@ function Chain() {
         await Promise.all(
             newNodes.map(async ({ publicKey }) => {
                 if (!publicKey) {
-return;
-}
+                    return;
+                }
                 // eslint-disable-next-line @typescript-eslint/no-floating-promises
                 waspClientService
                     .chains()
@@ -217,8 +217,8 @@ return;
         await Promise.all(
             removedNodes.map(async ({ publicKey }) => {
                 if (!publicKey) {
-return;
-}
+                    return;
+                }
 
                 // eslint-disable-next-line @typescript-eslint/no-floating-promises
                 waspClientService
