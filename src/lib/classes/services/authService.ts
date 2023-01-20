@@ -1,5 +1,5 @@
 import { Environment } from "../../../environment";
-import { ServiceFactory } from "../../classes";
+import { ServiceFactory, WaspClientService } from "../../classes";
 import { decodeJWTPayload } from "../../utils/jwt";
 import { FetchHelper } from "../helpers";
 import { EventAggregator } from "./eventAggregator";
@@ -10,6 +10,11 @@ import { LocalStorageService } from "./localStorageService";
  */
 export class AuthService {
     public static readonly ServiceName = "AuthService";
+
+    /**
+     * The client service.
+     */
+    private readonly _waspClientService: WaspClientService;
 
     /**
      * The storage service.
@@ -31,6 +36,7 @@ export class AuthService {
      */
     constructor() {
         this._jwt = undefined;
+        this._waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
         this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
 
         if (document.cookie) {
@@ -95,6 +101,7 @@ export class AuthService {
             if (response.jwt) {
                 this._jwt = `Bearer ${response.jwt}`;
                 this._storageService.save<string>("dashboard-jwt", this._jwt);
+                this._waspClientService.initialize();
                 EventAggregator.publish("auth-state", true);
             }
         } catch (err) {
@@ -111,6 +118,7 @@ export class AuthService {
         if (this._jwt) {
             this._storageService.remove("dashboard-jwt");
             this._jwt = undefined;
+            this._waspClientService.initialize();
             EventAggregator.publish("auth-state", false);
         }
     }
