@@ -1,8 +1,7 @@
-/* eslint-disable react/no-multi-comp */
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory, WaspClientService, AssetsResponse } from "../../lib";
-import "./Account.scss";
+import "./Route.scss";
 import { Breadcrumb, InfoBox, KeyValueRow } from "../components";
 
 /**
@@ -34,8 +33,8 @@ function Account() {
     }, [accountID]);
 
     return (
-        <div className="account">
-            <div className="account-wrapper">
+        <div className="main large">
+            <div className="main-wrapper">
                 <Breadcrumb breadcrumbs={blockBreadcrumbs} />
                 <div className="middle row">
                     <h2>Account {accountID}</h2>
