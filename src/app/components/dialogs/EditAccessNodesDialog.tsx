@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Dialog } from "..";
-import { PeeringNodeStatusResponse } from "../../../lib/classes";
+import { PeeringNodeStatusResponse } from "../../../lib";
 
 interface IEditAccessNodesDialog {
     onClose: () => void;
