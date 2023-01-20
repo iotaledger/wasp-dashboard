@@ -58,7 +58,7 @@ function Chain() {
         Record<string, ConsensusMetric> | null | ITableRow[]
     >(null);
     const { chainID } = useParams();
-    const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
+    const EVMChainID = chainInfo.find(({ key }) => key === "evmChainId");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
 
     const chainBreadcrumbs = [
