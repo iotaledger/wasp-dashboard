@@ -21,7 +21,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({ onClose, onSu
     }
 
     // Check if there has been any change at all
-    const noChanges = !(
+    const anyChanges = !(
         accessNodes.length === checkedNodes.length &&
         accessNodes.every((node, i) => node.publicKey === checkedNodes[i].publicKey)
     );
@@ -33,7 +33,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({ onClose, onSu
             onClose={onClose}
             actions={
                 <React.Fragment>
-                    <button type="button" className="button button--primary" onClick={save} disabled={!noChanges}>
+                    <button type="button" className="button button--primary" onClick={save} disabled={!anyChanges}>
                         Save
                     </button>
                     <button type="button" className="button button--primary" onClick={onClose}>
