@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { WaspClientService, ServiceFactory, ChainInfoResponse } from "../../lib";
-import "./Chains.scss";
+import "./Route.scss";
 import { Tile } from "../components";
 
 /**
@@ -23,8 +23,8 @@ function Chains() {
     }, []);
 
     return (
-        <div className="chains">
-            <div className="chains-wrapper">
+        <div className="main">
+            <div className="main-wrapper">
                 <h2>Chains</h2>
                 <div className="content">
                     {chains?.map(chain => (

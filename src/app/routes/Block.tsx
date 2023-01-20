@@ -8,8 +8,8 @@ import {
     RequestReceiptResponse,
     EventsResponse,
 } from "../../lib";
-import "./Block.scss";
-import { KeyValueRow, Breadcrumb, Tile } from "../components";
+import "./Route.scss";
+import { KeyValueRow, Breadcrumb, Tile, InfoBox } from "../components";
 
 /**
  * Block panel.
@@ -95,21 +95,18 @@ function Block() {
     })();
 
     return (
-        <div className="block">
-            <div className="block-wrapper">
+        <div className="main">
+            <div className="main-wrapper">
                 <Breadcrumb breadcrumbs={blockBreadcrumbs} />
                 <div className="middle row">
                     <h2>Block {blockID}</h2>
                 </div>
                 <div className="content">
-                    <div className="card col fill">
-                        <div className="block-summary">
-                            <h4>Info</h4>
-                            {info?.map(([k, v]) => (
-                                <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={v} />
-                            ))}
-                        </div>
-                    </div>
+                    <InfoBox title="Info">
+                        {info?.map(([k, v]) => (
+                            <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={v} />
+                        ))}
+                    </InfoBox>
                 </div>
                 <div className="middle row">
                     <h2>Requests</h2>
@@ -121,45 +118,38 @@ function Block() {
                         const attachedBaseTokens = receipt?.request?.fungibleTokens?.baseTokens;
                         const allowanceBaseTokens = receipt?.request?.allowance?.fungibleTokens?.baseTokens;
                         return (
-                            <div key={receipt.request?.requestId} className="card col fill">
-                                <div className="block-summary">
-                                    <h4>REQUEST #{receipt?.requestIndex}</h4>
-                                    <div className="block-info-content">
-                                        <div className="block-info-item">
-                                            <h4>info</h4>
-                                            {Object.entries(receipt)
-                                                .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
-                                                .map(([k, v]) => (
-                                                    <KeyValueRow
-                                                        key={k}
-                                                        keyText={BLOCK_REQUEST_NAMES[k]}
-                                                        value={JSON.stringify(v)}
-                                                    />
-                                                ))}
-                                            <KeyValueRow keyText="Sender" value={senderAccount} />
-                                        </div>
-                                        <div className="block-info-item">
-                                            <h4>Parameters</h4>
-                                            {params?.map(x => (
+                            <InfoBox key={receipt.request?.requestId} title={`REQUEST #${receipt?.requestIndex}`}>
+                                <div className="info-content">
+                                    <div className="main-info-item">
+                                        <h4>info</h4>
+                                        {Object.entries(receipt)
+                                            .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
+                                            .map(([k, v]) => (
                                                 <KeyValueRow
-                                                    key={x.key}
-                                                    keyText={x.key}
-                                                    value={JSON.stringify(x.value)}
+                                                    key={k}
+                                                    keyText={BLOCK_REQUEST_NAMES[k]}
+                                                    value={JSON.stringify(v)}
                                                 />
                                             ))}
-                                        </div>
-                                        <div className="block-info-item">
-                                            <h4>Attached tokens</h4>
+                                        <KeyValueRow keyText="Sender" value={senderAccount} />
+                                    </div>
+                                    <div className="main-info-item">
+                                        <h4>Parameters</h4>
+                                        {params?.map(x => (
+                                            <KeyValueRow key={x.key} keyText={x.key} value={JSON.stringify(x.value)} />
+                                        ))}
+                                    </div>
+                                    <div className="main-info-item">
+                                        <h4>Attached tokens</h4>
 
-                                            <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
-                                        </div>
-                                        <div className="block-info-item">
-                                            <h4>Allowance</h4>
-                                            <KeyValueRow keyText="Base tokens" value={allowanceBaseTokens} />
-                                        </div>
+                                        <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
+                                    </div>
+                                    <div className="main-info-item">
+                                        <h4>Allowance</h4>
+                                        <KeyValueRow keyText="Base tokens" value={allowanceBaseTokens} />
                                     </div>
                                 </div>
-                            </div>
+                            </InfoBox>
                         );
                     })}
                 </div>
@@ -167,18 +157,16 @@ function Block() {
                     <h2>Events</h2>
                 </div>
                 <div className="content">
-                    <div className="card fill">
-                        <div className="block-summary">
-                            {blockEvents?.events?.length === 0 ? (
-                                <Tile primaryText="No events found." />
-                            ) : (
-                                blockEvents?.events?.map(event => <Tile key={event} primaryText={event} />)
-                            )}
-                        </div>
-                    </div>
+                    <InfoBox title="Events">
+                        {blockEvents?.events?.length === 0 ? (
+                            <Tile primaryText="No events found." />
+                        ) : (
+                            blockEvents?.events?.map(event => <Tile key={event} primaryText={event} />)
+                        )}
+                    </InfoBox>
                 </div>
                 <div className="card fill">
-                    <div className="block-summary row spread-centered">
+                    <div className="summary row spread-centered">
                         <BlockLink chainID={chainID} disabled={blockIndex === 0} blockIndex={0} label="⏮️ First" />
                         <BlockLink
                             chainID={chainID}

@@ -2,143 +2,103 @@
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
 
-.home {
-    display: flex;
+.banner {
     flex: 1;
-    justify-content: center;
-    padding: 60px;
+    width: 100%;
+    height: 100%;
 
     @include desktop-down {
-        padding: $spacing-small;
+        height: unset;
     }
 
-    .content {
+    .node-info {
+        display: flex;
         flex: 1;
-        max-width: $content-width-desktop;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: $spacing-small;
 
-        .banner {
-            flex: 1;
-            width: 100%;
+        @include desktop-down {
+            padding: $spacing-tiny;
+        }
+
+        @include desktop-down {
+            * + .secondary {
+                margin-top: $spacing-tiny;
+            }
+        }
+
+        h3 {
+            @include font-size(16px);
+
+            margin-top: 10px;
+            word-break: break-all;
+
+            @include desktop-down {
+                @include font-size(14px);
+            }
+        }
+    }
+
+    .banner-image-wrapper {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        max-width: 350px;
+
+        @include desktop-down {
+            display: none;
+        }
+
+        .banner-curve {
             height: 100%;
+            color: var(--panel-background-highlight);
 
             @include desktop-down {
-                height: unset;
+                display: none;
             }
 
-            .node-info {
-                display: flex;
-                flex: 1;
-                flex-direction: column;
-                justify-content: space-between;
-                padding: $spacing-small;
-
-                @include desktop-down {
-                    padding: $spacing-tiny;
-                }
-
-                @include desktop-down {
-                    * + .secondary {
-                        margin-top: $spacing-tiny;
-                    }
-                }
-
-                h3 {
-                    @include font-size(16px);
-
-                    margin-top: 10px;
-                    word-break: break-all;
-
-                    @include desktop-down {
-                        @include font-size(14px);
-                    }
-                }
-            }
-
-            .banner-image-wrapper {
-                display: flex;
-                flex: 1;
-                align-items: center;
-                justify-content: center;
-                max-width: 350px;
-
-                @include desktop-down {
-                    display: none;
-                }
-
-                .banner-curve {
-                    height: 100%;
-                    color: var(--panel-background-highlight);
-
-                    @include desktop-down {
-                        display: none;
-                    }
-
-                    svg {
-                        width: 100%;
-                        height: 100%;
-                    }
-                }
-
-                .banner-image {
-                    display: flex;
-                    flex: 1;
-                    align-items: center;
-                    justify-content: center;
-                    width: 200px;
-                    height: 100%;
-                    border-radius: 0 16px 16px 0;
-                    background-color: var(--panel-background-highlight);
-
-                    img {
-                        width: 100%;
-                        height: 80px;
-                    }
-
-                    @include desktop-down {
-                        display: none;
-                    }
-                }
+            svg {
+                width: 100%;
+                height: 100%;
             }
         }
 
-        .blocks-graph-panel {
-            .graph {
-                padding: 24px;
-            }
-        }
+        .banner-image {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            height: 100%;
+            border-radius: 0 16px 16px 0;
+            background-color: var(--panel-background-highlight);
 
-        .info-col {
-            align-items: stretch;
-            width: 66%;
-            overflow: hidden;
+            img {
+                width: 100%;
+                height: 80px;
+            }
 
             @include desktop-down {
-                width: unset;
+                display: none;
             }
         }
+    }
+}
 
-        .title {
-            margin-bottom: 0;
-        }
+.title {
+    margin-bottom: 0;
+}
 
-        .peers-summary-blind-button {
-            border: 0;
-            outline: 0;
-            background: none;
-            color: var(--text-color-secondary);
-            cursor: pointer;
+.peers-summary-blind-button {
+    border: 0;
+    outline: 0;
+    background: none;
+    color: var(--text-color-secondary);
+    cursor: pointer;
 
-            &:hover {
-                color: var(--accent-primary);
-            }
-        }
-        .info-panel + .info-panel {
-            margin-left: $spacing-small;
-
-            @include tablet-down {
-                margin-top: $spacing-small;
-                margin-left: 0;
-            }
-        }
+    &:hover {
+        color: var(--accent-primary);
     }
 }

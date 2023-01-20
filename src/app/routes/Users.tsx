@@ -1,4 +1,5 @@
 import "./Users.scss";
+import "./Route.scss";
 import React, { useEffect, useState } from "react";
 import { WaspClientService, ServiceFactory, AuthService, User } from "../../lib";
 import { AddUserDialog, UsersList } from "../components";
@@ -67,8 +68,8 @@ const Users: React.FC = () => {
     }
 
     return (
-        <div className="users">
-            <div className="content">
+        <div className="main">
+            <div className="main-wrapper">
                 <div className="row spread">
                     <h2>Users</h2>
                     <div className="row">
@@ -77,13 +78,17 @@ const Users: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                {showAddUserDialog && <AddUserDialog onClose={closeAddUserDialog} onSuccess={handleAddUserSuccess} />}
-                <div className="users-panel">
-                    <UsersList
-                        users={usersList}
-                        onDeleteSuccess={onDeleteSuccess}
-                        canBeDeleted={usersList.length > 1}
-                    />
+                <div className="content">
+                    {showAddUserDialog && (
+                        <AddUserDialog onClose={closeAddUserDialog} onSuccess={handleAddUserSuccess} />
+                    )}
+                    <div className="users-panel">
+                        <UsersList
+                            users={usersList}
+                            onDeleteSuccess={onDeleteSuccess}
+                            canBeDeleted={usersList.length > 1}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

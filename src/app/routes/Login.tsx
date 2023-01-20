@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthService, ServiceFactory } from "../../lib/classes";
-import { AsyncComponent, Spinner } from "../components";
-import "./Login.scss";
+import { AsyncComponent, InfoBox, Spinner } from "../components";
+import "./Route.scss";
 import { LoginState } from "./LoginState";
 
 /**
@@ -41,10 +41,10 @@ class Login extends AsyncComponent<unknown, LoginState> {
             return <Navigate to={this.state.redirect} />;
         }
         return (
-            <div className="login">
+            <div className="main">
                 <div className="content">
                     <h2>Login</h2>
-                    <div className="card margin-t-s padding-l">
+                    <InfoBox title="" cardClassName="margin-t-s padding-l">
                         <form>
                             <p>Please enter your credentials to unlock the full dashboard.</p>
                             <div className="card--label">User</div>
@@ -97,7 +97,7 @@ class Login extends AsyncComponent<unknown, LoginState> {
                                 )}
                             </div>
                         </form>
-                    </div>
+                    </InfoBox>
                 </div>
             </div>
         );

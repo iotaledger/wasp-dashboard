@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import "./Chain.scss";
 import { EditIcon } from "../../assets";
+import "./Route.scss";
+import "./Chain.scss";
 import {
     AssetsResponse,
     ChainInfoResponse,
@@ -241,8 +242,8 @@ function Chain() {
     }
 
     return (
-        <div className="chain">
-            <div className="chain-wrapper">
+        <div className="main">
+            <div className="main-wrapper">
                 <Breadcrumb breadcrumbs={chainBreadcrumbs} />
                 <div className="middle row">
                     <h2 className="l1-details-title">Chain {chainID}</h2>
@@ -315,7 +316,7 @@ function Chain() {
                         {chainBlobs.length > 0 ? (
                             <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
                         ) : (
-                            <p>No blobs found.</p>
+                            <Tile primaryText="No blobs found." />
                         )}
                     </InfoBox>
                     <InfoBox title="Latest block">

@@ -2,65 +2,29 @@
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
 
-.chain {
+.edit-button {
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--text-color-secondary);
+  cursor: pointer;
+
+  &:hover {
+      color: var(--accent-primary);
+  }
+}
+
+.access-nodes-list {
   display: flex;
-  flex: 1;
-  justify-content: center;
-  padding: 60px;
-  font-family: $font-sans;
+  flex-direction: column;
 
-  @include desktop-down {
-    padding: $spacing-small;
-  }
-
-  .chain-wrapper {
+  div {
     display: flex;
-    flex: 1;
-    flex-direction: column;
-    max-width: $content-width-desktop;
-
-    h2 {
-      text-transform: uppercase;
-    }
-  }
-
-  .card {
-    margin-bottom: 16px;
-  }
-
-  .content {
-    display: inline-flex;
-    flex: 1;
-    flex-flow: column wrap;
-    max-width: $content-width-desktop;
-    margin-top: $spacing-small;
-    color: var(--text-color-primary);
+    align-items: center;
+    margin-bottom: 6px;
     
-    .edit-button {
-      border: 0;
-      outline: 0;
-      background: none;
-      color: var(--text-color-secondary);
-      cursor: pointer;
-
-      &:hover {
-          color: var(--accent-primary);
-      }
-  }
-
-  .access-nodes-list {
-    display: flex;
-    flex-direction: column;
-
-    div {
-      display: flex;
-      align-items: center;
-      margin-bottom: 6px;
-      
-      input {
-        margin-right: 6px;
-      }
+    input {
+      margin-right: 6px;
     }
-  }
   }
 }
