@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as ChevronLeftIcon } from "../../assets/chevron-left.svg";
 import { AsyncComponent } from "../components";
-import "./Unavailable.scss";
+import "./Route.scss";
 
 /**
  * Component which will show the unavailable page.
@@ -24,7 +24,7 @@ class Unavailable extends AsyncComponent<never> {
      */
     public render(): ReactNode {
         return (
-            <div className="unavailable">
+            <div className="main">
                 <div className="content">
                     <Link to="/explorer" className="row middle inline">
                         <ChevronLeftIcon className="secondary" />

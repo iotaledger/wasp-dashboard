@@ -13,6 +13,7 @@ import {
     BrandHelper,
 } from "../../lib/classes";
 import { PeersList, AsyncComponent, InfoBox } from "../components";
+import "./Route.scss";
 import "./Home.scss";
 import { HomeState } from "./HomeState";
 
@@ -125,7 +126,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
      */
     public render(): ReactNode {
         return (
-            <div className="home">
+            <div className="main">
                 <div className="content">
                     <div className="card">
                         <div className="banner row">
