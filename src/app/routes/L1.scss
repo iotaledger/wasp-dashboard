@@ -41,6 +41,13 @@
       flex-direction: column;
     }
 
+    .card {
+      .summary {
+        width: 100%;
+        min-width: 350px;
+      }
+    }
+
     .first-card {
       margin-right: $spacing-small;
       margin-bottom: 0;
