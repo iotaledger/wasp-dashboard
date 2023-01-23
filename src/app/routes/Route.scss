@@ -29,6 +29,7 @@
 
     h2 {
       text-transform: uppercase;
+      word-break: break-all;
     }
   }
 
@@ -48,6 +49,9 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+    @include tablet-down {
+      grid-template-columns: 1fr;
+    }
   }
 
   .content {
