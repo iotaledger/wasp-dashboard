@@ -4,7 +4,6 @@
 
 .tab {
     @include font-size(14px);
-    margin-bottom: $spacing-small;
     padding: $spacing-tiny;
     width: 140px;
     color: var(--text-color-secondary);
@@ -26,4 +25,6 @@
     display: flex;
     justify-content: flex-start;
     gap: 15px;
+    margin-bottom: $spacing-small;
+    border-bottom: 1px solid var(--accent-primary);
 }
