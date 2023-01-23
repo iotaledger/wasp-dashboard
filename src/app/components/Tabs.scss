@@ -1,0 +1,24 @@
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
+
+.tab {
+    padding: $spacing-tiny;
+    margin-bottom: $spacing-small;
+    color: var(--text-color-secondary);
+    border-radius: $form-input-radius;
+    background-color: var(--panel-background-highlight);
+    @include font-size(14px);
+    width: 140px;
+    border: 1px solid transparent;
+    &.tab-active {
+        color: var(--text-color-primary);
+        border: 1px solid var(--accent-primary);
+    }
+}
+
+.tab-group {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+}

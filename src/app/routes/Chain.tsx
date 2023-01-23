@@ -14,6 +14,8 @@ import {
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
 import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
+import Tab from "../components/Tab";
+import TabGroup from "../components/TabGroup";
 
 interface ChainInfoValue {
     key: string;
@@ -60,10 +62,11 @@ function Chain() {
     const { chainID } = useParams();
     const EVMChainID = chainInfo.find(({ key }) => key === "evmChainId");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
+    const chainURL = `/chains/${ChainID?.val}`;
 
     const chainBreadcrumbs = [
         { goTo: "/chains", text: "Chains" },
-        { goTo: `/chains/${ChainID?.val}`, text: `Chain ${chainID}` },
+        { goTo: chainURL, text: `Chain ${chainID}` },
     ];
     React.useEffect(() => {
         if (!chainID) {
@@ -165,6 +168,11 @@ function Chain() {
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
+                    <TabGroup>
+                        <Tab to={`${chainURL}`} label="Info" />
+                        <Tab to={`${chainURL}/accounts`} label="Accounts" />
+                        <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
+                    </TabGroup>
                     <InfoBox title="Info">
                         {chainInfo
                             .filter(({ key }) => !INFO_SKIP_NAMES.has(key))

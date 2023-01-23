@@ -35,6 +35,8 @@ function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
                     <Route path="/chains/:chainID/accounts/:accountID" element={<Account />} key="account" />
                     <Route path="/chains/:chainID/blocks/:blockID" element={<Block />} key="block" />
                     <Route path="/chains/:chainID/contract/:contractHName" element={<Contract />} key="contract" />
+                    <Route path="/chains/:chainID/access-nodes" element={<Chain />} key="chain" />
+                    <Route path="/chains/:chainID/accounts" element={<Chain />} key="chain" />
                     <Route path="/chains/:chainID" element={<Chain />} key="chain" />
                     <Route path="/chains" element={<Chains />} key="chains" />
                     <Route path="/configuration" element={<Configuration />} key="configuration" />
