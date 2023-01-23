@@ -56,7 +56,7 @@ function Chain() {
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
     const peersService: PeersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
-    const [chainInfo, setChainInfo] = useState<ChainInfoValue[]>([]);
+    const [chainInfo, setChainInfo] = useState<ChainInfoResponse | null>(null);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
     const [chainAccounts, setChainAccounts] = useState<string[]>([]);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
@@ -69,13 +69,13 @@ function Chain() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const { chainID } = useParams();
     const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
-    const EVMChainID = chainInfo.find(({ key }) => key === "evmChainId");
-    const ChainID = chainInfo.find(({ key }) => key === "chainID");
+
+    const chainProperties = chainInfo ? transformInfoIntoArray(chainInfo) : [];
     const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
 
     const chainBreadcrumbs = [
         { goTo: "/chains", text: "Chains" },
-        { goTo: `/chains/${ChainID?.val}`, text: `Chain ${chainID}` },
+        { goTo: `/chains/${chainID}`, text: `Chain ${chainID}` },
     ];
 
     React.useEffect(() => {
@@ -88,7 +88,7 @@ function Chain() {
             .chains()
             .getChainInfo({ chainID })
             .then(newChainInfo => {
-                setChainInfo(transformInfoIntoArray(newChainInfo));
+                setChainInfo(newChainInfo);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -249,7 +249,7 @@ function Chain() {
                 </div>
                 <div className="content">
                     <InfoBox title="Info">
-                        {chainInfo
+                        {chainProperties
                             .filter(({ key }) => !INFO_SKIP_NAMES.has(key))
                             .map(({ key, val }) => (
                                 <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
@@ -351,20 +351,18 @@ function Chain() {
                         )}
                     </InfoBox>
                     <InfoBox title="EVM">
-                        {ChainID && (
+                        {chainID && (
                             <React.Fragment>
-                                <KeyValueRow keyText="EVM ChainID" value={EVMChainID?.val} />
-                                <KeyValueRow keyText="JSON-RPC URL" value={formatEVMJSONRPCUrl(ChainID?.val)} />
+                                <KeyValueRow keyText="EVM ChainID" value={chainInfo?.evmChainId} />
+                                <KeyValueRow keyText="JSON-RPC URL" value={formatEVMJSONRPCUrl(chainID)} />
                             </React.Fragment>
                         )}
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
-                        {ChainID && (
-                            <Table
-                                tHead={["Flag name", "Status", "Trigger time"]}
-                                tBody={chainConsensusMetrics as ITableRow[]}
-                            />
-                        )}
+                        <Table
+                            tHead={["Flag name", "Status", "Trigger time"]}
+                            tBody={chainConsensusMetrics as ITableRow[]}
+                        />
                     </InfoBox>
                 </div>
             </div>
