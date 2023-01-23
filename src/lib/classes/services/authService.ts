@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment, { Moment } from "moment";
 import { Environment } from "../../../environment";
 import { ServiceFactory, WaspClientService } from "../../classes";
 import { decodeJWTPayload, getTokenExpiry } from "../../utils/jwt";
@@ -65,7 +65,9 @@ export class AuthService {
     public async initialize(): Promise<void> {
         const jwt = this._storageService.load<string>("dashboard-jwt");
         this._jwt = jwt;
-        if (!(await this.isJWTValid())) {
+        if (await this.isJWTValid()) {
+            this.validateTokenPeriodically();
+        } else {
             this.logout();
         }
     }
@@ -93,16 +95,26 @@ export class AuthService {
 
             this._tokenExpiryTimer = setInterval(async () => {
                 const now = moment();
-                if (now.isAfter(expiryDate)) {
+                const isExpired = this.isJWTExpired(now, expiryDate);
+                const isValid = await this.isJWTValid();
+                if (isExpired || !isValid) {
                     this.logout();
-                    this.clearTokenExpiryInterval();
                 } else if (now.isBetween(refreshTokenDate, expiryDate)) {
                     await this.initialize();
                 }
-            }, 5000);
+            }, 30000);
         } catch {
             this.logout();
         }
+    }
+
+    /**
+     * Check if the JWT has expired
+     * @param now
+     * @param expiryDate
+     */
+    public isJWTExpired(now: Moment, expiryDate: Moment): boolean {
+        return now.isAfter(expiryDate);
     }
 
     /**
