@@ -62,7 +62,7 @@ function Chain() {
     const { chainID } = useParams();
     const EVMChainID = chainInfo.find(({ key }) => key === "evmChainId");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
-    const chainURL = `/chains/${ChainID?.val}`;
+    const chainURL = `/chains/${chainID}`;
 
     const chainBreadcrumbs = [
         { goTo: "/chains", text: "Chains" },
