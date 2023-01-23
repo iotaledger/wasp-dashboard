@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Account from "./Account";
 import Block from "./Block";
 import Chain from "./Chain";
+import ChainAccounts from "./ChainAccounts";
 import Chains from "./Chains";
 import Configuration from "./Configuration";
 import Contract from "./Contract";
@@ -36,7 +37,7 @@ function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
                     <Route path="/chains/:chainID/blocks/:blockID" element={<Block />} key="block" />
                     <Route path="/chains/:chainID/contract/:contractHName" element={<Contract />} key="contract" />
                     <Route path="/chains/:chainID/access-nodes" element={<Chain />} key="chain" />
-                    <Route path="/chains/:chainID/accounts" element={<Chain />} key="chain" />
+                    <Route path="/chains/:chainID/accounts" element={<ChainAccounts />} key="chain-accounts" />
                     <Route path="/chains/:chainID" element={<Chain />} key="chain" />
                     <Route path="/chains" element={<Chains />} key="chains" />
                     <Route path="/configuration" element={<Configuration />} key="configuration" />
