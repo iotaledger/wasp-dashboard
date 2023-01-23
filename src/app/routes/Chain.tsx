@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { EditIcon } from "../../assets";
 import "./Route.scss";
+import "./Chain.scss";
 import {
     AssetsResponse,
     ChainInfoResponse,
@@ -10,12 +12,16 @@ import {
     CommitteeInfoResponse,
     WaspClientService,
     ServiceFactory,
+    PeersService,
+    PeeringNodeStatusResponse,
+    EventAggregator,
 } from "../../lib";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
 import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
 import Tab from "../components/Tab";
 import TabGroup from "../components/TabGroup";
+import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
 
 interface ChainInfoValue {
     key: string;
@@ -49,6 +55,9 @@ const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
  * @returns The node to render.
  */
 function Chain() {
+    const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+    const peersService: PeersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
+
     const [chainInfo, setChainInfo] = useState<ChainInfoValue[]>([]);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
     const [chainAccounts, setChainAccounts] = useState<string[]>([]);
@@ -59,21 +68,23 @@ function Chain() {
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
         Record<string, ConsensusMetric> | null | ITableRow[]
     >(null);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const { chainID } = useParams();
+    const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
     const EVMChainID = chainInfo.find(({ key }) => key === "evmChainId");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
     const chainURL = `/chains/${chainID}`;
+    const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
 
     const chainBreadcrumbs = [
         { goTo: "/chains", text: "Chains" },
         { goTo: chainURL, text: `Chain ${chainID}` },
     ];
+
     React.useEffect(() => {
         if (!chainID) {
             return;
         }
-
-        const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
@@ -121,14 +132,6 @@ function Chain() {
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
-            .chains()
-            .getCommitteeInfo({ chainID })
-            .then(newCommitteeInfo => {
-                setChainCommitteeInfo(newCommitteeInfo);
-            });
-
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
             .corecontracts()
             .blocklogGetLatestBlockInfo({ chainID })
             .then(newLatestBlock => {
@@ -158,7 +161,87 @@ function Chain() {
                 });
                 setChainConsensusMetrics(chainConsensusMetricsArray);
             });
+
+        loadCommitteeInfo();
+
+        EventAggregator.subscribe("peers-state", "chain", setPeersList);
     }, []);
+
+    /**
+     *
+     */
+    function loadCommitteeInfo() {
+        if (!chainID) {
+            return;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .chains()
+            .getCommitteeInfo({ chainID })
+            .then(newCommitteeInfo => {
+                setChainCommitteeInfo(newCommitteeInfo);
+            });
+    }
+
+    /**
+     * Add and remove the access nodes.
+     * @param newAccessNodes Updated access nodes.
+     */
+    async function updateAccessNodes(newAccessNodes: PeeringNodeStatusResponse[]) {
+        if (!chainID) {
+            return;
+        }
+
+        // Filter what new access nodes were not previously enabled
+        const newNodes = newAccessNodes.filter(
+            peer => !accessNodes.some(node => node.publicKey === peer.publicKey),
+        );
+        // Filter what trusted nodes are not access nodes
+        const removedNodes = peersList.filter(
+            peer => !newAccessNodes.some(node => node.publicKey === peer.publicKey),
+        );
+
+        // Add peer nodes as access nodes
+        await Promise.all(
+            newNodes.map(async ({ publicKey }) => {
+                if (!publicKey) {
+                    return;
+                }
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                waspClientService
+                    .chains()
+                    .addAccessNode({ chainID, publicKey })
+                    .catch(() => {});
+            }),
+        );
+
+        // Remove peer nodes as access nodes
+        await Promise.all(
+            removedNodes.map(async ({ publicKey }) => {
+                if (!publicKey) {
+                    return;
+                }
+
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                waspClientService
+                    .chains()
+                    .removeAccessNode({ chainID, publicKey })
+                    .catch(() => {});
+            }),
+        );
+    }
+
+    /**
+     * When the access nodes are edited.
+     * @param newAccessNodes Updated access nodes.
+     */
+    function onAccessNodesEdited(newAccessNodes: PeeringNodeStatusResponse[]) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        updateAccessNodes(newAccessNodes).then(() => {
+            loadCommitteeInfo();
+        });
+    }
 
     return (
         <div className="main">
@@ -179,6 +262,36 @@ function Chain() {
                             .map(({ key, val }) => (
                                 <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
                             ))}
+                    </InfoBox>
+                    <InfoBox
+                        title="Access nodes"
+                        titleWithIcon={true}
+                        icon={
+                            <button type="button" onClick={() => setIsPopupOpen(true)} className="edit-button">
+                                <EditIcon />
+                            </button>
+                        }
+                    >
+                        {isPopupOpen && (
+                            <EditAccessNodesDialog
+                                peerNodes={peersList}
+                                accessNodes={accessNodes}
+                                onSuccess={onAccessNodesEdited}
+                                onClose={() => setIsPopupOpen(false)}
+                            />
+                        )}
+                        {accessNodes.length > 0 ? (
+                            accessNodes?.map(node => (
+                                <Tile
+                                    key={node.publicKey}
+                                    primaryText={node.publicKey}
+                                    healthy={node.isAlive}
+                                    displayHealth={true}
+                                />
+                            ))
+                        ) : (
+                            <Tile primaryText="No access nodes found." />
+                        )}
                     </InfoBox>
                     <InfoBox title="Contracts">
                         {chainContracts.map(({ name, hName, description, programHash }) => (
