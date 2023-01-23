@@ -21,29 +21,24 @@ import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
 import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
 import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
 
-interface ChainInfoValue {
-    key: string;
-    val: string;
-}
-
 interface ConsensusMetric {
     status: string;
     triggerTime: Date;
 }
 
 /**
- * Transforms a ChainInfoResponse into an array of key-value pairs
+ * Transforms a ChainInfoResponse into an array of key-value pairs, useful if it has nested properties
  *
  * @param chainInfo Input chain info
  * @returns An array of key-value pairs
  */
-function transformInfoIntoArray(chainInfo: ChainInfoResponse): ChainInfoValue[] {
-    return Object.entries(chainInfo).flatMap(([key, val]) => {
+function transformInfoIntoArray(chainInfo: ChainInfoResponse) {
+    return Object.entries(chainInfo).flatMap(([key, val]: [string, string | Record<string, string>]) => {
         if (typeof val === "object") {
-            return Object.entries(val as Record<string, string>).map(([k, v]) => ({ key: k, val: v }));
+            return Object.entries(val);
         }
-        return { key, val };
-    }) as ChainInfoValue[];
+        return [[key, val]];
+    });
 }
 
 const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
@@ -250,8 +245,8 @@ function Chain() {
                 <div className="content">
                     <InfoBox title="Info">
                         {chainProperties
-                            .filter(({ key }) => !INFO_SKIP_NAMES.has(key))
-                            .map(({ key, val }) => (
+                            .filter(([key]) => !INFO_SKIP_NAMES.has(key))
+                            .map(([key, val]) => (
                                 <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
                             ))}
                     </InfoBox>
