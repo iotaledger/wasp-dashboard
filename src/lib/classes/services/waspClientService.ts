@@ -1,5 +1,5 @@
 import { Environment } from "../../../environment";
-import { EventAggregator, ServiceFactory, LocalStorageService } from "../../classes";
+import { ServiceFactory, LocalStorageService } from "../../classes";
 import {
     UsersApi,
     NodeApi,
@@ -26,10 +26,6 @@ export class WaspClientService {
 
     constructor() {
         this.initialize();
-
-        EventAggregator.subscribe("auth-state", "waspClient", isLoggedIn => {
-            this.initialize();
-        });
     }
 
     public initialize() {

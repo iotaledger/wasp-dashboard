@@ -69,8 +69,7 @@ function Chain() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const { chainID } = useParams();
     const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
-
-    const EVMChainID = chainInfo.find(({ key }) => key === "eVMChainID");
+    const EVMChainID = chainInfo.find(({ key }) => key === "evmChainId");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
     const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
 
