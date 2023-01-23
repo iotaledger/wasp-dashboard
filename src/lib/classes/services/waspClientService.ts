@@ -45,16 +45,6 @@ export class WaspClientService {
         };
     }
 
-    public async isJWTValid(): Promise<boolean> {
-        const nodeAPI = this.node();
-        try {
-            await nodeAPI.getInfo();
-            return true;
-        } catch {
-            return false;
-        }
-    }
-
     public users(): UsersApi {
         return this._apiClients?.users as UsersApi;
     }

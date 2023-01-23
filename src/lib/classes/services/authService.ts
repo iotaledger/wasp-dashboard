@@ -1,6 +1,7 @@
+import moment from "moment";
 import { Environment } from "../../../environment";
 import { ServiceFactory, WaspClientService } from "../../classes";
-import { decodeJWTPayload } from "../../utils/jwt";
+import { decodeJWTPayload, getTokenExpiry } from "../../utils/jwt";
 import { FetchHelper } from "../helpers";
 import { EventAggregator } from "./eventAggregator";
 import { LocalStorageService } from "./localStorageService";
@@ -32,6 +33,11 @@ export class AuthService {
     private readonly _csrf?: string;
 
     /**
+     * The token expiry timer.
+     */
+    private _tokenExpiryTimer?: NodeJS.Timer;
+
+    /**
      * Create a new instance of AuthService.
      */
     constructor() {
@@ -59,8 +65,56 @@ export class AuthService {
     public async initialize(): Promise<void> {
         const jwt = this._storageService.load<string>("dashboard-jwt");
         this._jwt = jwt;
-        if (!(await this._waspClientService.isJWTValid())) {
+        if (!(await this.isJWTValid())) {
             this.logout();
+        }
+    }
+
+    /**
+     * Clear token expiry interval.
+     */
+    public clearTokenExpiryInterval() {
+        if (this._tokenExpiryTimer !== undefined) {
+            clearInterval(this._tokenExpiryTimer);
+            this._tokenExpiryTimer = undefined;
+        }
+    }
+
+    /**
+     * Refresh the token one minute before it expires.
+     */
+    public validateTokenPeriodically() {
+        try {
+            this.clearTokenExpiryInterval();
+            const jwt = this._storageService.load<string>("dashboard-jwt");
+            const expiryTimestamp = getTokenExpiry(jwt);
+            const expiryDate = moment(expiryTimestamp);
+            const refreshTokenDate = moment(expiryDate).subtract(1, "minutes");
+
+            this._tokenExpiryTimer = setInterval(async () => {
+                const now = moment();
+                if (now.isAfter(expiryDate)) {
+                    this.logout();
+                    this.clearTokenExpiryInterval();
+                } else if (now.isBetween(refreshTokenDate, expiryDate)) {
+                    await this.initialize();
+                }
+            }, 5000);
+        } catch {
+            this.logout();
+        }
+    }
+
+    /**
+     * Check if the JWT hasn't been invalidated manually
+     */
+    public async isJWTValid(): Promise<boolean> {
+        const nodeAPI = this._waspClientService.node();
+        try {
+            await nodeAPI.getInfo();
+            return true;
+        } catch {
+            return false;
         }
     }
 
@@ -105,6 +159,7 @@ export class AuthService {
                 this._jwt = `Bearer ${response.jwt}`;
                 this._storageService.save<string>("dashboard-jwt", this._jwt);
                 this._waspClientService.initialize();
+                this.validateTokenPeriodically();
                 EventAggregator.publish("auth-state", true);
             }
         } catch (err) {
@@ -122,6 +177,7 @@ export class AuthService {
             this._storageService.remove("dashboard-jwt");
             this._jwt = undefined;
             this._waspClientService.initialize();
+            this.clearTokenExpiryInterval();
             EventAggregator.publish("auth-state", false);
         }
     }
