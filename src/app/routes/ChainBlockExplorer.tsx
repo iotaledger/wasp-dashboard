@@ -28,8 +28,9 @@ function ChainBlockExplorer() {
     const chainURL = `/chains/${chainID}`;
 
     const chainBreadcrumbs = [
-        { goTo: "/chains", text: "Chains" },
+        { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
+        { goTo: `${chainURL}/blocks/${blockID}`, text: `Block ${blockID}` },
     ];
 
     React.useEffect(() => {
