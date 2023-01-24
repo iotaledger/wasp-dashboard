@@ -138,6 +138,7 @@ function ChainAccessNodes() {
                         <Tab to={`${chainURL}`} label="Info" />
                         <Tab to={`${chainURL}/accounts`} label="Accounts" />
                         <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
+                        <Tab to={`${chainURL}/blocks`} label="Block explorer" />
                     </TabGroup>
                     <InfoBox
                         title="Access nodes"

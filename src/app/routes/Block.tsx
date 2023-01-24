@@ -24,7 +24,7 @@ function Block() {
     const blockIndex = Number(blockID);
     const blockBreadcrumbs = [
         { goTo: "/chains", text: "Chains" },
-        { goTo: `/chains/${chainID}`, text: `Chain ${chainID}` },
+        { goTo: `/chains/${chainID}/blocks`, text: `Chain ${chainID}` },
         { goTo: `/chains/${chainID}/blocks/${blockID}`, text: `Block ${blockID}` },
     ];
     React.useEffect(() => {

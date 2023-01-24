@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Route.scss";
-import { WaspClientService, ServiceFactory } from "../../lib";
-import { Breadcrumb, InfoBox, Tile } from "../components";
+import { WaspClientService, ServiceFactory, BlockInfoResponse } from "../../lib";
+import { Breadcrumb, InfoBox, KeyValueRow } from "../components";
 import Tab from "../components/Tab";
 import TabGroup from "../components/TabGroup";
 
 /**
- * ChainAccount panel.
+ * ChainBlockExplorer panel.
  * @returns The node to render.
  */
-function ChainAccounts() {
-    const [chainAccounts, setChainAccounts] = useState<string[]>([]);
+function ChainBlockExplorer() {
+    const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const { chainID } = useParams();
     const chainURL = `/chains/${chainID}`;
 
@@ -30,11 +30,9 @@ function ChainAccounts() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .corecontracts()
-            .accountsGetAccounts({ chainID })
-            .then(newAccounts => {
-                if (newAccounts.accounts) {
-                    setChainAccounts(newAccounts.accounts);
-                }
+            .blocklogGetLatestBlockInfo({ chainID })
+            .then(newLatestBlock => {
+                setChainLatestBlock(newLatestBlock);
             });
     }, []);
 
@@ -52,10 +50,15 @@ function ChainAccounts() {
                         <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
                         <Tab to={`${chainURL}/blocks`} label="Block explorer" />
                     </TabGroup>
-                    <InfoBox title="On-chain accounts">
-                        {chainAccounts.map(account => (
-                            <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
-                        ))}
+                    <InfoBox title="Latest block">
+                        <KeyValueRow
+                            keyText="Block index"
+                            value={{
+                                text: chainLatestBlock?.blockIndex?.toString(),
+                                url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
+                            }}
+                        />
+                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp} />
                     </InfoBox>
                 </div>
             </div>
@@ -63,4 +66,4 @@ function ChainAccounts() {
     );
 }
 
-export default ChainAccounts;
+export default ChainBlockExplorer;
