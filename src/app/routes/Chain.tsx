@@ -60,7 +60,6 @@ function Chain() {
 
     const [chainInfo, setChainInfo] = useState<ChainInfoValue[]>([]);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
-    const [chainAccounts, setChainAccounts] = useState<string[]>([]);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
@@ -100,16 +99,6 @@ function Chain() {
             .getContracts({ chainID })
             .then(newChainContracts => {
                 setChainContracts(newChainContracts);
-            });
-
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .corecontracts()
-            .accountsGetAccounts({ chainID })
-            .then(newAccounts => {
-                if (newAccounts.accounts) {
-                    setChainAccounts(newAccounts.accounts);
-                }
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -300,11 +289,6 @@ function Chain() {
                                 keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
                                 value={description}
                             />
-                        ))}
-                    </InfoBox>
-                    <InfoBox title="On-chain accounts">
-                        {chainAccounts.map(account => (
-                            <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
                         ))}
                     </InfoBox>
                     <InfoBox title="Total Assets">
