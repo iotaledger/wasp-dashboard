@@ -10,6 +10,7 @@ import {
     CommitteeInfoResponse,
     WaspClientService,
     ServiceFactory,
+    BlockInfoResponse,
 } from "../../lib";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
@@ -56,6 +57,7 @@ function Chain() {
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
+    const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
         Record<string, ConsensusMetric> | null | ITableRow[]
     >(null);
@@ -106,6 +108,14 @@ function Chain() {
                 if (newBlobs.blobs) {
                     setChainBlobs(newBlobs.blobs);
                 }
+            });
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .blocklogGetLatestBlockInfo({ chainID })
+            .then(newLatestBlock => {
+                setChainLatestBlock(newLatestBlock);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -164,7 +174,7 @@ function Chain() {
                         <Tab to={`${chainURL}`} label="Info" />
                         <Tab to={`${chainURL}/accounts`} label="Accounts" />
                         <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
-                        <Tab to={`${chainURL}/blocks`} label="Block explorer" />
+                        <Tab to={`${chainURL}/blocks/${chainLatestBlock?.blockIndex}`} label="Block explorer" />
                     </TabGroup>
                     <InfoBox title="Info">
                         {chainInfo
@@ -200,6 +210,16 @@ function Chain() {
                         ) : (
                             <Tile primaryText="No blobs found." />
                         )}
+                    </InfoBox>
+                    <InfoBox title="Latest block">
+                        <KeyValueRow
+                            keyText="Block index"
+                            value={{
+                                text: chainLatestBlock?.blockIndex?.toString(),
+                                url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
+                            }}
+                        />
+                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp} />
                     </InfoBox>
                     <InfoBox title="Committee">
                         {chainCommitteeInfo && (

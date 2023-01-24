@@ -12,6 +12,7 @@ import TabGroup from "../components/TabGroup";
  */
 function ChainAccounts() {
     const [chainAccounts, setChainAccounts] = useState<string[]>([]);
+    const [latestBlock, setLatestBlock] = useState<number>();
     const { chainID } = useParams();
     const chainURL = `/chains/${chainID}`;
 
@@ -36,6 +37,19 @@ function ChainAccounts() {
                     setChainAccounts(newAccounts.accounts);
                 }
             });
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .blocklogGetLatestBlockInfo({ chainID })
+            .then(newLatestBlock => {
+                if (newLatestBlock.blockIndex) {
+                    setLatestBlock(newLatestBlock.blockIndex);
+                }
+            })
+            .catch(() => {
+                setLatestBlock(0);
+            });
     }, []);
 
     return (
@@ -50,7 +64,7 @@ function ChainAccounts() {
                         <Tab to={`${chainURL}`} label="Info" />
                         <Tab to={`${chainURL}/accounts`} label="Accounts" />
                         <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
-                        <Tab to={`${chainURL}/blocks`} label="Block explorer" />
+                        <Tab to={`${chainURL}/blocks/${latestBlock}`} label="Block explorer" />
                     </TabGroup>
                     <InfoBox title="On-chain accounts">
                         {chainAccounts.map(account => (

@@ -23,6 +23,7 @@ function ChainAccessNodes() {
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
     const peersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
+    const [latestBlock, setLatestBlock] = useState<number>();
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
     const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -40,6 +41,19 @@ function ChainAccessNodes() {
         if (!chainID) {
             return;
         }
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        waspClientService
+            .corecontracts()
+            .blocklogGetLatestBlockInfo({ chainID })
+            .then(newLatestBlock => {
+                if (newLatestBlock.blockIndex) {
+                    setLatestBlock(newLatestBlock.blockIndex);
+                }
+            })
+            .catch(() => {
+                setLatestBlock(0);
+            });
 
         loadCommitteeInfo();
 
@@ -138,7 +152,7 @@ function ChainAccessNodes() {
                         <Tab to={`${chainURL}`} label="Info" />
                         <Tab to={`${chainURL}/accounts`} label="Accounts" />
                         <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
-                        <Tab to={`${chainURL}/blocks`} label="Block explorer" />
+                        <Tab to={`${chainURL}/blocks/${latestBlock}`} label="Block explorer" />
                     </TabGroup>
                     <InfoBox
                         title="Access nodes"
