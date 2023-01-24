@@ -25,7 +25,7 @@ import "./Home.scss";
  */
 function Home() {
     const [bannerSrc, setBannerSrc] = useState<undefined | string>();
-    const [blindMode, setBlindMode] = useState(false);
+    const [blindMode, setBlindMode] = useState<boolean>(false);
     const [publicKey, setPublicKey] = useState<undefined | string>();
     const [version, setVersion] = useState<undefined | string>();
     const [networkId, setNetworkId] = useState<undefined | string>();
@@ -49,7 +49,7 @@ function Home() {
                     setVersion(nodeConfigService.getVersion());
                     setPublicKey(nodeConfigService.getPublicKey());
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
                 }
             }
         };
@@ -77,7 +77,7 @@ function Home() {
                     setVersion(nodeConfigService.getVersion());
                     setPublicKey(nodeConfigService.getPublicKey());
                 })
-                .catch(e => console.log(e));
+                .catch(e => console.error(e));
         }
 
         return () => {
