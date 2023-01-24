@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ThemeService, EventAggregator, ServiceFactory, BrandHelper } from "../../lib/classes";
+import { SettingsService, EventAggregator, ServiceFactory, BrandHelper } from "../../lib/classes";
 import "./NavPanel.scss";
 import { NavPanelProps } from "./NavPanelProps";
 
@@ -11,14 +11,14 @@ import { NavPanelProps } from "./NavPanelProps";
  * @returns The node to render.
  */
 function NavPanel(props: NavPanelProps) {
-    const themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
+    const settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
     const location = useLocation();
 
     const [logoSrc, setLogoSrc] = useState("");
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        BrandHelper.getLogoNavigation(themeService.get()).then(logo => {
+        BrandHelper.getLogoNavigation(settingsService.get()).then(logo => {
             setLogoSrc(logo);
         });
 

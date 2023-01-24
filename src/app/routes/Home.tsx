@@ -8,7 +8,6 @@ import {
     NodeConfigService,
     PeersService,
     SettingsService,
-    ThemeService,
     BrandHelper,
 } from "../../lib/classes";
 import { PeersList, AsyncComponent, InfoBox } from "../components";
@@ -20,11 +19,6 @@ import { HomeState } from "./HomeState";
  * Home panel.
  */
 class Home extends AsyncComponent<unknown, HomeState> {
-    /**
-     * The theme service.
-     */
-    private readonly _themeService: ThemeService;
-
     /**
      * The settings service.
      */
@@ -53,7 +47,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
         super(props);
 
         this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
-        this._themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
+        this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
         this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
         this._nodeConfigService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
         this._peersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
@@ -77,7 +71,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
         super.componentDidMount();
 
         this.setState({
-            bannerSrc: await BrandHelper.getBanner(this._themeService.get()),
+            bannerSrc: await BrandHelper.getBanner(this._settingsService.get()),
             peersList: this._peersService.get(),
         });
 

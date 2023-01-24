@@ -18,7 +18,7 @@ import {
     EventAggregator,
     LocalStorageService,
     MetricsService,
-    ThemeService,
+    SettingsService,
     WaspClientService,
     BrandHelper,
 } from "../lib/classes";
@@ -34,7 +34,7 @@ class App extends Component<object, AppState> {
     /**
      * The theme service.
      */
-    private readonly _themeService: ThemeService;
+    private readonly _settingsService: SettingsService;
 
     /**
      * The auth service.
@@ -107,7 +107,7 @@ class App extends Component<object, AppState> {
      */
     constructor(props: object) {
         super(props);
-        this._themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
+        this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
         this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
         this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
         this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
@@ -116,7 +116,7 @@ class App extends Component<object, AppState> {
 
         this.state = {
             isLoggedIn: Boolean(this._authService.isLoggedIn()),
-            theme: this._themeService.get(),
+            theme: this._settingsService.get(),
             online: false,
             // eslint-disable-next-line react/no-unused-state
             syncHealth: false,
@@ -306,13 +306,13 @@ class App extends Component<object, AppState> {
             {
                 label: "Light",
                 icon: <SunIcon />,
-                function: () => this._themeService.apply("light", true),
+                function: () => this._settingsService.apply("light", true),
                 hidden: this.state.theme === "light",
             },
             {
                 label: "Dark",
                 icon: <MoonIcon />,
-                function: () => this._themeService.apply("dark", true),
+                function: () => this._settingsService.apply("dark", true),
                 hidden: this.state.theme === "dark",
             },
         ];
