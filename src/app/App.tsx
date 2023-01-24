@@ -1,6 +1,5 @@
 import "./App.scss";
 
-import moment from "moment";
 import React, { Component, ReactNode } from "react";
 import { ReactComponent as ConfigurationIcon } from "../assets/configuration.svg";
 import { ReactComponent as HomeIcon } from "../assets/home.svg";
@@ -20,7 +19,7 @@ import {
     WaspClientService,
     BrandHelper,
 } from "../lib/classes";
-import { decodeJWTPayload, isNodeOnline } from "../lib/utils";
+import { isNodeOnline } from "../lib/utils";
 import { AppState } from "./AppState";
 import { Breakpoint, NavPanel } from "./components";
 import RoutesSwitcher from "./routes/RoutesSwitcher";
@@ -95,11 +94,6 @@ class App extends Component<object, AppState> {
     private _statusTimer?: NodeJS.Timer;
 
     /**
-     * The token expiry timer.
-     */
-    private _tokenExpiryTimer?: NodeJS.Timer;
-
-    /**
      * Create a new instance of App.
      * @param props The props.
      */
@@ -136,21 +130,10 @@ class App extends Component<object, AppState> {
             });
         });
 
-        if (this.state.isLoggedIn) {
-            this.validateTokenPeriodically();
-        }
-
         EventAggregator.subscribe("auth-state", "app", isLoggedIn => {
-            this.setState(
-                {
-                    isLoggedIn,
-                },
-                () => {
-                    if (this.state.isLoggedIn) {
-                        this.validateTokenPeriodically();
-                    }
-                },
-            );
+            this.setState({
+                isLoggedIn,
+            });
         });
 
         EventAggregator.subscribe("theme", "app", theme => {
@@ -240,8 +223,6 @@ class App extends Component<object, AppState> {
             clearInterval(this._statusTimer);
             this._statusTimer = undefined;
         }
-
-        this.clearTokenExpiryInterval();
     }
 
     /**
@@ -336,53 +317,6 @@ class App extends Component<object, AppState> {
         }
 
         document.title = title;
-    }
-
-    /**
-     * Refresh the token one minute before it expires.
-     */
-    private validateTokenPeriodically() {
-        try {
-            this.clearTokenExpiryInterval();
-            const jwt = this._storageService.load<string>("dashboard-jwt");
-            const expiryTimestamp = this.getTokenExpiry(jwt);
-            const expiryDate = moment(expiryTimestamp);
-            const refreshTokenDate = moment(expiryDate).subtract(1, "minutes");
-
-            this._tokenExpiryTimer = setInterval(async () => {
-                const now = moment();
-                if (now.isAfter(expiryDate)) {
-                    this._authService.logout();
-                    this.clearTokenExpiryInterval();
-                } else if (now.isBetween(refreshTokenDate, expiryDate)) {
-                    await this._authService.initialize();
-                }
-            }, 5000);
-        } catch {
-            this._authService.logout();
-            this.clearTokenExpiryInterval();
-        }
-    }
-
-    /**
-     * Decode jwt to get expiry time.
-     * @param token The jwt.
-     * @returns The expiry time.
-     */
-    private getTokenExpiry(token: string) {
-        const { exp } = decodeJWTPayload(token);
-        const expiryTimestamp = (exp as number) * 1000;
-        return expiryTimestamp;
-    }
-
-    /**
-     * Clear token expiry interval.
-     */
-    private clearTokenExpiryInterval() {
-        if (this._tokenExpiryTimer !== undefined) {
-            clearInterval(this._tokenExpiryTimer);
-            this._tokenExpiryTimer = undefined;
-        }
     }
 }
 
