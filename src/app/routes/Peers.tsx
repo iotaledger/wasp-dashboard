@@ -1,18 +1,10 @@
 import "./Route.scss";
 import "./Peers.scss";
 import React, { useEffect, useState } from "react";
-import { EyeClosedIcon, EyeIcon } from "../../assets";
-import { ServiceFactory, EventAggregator, PeersService, SettingsService, PeeringNodeStatusResponse } from "../../lib";
+import { ServiceFactory, EventAggregator, PeersService, PeeringNodeStatusResponse } from "../../lib";
 import { PeersList, AddPeerDialog } from "../components";
 
 const Peers: React.FC = () => {
-    /**
-     * The settings service.
-     * @private
-     * @type {SettingsService}
-     */
-    const settingsService: SettingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
-
     /**
      * The peers service.
      * @private
@@ -24,11 +16,6 @@ const Peers: React.FC = () => {
      * The peers state.
      */
     const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
-
-    /**
-     * The blind mode state.
-     */
-    const [blindMode, setBlindMode] = useState<boolean>(settingsService.getBlindMode());
 
     /**
      * The state to handle "Add Peer" dialog.
@@ -43,15 +30,6 @@ const Peers: React.FC = () => {
     }, []);
 
     /**
-     * Toggle the blind mode.
-     */
-    function toggleBlindMode(): void {
-        const newBlindMode = !blindMode;
-        setBlindMode(newBlindMode);
-        settingsService.setBlindMode(newBlindMode);
-    }
-
-    /**
      *
      */
     function closeAddPeerDialog() {
@@ -63,10 +41,6 @@ const Peers: React.FC = () => {
                 <div className="row spread">
                     <h2>Peers</h2>
                     <div className="row">
-                        <button type="button" onClick={toggleBlindMode} className="peers-blind-icon-button">
-                            {blindMode ? <EyeIcon /> : <EyeClosedIcon />}
-                        </button>
-
                         <button type="button" className="add-button" onClick={() => setShowAddPeerDialog(true)}>
                             Add Peer
                         </button>
@@ -74,7 +48,7 @@ const Peers: React.FC = () => {
                 </div>
                 <div className="content">
                     <div className="peers-panel">
-                        <PeersList peers={peersList} blindMode={blindMode} detailedList />
+                        <PeersList peers={peersList} detailedList />
                     </div>
                     {showAddPeerDialog && <AddPeerDialog onClose={closeAddPeerDialog} onSuccess={closeAddPeerDialog} />}
                 </div>

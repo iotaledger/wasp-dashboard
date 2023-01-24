@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React, { ReactNode } from "react";
-import { EyeClosedIcon, EyeIcon } from "../../assets";
 import { ReactComponent as BannerCurve } from "../../assets/banner-curve.svg";
 import {
     ServiceFactory,
@@ -64,7 +63,6 @@ class Home extends AsyncComponent<unknown, HomeState> {
             bpsIncoming: [],
             bpsOutgoing: [],
             bannerSrc: "",
-            blindMode: this._settingsService.getBlindMode(),
             publicKey: "",
             version: "",
             networkId: "",
@@ -102,10 +100,6 @@ class Home extends AsyncComponent<unknown, HomeState> {
             });
         });
 
-        EventAggregator.subscribe("settings.blindMode", "home", blindMode => {
-            this.setState({ blindMode });
-        });
-
         EventAggregator.subscribe("peers-state", "home", peers => {
             this.setState({ peersList: peers });
         });
@@ -117,7 +111,6 @@ class Home extends AsyncComponent<unknown, HomeState> {
     public componentWillUnmount(): void {
         super.componentWillUnmount();
         EventAggregator.unsubscribe("theme", "home");
-        EventAggregator.unsubscribe("settings.blindMode", "home");
     }
 
     /**
@@ -133,9 +126,7 @@ class Home extends AsyncComponent<unknown, HomeState> {
                             <div className="node-info">
                                 <div>
                                     <h1>WASP node</h1>
-                                    <h3 className="secondary">
-                                        {this.state.blindMode ? "**********" : this.state.publicKey}
-                                    </h3>
+                                    <h3 className="secondary">{this.state.publicKey}</h3>
                                 </div>
                                 <p className="secondary">{this.state.networkId}</p>
                                 <p className="secondary">{this.state.version}</p>
@@ -151,21 +142,8 @@ class Home extends AsyncComponent<unknown, HomeState> {
                         </div>
                     </div>
                     <div className="row fill margin-t-s desktop-down-column">
-                        <InfoBox
-                            title="Peers"
-                            titleClassName="title"
-                            titleWithIcon={true}
-                            icon={
-                                <button
-                                    type="button"
-                                    onClick={this.handleBlindMode}
-                                    className="peers-summary-blind-button"
-                                >
-                                    {this.state.blindMode ? <EyeIcon /> : <EyeClosedIcon />}
-                                </button>
-                            }
-                        >
-                            <PeersList peers={this.state.peersList} blindMode={this.state.blindMode} />
+                        <InfoBox title="Peers" titleClassName="title" titleWithIcon={true}>
+                            <PeersList peers={this.state.peersList} />
                         </InfoBox>
                     </div>
                 </div>
@@ -228,13 +206,6 @@ class Home extends AsyncComponent<unknown, HomeState> {
 
         return 0;
     }
-
-    /**
-     * Toggle blind mode in peers list.
-     */
-    private readonly handleBlindMode = (): void => {
-        this._settingsService.setBlindMode(!this.state.blindMode);
-    };
 }
 
 export default Home;

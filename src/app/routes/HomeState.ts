@@ -52,11 +52,6 @@ export interface HomeState {
     bannerSrc: string;
 
     /**
-     * Hide any details.
-     */
-    blindMode: boolean;
-
-    /**
      *  The list of peers.
      */
     peersList: PeeringNodeStatusResponse[];
