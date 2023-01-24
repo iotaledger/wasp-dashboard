@@ -119,6 +119,21 @@ function Home() {
                     </div>
                 </div>
                 <div className="row fill margin-t-s desktop-down-column">
+                    <InfoBox title="Chains" titleClassName="title">
+                        <div className="sized-container scrollbar-secondary">
+                            {chains?.map(chain => (
+                                <Tile
+                                    key={chain.chainID}
+                                    primaryText={chain.chainID}
+                                    url={`/chains/${chain.chainID}`}
+                                    displayHealth
+                                    healthy={chain.isActive}
+                                />
+                            ))}
+                        </div>
+                    </InfoBox>
+                </div>
+                <div className="row fill margin-t-s desktop-down-column">
                     <InfoBox
                         title="Peers"
                         titleWithIcon={true}
@@ -128,22 +143,11 @@ function Home() {
                             </button>
                         }
                     >
-                        <PeersList peers={peersList} detailedList />
+                        <div className="sized-container scrollbar-secondary">
+                            <PeersList peers={[...peersList, ...peersList, ...peersList, ...peersList]} detailedList />
+                        </div>
                     </InfoBox>
                     {showAddPeerDialog && <AddPeerDialog onClose={closeAddPeerDialog} onSuccess={closeAddPeerDialog} />}
-                </div>
-                <div className="row fill margin-t-s desktop-down-column">
-                    <InfoBox title="Chains">
-                        {chains?.map(chain => (
-                            <Tile
-                                key={chain.chainID}
-                                primaryText={chain.chainID}
-                                url={`/chains/${chain.chainID}`}
-                                displayHealth
-                                healthy={chain.isActive}
-                            />
-                        ))}
-                    </InfoBox>
                 </div>
             </div>
         </div>
