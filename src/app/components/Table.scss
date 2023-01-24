@@ -1,0 +1,19 @@
+
+@use "../../scss/card" as *;
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
+
+table {
+  max-width: $content-width-desktop;
+  overflow-x: auto;
+  white-space: nowrap;
+  @include tablet-down {
+    display: block;
+    max-width: 500px;
+  }
+
+  @include phone-down {
+    max-width: 300px;
+  }
+}
