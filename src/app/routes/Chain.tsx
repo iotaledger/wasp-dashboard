@@ -18,29 +18,24 @@ import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
 import Tab from "../components/Tab";
 import TabGroup from "../components/TabGroup";
 
-interface ChainInfoValue {
-    key: string;
-    val: string;
-}
-
 interface ConsensusMetric {
     status: string;
     triggerTime: Date;
 }
 
 /**
- * Transforms a ChainInfoResponse into an array of key-value pairs
+ * Transforms a ChainInfoResponse into an array of key-value pairs, useful if it has nested properties
  *
  * @param chainInfo Input chain info
  * @returns An array of key-value pairs
  */
-function transformInfoIntoArray(chainInfo: ChainInfoResponse): ChainInfoValue[] {
-    return Object.entries(chainInfo).flatMap(([key, val]) => {
+function transformInfoIntoArray(chainInfo: ChainInfoResponse) {
+    return Object.entries(chainInfo).flatMap(([key, val]: [string, string | Record<string, string>]) => {
         if (typeof val === "object") {
-            return Object.entries(val as Record<string, string>).map(([k, v]) => ({ key: k, val: v }));
+            return Object.entries(val);
         }
-        return { key, val };
-    }) as ChainInfoValue[];
+        return [[key, val]];
+    });
 }
 
 const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
@@ -52,7 +47,7 @@ const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
 function Chain() {
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
-    const [chainInfo, setChainInfo] = useState<ChainInfoValue[]>([]);
+    const [chainInfo, setChainInfo] = useState<ChainInfoResponse | null>(null);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
@@ -63,9 +58,9 @@ function Chain() {
     >(null);
     const { chainID } = useParams();
 
-    const EVMChainID = chainInfo.find(({ key }) => key === "evmChainId");
-    const ChainID = chainInfo.find(({ key }) => key === "chainID");
     const chainURL = `/chains/${chainID}`;
+    const chainProperties = chainInfo ? transformInfoIntoArray(chainInfo) : [];
+
     const chainBreadcrumbs = [
         { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
@@ -81,7 +76,7 @@ function Chain() {
             .chains()
             .getChainInfo({ chainID })
             .then(newChainInfo => {
-                setChainInfo(transformInfoIntoArray(newChainInfo));
+                setChainInfo(newChainInfo);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -177,9 +172,9 @@ function Chain() {
                         <Tab to={`${chainURL}/blocks/${chainLatestBlock?.blockIndex}`} label="Block explorer" />
                     </TabGroup>
                     <InfoBox title="Info">
-                        {chainInfo
-                            .filter(({ key }) => !INFO_SKIP_NAMES.has(key))
-                            .map(({ key, val }) => (
+                        {chainProperties
+                            .filter(([key]) => !INFO_SKIP_NAMES.has(key))
+                            .map(([key, val]) => (
                                 <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
                             ))}
                     </InfoBox>
@@ -244,20 +239,18 @@ function Chain() {
                         )}
                     </InfoBox>
                     <InfoBox title="EVM">
-                        {ChainID && (
+                        {chainID && (
                             <React.Fragment>
-                                <KeyValueRow keyText="EVM ChainID" value={EVMChainID?.val} />
-                                <KeyValueRow keyText="JSON-RPC URL" value={formatEVMJSONRPCUrl(ChainID?.val)} />
+                                <KeyValueRow keyText="EVM ChainID" value={chainInfo?.evmChainId} />
+                                <KeyValueRow keyText="JSON-RPC URL" value={formatEVMJSONRPCUrl(chainID)} />
                             </React.Fragment>
                         )}
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
-                        {ChainID && (
-                            <Table
-                                tHead={["Flag name", "Status", "Trigger time"]}
-                                tBody={chainConsensusMetrics as ITableRow[]}
-                            />
-                        )}
+                        <Table
+                            tHead={["Flag name", "Status", "Trigger time"]}
+                            tBody={chainConsensusMetrics as ITableRow[]}
+                        />
                     </InfoBox>
                 </div>
             </div>
