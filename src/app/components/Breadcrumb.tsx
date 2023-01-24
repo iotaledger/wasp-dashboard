@@ -15,7 +15,8 @@ interface Breadcrumb {
 
 /**
  * Breadcrumbs.
- * @param breadcrumbs The breadcrumbs to render.
+ * @param props The breadcrumbs options.
+ * @param props.breadcrumbs The breadcrumbs to render.
  * @returns The node to render.
  */
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
