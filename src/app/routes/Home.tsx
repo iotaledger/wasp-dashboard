@@ -113,21 +113,23 @@ function Home() {
                     </div>
                 </div>
                 <div className="row fill margin-t-s desktop-down-column">
-                    <InfoBox title="Peers" titleClassName="title" titleWithIcon={true}>
-                        <PeersList peers={peersList} detailedList />
+                    <InfoBox title="Chains" titleClassName="title">
+                        <div className="sized-container">
+                            {chains?.map(chain => (
+                                <Tile
+                                    key={chain.chainID}
+                                    primaryText={chain.chainID}
+                                    url={`/chains/${chain.chainID}`}
+                                    displayHealth
+                                    healthy={chain.isActive}
+                                />
+                            ))}
+                        </div>
                     </InfoBox>
                 </div>
                 <div className="row fill margin-t-s desktop-down-column">
-                    <InfoBox title="Chains" titleClassName="title">
-                        {chains?.map(chain => (
-                            <Tile
-                                key={chain.chainID}
-                                primaryText={chain.chainID}
-                                url={`/chains/${chain.chainID}`}
-                                displayHealth
-                                healthy={chain.isActive}
-                            />
-                        ))}
+                    <InfoBox title="Peers" titleClassName="title" titleWithIcon={true}>
+                        <PeersList peers={peersList} detailedList />
                     </InfoBox>
                 </div>
             </div>
