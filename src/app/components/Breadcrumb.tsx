@@ -22,7 +22,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
     const location = useLocation();
 
     return (
-        <div className="row middle">
+        <div className="breadcrumbs">
             {breadcrumbs.map((breadcrumb, index) => {
                 const isLast = breadcrumbs.length - 1 === index;
                 const isActive = isLast ?? location.pathname === breadcrumb.goTo;

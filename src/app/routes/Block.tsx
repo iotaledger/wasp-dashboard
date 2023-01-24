@@ -10,7 +10,6 @@ import {
 } from "../../lib";
 import "./Route.scss";
 import { KeyValueRow, Breadcrumb, Tile, InfoBox } from "../components";
-
 /**
  * Block panel.
  * @returns The node to render.
@@ -214,7 +213,7 @@ function BlockLink({
     disabled: boolean;
 }) {
     return (
-        <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
+        <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled ? "disabled" : ""}`}>
             {label}
         </Link>
     );

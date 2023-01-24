@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React from "react";
 import { ITableRow } from "../../lib/interfaces";
-
+import "./Table.scss";
 interface TableProps {
     tBody: ITableRow[];
     classNames?: string;
