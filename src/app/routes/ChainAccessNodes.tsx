@@ -33,7 +33,7 @@ function ChainAccessNodes() {
     const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
 
     const chainBreadcrumbs = [
-        { goTo: "/chains", text: "Chains" },
+        { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
     ];
 
