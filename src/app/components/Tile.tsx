@@ -15,6 +15,7 @@ interface TileProps {
     primaryText: string | undefined;
     secondaryText?: string | undefined;
     url?: string | undefined;
+    clickable?: boolean | undefined;
     actions?: IAction[] | undefined;
 }
 
@@ -24,8 +25,9 @@ const TileContent: React.FC<TileProps> = ({
     healthy,
     primaryText,
     secondaryText,
+    clickable,
 }: TileProps) => (
-    <div className="tile-content">
+    <div className={`tile-content ${clickable ? "clickable" : ""}`}>
         <div className="text-content">
             {displayHealth && <div className="health-icon">{healthy ? <HealthGoodIcon /> : <HealthWarning />}</div>}
             <div className="text">
@@ -47,6 +49,7 @@ const TileContent: React.FC<TileProps> = ({
                 ))}
             </div>
         )}
+        {clickable && <div className="clickable-overlay">{">"}</div>}
     </div>
 );
 
@@ -60,6 +63,7 @@ const Tile: React.FC<TileProps> = ({ actions, displayHealth, healthy, primaryTex
                     healthy={healthy}
                     primaryText={primaryText}
                     secondaryText={secondaryText}
+                    clickable
                 />
             </Link>
         ) : (
@@ -76,6 +80,7 @@ const Tile: React.FC<TileProps> = ({ actions, displayHealth, healthy, primaryTex
 
 Tile.defaultProps = {
     actions: undefined,
+    clickable: false,
     displayHealth: false,
     healthy: false,
     secondaryText: undefined,
