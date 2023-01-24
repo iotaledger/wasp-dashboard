@@ -8,10 +8,7 @@ interface PeerTileProps {
      * @type {PeeringNodeStatusResponse}
      */
     peer: PeeringNodeStatusResponse;
-    /**
-     * Is blind mode activated.
-     */
-    blindMode: boolean;
+
     /**
      * Show a detailed list with actions.
      * @default false
@@ -19,7 +16,7 @@ interface PeerTileProps {
     detailed?: boolean;
 }
 
-const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
+const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed }) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
     /**
      *
@@ -28,8 +25,8 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, blindMode, detailed }) => {
         setShowDeleteDialog(false);
     }
 
-    const primaryText = blindMode ? "*".repeat((peer.publicKey ?? "Unknown").length) : peer.publicKey ?? "Unknown";
-    const secondaryText = blindMode ? "*".repeat((peer.netId ?? "Unknown").length) : peer.netId ?? "Unknown";
+    const primaryText = peer.publicKey;
+    const secondaryText = peer.netId;
     const healthy = peer.isAlive;
 
     const actions = [

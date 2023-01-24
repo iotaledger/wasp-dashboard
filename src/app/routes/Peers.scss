@@ -1,0 +1,16 @@
+
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
+
+.peers-panel {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    margin-top: $spacing-medium;
+
+    @media (max-width: 1340px) {
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+    }
+}
