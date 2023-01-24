@@ -10,7 +10,6 @@ import {
 } from "../../lib";
 import "./Route.scss";
 import { KeyValueRow, Breadcrumb, Tile, InfoBox } from "../components";
-
 /**
  * Block panel.
  * @returns The node to render.
@@ -23,7 +22,6 @@ function Block() {
     const { chainID, blockID } = useParams();
     const blockIndex = Number(blockID);
     const blockBreadcrumbs = [
-        { goTo: "/chains", text: "Chains" },
         { goTo: `/chains/${chainID}`, text: `Chain ${chainID}` },
         { goTo: `/chains/${chainID}/blocks/${blockID}`, text: `Block ${blockID}` },
     ];
@@ -214,7 +212,7 @@ function BlockLink({
     disabled: boolean;
 }) {
     return (
-        <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
+        <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled ? "disabled" : ""}`}>
             {label}
         </Link>
     );

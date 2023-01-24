@@ -12,7 +12,6 @@ function Account() {
     const [accountBalance, setAccountBalance] = useState<AssetsResponse | null>(null);
     const { chainID, accountID } = useParams();
     const blockBreadcrumbs = [
-        { goTo: "/chains", text: "Chains" },
         { goTo: `/chains/${chainID}`, text: `Chain ${chainID}` },
         { goTo: `/chains/${chainID}/accounts/${accountID}`, text: `Account ${accountID}` },
     ];

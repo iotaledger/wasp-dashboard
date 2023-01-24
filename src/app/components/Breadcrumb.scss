@@ -1,11 +1,22 @@
 @use "../../scss/variables" as *;
+@use "../../scss/media-queries" as *;
+
+.breadcrumbs{
+display: flex;
+flex-direction: row;
+align-items: center;
+
+@include tablet-down {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
 
 .nav-link {
   display: flex;
   align-items: center;
   color: var(--text-color-secondary);
   text-decoration: none;
-
+word-break: break-all;
   &.active-path {
       color: var(--text-color-primary);
 
@@ -35,4 +46,5 @@
       pointer-events: none;
       opacity: 0.5;
   }
+}
 }
