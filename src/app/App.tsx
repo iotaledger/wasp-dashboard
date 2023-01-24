@@ -114,7 +114,7 @@ class App extends Component<object, AppState> {
 
         this.state = {
             isLoggedIn: Boolean(this._authService.isLoggedIn()),
-            theme: this._settingsService.get(),
+            theme: this._settingsService.getTheme(),
             online: false,
             // eslint-disable-next-line react/no-unused-state
             syncHealth: false,
@@ -292,13 +292,13 @@ class App extends Component<object, AppState> {
             {
                 label: "Light",
                 icon: <SunIcon />,
-                function: () => this._settingsService.apply("light", true),
+                function: () => this._settingsService.applyTheme("light", true),
                 hidden: this.state.theme === "light",
             },
             {
                 label: "Dark",
                 icon: <MoonIcon />,
-                function: () => this._settingsService.apply("dark", true),
+                function: () => this._settingsService.applyTheme("dark", true),
                 hidden: this.state.theme === "dark",
             },
         ];

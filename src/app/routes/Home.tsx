@@ -36,7 +36,7 @@ function Home() {
 
     useEffect(() => {
         const fetchData = async () => {
-            setBannerSrc(await BrandHelper.getBanner(settingsService.get()));
+            setBannerSrc(await BrandHelper.getBanner(settingsService.getTheme()));
             setPeersList(peersService.get());
             if (authService.isLoggedIn()) {
                 try {
