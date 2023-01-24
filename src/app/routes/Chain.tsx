@@ -57,11 +57,9 @@ function Chain() {
         Record<string, ConsensusMetric> | null | ITableRow[]
     >(null);
     const { chainID } = useParams();
-    const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
 
     const chainURL = `/chains/${chainID}`;
     const chainProperties = chainInfo ? transformInfoIntoArray(chainInfo) : [];
-    const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
 
     const chainBreadcrumbs = [
         { goTo: "/", text: "Home" },
