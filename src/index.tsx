@@ -18,6 +18,7 @@ import {
     WebSocketService,
     BrandHelper,
 } from "./lib/classes";
+import { ChainsService } from "./lib/classes/services/chainsService";
 import { IBrandConfiguration } from "./lib/interfaces";
 
 initServices()
@@ -66,6 +67,10 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
     const peersService = new PeersService();
     ServiceFactory.register(PeersService.ServiceName, () => peersService);
     peersService.initialize();
+
+    const chainsService = new ChainsService();
+    ServiceFactory.register(ChainsService.ServiceName, () => chainsService);
+    chainsService.initialize();
 
     EventAggregator.subscribe("auth-state", "init", async () => {
         webSocketService.resubscribe();
