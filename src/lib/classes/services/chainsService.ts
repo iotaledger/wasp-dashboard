@@ -1,6 +1,7 @@
 import { WaspClientService, ServiceFactory, LocalStorageService } from "../../classes";
 import { BlockInfoResponse, RequestReceiptResponse } from "../../wasp_client";
 
+// Information about a Block
 export interface BlockData {
     info?: BlockInfoResponse;
     requests: RequestReceiptResponse[];
@@ -63,7 +64,7 @@ export class ChainsService {
             requests: [],
         };
 
-        // Otherwise feth it and cache it for the next time
+        // Otherwise fecth it and cache it for the next time
         await Promise.all([
             this._waspClientService
                 .corecontracts()
@@ -98,6 +99,9 @@ export class ChainsService {
         return block;
     }
 
+    /**
+     * Persist the cached blocks
+     */
     public save() {
         this._storageService.save("chains", this._cachedChains);
     }
