@@ -42,6 +42,11 @@
     @include desktop-down {
         grid-template-columns: 1fr;
     }
+
+    .card {
+      margin-bottom: 0;
+    }
+
   }
 
   .card {
