@@ -22,6 +22,7 @@
     h2 {
       margin-bottom: 16px;
       text-transform: uppercase;
+      word-break: break-all;
 
       &.l1-details-title {
         margin-bottom: 0;
@@ -38,6 +39,13 @@
 
     @include desktop-down {
       flex-direction: column;
+    }
+
+    .card {
+      .summary {
+        width: 100%;
+        min-width: 350px;
+      }
     }
 
     .first-card {
