@@ -163,14 +163,6 @@ function ChainAccessNodes() {
                             </button>
                         }
                     >
-                        {isPopupOpen && (
-                            <EditAccessNodesDialog
-                                peerNodes={peersList}
-                                accessNodes={accessNodes}
-                                onSuccess={onAccessNodesEdited}
-                                onClose={() => setIsPopupOpen(false)}
-                            />
-                        )}
                         {accessNodes.length > 0 ? (
                             accessNodes?.map(node => (
                                 <Tile
@@ -182,6 +174,14 @@ function ChainAccessNodes() {
                             ))
                         ) : (
                             <Tile primaryText="No access nodes found." />
+                        )}
+                        {isPopupOpen && (
+                            <EditAccessNodesDialog
+                                peerNodes={peersList}
+                                accessNodes={accessNodes}
+                                onSuccess={onAccessNodesEdited}
+                                onClose={() => setIsPopupOpen(false)}
+                            />
                         )}
                     </InfoBox>
                 </div>
