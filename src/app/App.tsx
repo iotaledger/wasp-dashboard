@@ -2,14 +2,12 @@ import "./App.scss";
 
 import moment from "moment";
 import React, { Component, ReactNode } from "react";
-import { ReactComponent as ChainsIcon } from "../assets/chains.svg";
 import { ReactComponent as ConfigurationIcon } from "../assets/configuration.svg";
 import { ReactComponent as HomeIcon } from "../assets/home.svg";
 import { ReactComponent as L1Icon } from "../assets/l1.svg";
 import { ReactComponent as MoonIcon } from "../assets/moon.svg";
 import { ReactComponent as PadlockUnlockedIcon } from "../assets/padlock-unlocked.svg";
 import { ReactComponent as PadlockIcon } from "../assets/padlock.svg";
-import { ReactComponent as PeersIcon } from "../assets/peers.svg";
 import { ReactComponent as SunIcon } from "../assets/sun.svg";
 import { ReactComponent as UsersIcon } from "../assets/users.svg";
 import {
@@ -256,18 +254,6 @@ class App extends Component<object, AppState> {
                 label: "Home",
                 icon: <HomeIcon />,
                 route: "/",
-                hidden: !this.state.isLoggedIn,
-            },
-            {
-                label: "Peers",
-                icon: <PeersIcon />,
-                route: "/peers",
-                hidden: !this.state.isLoggedIn,
-            },
-            {
-                label: "Chains",
-                icon: <ChainsIcon />,
-                route: "/chains",
                 hidden: !this.state.isLoggedIn,
             },
             {
