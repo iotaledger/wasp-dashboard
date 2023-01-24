@@ -4,6 +4,7 @@
 
 .tile-content {
   display: flex;
+  position: relative;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -13,9 +14,27 @@
   overflow: hidden;
   border-radius: $spacing-small;
   background-color: var(--panel-background-highlight);
-
+  @include tablet-down {
+    padding: $spacing-medium;
+  }
+  
   &:focus {
     border: 0;
+  }
+
+  .arrow{
+    margin-left: 10px;
+    color: var(--text-color-primary);
+    cursor: pointer;
+    @include font-size(20px);
+  }
+
+  &.clickable {
+    transition: all 0.1s ease-in;
+
+    &:hover {
+      background-color: var(--panel-bakground-hover);
+    }
   }
 
   .text-content {
@@ -37,7 +56,7 @@
       display: flex;
       flex-direction: column;
     }
-    
+
     .secondary {
       @include font-size(12px);
 
