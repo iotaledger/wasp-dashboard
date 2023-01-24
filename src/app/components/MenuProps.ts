@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export interface NavPanelProps {
+export interface MenuProps {
     /**
      * The buttons to display on the panel.
      */

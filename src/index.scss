@@ -17,14 +17,11 @@ html {
 }
 
 body {
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
+
     background-color: var(--background);
 
     #root {
         display: flex;
-        flex: 1;
 
         .success {
             color: $success;

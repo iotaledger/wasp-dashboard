@@ -7,20 +7,13 @@
   display: flex;
   flex: 1;
   justify-content: center;
-  padding: 60px;
+  padding: 60px 60px 60px 180px;
   font-family: $font-sans;
 
-  &.large {
-    padding: 40px;
-    .main-wrapper {
-      max-width: $large-content-width-desktop;
-    }
-  }
-
-  @include desktop-down {
+  @include tablet-down {
     padding: $spacing-small;
   }
-
+ 
   .main-wrapper {
     display: flex;
     flex: 1;
@@ -33,6 +26,15 @@
     }
   }
 
+  &.large {
+    padding: 40px;
+
+    .main-wrapper {
+      max-width: $large-content-width-desktop;
+    }
+  }
+
+
   .card {
     margin-bottom: 16px;
   }
@@ -41,8 +43,8 @@
     padding: 16px;
 
     .nav-link {
-      text-decoration: none;
       color: var(--text-color-secondary);
+      text-decoration: none;
       
       &:hover{
         color: var(--text-color-primary);

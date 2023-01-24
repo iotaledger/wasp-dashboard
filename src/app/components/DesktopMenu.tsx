@@ -2,15 +2,15 @@ import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { SettingsService, EventAggregator, ServiceFactory, BrandHelper } from "../../lib/classes";
-import "./NavPanel.scss";
-import { NavPanelProps } from "./NavPanelProps";
+import "./DesktopMenu.scss";
+import { MenuProps } from "./MenuProps";
 
 /**
  * Navigation panel.
  * @param props The navigation panel props
  * @returns The node to render.
  */
-function NavPanel(props: NavPanelProps) {
+function DesktopMenu(props: MenuProps) {
     const settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
     const location = useLocation();
 
@@ -100,4 +100,4 @@ function NavPanel(props: NavPanelProps) {
     );
 }
 
-export default NavPanel;
+export default DesktopMenu;
