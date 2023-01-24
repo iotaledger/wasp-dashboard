@@ -22,7 +22,6 @@ function Block() {
     const { chainID, blockID } = useParams();
     const blockIndex = Number(blockID);
     const blockBreadcrumbs = [
-        { goTo: "/chains", text: "Chains" },
         { goTo: `/chains/${chainID}`, text: `Chain ${chainID}` },
         { goTo: `/chains/${chainID}/blocks/${blockID}`, text: `Block ${blockID}` },
     ];
