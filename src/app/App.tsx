@@ -2,14 +2,12 @@ import "./App.scss";
 
 import moment from "moment";
 import React, { Component, ReactNode } from "react";
-import { ReactComponent as ChainsIcon } from "../assets/chains.svg";
 import { ReactComponent as ConfigurationIcon } from "../assets/configuration.svg";
 import { ReactComponent as HomeIcon } from "../assets/home.svg";
 import { ReactComponent as L1Icon } from "../assets/l1.svg";
 import { ReactComponent as MoonIcon } from "../assets/moon.svg";
 import { ReactComponent as PadlockUnlockedIcon } from "../assets/padlock-unlocked.svg";
 import { ReactComponent as PadlockIcon } from "../assets/padlock.svg";
-import { ReactComponent as PeersIcon } from "../assets/peers.svg";
 import { ReactComponent as SunIcon } from "../assets/sun.svg";
 import { ReactComponent as UsersIcon } from "../assets/users.svg";
 import {
@@ -18,7 +16,7 @@ import {
     EventAggregator,
     LocalStorageService,
     MetricsService,
-    ThemeService,
+    SettingsService,
     WaspClientService,
     BrandHelper,
 } from "../lib/classes";
@@ -34,7 +32,7 @@ class App extends Component<object, AppState> {
     /**
      * The theme service.
      */
-    private readonly _themeService: ThemeService;
+    private readonly _settingsService: SettingsService;
 
     /**
      * The auth service.
@@ -107,7 +105,7 @@ class App extends Component<object, AppState> {
      */
     constructor(props: object) {
         super(props);
-        this._themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
+        this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
         this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
         this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
         this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
@@ -116,7 +114,7 @@ class App extends Component<object, AppState> {
 
         this.state = {
             isLoggedIn: Boolean(this._authService.isLoggedIn()),
-            theme: this._themeService.get(),
+            theme: this._settingsService.getTheme(),
             online: false,
             // eslint-disable-next-line react/no-unused-state
             syncHealth: false,
@@ -259,18 +257,6 @@ class App extends Component<object, AppState> {
                 hidden: !this.state.isLoggedIn,
             },
             {
-                label: "Peers",
-                icon: <PeersIcon />,
-                route: "/peers",
-                hidden: !this.state.isLoggedIn,
-            },
-            {
-                label: "Chains",
-                icon: <ChainsIcon />,
-                route: "/chains",
-                hidden: !this.state.isLoggedIn,
-            },
-            {
                 label: "Configuration",
                 icon: <ConfigurationIcon />,
                 route: "/configuration",
@@ -306,13 +292,13 @@ class App extends Component<object, AppState> {
             {
                 label: "Light",
                 icon: <SunIcon />,
-                function: () => this._themeService.apply("light", true),
+                function: () => this._settingsService.applyTheme("light", true),
                 hidden: this.state.theme === "light",
             },
             {
                 label: "Dark",
                 icon: <MoonIcon />,
-                function: () => this._themeService.apply("dark", true),
+                function: () => this._settingsService.applyTheme("dark", true),
                 hidden: this.state.theme === "dark",
             },
         ];

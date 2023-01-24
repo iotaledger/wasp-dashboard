@@ -29,6 +29,7 @@
 
     h2 {
       text-transform: uppercase;
+      word-break: break-all;
     }
   }
 
@@ -39,6 +40,19 @@
   .summary {
     padding: 16px;
 
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-color-secondary);
+      
+      &:hover{
+        color: var(--text-color-primary);
+      }
+
+      &.disabled {
+        opacity: 0.4;
+      }
+    }
+
     h4 {
       margin-bottom: 20px;
     }
@@ -48,6 +62,9 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+    @include tablet-down {
+      grid-template-columns: 1fr;
+    }
   }
 
   .content {
@@ -75,7 +92,6 @@
   }
 }
 
-
 .add-button {
   @include font-size(14px);
 
@@ -92,10 +108,10 @@
   cursor: pointer;
 
   &:hover {
-      color: var(--accent-primary);
+    color: var(--accent-primary);
   }
 
   &:focus {
-      box-shadow: 0 0 3px 0 var(--accent-primary);
+    box-shadow: 0 0 3px 0 var(--accent-primary);
   }
 }

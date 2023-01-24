@@ -7,45 +7,63 @@ export class SettingsService {
     public static readonly ServiceName = "SettingsService";
 
     /**
-     * The blind mode setting.
-     */
-    private _blindMode: boolean;
-
-    /**
      * The storage servie.
      */
     private readonly _storageService: LocalStorageService;
+
+    /**
+     * The theme.
+     */
+    private _theme: string;
 
     /**
      * Create a new instance of SettingsService.
      */
     constructor() {
         this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
-        this._blindMode = false;
+        this._theme = "light";
     }
 
     /**
-     * Initialize the service.
+     * Initialize the theme.
      */
     public initialize(): void {
-        this._blindMode = this._storageService.load<boolean>("blindMode") ?? false;
+        const theme = this._storageService.load<string>("theme");
+
+        this.applyTheme(theme, false);
     }
 
     /**
-     * Get the blind mode setting.
-     * @returns The blind mode.
+     * Apply a theme.
+     * @param theme The theme to apply.
+     * @param save Save the theme.
      */
-    public getBlindMode(): boolean {
-        return this._blindMode;
+    public applyTheme(theme: string, save: boolean): void {
+        const currentTheme = this._theme;
+        this._theme = theme ?? "light";
+
+        document.body.classList.remove(`theme-${currentTheme}`);
+        document.body.classList.add(`theme-${this._theme}`);
+
+        EventAggregator.publish("theme", this._theme);
+
+        if (save) {
+            this.save();
+        }
     }
 
     /**
-     * Set the blind mode setting.
-     * @param blindMode The new blind mode.
+     * Get the theme.
+     * @returns The theme.
      */
-    public setBlindMode(blindMode: boolean): void {
-        this._blindMode = blindMode;
-        this._storageService.save<boolean>("blindMode", this._blindMode);
-        EventAggregator.publish("settings.blindMode", this._blindMode);
+    public getTheme(): string {
+        return this._theme;
+    }
+
+    /**
+     * Save all the settings.
+     */
+    public save(): void {
+        this._storageService.save("theme", this._theme);
     }
 }

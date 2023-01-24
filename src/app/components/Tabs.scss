@@ -1,0 +1,30 @@
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
+
+.tab {
+    @include font-size(14px);
+    padding: $spacing-tiny;
+    width: 140px;
+    color: var(--text-color-secondary);
+    border-top-left-radius: $form-input-radius;
+    border-top-right-radius: $form-input-radius;
+    border: 1px solid var(--panel-background-highlight);
+    transition: 0.1s;
+    &.tab-active {
+        color: var(--text-color-primary);
+        border: 1px solid var(--accent-primary);
+        border-bottom-color: transparent;
+    }
+    &:not(.tab-active):hover {
+        border: 1px solid var(--text-color-secondary);
+    }
+}
+
+.tab-group {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-bottom: $spacing-small;
+    border-bottom: 1px solid var(--accent-primary);
+}

@@ -15,7 +15,6 @@ import {
     PeersService,
     SessionStorageService,
     SettingsService,
-    ThemeService,
     WaspClientService,
     WebSocketService,
     BrandHelper,
@@ -57,10 +56,6 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
 
     const webSocketService = new WebSocketService();
     ServiceFactory.register(WebSocketService.ServiceName, () => webSocketService);
-
-    const themeService = new ThemeService();
-    themeService.initialize();
-    ServiceFactory.register(ThemeService.ServiceName, () => themeService);
 
     const nodeConfigService = new NodeConfigService();
     await nodeConfigService.initialize();
