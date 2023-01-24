@@ -15,14 +15,11 @@ function InfoBox({ title, children, titleClassName, cardClassName, titleWithIcon
     return (
         <div className={cardClassName ? `${cardClassName} card col fill` : "card col fill"}>
             <div className="summary">
-                {titleWithIcon ? (
-                    <div className="row middle spread margin-b-m">
-                        <h4 className={titleClassName ?? ""}>{title}</h4>
-                        {titleWithIcon && icon}
-                    </div>
-                ) : (
+                <div className="row middle spread margin-b-m">
                     <h4 className={titleClassName ?? ""}>{title}</h4>
-                )}
+                    {titleWithIcon && icon}
+                </div>
+
                 {children}
             </div>
         </div>
