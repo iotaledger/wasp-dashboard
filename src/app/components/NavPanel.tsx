@@ -18,7 +18,7 @@ function NavPanel(props: NavPanelProps) {
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        BrandHelper.getLogoNavigation(settingsService.get()).then(logo => {
+        BrandHelper.getLogoNavigation(settingsService.getTheme()).then(logo => {
             setLogoSrc(logo);
         });
 

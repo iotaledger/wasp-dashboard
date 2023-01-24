@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { EditIcon } from "../../assets";
 import "./Route.scss";
 import "./Chain.scss";
 import {
@@ -8,23 +7,16 @@ import {
     ChainInfoResponse,
     ContractInfoResponse,
     Blob,
-    BlockInfoResponse,
     CommitteeInfoResponse,
     WaspClientService,
     ServiceFactory,
-    PeersService,
-    PeeringNodeStatusResponse,
-    EventAggregator,
+    BlockInfoResponse,
 } from "../../lib";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
 import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
-import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
-
-interface ChainInfoValue {
-    key: string;
-    val: string;
-}
+import Tab from "../components/Tab";
+import TabGroup from "../components/TabGroup";
 
 interface ConsensusMetric {
     status: string;
@@ -32,18 +24,18 @@ interface ConsensusMetric {
 }
 
 /**
- * Transforms a ChainInfoResponse into an array of key-value pairs
+ * Transforms a ChainInfoResponse into an array of key-value pairs, useful if it has nested properties
  *
  * @param chainInfo Input chain info
  * @returns An array of key-value pairs
  */
-function transformInfoIntoArray(chainInfo: ChainInfoResponse): ChainInfoValue[] {
-    return Object.entries(chainInfo).flatMap(([key, val]) => {
+function transformInfoIntoArray(chainInfo: ChainInfoResponse) {
+    return Object.entries(chainInfo).flatMap(([key, val]: [string, string | Record<string, string>]) => {
         if (typeof val === "object") {
-            return Object.entries(val as Record<string, string>).map(([k, v]) => ({ key: k, val: v }));
+            return Object.entries(val);
         }
-        return { key, val };
-    }) as ChainInfoValue[];
+        return [[key, val]];
+    });
 }
 
 const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
@@ -54,28 +46,24 @@ const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
  */
 function Chain() {
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
-    const peersService: PeersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
-    const [chainInfo, setChainInfo] = useState<ChainInfoValue[]>([]);
+    const [chainInfo, setChainInfo] = useState<ChainInfoResponse | null>(null);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
-    const [chainAccounts, setChainAccounts] = useState<string[]>([]);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
-    const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
+    const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
         Record<string, ConsensusMetric> | null | ITableRow[]
     >(null);
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const { chainID } = useParams();
-    const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
-    const EVMChainID = chainInfo.find(({ key }) => key === "evmChainId");
-    const ChainID = chainInfo.find(({ key }) => key === "chainID");
-    const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
+
+    const chainURL = `/chains/${chainID}`;
+    const chainProperties = chainInfo ? transformInfoIntoArray(chainInfo) : [];
 
     const chainBreadcrumbs = [
-        { goTo: "/chains", text: "Chains" },
-        { goTo: `/chains/${ChainID?.val}`, text: `Chain ${chainID}` },
+        { goTo: "/", text: "Home" },
+        { goTo: chainURL, text: `Chain ${chainID}` },
     ];
 
     React.useEffect(() => {
@@ -88,7 +76,7 @@ function Chain() {
             .chains()
             .getChainInfo({ chainID })
             .then(newChainInfo => {
-                setChainInfo(transformInfoIntoArray(newChainInfo));
+                setChainInfo(newChainInfo);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -97,16 +85,6 @@ function Chain() {
             .getContracts({ chainID })
             .then(newChainContracts => {
                 setChainContracts(newChainContracts);
-            });
-
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .corecontracts()
-            .accountsGetAccounts({ chainID })
-            .then(newAccounts => {
-                if (newAccounts.accounts) {
-                    setChainAccounts(newAccounts.accounts);
-                }
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -160,12 +138,10 @@ function Chain() {
             });
 
         loadCommitteeInfo();
-
-        EventAggregator.subscribe("peers-state", "chain", setPeersList);
-    }, []);
+    }, [chainID]);
 
     /**
-     *
+     * Load the committee info
      */
     function loadCommitteeInfo() {
         if (!chainID) {
@@ -181,65 +157,6 @@ function Chain() {
             });
     }
 
-    /**
-     * Add and remove the access nodes.
-     * @param newAccessNodes Updated access nodes.
-     */
-    async function updateAccessNodes(newAccessNodes: PeeringNodeStatusResponse[]) {
-        if (!chainID) {
-            return;
-        }
-
-        // Filter what new access nodes were not previously enabled
-        const newNodes = newAccessNodes.filter(
-            peer => !accessNodes.some(node => node.publicKey === peer.publicKey),
-        );
-        // Filter what trusted nodes are not access nodes
-        const removedNodes = peersList.filter(
-            peer => !newAccessNodes.some(node => node.publicKey === peer.publicKey),
-        );
-
-        // Add peer nodes as access nodes
-        await Promise.all(
-            newNodes.map(async ({ publicKey }) => {
-                if (!publicKey) {
-                    return;
-                }
-                // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                waspClientService
-                    .chains()
-                    .addAccessNode({ chainID, publicKey })
-                    .catch(() => {});
-            }),
-        );
-
-        // Remove peer nodes as access nodes
-        await Promise.all(
-            removedNodes.map(async ({ publicKey }) => {
-                if (!publicKey) {
-                    return;
-                }
-
-                // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                waspClientService
-                    .chains()
-                    .removeAccessNode({ chainID, publicKey })
-                    .catch(() => {});
-            }),
-        );
-    }
-
-    /**
-     * When the access nodes are edited.
-     * @param newAccessNodes Updated access nodes.
-     */
-    function onAccessNodesEdited(newAccessNodes: PeeringNodeStatusResponse[]) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        updateAccessNodes(newAccessNodes).then(() => {
-            loadCommitteeInfo();
-        });
-    }
-
     return (
         <div className="main">
             <div className="main-wrapper">
@@ -248,42 +165,18 @@ function Chain() {
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
+                    <TabGroup>
+                        <Tab to={`${chainURL}`} label="Info" />
+                        <Tab to={`${chainURL}/accounts`} label="Accounts" />
+                        <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
+                        <Tab to={`${chainURL}/blocks/${chainLatestBlock?.blockIndex}`} label="Block explorer" />
+                    </TabGroup>
                     <InfoBox title="Info">
-                        {chainInfo
-                            .filter(({ key }) => !INFO_SKIP_NAMES.has(key))
-                            .map(({ key, val }) => (
+                        {chainProperties
+                            .filter(([key]) => !INFO_SKIP_NAMES.has(key))
+                            .map(([key, val]) => (
                                 <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
                             ))}
-                    </InfoBox>
-                    <InfoBox
-                        title="Access nodes"
-                        titleWithIcon={true}
-                        icon={
-                            <button type="button" onClick={() => setIsPopupOpen(true)} className="edit-button">
-                                <EditIcon />
-                            </button>
-                        }
-                    >
-                        {isPopupOpen && (
-                            <EditAccessNodesDialog
-                                peerNodes={peersList}
-                                accessNodes={accessNodes}
-                                onSuccess={onAccessNodesEdited}
-                                onClose={() => setIsPopupOpen(false)}
-                            />
-                        )}
-                        {accessNodes.length > 0 ? (
-                            accessNodes?.map(node => (
-                                <Tile
-                                    key={node.publicKey}
-                                    primaryText={node.publicKey}
-                                    healthy={node.isAlive}
-                                    displayHealth={true}
-                                />
-                            ))
-                        ) : (
-                            <Tile primaryText="No access nodes found." />
-                        )}
                     </InfoBox>
                     <InfoBox title="Contracts">
                         {chainContracts.map(({ name, hName, description, programHash }) => (
@@ -292,11 +185,6 @@ function Chain() {
                                 keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
                                 value={description}
                             />
-                        ))}
-                    </InfoBox>
-                    <InfoBox title="On-chain accounts">
-                        {chainAccounts.map(account => (
-                            <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
                         ))}
                     </InfoBox>
                     <InfoBox title="Total Assets">
@@ -323,7 +211,7 @@ function Chain() {
                             keyText="Block index"
                             value={{
                                 text: chainLatestBlock?.blockIndex?.toString(),
-                                url: `blocks/${chainLatestBlock?.blockIndex}`,
+                                url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
                             }}
                         />
                         <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp} />
@@ -351,20 +239,18 @@ function Chain() {
                         )}
                     </InfoBox>
                     <InfoBox title="EVM">
-                        {ChainID && (
+                        {chainID && (
                             <React.Fragment>
-                                <KeyValueRow keyText="EVM ChainID" value={EVMChainID?.val} />
-                                <KeyValueRow keyText="JSON-RPC URL" value={formatEVMJSONRPCUrl(ChainID?.val)} />
+                                <KeyValueRow keyText="EVM ChainID" value={chainInfo?.evmChainId} />
+                                <KeyValueRow keyText="JSON-RPC URL" value={formatEVMJSONRPCUrl(chainID)} />
                             </React.Fragment>
                         )}
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
-                        {ChainID && (
-                            <Table
-                                tHead={["Flag name", "Status", "Trigger time"]}
-                                tBody={chainConsensusMetrics as ITableRow[]}
-                            />
-                        )}
+                        <Table
+                            tHead={["Flag name", "Status", "Trigger time"]}
+                            tBody={chainConsensusMetrics as ITableRow[]}
+                        />
                     </InfoBox>
                 </div>
             </div>

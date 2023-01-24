@@ -30,7 +30,7 @@ export class SettingsService {
     public initialize(): void {
         const theme = this._storageService.load<string>("theme");
 
-        this.apply(theme, false);
+        this.applyTheme(theme, false);
     }
 
     /**
@@ -38,7 +38,7 @@ export class SettingsService {
      * @param theme The theme to apply.
      * @param save Save the theme.
      */
-    public apply(theme: string, save: boolean): void {
+    public applyTheme(theme: string, save: boolean): void {
         const currentTheme = this._theme;
         this._theme = theme ?? "light";
 
@@ -56,12 +56,12 @@ export class SettingsService {
      * Get the theme.
      * @returns The theme.
      */
-    public get(): string {
+    public getTheme(): string {
         return this._theme;
     }
 
     /**
-     * Save theme.
+     * Save all the settings.
      */
     public save(): void {
         this._storageService.save("theme", this._theme);
