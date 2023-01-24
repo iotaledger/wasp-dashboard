@@ -33,6 +33,22 @@
     }
   }
 
+  .grid-wrapper {
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+
+    @include desktop-down {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+      margin-bottom: 0;
+    }
+
+  }
+
   .card {
     margin-bottom: 16px;
   }

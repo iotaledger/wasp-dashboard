@@ -75,6 +75,14 @@ function Home() {
                 .catch(e => console.error(e));
         }
 
+        EventAggregator.subscribe("theme", "home", async (theme: string) => {
+            setBannerSrc(await BrandHelper.getBanner(theme));
+        });
+
+        EventAggregator.subscribe("peers-state", "home", async (peers: PeeringNodeStatusResponse[]) => {
+            setPeersList(peers);
+        });
+
         return () => {
             EventAggregator.unsubscribe("theme", "home");
             EventAggregator.unsubscribe("peers-state", "home");

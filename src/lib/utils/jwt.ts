@@ -13,3 +13,14 @@ export function decodeJWTPayload(token: string): Record<string, string | number>
     const parsedPayload = JSON.parse(decodedPayload) as Record<string, string | number>;
     return parsedPayload;
 }
+
+/**
+ * Decode jwt to get expiry time.
+ * @param token The jwt.
+ * @returns The expiry time.
+ */
+export function getTokenExpiry(token: string) {
+    const { exp } = decodeJWTPayload(token);
+    const expiryTimestamp = (exp as number) * 1000;
+    return expiryTimestamp;
+}

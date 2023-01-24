@@ -24,8 +24,9 @@ const TileContent: React.FC<TileProps> = ({
     healthy,
     primaryText,
     secondaryText,
+    url,
 }: TileProps) => (
-    <div className="tile-content">
+    <div className={`tile-content ${url ? "clickable" : ""}`}>
         <div className="text-content">
             {displayHealth && <div className="health-icon">{healthy ? <HealthGoodIcon /> : <HealthWarning />}</div>}
             <div className="text">
@@ -47,6 +48,7 @@ const TileContent: React.FC<TileProps> = ({
                 ))}
             </div>
         )}
+        {url && <div className="arrow">{">"}</div>}
     </div>
 );
 
@@ -60,6 +62,7 @@ const Tile: React.FC<TileProps> = ({ actions, displayHealth, healthy, primaryTex
                     healthy={healthy}
                     primaryText={primaryText}
                     secondaryText={secondaryText}
+                    url={url}
                 />
             </Link>
         ) : (
