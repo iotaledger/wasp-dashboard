@@ -7,10 +7,10 @@ import {
     ChainInfoResponse,
     ContractInfoResponse,
     Blob,
-    BlockInfoResponse,
     CommitteeInfoResponse,
     WaspClientService,
     ServiceFactory,
+    BlockInfoResponse,
 } from "../../lib";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
@@ -56,8 +56,8 @@ function Chain() {
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
-    const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
+    const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
         Record<string, ConsensusMetric> | null | ITableRow[]
     >(null);
@@ -174,6 +174,7 @@ function Chain() {
                         <Tab to={`${chainURL}`} label="Info" />
                         <Tab to={`${chainURL}/accounts`} label="Accounts" />
                         <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
+                        <Tab to={`${chainURL}/blocks/${chainLatestBlock?.blockIndex}`} label="Block explorer" />
                     </TabGroup>
                     <InfoBox title="Info">
                         {chainInfo
@@ -215,7 +216,7 @@ function Chain() {
                             keyText="Block index"
                             value={{
                                 text: chainLatestBlock?.blockIndex?.toString(),
-                                url: `blocks/${chainLatestBlock?.blockIndex}`,
+                                url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
                             }}
                         />
                         <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp} />
