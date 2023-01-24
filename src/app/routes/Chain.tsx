@@ -12,6 +12,7 @@ import {
     ServiceFactory,
     BlockInfoResponse,
 } from "../../lib";
+import { ChainsService } from "../../lib/classes/services/chainsService";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
 import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
@@ -46,6 +47,7 @@ const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
  */
 function Chain() {
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+    const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
 
     const [chainInfo, setChainInfo] = useState<ChainInfoResponse | null>(null);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
@@ -106,12 +108,11 @@ function Chain() {
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .corecontracts()
-            .blocklogGetLatestBlockInfo({ chainID })
-            .then(newLatestBlock => {
+        chainsService.getLatestBlock(chainID).then(newLatestBlock => {
+            if (newLatestBlock) {
                 setChainLatestBlock(newLatestBlock);
-            });
+            }
+        });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService

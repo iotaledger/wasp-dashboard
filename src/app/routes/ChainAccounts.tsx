@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Route.scss";
 import { WaspClientService, ServiceFactory } from "../../lib";
+import { ChainsService } from "../../lib/classes/services/chainsService";
 import { Breadcrumb, InfoBox, Tile } from "../components";
 import Tab from "../components/Tab";
 import TabGroup from "../components/TabGroup";
@@ -27,6 +28,7 @@ function ChainAccounts() {
         }
 
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+        const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
@@ -38,18 +40,14 @@ function ChainAccounts() {
                 }
             });
 
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .corecontracts()
-            .blocklogGetLatestBlockInfo({ chainID })
+        chainsService
+            .getLatestBlock(chainID)
             .then(newLatestBlock => {
-                if (newLatestBlock.blockIndex) {
+                if (newLatestBlock) {
                     setLatestBlock(newLatestBlock.blockIndex);
                 }
             })
-            .catch(() => {
-                setLatestBlock(0);
-            });
+            .catch(() => setLatestBlock(0));
     }, []);
 
     return (

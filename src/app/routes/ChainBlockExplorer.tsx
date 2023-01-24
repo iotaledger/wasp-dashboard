@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Route.scss";
-import { WaspClientService, ServiceFactory } from "../../lib";
+import { ServiceFactory } from "../../lib";
 import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
 import { Breadcrumb, InfoBox, KeyValueRow, Tile } from "../components";
 import Tab from "../components/Tab";
@@ -13,6 +13,8 @@ import TabGroup from "../components/TabGroup";
  * @returns The node to render.
  */
 function ChainBlockExplorer() {
+    const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
+
     const [blockData, setBlockData] = useState<BlockData | null>(null);
     const [latestBlock, setLatestBlock] = useState<number>();
     const { chainID, blockID } = useParams();
@@ -30,32 +32,28 @@ function ChainBlockExplorer() {
         if (!chainID) {
             return;
         }
-        const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
-        const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
 
         chainsService
             .getBlock(chainID, blockIndex)
             .then(newBlockData => {
+                console.log(newBlockData);
                 if (newBlockData) {
                     setBlockData(newBlockData);
                 }
             })
-            .catch(() => {
+            .catch(e => {
+                console.error(e);
                 setBlockData(null);
             });
 
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .corecontracts()
-            .blocklogGetLatestBlockInfo({ chainID })
+        chainsService
+            .getLatestBlock(chainID)
             .then(newLatestBlock => {
-                if (newLatestBlock.blockIndex) {
+                if (newLatestBlock) {
                     setLatestBlock(newLatestBlock.blockIndex);
                 }
             })
-            .catch(() => {
-                setLatestBlock(0);
-            });
+            .catch(() => setLatestBlock(0));
     }, [blockID]);
 
     const info = blockData?.info ? Object.entries(blockData.info).filter(([k]) => BLOCK_DATA_VALUES.has(k)) : null;

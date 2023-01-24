@@ -10,6 +10,7 @@ import {
     PeersService,
     EventAggregator,
 } from "../../lib";
+import { ChainsService } from "../../lib/classes/services/chainsService";
 import { Breadcrumb, InfoBox, Tile } from "../components";
 import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
 import Tab from "../components/Tab";
@@ -21,6 +22,7 @@ import TabGroup from "../components/TabGroup";
  */
 function ChainAccessNodes() {
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+    const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
     const peersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
     const [latestBlock, setLatestBlock] = useState<number>();
@@ -42,18 +44,14 @@ function ChainAccessNodes() {
             return;
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .corecontracts()
-            .blocklogGetLatestBlockInfo({ chainID })
+        chainsService
+            .getLatestBlock(chainID)
             .then(newLatestBlock => {
-                if (newLatestBlock.blockIndex) {
+                if (newLatestBlock) {
                     setLatestBlock(newLatestBlock.blockIndex);
                 }
             })
-            .catch(() => {
-                setLatestBlock(0);
-            });
+            .catch(() => setLatestBlock(0));
 
         loadCommitteeInfo();
 
