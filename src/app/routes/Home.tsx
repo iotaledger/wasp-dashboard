@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useEffect, useState } from "react";
-import { EyeClosedIcon, EyeIcon } from "../../assets";
 import { ReactComponent as BannerCurve } from "../../assets/banner-curve.svg";
 import {
     ServiceFactory,
@@ -9,7 +8,6 @@ import {
     NodeConfigService,
     PeersService,
     SettingsService,
-    ThemeService,
     BrandHelper,
     PeeringNodeStatusResponse,
     WaspClientService,
@@ -25,7 +23,6 @@ import "./Home.scss";
  */
 function Home() {
     const [bannerSrc, setBannerSrc] = useState<undefined | string>();
-    const [blindMode, setBlindMode] = useState<boolean>(false);
     const [publicKey, setPublicKey] = useState<undefined | string>();
     const [version, setVersion] = useState<undefined | string>();
     const [networkId, setNetworkId] = useState<undefined | string>();
@@ -33,14 +30,13 @@ function Home() {
     const [chains, setChains] = useState<ChainInfoResponse[] | null>(null);
 
     const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
-    const themeService = ServiceFactory.get<ThemeService>(ThemeService.ServiceName);
     const settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
     const nodeConfigService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
     const peersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
     useEffect(() => {
         const fetchData = async () => {
-            setBannerSrc(await BrandHelper.getBanner(themeService.get()));
+            setBannerSrc(await BrandHelper.getBanner(settingsService.getTheme()));
             setPeersList(peersService.get());
             if (authService.isLoggedIn()) {
                 try {
@@ -67,7 +63,6 @@ function Home() {
             });
 
         setPeersList(peersService.get());
-        setBlindMode(settingsService.getBlindMode());
 
         if (authService.isLoggedIn()) {
             nodeConfigService
@@ -82,18 +77,9 @@ function Home() {
 
         return () => {
             EventAggregator.unsubscribe("theme", "home");
-            EventAggregator.unsubscribe("settings.blindMode", "home");
             EventAggregator.unsubscribe("peers-state", "home");
         };
     }, []);
-
-    /**
-     * Toggle blind mode in peers list.
-     */
-    function handleBlindMode(): void {
-        setBlindMode(!blindMode);
-        settingsService.setBlindMode(!blindMode);
-    }
 
     return (
         <div className="main">
@@ -103,7 +89,7 @@ function Home() {
                         <div className="node-info">
                             <div>
                                 <h1>WASP node</h1>
-                                <h3 className="secondary">{blindMode ? "**********" : publicKey}</h3>
+                                <h3 className="secondary">{publicKey}</h3>
                             </div>
                             <p className="secondary">{networkId}</p>
                             <p className="secondary">{version}</p>
@@ -119,17 +105,8 @@ function Home() {
                     </div>
                 </div>
                 <div className="row fill margin-t-s desktop-down-column">
-                    <InfoBox
-                        title="Peers"
-                        titleClassName="title"
-                        titleWithIcon={true}
-                        icon={
-                            <button type="button" onClick={handleBlindMode} className="peers-summary-blind-button">
-                                {blindMode ? <EyeIcon /> : <EyeClosedIcon />}
-                            </button>
-                        }
-                    >
-                        <PeersList peers={peersList} blindMode={blindMode} detailedList />
+                    <InfoBox title="Peers" titleClassName="title" titleWithIcon={true}>
+                        <PeersList peers={peersList} detailedList />
                     </InfoBox>
                 </div>
                 <div className="row fill margin-t-s desktop-down-column">

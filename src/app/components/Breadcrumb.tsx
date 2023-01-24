@@ -15,6 +15,7 @@ interface Breadcrumb {
 
 /**
  * Breadcrumbs.
+ * @param props The breadcrumbs options.
  * @param props.breadcrumbs The breadcrumbs to render.
  * @returns The node to render.
  */
