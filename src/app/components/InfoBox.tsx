@@ -17,7 +17,7 @@ function InfoBox({ title, children, titleClassName, cardClassName, titleWithIcon
             <div className="summary">
                 <div className="row middle spread margin-b-m">
                     <h4 className={titleClassName ?? ""}>{title}</h4>
-                    {titleWithIcon && titleWithIcon && icon}
+                    {titleWithIcon && icon}
                 </div>
 
                 {children}
