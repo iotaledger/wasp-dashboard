@@ -13,7 +13,6 @@ import {
     MetricsService,
     NodeConfigService,
     PeersService,
-    SessionStorageService,
     SettingsService,
     WaspClientService,
     WebSocketService,
@@ -44,7 +43,6 @@ initServices()
  */
 async function initServices(): Promise<IBrandConfiguration | undefined> {
     ServiceFactory.register(LocalStorageService.ServiceName, () => new LocalStorageService());
-    ServiceFactory.register(SessionStorageService.ServiceName, () => new SessionStorageService());
     ServiceFactory.register(WaspClientService.ServiceName, () => new WaspClientService());
 
     const settingsService = new SettingsService();

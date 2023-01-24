@@ -4,7 +4,6 @@ export { LocalStorageService } from "./localStorageService";
 export { MetricsService } from "./metricsService";
 export { NodeConfigService } from "./nodeConfigService";
 export { PeersService } from "./peersService";
-export { SessionStorageService } from "./sessionStorageService";
 export { SettingsService } from "./settingsService";
 export { WaspClientService } from "./waspClientService";
 export { WebSocketService } from "./webSocketService";
