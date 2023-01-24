@@ -13,8 +13,7 @@ import {
     WaspClientService,
     ChainInfoResponse,
 } from "../../lib/";
-import { PeersList, InfoBox, Tile } from "../components";
-import "./Route.scss";
+import { PeersList, InfoBox, Tile, AddPeerDialog } from "../components";
 import "./Home.scss";
 
 /**
@@ -28,6 +27,7 @@ function Home() {
     const [networkId, setNetworkId] = useState<undefined | string>();
     const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>([]);
     const [chains, setChains] = useState<ChainInfoResponse[] | null>(null);
+    const [showAddPeerDialog, setShowAddPeerDialog] = useState<boolean>(false);
 
     const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
     const settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
@@ -89,6 +89,12 @@ function Home() {
         };
     }, []);
 
+    /**
+     * Close the AddPeerDialog.
+     */
+    function closeAddPeerDialog() {
+        setShowAddPeerDialog(false);
+    }
     return (
         <div className="main">
             <div className="content">
@@ -114,7 +120,7 @@ function Home() {
                 </div>
                 <div className="row fill margin-t-s desktop-down-column">
                     <InfoBox title="Chains" titleClassName="title">
-                        <div className="sized-container">
+                        <div className="sized-container scrollbar-secondary">
                             {chains?.map(chain => (
                                 <Tile
                                     key={chain.chainID}
@@ -128,9 +134,20 @@ function Home() {
                     </InfoBox>
                 </div>
                 <div className="row fill margin-t-s desktop-down-column">
-                    <InfoBox title="Peers" titleClassName="title" titleWithIcon={true}>
-                        <PeersList peers={peersList} detailedList />
+                    <InfoBox
+                        title="Peers"
+                        titleWithIcon={true}
+                        icon={
+                            <button type="button" className="add-button" onClick={() => setShowAddPeerDialog(true)}>
+                                Add Peer
+                            </button>
+                        }
+                    >
+                        <div className="sized-container scrollbar-secondary">
+                            <PeersList peers={[...peersList, ...peersList, ...peersList, ...peersList]} detailedList />
+                        </div>
                     </InfoBox>
+                    {showAddPeerDialog && <AddPeerDialog onClose={closeAddPeerDialog} onSuccess={closeAddPeerDialog} />}
                 </div>
             </div>
         </div>
