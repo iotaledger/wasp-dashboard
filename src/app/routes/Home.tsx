@@ -82,7 +82,7 @@ function Home() {
     }, []);
 
     /**
-     *
+     * Close the AddPeerDialog.
      */
     function closeAddPeerDialog() {
         setShowAddPeerDialog(false);
