@@ -18,8 +18,10 @@ import {
 } from "../../lib";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
-import { InfoBox, KeyValueRow, Table, Tile } from "../components";
+import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
 import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
+import Tab from "../components/Tab";
+import TabGroup from "../components/TabGroup";
 
 interface ChainInfoValue {
     key: string;
@@ -71,7 +73,13 @@ function Chain() {
     const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
     const EVMChainID = chainInfo.find(({ key }) => key === "evmChainId");
     const ChainID = chainInfo.find(({ key }) => key === "chainID");
+    const chainURL = `/chains/${chainID}`;
     const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
+
+    const chainBreadcrumbs = [
+        { goTo: "/", text: "Home" },
+        { goTo: chainURL, text: `Chain ${chainID}` },
+    ];
 
     React.useEffect(() => {
         if (!chainID) {
@@ -238,11 +246,16 @@ function Chain() {
     return (
         <div className="main">
             <div className="main-wrapper">
-                {/* <Breadcrumb breadcrumbs={chainBreadcrumbs} /> */}
+                <Breadcrumb breadcrumbs={chainBreadcrumbs} />
                 <div className="middle row">
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
+                    <TabGroup>
+                        <Tab to={`${chainURL}`} label="Info" />
+                        <Tab to={`${chainURL}/accounts`} label="Accounts" />
+                        <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
+                    </TabGroup>
                     <InfoBox title="Info">
                         {chainInfo
                             .filter(({ key }) => !INFO_SKIP_NAMES.has(key))

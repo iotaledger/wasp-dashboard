@@ -24,18 +24,21 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
 
     return (
         <div className="breadcrumbs">
-            {breadcrumbs.map((breadcrumb, index) => (
-                <Link
-                    className={`${
-                        location.pathname === breadcrumb.goTo ? "active-path" : ""
-                    } nav-link margin-r-t margin-b-m`}
-                    to={breadcrumb.goTo}
-                    key={index}
-                >
-                    <span className={index === breadcrumbs.length - 1 ? "last-item" : ""}>{breadcrumb.text}</span>
-                    {index < breadcrumbs.length - 1 && <ChevronRight />}
-                </Link>
-            ))}
+            {breadcrumbs.map((breadcrumb, index) => {
+                const isLast = breadcrumbs.length - 1 === index;
+                const isActive = isLast ?? location.pathname === breadcrumb.goTo;
+
+                return (
+                    <Link
+                        className={`${isActive ? "active-path" : ""} nav-link margin-r-t margin-b-m`}
+                        to={breadcrumb.goTo}
+                        key={index}
+                    >
+                        <span className={isLast ? "last-item" : ""}>{breadcrumb.text}</span>
+                        {!isLast && <ChevronRight />}
+                    </Link>
+                );
+            })}
         </div>
     );
 };
