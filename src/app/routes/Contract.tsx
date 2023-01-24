@@ -13,7 +13,6 @@ function Contract() {
     const { contractHName, chainID } = useParams();
     const [contractEvents, setContractEvents] = useState<EventsResponse | null>(null);
     const contractBreadcrumbs = [
-        { goTo: "/chains", text: "Chains" },
         { goTo: `/chains/${chainID}`, text: `Chain ${chainID}` },
         { goTo: `/chains/${chainID}/contract/${contractHName}`, text: `Contract ${contractHName}` },
     ];

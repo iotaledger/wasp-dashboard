@@ -3,14 +3,12 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Account from "./Account";
 import Block from "./Block";
 import Chain from "./Chain";
-import Chains from "./Chains";
 import Configuration from "./Configuration";
 import Contract from "./Contract";
 import Home from "./Home";
 import L1 from "./L1";
 import L1Chain from "./L1Chain";
 import Login from "./Login";
-import Peers from "./Peers";
 import Users from "./Users";
 
 /**
@@ -25,7 +23,6 @@ function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
             {isLoggedIn ? (
                 <React.Fragment>
                     <Route path="/" element={<Home />} key="home" />
-                    <Route path="/peers" element={<Peers />} key="peers" />
                     {/* <Route
 
                         path="/peers/:peerId"
@@ -38,7 +35,6 @@ function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
                     <Route path="/chains/:chainID/access-nodes" element={<Chain />} key="chain" />
                     <Route path="/chains/:chainID/accounts" element={<Chain />} key="chain" />
                     <Route path="/chains/:chainID" element={<Chain />} key="chain" />
-                    <Route path="/chains" element={<Chains />} key="chains" />
                     <Route path="/configuration" element={<Configuration />} key="configuration" />
                     <Route path="/l1" element={<L1 />} key="l1" />
                     <Route path="/l1/:chainID" element={<L1Chain />} key="l1-chain" />

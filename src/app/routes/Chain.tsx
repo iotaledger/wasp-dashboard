@@ -81,6 +81,7 @@ function Chain() {
         { goTo: chainURL, text: `Chain ${chainID}` },
     ];
 
+
     React.useEffect(() => {
         if (!chainID) {
             return;
@@ -246,7 +247,7 @@ function Chain() {
     return (
         <div className="main">
             <div className="main-wrapper">
-                <Breadcrumb breadcrumbs={chainBreadcrumbs} />
+                {/* <Breadcrumb breadcrumbs={chainBreadcrumbs} /> */}
                 <div className="middle row">
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
