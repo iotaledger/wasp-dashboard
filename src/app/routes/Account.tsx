@@ -42,6 +42,13 @@ function Account() {
                     <InfoBox title="Info">
                         <KeyValueRow keyText="Base Tokens" value={accountBalance?.baseTokens} />
                     </InfoBox>
+                    {accountBalance?.nativeTokens?.map(token => (
+                        <InfoBox key={token.id} title={`Native Token #${token.id}`}>
+                            {Object.entries(token).map(([key, value]) => (
+                                <KeyValueRow key={key} keyText={key} value={value} />
+                            ))}
+                        </InfoBox>
+                    ))}
                 </div>
             </div>
         </div>
