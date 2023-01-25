@@ -10,7 +10,7 @@
   cursor: pointer;
 
   &:hover {
-      color: var(--accent-primary);
+    color: var(--accent-primary);
   }
 }
 
@@ -20,14 +20,18 @@
 
   .access-nodes-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
     margin-bottom: 16px;
-    align-items: flex-start;
-    
+
+    &:hover {
+      color: var(--text-color-secondary);
+    }
+
     input {
-      margin-top: 3px;
+      margin-top: 2px;
       margin-right: 6px;
+      cursor: pointer;
 
       @include phone-down {
         margin-top: 4px;
@@ -35,8 +39,9 @@
     }
 
     label {
-      flex:1;
+      flex: 1;
       word-break: break-all;
+      cursor: pointer;
     }
   }
 }
