@@ -11,7 +11,6 @@ export interface BlockData {
 // Information about a Chain
 export interface ChainData {
     blocks: BlockData[];
-    latestBlockInfo?: BlockInfoResponse;
 }
 
 /**
@@ -54,30 +53,11 @@ export class ChainsService {
      * @returns The block information.
      */
     public async getLatestBlock(chainID: string): Promise<BlockInfoResponse | null> {
-        // Return the block if it's cached
-        const savedChain = this._cachedChains[chainID];
-        if (savedChain) {
-            const savedBlock = savedChain.latestBlockInfo;
-            if (savedBlock) {
-                return savedBlock;
-            }
-        } else {
-            this._cachedChains[chainID] = {
-                blocks: [],
-            };
-        }
-
-        // Otherwise fecth it and cache it for the next time
         const blockInfo = await this._waspClientService
             .corecontracts()
             .blocklogGetLatestBlockInfo({ chainID })
             .then(newBlockInfo => newBlockInfo)
             .catch(() => null);
-
-        if (blockInfo) {
-            this._cachedChains[chainID].latestBlockInfo = blockInfo;
-            this.save();
-        }
 
         return blockInfo;
     }
