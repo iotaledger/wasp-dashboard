@@ -55,7 +55,7 @@ function ChainBlockExplorer() {
     }, [blockID]);
 
     const info = blockData?.info ? Object.entries(blockData.info).filter(([k]) => BLOCK_DATA_VALUES.has(k)) : null;
-    
+
     const previousBlock = blockIndex - 1;
 
     const nextBlock = (() => {
@@ -283,6 +283,7 @@ const BLOCK_REQUESTS_INFO_VALUES = new Set([
     "requestId",
     "senderAccount",
     "targetAddress",
+    "isEVM",
 ]);
 
 export default ChainBlockExplorer;
