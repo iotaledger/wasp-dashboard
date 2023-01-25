@@ -22,8 +22,8 @@ export default function ChainNavbar({ chainID, block }: ChainNavbarProps) {
 
     useEffect(() => {
         if (block || !chainID) {
-return;
-}
+            return;
+        }
 
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
