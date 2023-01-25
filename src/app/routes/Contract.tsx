@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { WaspClientService, ContractInfoResponse, ServiceFactory, EventsResponse } from "../../lib";
 import "./Route.scss";
 import { KeyValueRow, InfoBox, Breadcrumb, Tile } from "../components";
+import ChainNavbar from "../components/ChainNavbar";
 
 /**
  * Contract panel.
@@ -12,10 +13,15 @@ function Contract() {
     const [contractInfo, setContractInfo] = useState<ContractInfoResponse | null>(null);
     const { contractHName, chainID } = useParams();
     const [contractEvents, setContractEvents] = useState<EventsResponse | null>(null);
+
+    const chainURL = `/chains/${chainID}`;
+
     const contractBreadcrumbs = [
-        { goTo: `/chains/${chainID}`, text: `Chain ${chainID}` },
-        { goTo: `/chains/${chainID}/contract/${contractHName}`, text: `Contract ${contractHName}` },
+        { goTo: "/", text: "Home" },
+        { goTo: chainURL, text: `Chain ${chainID}` },
+        { goTo: `${chainURL}/contract/${contractHName}`, text: `Contract ${contractHName}` },
     ];
+
     React.useEffect(() => {
         if (!contractHName || !chainID) {
             return;
@@ -48,6 +54,7 @@ function Contract() {
                 <Breadcrumb breadcrumbs={contractBreadcrumbs} />
                 <h2>Contract {contractInfo?.name}</h2>
                 <div className="content">
+                    <ChainNavbar chainID={chainID} />
                     <InfoBox title="Info">
                         {contractInfo &&
                             Object.entries(contractInfo).map(([key, val]) => (
