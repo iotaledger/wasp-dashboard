@@ -31,7 +31,6 @@ function L1() {
         nodeService.initialize().then(() => {
             const params = nodeService.getL1Params();
             if (params) {
-                console.log(params);
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 setL1Params(params);
             }
