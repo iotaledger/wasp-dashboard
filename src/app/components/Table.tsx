@@ -13,39 +13,41 @@ interface TableProps {
 // eslint-disable-next-line jsdoc/require-jsdoc
 function Table({ tBody, classNames, tHead }: TableProps) {
     return (
-        <table cellSpacing={0} className={classNames ?? ""} style={{ width: "100%" }}>
-            <thead>
-                <tr>
-                    {tHead?.map((head: string, index: number) => (
-                        <th key={index}>{head}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {tBody?.length > 0 &&
-                    tBody?.map((row: ITableRow, index: number) => (
-                        <tr key={index}>
-                            {Object.keys(row).map((key: string, rowIndex: number) => (
-                                <td key={rowIndex}>
-                                    {key === "lastMessage" ? (
-                                        <pre>
-                                            <code>{row[key]}</code>
-                                        </pre>
-                                    ) : typeof row[key] === "boolean" ? (
-                                        row[key] ? (
-                                            <input type="checkbox" checked disabled />
+        <div className="table-wrapper">
+            <table cellSpacing={0} className={classNames ?? ""}>
+                <thead>
+                    <tr>
+                        {tHead?.map((head: string, index: number) => (
+                            <th key={index}>{head}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {tBody?.length > 0 &&
+                        tBody?.map((row: ITableRow, index: number) => (
+                            <tr key={index}>
+                                {Object.keys(row).map((key: string, rowIndex: number) => (
+                                    <td key={rowIndex}>
+                                        {key === "lastMessage" ? (
+                                            <pre>
+                                                <code>{row[key]}</code>
+                                            </pre>
+                                        ) : typeof row[key] === "boolean" ? (
+                                            row[key] ? (
+                                                <input type="checkbox" checked disabled />
+                                            ) : (
+                                                <input type="checkbox" disabled />
+                                            )
                                         ) : (
-                                            <input type="checkbox" disabled />
-                                        )
-                                    ) : (
-                                        row[key]
-                                    )}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-            </tbody>
-        </table>
+                                            row[key]
+                                        )}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                </tbody>
+            </table>
+        </div>
     );
 }
 Table.defaultProps = {
