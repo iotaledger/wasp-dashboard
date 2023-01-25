@@ -88,6 +88,10 @@
       overflow: hidden;
       border-radius: $spacing-small;
       background-color: var(--panel-background-highlight);
+
+      h4 { 
+        margin-bottom:16px;
+      }
     }
   }
 }
