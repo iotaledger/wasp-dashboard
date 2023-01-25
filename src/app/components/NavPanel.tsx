@@ -40,8 +40,8 @@ function NavPanel(props: NavPanelProps) {
             <div className="nav-panel-middle">
                 {props.middle.map(b => {
                     if (b.hidden) {
-return null;
-}
+                        return null;
+                    }
 
                     const routeMatches =
                         b.route === location.pathname ||

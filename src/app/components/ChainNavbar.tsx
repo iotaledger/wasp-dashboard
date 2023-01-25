@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { ServiceFactory, WaspClientService } from "../../lib";
+import { ServiceFactory } from "../../lib";
+import { ChainsService } from "../../lib/classes/services/chainsService";
 import { Tab, TabGroup } from "./index";
 
 interface ChainNavbarProps {
@@ -15,6 +16,8 @@ interface ChainNavbarProps {
  * @returns The node to render.
  */
 export default function ChainNavbar({ chainID, block }: ChainNavbarProps) {
+    const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
+
     const [latestBlock, setLatestBLock] = useState(block);
 
     const chainURL = `/chains/${chainID}`;
@@ -24,13 +27,10 @@ export default function ChainNavbar({ chainID, block }: ChainNavbarProps) {
             return;
         }
 
-        const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
-
-        waspClientService
-            .corecontracts()
-            .blocklogGetLatestBlockInfo({ chainID })
+        chainsService
+            .getLatestBlock(chainID)
             .then(newLatestBlock => {
-                if (newLatestBlock.blockIndex) {
+                if (newLatestBlock) {
                     setLatestBLock(newLatestBlock.blockIndex);
                 }
             })

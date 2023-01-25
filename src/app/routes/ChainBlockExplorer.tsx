@@ -2,13 +2,8 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Route.scss";
-import {
-    WaspClientService,
-    ServiceFactory,
-    BlockInfoResponse,
-    RequestReceiptResponse,
-    EventsResponse,
-} from "../../lib";
+import { ServiceFactory } from "../../lib";
+import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
 import { Breadcrumb, InfoBox, KeyValueRow, Tile } from "../components";
 import ChainNavbar from "../components/ChainNavbar";
 
@@ -17,10 +12,10 @@ import ChainNavbar from "../components/ChainNavbar";
  * @returns The node to render.
  */
 function ChainBlockExplorer() {
-    const [blockInfo, setBlockInfo] = useState<BlockInfoResponse | null>(null);
-    const [blockRequests, setBlockRequests] = useState<RequestReceiptResponse[]>([]);
+    const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
+
+    const [blockData, setBlockData] = useState<BlockData | null>(null);
     const [latestBlock, setLatestBlock] = useState<number>();
-    const [blockEvents, setBlockEvents] = useState<EventsResponse | null>(null);
     const { chainID, blockID } = useParams();
 
     const blockIndex = Number(blockID);
@@ -36,55 +31,30 @@ function ChainBlockExplorer() {
         if (!chainID) {
             return;
         }
-        const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .corecontracts()
-            .blocklogGetBlockInfo({ chainID, blockIndex })
-            .then(newBlockInfo => {
-                setBlockInfo(newBlockInfo);
-            })
-            .catch(() => {
-                setBlockInfo(null);
-            });
-
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .corecontracts()
-            .blocklogGetRequestReceiptsOfBlock({ chainID, blockIndex })
-            .then(async newBlockReceipts => {
-                if (newBlockReceipts.receipts) {
-                    setBlockRequests(newBlockReceipts.receipts);
+        chainsService
+            .getBlock(chainID, blockIndex)
+            .then(newBlockData => {
+                if (newBlockData) {
+                    setBlockData(newBlockData);
                 }
             })
-            .catch(() => {
-                setBlockRequests([]);
+            .catch(e => {
+                console.error(e);
+                setBlockData(null);
             });
 
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .corecontracts()
-            .blocklogGetLatestBlockInfo({ chainID })
+        chainsService
+            .getLatestBlock(chainID)
             .then(newLatestBlock => {
-                if (newLatestBlock.blockIndex) {
+                if (newLatestBlock) {
                     setLatestBlock(newLatestBlock.blockIndex);
                 }
             })
-            .catch(() => {
-                setLatestBlock(0);
-            });
-
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .corecontracts()
-            .blocklogGetEventsOfBlock({ chainID, blockIndex })
-            .then(events => {
-                setBlockEvents(events);
-            });
+            .catch(() => setLatestBlock(0));
     }, [blockID]);
 
-    const info = blockInfo ? Object.entries(blockInfo).filter(([k]) => BLOCK_DATA_VALUES.has(k)) : null;
+    const info = blockData?.info ? Object.entries(blockData.info).filter(([k]) => BLOCK_DATA_VALUES.has(k)) : null;
 
     const previousBlock = blockIndex - 1;
 
@@ -121,7 +91,7 @@ function ChainBlockExplorer() {
                         <h2>Requests</h2>
                     </div>
                     <div className="content">
-                        {blockRequests.map((receipt, index) => {
+                        {blockData?.requests.map((receipt, index) => {
                             const params = receipt?.request?.params?.items;
                             const senderAccount = receipt.request?.senderAccount;
                             const attachedBaseTokens = receipt?.request?.fungibleTokens?.baseTokens;
@@ -171,10 +141,10 @@ function ChainBlockExplorer() {
                     </div>
                     <div className="content">
                         <InfoBox title="Events">
-                            {blockEvents?.events?.length === 0 ? (
+                            {blockData?.events?.length === 0 ? (
                                 <Tile primaryText="No events found." />
                             ) : (
-                                blockEvents?.events?.map(event => <Tile key={event} primaryText={event} />)
+                                blockData?.events?.map(event => <Tile key={event} primaryText={event} />)
                             )}
                         </InfoBox>
                     </div>
