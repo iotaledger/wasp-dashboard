@@ -76,7 +76,7 @@ function ChainBlockExplorer() {
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
-                    <ChainNavbar chainID={chainID} block={latestBlock} />
+                    <ChainNavbar chainID={chainID} block={blockIndex} />
                     <div className="middle row">
                         <h2>Block {blockID}</h2>
                     </div>
