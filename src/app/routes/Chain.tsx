@@ -12,11 +12,11 @@ import {
     ServiceFactory,
     BlockInfoResponse,
 } from "../../lib";
+import { ChainsService } from "../../lib/classes/services/chainsService";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
 import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
-import Tab from "../components/Tab";
-import TabGroup from "../components/TabGroup";
+import ChainNavbar from "../components/ChainNavbar";
 
 interface ConsensusMetric {
     status: string;
@@ -46,6 +46,7 @@ const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
  */
 function Chain() {
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+    const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
 
     const [chainInfo, setChainInfo] = useState<ChainInfoResponse | null>(null);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
@@ -106,12 +107,11 @@ function Chain() {
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .corecontracts()
-            .blocklogGetLatestBlockInfo({ chainID })
-            .then(newLatestBlock => {
+        chainsService.getLatestBlock(chainID).then(newLatestBlock => {
+            if (newLatestBlock) {
                 setChainLatestBlock(newLatestBlock);
-            });
+            }
+        });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
@@ -165,12 +165,7 @@ function Chain() {
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
-                    <TabGroup>
-                        <Tab to={`${chainURL}`} label="Info" />
-                        <Tab to={`${chainURL}/accounts`} label="Accounts" />
-                        <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
-                        <Tab to={`${chainURL}/blocks/${chainLatestBlock?.blockIndex}`} label="Block explorer" />
-                    </TabGroup>
+                    <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
                     <InfoBox title="Info">
                         {chainProperties
                             .filter(([key]) => !INFO_SKIP_NAMES.has(key))

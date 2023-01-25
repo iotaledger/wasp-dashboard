@@ -13,10 +13,8 @@ import {
     ServiceFactory,
     AuthService,
     EventAggregator,
-    LocalStorageService,
     MetricsService,
     SettingsService,
-    WaspClientService,
     BrandHelper,
 } from "../lib/classes";
 import { isNodeOnline } from "../lib/utils";
@@ -37,16 +35,6 @@ class App extends Component<object, AppState> {
      * The auth service.
      */
     private readonly _authService: AuthService;
-
-    /**
-     * The wasp client service.
-     */
-    private readonly _waspClientService: WaspClientService;
-
-    /**
-     * The storage service.
-     */
-    private readonly _storageService: LocalStorageService;
 
     /**
      * The metrics service.
@@ -102,8 +90,6 @@ class App extends Component<object, AppState> {
         this._settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
         this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
         this._metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
-        this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
-        this._waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
         this._lastStatus = 0;
 
         this.state = {
@@ -235,6 +221,7 @@ class App extends Component<object, AppState> {
                 label: "Home",
                 icon: <HomeIcon />,
                 route: "/",
+                extraMatchingRoutes: ["/chains"],
                 hidden: !this.state.isLoggedIn,
             },
             {

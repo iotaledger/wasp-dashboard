@@ -38,33 +38,44 @@ function NavPanel(props: NavPanelProps) {
             </Link>
 
             <div className="nav-panel-middle">
-                {props.middle.map(b => (
-                    <React.Fragment key={b.label}>
-                        {!b.hidden && b.route && (
-                            <Link
-                                to={b.route}
-                                className={classNames("nav-panel-button", {
-                                    "nav-panel-button-selected":
-                                        (b.route.length > 1 && location.pathname.startsWith(b.route)) ||
-                                        b.route === location.pathname,
-                                })}
-                            >
-                                {b.icon}
-                                <span className="nav-panel-button-label">{b.label}</span>
-                            </Link>
-                        )}
-                        {!b.hidden && b.function && (
-                            <button
-                                type="button"
-                                onClick={() => b.function?.()}
-                                className={classNames("nav-panel-button")}
-                            >
-                                {b.icon}
-                                <span className="nav-panel-button-label">{b.label}</span>
-                            </button>
-                        )}
-                    </React.Fragment>
-                ))}
+                {props.middle.map(b => {
+                    if (b.hidden) {
+                        return null;
+                    }
+
+                    const routeMatches =
+                        b.route === location.pathname ||
+                        (b.route ? b.route?.length > 1 && location.pathname.startsWith(b.route) : false);
+                    const extraRoutesMatch = b.extraMatchingRoutes?.some(route =>
+                        location.pathname.startsWith(route),
+                    );
+
+                    return (
+                        <React.Fragment key={b.label}>
+                            {b.route && (
+                                <Link
+                                    to={b.route}
+                                    className={classNames("nav-panel-button", {
+                                        "nav-panel-button-selected": routeMatches || extraRoutesMatch,
+                                    })}
+                                >
+                                    {b.icon}
+                                    <span className="nav-panel-button-label">{b.label}</span>
+                                </Link>
+                            )}
+                            {b.function && (
+                                <button
+                                    type="button"
+                                    onClick={() => b.function?.()}
+                                    className={classNames("nav-panel-button")}
+                                >
+                                    {b.icon}
+                                    <span className="nav-panel-button-label">{b.label}</span>
+                                </button>
+                            )}
+                        </React.Fragment>
+                    );
+                })}
             </div>
 
             <div className="nav-panel-end">

@@ -1,4 +1,4 @@
-import { WaspClientService, SessionStorageService, ServiceFactory } from "../../classes";
+import { WaspClientService, ServiceFactory } from "../../classes";
 import { L1Params } from "../../wasp_client";
 
 /**
@@ -33,15 +33,9 @@ export class NodeConfigService {
     private readonly _bech32Hrp: string;
 
     /**
-     * The storage servie.
-     */
-    private readonly _storageService: SessionStorageService;
-
-    /**
      * Create a new instance of NodeConfigService.
      */
     constructor() {
-        this._storageService = ServiceFactory.get<SessionStorageService>(SessionStorageService.ServiceName);
         this._networkId = "";
         this._bech32Hrp = "iota";
     }
@@ -50,11 +44,6 @@ export class NodeConfigService {
      * Initialise NodeConfigService.
      */
     public async initialize(): Promise<void> {
-        this._networkId = this._storageService.load<string>("networkId");
-        this._publicKey = this._storageService.load<string>("publicKey");
-        this._version = this._storageService.load<string>("version");
-        this._l1Params = this._storageService.load<L1Params>("l1Params");
-
         if (!this._networkId || !this._version || !this._publicKey || !this._l1Params) {
             const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
@@ -125,7 +114,6 @@ export class NodeConfigService {
      */
     public setNetworkId(networkId: string): void {
         this._networkId = networkId;
-        this._storageService.save<string>("networkId", this._networkId);
     }
 
     /**
@@ -134,7 +122,6 @@ export class NodeConfigService {
      */
     public setVersion(version: string): void {
         this._version = version;
-        this._storageService.save<string>("version", this._version);
     }
 
     /**
@@ -143,7 +130,6 @@ export class NodeConfigService {
      */
     public setPublicKey(publicKey: string): void {
         this._publicKey = publicKey;
-        this._storageService.save<string>("publicKey", this._publicKey);
     }
 
     /**
@@ -152,6 +138,5 @@ export class NodeConfigService {
      */
     public setL1Params(params: L1Params): void {
         this._l1Params = params;
-        this._storageService.save<L1Params>("l1Params", this._l1Params);
     }
 }
