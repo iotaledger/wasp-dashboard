@@ -2,14 +2,14 @@
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
 
-.l1 {
+.l1-main {
   display: flex;
   flex: 1;
   justify-content: center;
-  padding: 60px;
+  padding: 60px 60px 60px 180px;
   font-family: $font-sans;
 
-  @include desktop-down {
+  @include tablet-down {
     padding: $spacing-small;
   }
 
