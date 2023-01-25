@@ -1,7 +1,6 @@
 /* eslint-disable jsdoc/require-param */
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ReactComponent as ChevronRight } from "../../assets/chevron-right.svg";
 import "./Breadcrumb.scss";
 
 interface BreadcrumbProps {
@@ -30,12 +29,12 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
 
                 return (
                     <Link
-                        className={`${isActive ? "active-path" : ""} nav-link margin-r-t margin-b-m`}
+                        className={`${isActive ? "active-path" : ""} nav-link margin-r-t`}
                         to={breadcrumb.goTo}
                         key={index}
                     >
                         <span className={isLast ? "last-item" : ""}>{breadcrumb.text}</span>
-                        {!isLast && <ChevronRight />}
+                        {!isLast && "/"}
                     </Link>
                 );
             })}
