@@ -144,7 +144,7 @@ function Home() {
                         }
                     >
                         <div className="sized-container scrollbar-secondary">
-                            <PeersList peers={[...peersList, ...peersList, ...peersList, ...peersList]} detailedList />
+                            <PeersList peers={peersList} detailedList />
                         </div>
                     </InfoBox>
                     {showAddPeerDialog && <AddPeerDialog onClose={closeAddPeerDialog} onSuccess={closeAddPeerDialog} />}

@@ -6,6 +6,7 @@ interface TabProps {
     to: string;
     label: string;
     extraMatchingRoutes?: string[];
+    exact?: boolean;
 }
 
 /**
@@ -13,12 +14,13 @@ interface TabProps {
  * @param props Tab props.
  * @param props.to Location to go to.
  * @param props.label The location label.
+ * @param props.exact If the route match must be exact or not.
  * @param props.extraMatchingRoutes Extra routes to mark this tab as active.
  * @returns The node to render.
  */
-const Tab: React.FC<TabProps> = ({ to, label, extraMatchingRoutes }) => {
+const Tab: React.FC<TabProps> = ({ exact, to, label, extraMatchingRoutes }) => {
     const location = useLocation();
-    const isActive = to === location.pathname;
+    const isActive = exact ? to === location.pathname : location.pathname.startsWith(to);
     const extraRoutesMatch = extraMatchingRoutes?.some(route => location.pathname.startsWith(route));
 
     return (
@@ -31,6 +33,7 @@ const Tab: React.FC<TabProps> = ({ to, label, extraMatchingRoutes }) => {
 };
 
 Tab.defaultProps = {
+    exact: false,
     extraMatchingRoutes: [],
 };
 

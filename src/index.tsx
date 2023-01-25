@@ -13,12 +13,12 @@ import {
     MetricsService,
     NodeConfigService,
     PeersService,
-    SessionStorageService,
     SettingsService,
     WaspClientService,
     WebSocketService,
     BrandHelper,
 } from "./lib/classes";
+import { ChainsService } from "./lib/classes/services/chainsService";
 import { IBrandConfiguration } from "./lib/interfaces";
 
 initServices()
@@ -44,7 +44,6 @@ initServices()
  */
 async function initServices(): Promise<IBrandConfiguration | undefined> {
     ServiceFactory.register(LocalStorageService.ServiceName, () => new LocalStorageService());
-    ServiceFactory.register(SessionStorageService.ServiceName, () => new SessionStorageService());
     ServiceFactory.register(WaspClientService.ServiceName, () => new WaspClientService());
 
     const settingsService = new SettingsService();
@@ -68,6 +67,10 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
     const peersService = new PeersService();
     ServiceFactory.register(PeersService.ServiceName, () => peersService);
     peersService.initialize();
+
+    const chainsService = new ChainsService();
+    ServiceFactory.register(ChainsService.ServiceName, () => chainsService);
+    chainsService.initialize();
 
     EventAggregator.subscribe("auth-state", "init", async () => {
         webSocketService.resubscribe();

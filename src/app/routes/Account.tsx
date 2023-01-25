@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ServiceFactory, WaspClientService, AssetsResponse } from "../../lib";
 import "./Route.scss";
-import { Breadcrumb, InfoBox, KeyValueRow } from "../components";
+import { Breadcrumb, ChainNavbar, InfoBox, KeyValueRow } from "../components";
 
 /**
  * Account panel.
@@ -11,10 +11,14 @@ import { Breadcrumb, InfoBox, KeyValueRow } from "../components";
 function Account() {
     const [accountBalance, setAccountBalance] = useState<AssetsResponse | null>(null);
     const { chainID, accountID } = useParams();
+
+    const chainURL = `/chains/${chainID}`;
     const blockBreadcrumbs = [
-        { goTo: `/chains/${chainID}`, text: `Chain ${chainID}` },
-        { goTo: `/chains/${chainID}/accounts/${accountID}`, text: `Account ${accountID}` },
+        { goTo: "/", text: "Home" },
+        { goTo: chainURL, text: `Chain ${chainID}` },
+        { goTo: `${chainURL}/accounts/${accountID}`, text: `Account ${accountID}` },
     ];
+
     React.useEffect(() => {
         if (!accountID || !chainID) {
             return;
@@ -39,6 +43,7 @@ function Account() {
                     <h2>Account {accountID}</h2>
                 </div>
                 <div className="content">
+                    <ChainNavbar chainID={chainID} />
                     <InfoBox title="Info">
                         <KeyValueRow keyText="Base Tokens" value={accountBalance?.baseTokens} />
                     </InfoBox>
