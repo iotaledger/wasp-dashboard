@@ -35,7 +35,6 @@ function ChainBlockExplorer() {
         chainsService
             .getBlock(chainID, blockIndex)
             .then(newBlockData => {
-                console.log(newBlockData);
                 if (newBlockData) {
                     setBlockData(newBlockData);
                 }
