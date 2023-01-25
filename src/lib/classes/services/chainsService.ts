@@ -115,8 +115,6 @@ export class ChainsService {
                 .catch(console.error),
         ]);
 
-        console.log(block);
-
         this._cachedChains[chainID].blocks[blockIndex] = block;
         this.save();
 
