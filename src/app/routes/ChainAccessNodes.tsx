@@ -33,6 +33,7 @@ function ChainAccessNodes() {
     const chainBreadcrumbs = [
         { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
+        { goTo: `${chainURL}/access-nodes`, text: "Access Nodes" },
     ];
 
     React.useEffect(() => {
