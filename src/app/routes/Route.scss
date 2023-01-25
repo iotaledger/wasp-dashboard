@@ -26,15 +26,6 @@
     }
   }
 
-  &.large {
-    padding: 40px;
-
-    .main-wrapper {
-      max-width: $large-content-width-desktop;
-    }
-  }
-
-
   .grid-wrapper {
     display: grid;
     grid-gap: 16px;
