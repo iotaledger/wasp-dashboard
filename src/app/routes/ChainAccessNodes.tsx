@@ -10,11 +10,9 @@ import {
     PeersService,
     EventAggregator,
 } from "../../lib";
-import { ChainsService } from "../../lib/classes/services/chainsService";
 import { Breadcrumb, InfoBox, Tile } from "../components";
+import ChainNavbar from "../components/ChainNavbar";
 import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
-import Tab from "../components/Tab";
-import TabGroup from "../components/TabGroup";
 
 /**
  * ChainAccessNodes panel.
@@ -22,10 +20,8 @@ import TabGroup from "../components/TabGroup";
  */
 function ChainAccessNodes() {
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
-    const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
     const peersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
-    const [latestBlock, setLatestBlock] = useState<number>();
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
     const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -43,15 +39,6 @@ function ChainAccessNodes() {
         if (!chainID) {
             return;
         }
-
-        chainsService
-            .getLatestBlock(chainID)
-            .then(newLatestBlock => {
-                if (newLatestBlock) {
-                    setLatestBlock(newLatestBlock.blockIndex);
-                }
-            })
-            .catch(() => setLatestBlock(0));
 
         loadCommitteeInfo();
 
@@ -146,12 +133,7 @@ function ChainAccessNodes() {
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
-                    <TabGroup>
-                        <Tab to={`${chainURL}`} label="Info" />
-                        <Tab to={`${chainURL}/accounts`} label="Accounts" />
-                        <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
-                        <Tab to={`${chainURL}/blocks/${latestBlock}`} label="Block explorer" />
-                    </TabGroup>
+                    <ChainNavbar chainID={chainID} />
                     <InfoBox
                         title="Access nodes"
                         titleWithIcon={true}

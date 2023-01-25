@@ -5,8 +5,7 @@ import "./Route.scss";
 import { ServiceFactory } from "../../lib";
 import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
 import { Breadcrumb, InfoBox, KeyValueRow, Tile } from "../components";
-import Tab from "../components/Tab";
-import TabGroup from "../components/TabGroup";
+import ChainNavbar from "../components/ChainNavbar";
 
 /**
  * ChainBlockExplorer panel.
@@ -78,12 +77,7 @@ function ChainBlockExplorer() {
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
-                    <TabGroup>
-                        <Tab to={`${chainURL}`} label="Info" />
-                        <Tab to={`${chainURL}/accounts`} label="Accounts" />
-                        <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
-                        <Tab to={`${chainURL}/blocks/${blockID}`} label="Block explorer" />
-                    </TabGroup>
+                    <ChainNavbar chainID={chainID} block={latestBlock} />
                     <div className="middle row">
                         <h2>Block {blockID}</h2>
                     </div>
