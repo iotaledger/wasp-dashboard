@@ -1,5 +1,6 @@
 @use "../../scss/fonts" as *;
 @use "../../scss/variables" as *;
+@use "../../scss/media-queries" as *;
 
 .info-item {
     display: flex;
@@ -10,12 +11,18 @@
     span {
         margin-right: 10px;
         color: var(--text-color-secondary);
-        @include font-size(14px);
         font-family: $font-mono;
+        @include font-size(14px);
+
+        @include phone-down {
+            font-size: 13px;
+        }
+
         &.value {
           color: var(--text-color-primary);
         }
     }
+
     a {
         span {
             color: var(--accent-primary);

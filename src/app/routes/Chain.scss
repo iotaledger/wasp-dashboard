@@ -18,13 +18,25 @@
   display: flex;
   flex-direction: column;
 
-  div {
+  .access-nodes-item {
     display: flex;
     align-items: center;
-    margin-bottom: 6px;
+    width: 100%;
+    margin-bottom: 16px;
+    align-items: flex-start;
     
     input {
+      margin-top: 3px;
       margin-right: 6px;
+
+      @include phone-down {
+        margin-top: 4px;
+      }
+    }
+
+    label {
+      flex:1;
+      word-break: break-all;
     }
   }
 }

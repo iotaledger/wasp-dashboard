@@ -49,6 +49,10 @@
   .summary {
     padding: 16px;
 
+    @include tablet-down {
+      padding: 6px;
+    }
+
     .nav-link {
       color: var(--text-color-secondary);
       text-decoration: none;

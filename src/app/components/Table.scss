@@ -11,6 +11,8 @@
   @include tablet-down {
     display: block;
     max-width: calc(100vw - 90px);
+
+    @include font-size(13px);
   }
 
   table {
