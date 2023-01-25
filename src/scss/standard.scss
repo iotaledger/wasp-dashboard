@@ -156,6 +156,7 @@ table {
 }
 
 .action-button {
+    padding: 6px;
     border: 0;
     outline: 0;
     background: none;
@@ -167,10 +168,8 @@ table {
     }
 
     &.action-button-danger {
-        color: transparentize($danger, 0.2);
-
         &:hover {
-            color: $danger;
+            color: transparentize($danger, 0.4);
       }
     }
   }
