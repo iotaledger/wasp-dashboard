@@ -68,10 +68,6 @@
         opacity: 0.4;
       }
     }
-
-    h4 {
-      margin-bottom: 20px;
-    }
   }
 
   .info-content {
@@ -130,4 +126,9 @@
   &:focus {
     box-shadow: 0 0 3px 0 var(--accent-primary);
   }
+}
+
+.sized-container {
+  overflow: auto;
+  max-height: 400px;
 }
