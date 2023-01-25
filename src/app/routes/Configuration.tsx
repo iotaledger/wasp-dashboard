@@ -72,7 +72,7 @@ function Configuration() {
                 <div className="content">
                     <div className="margin-t-s">
                         {newConfigArrayBasedOnKeys && (
-                            <div className="main-wrapper">
+                            <div className="grid-wrapper">
                                 {newConfigArrayBasedOnKeys.map((item, index) => {
                                     const key = Object.keys(item)[0];
                                     const value = Object.values(item)[0] as any;

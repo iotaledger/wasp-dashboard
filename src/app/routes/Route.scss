@@ -35,6 +35,22 @@
   }
 
 
+  .grid-wrapper {
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+
+    @include desktop-down {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+      margin-bottom: 0;
+    }
+
+  }
+
   .card {
     margin-bottom: 16px;
   }
@@ -53,10 +69,6 @@
       &.disabled {
         opacity: 0.4;
       }
-    }
-
-    h4 {
-      margin-bottom: 20px;
     }
   }
 
@@ -116,4 +128,9 @@
   &:focus {
     box-shadow: 0 0 3px 0 var(--accent-primary);
   }
+}
+
+.sized-container {
+  overflow: auto;
+  max-height: 400px;
 }

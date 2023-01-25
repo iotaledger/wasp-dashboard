@@ -55,3 +55,17 @@ body {
     border-radius: 0;
     background-color: var(--scroll-thumb);
 }
+
+.scrollbar-secondary {
+    &::-webkit-scrollbar-track, 
+    ::-webkit-scrollbar-track,
+    &::-webkit-scrollbar,
+    ::-webkit-scrollbar {
+        background-color: var(--scroll-background-secondary);
+    }
+
+    &::-webkit-scrollbar-thumb,
+    ::-webkit-scrollbar-thumb {
+        background-color: var(--scroll-thumb-secondary);
+    }
+}
