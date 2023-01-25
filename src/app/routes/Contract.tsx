@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { WaspClientService, ContractInfoResponse, ServiceFactory, EventsResponse } from "../../lib";
 import "./Route.scss";
-import { KeyValueRow, InfoBox, Breadcrumb, Tile } from "../components";
-import ChainNavbar from "../components/ChainNavbar";
-
+import { KeyValueRow, InfoBox, Breadcrumb, Tile, ChainNavbar } from "../components";
 /**
  * Contract panel.
  * @returns The node to render.

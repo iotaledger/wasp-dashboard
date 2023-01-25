@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ServiceFactory, WaspClientService } from "../../lib";
-import Tab from "./Tab";
-import TabGroup from "./TabGroup";
+import { Tab, TabGroup } from "./index";
 
 interface ChainNavbarProps {
     chainID?: string;
