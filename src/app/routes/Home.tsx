@@ -120,7 +120,7 @@ function Home() {
                 </div>
                 <div className="row fill margin-t-s desktop-down-column">
                     <InfoBox title="Chains" titleClassName="title">
-                        <div className="sized-container scrollbar-secondary">
+                        <div className="sized-container">
                             {chains?.map(chain => (
                                 <Tile
                                     key={chain.chainID}
@@ -143,7 +143,7 @@ function Home() {
                             </button>
                         }
                     >
-                        <div className="sized-container scrollbar-secondary">
+                        <div className="sized-container">
                             <PeersList peers={peersList} detailedList />
                         </div>
                     </InfoBox>

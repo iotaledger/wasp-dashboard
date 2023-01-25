@@ -25,7 +25,7 @@ const Tab: React.FC<TabProps> = ({ exact, to, label, extraMatchingRoutes }) => {
 
     return (
         <Link to={to}>
-            <div className={`tab ${(isActive || extraRoutesMatch) && "tab-active"}`}>
+            <div className={`tab ${isActive || extraRoutesMatch ? "tab-active" : ""}`}>
                 <span>{label}</span>
             </div>
         </Link>

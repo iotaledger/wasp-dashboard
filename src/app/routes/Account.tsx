@@ -37,7 +37,7 @@ function Account() {
     }, [accountID]);
 
     return (
-        <div className="main large">
+        <div className="main">
             <div className="main-wrapper">
                 <Breadcrumb breadcrumbs={blockBreadcrumbs} />
                 <div className="middle row">

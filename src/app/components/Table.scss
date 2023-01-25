@@ -1,19 +1,21 @@
-
 @use "../../scss/card" as *;
 @use "../../scss/fonts" as *;
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
 
-table {
+.table-wrapper {
   max-width: $content-width-desktop;
+  overflow: hidden;
   overflow-x: auto;
-  white-space: nowrap;
+
   @include tablet-down {
     display: block;
-    max-width: 500px;
+    max-width: calc(100vw - 90px);
+
+    @include font-size(13px);
   }
 
-  @include phone-down {
-    max-width: 300px;
+  table {
+    width: 100%;
   }
 }

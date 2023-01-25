@@ -1,21 +1,35 @@
 @use "../../scss/fonts" as *;
 @use "../../scss/variables" as *;
+@use "../../scss/media-queries" as *;
 
 .info-item {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: baseline;
     margin-bottom: 4px;
 
     span {
         margin-right: 10px;
         color: var(--text-color-secondary);
-        @include font-size(14px);
         font-family: $font-mono;
+        @include font-size(14px);
+
+        @include phone-down {
+            font-size: 13px;
+        }
+
         &.value {
-          color: var(--text-color-primary);
+            max-height: 400px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            color: var(--text-color-primary);
+
+            @include tablet-down {
+                max-height: 250px;
+            }
         }
     }
+
     a {
         span {
             color: var(--accent-primary);
