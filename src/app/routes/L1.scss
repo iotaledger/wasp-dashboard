@@ -6,9 +6,9 @@
   display: flex;
   flex: 1;
   justify-content: center;
-  padding: 60px 60px 60px 180px;
+  padding: 60px 60px 60px 150px;
   font-family: $font-sans;
-
+  
   @include tablet-down {
     padding: $spacing-small;
   }
@@ -39,9 +39,15 @@
 
     @include desktop-down {
       flex-direction: column;
+      max-width: 600px;
+    }
+
+    @include tablet-down {
+      max-width: 100%;
     }
 
     .card {
+      width: 100%;
       .summary {
         width: 100%;
         min-width: 350px;
