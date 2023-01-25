@@ -235,6 +235,7 @@ class App extends Component<object, AppState> {
                 label: "Home",
                 icon: <HomeIcon />,
                 route: "/",
+                extraMatchingRoutes: ["/chains"],
                 hidden: !this.state.isLoggedIn,
             },
             {

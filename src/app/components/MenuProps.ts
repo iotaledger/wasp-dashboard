@@ -18,6 +18,10 @@ export interface MenuProps {
          */
         route?: string;
         /**
+         * Extra matching routes for the button.
+         */
+        extraMatchingRoutes?: string[];
+        /**
          * The function to trigger for the button.
          */
         function?: () => void;
