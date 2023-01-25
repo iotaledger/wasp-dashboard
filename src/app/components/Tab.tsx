@@ -20,7 +20,7 @@ const Tab: React.FC<TabProps> = ({ to, label }) => {
 
     return (
         <Link to={to}>
-            <div className={`tab ${isActive && "tab-active"}`}>
+            <div className={`tab ${isActive ? "tab-active" : ""}`}>
                 <span>{label}</span>
             </div>
         </Link>
