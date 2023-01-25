@@ -15,8 +15,7 @@ import {
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
 import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
-import Tab from "../components/Tab";
-import TabGroup from "../components/TabGroup";
+import ChainNavbar from "../components/ChainNavbar";
 
 interface ConsensusMetric {
     status: string;
@@ -165,12 +164,7 @@ function Chain() {
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
-                    <TabGroup>
-                        <Tab to={`${chainURL}`} label="Info" />
-                        <Tab to={`${chainURL}/accounts`} label="Accounts" />
-                        <Tab to={`${chainURL}/access-nodes`} label="Access nodes" />
-                        <Tab to={`${chainURL}/blocks/${chainLatestBlock?.blockIndex}`} label="Block explorer" />
-                    </TabGroup>
+                    <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
                     <InfoBox title="Info">
                         {chainProperties
                             .filter(([key]) => !INFO_SKIP_NAMES.has(key))
