@@ -45,35 +45,6 @@
         margin: $spacing-large 0;
     }
 
-    .nav-panel-button {
-        @include font-size(12px);
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        height: 50px;
-        border: 0;
-        outline: 0;
-        background: none;
-        color: var(--text-color-secondary);
-        font-family: $font-sans;
-        font-weight: bold;
-        text-decoration: none;
-        cursor: pointer;
-
-        &.nav-panel-button-selected {
-            color: var(--accent-primary);
-        }
-
-        .nav-panel-button-label {
-            margin-top: $spacing-tiny;
-        }
-
-        + .nav-panel-button {
-            margin-top: $spacing-large;
-        }
-    }
-
     &.full-width {
         width: 100%;
 

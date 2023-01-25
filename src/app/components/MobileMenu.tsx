@@ -72,7 +72,7 @@ function MobileMenu(props: MenuProps) {
                 <MenuIcon className="menu-icon" onClick={toggleMenu} />
             </div>
             {isOpen && (
-                <div className="mobile-panel-middle">
+                <div className="mobile-panel-items">
                     <div className="close-icon">
                         <CloseIcon onClick={toggleMenu} />
                     </div>
@@ -81,14 +81,14 @@ function MobileMenu(props: MenuProps) {
                             {!b.hidden && b.route && (
                                 <Link
                                     to={b.route}
-                                    className={classNames("mobile-panel-button", {
-                                        "mobile-panel-button-selected":
+                                    className={classNames("mobile-panel-item", {
+                                        "mobile-panel-item-selected":
                                             (b.route.length > 1 && location.pathname.startsWith(b.route)) ||
                                             b.route === location.pathname,
                                     })}
                                 >
                                     {b.icon}
-                                    <span className="mobile-panel-button-label" onClick={toggleMenu}>
+                                    <span className="mobile-panel-item-label" onClick={toggleMenu}>
                                         {b.label}
                                     </span>
                                 </Link>
@@ -97,10 +97,10 @@ function MobileMenu(props: MenuProps) {
                                 <button
                                     type="button"
                                     onClick={() => b.function?.()}
-                                    className={classNames("mobile-panel-button")}
+                                    className={classNames("mobile-panel-item last")}
                                 >
                                     {b.icon}
-                                    <span className="mobile-panel-button-label">{b.label}</span>
+                                    <span className="mobile-panel-item-label">{b.label}</span>
                                 </button>
                             )}
                         </React.Fragment>
