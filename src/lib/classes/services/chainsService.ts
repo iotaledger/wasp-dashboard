@@ -53,7 +53,7 @@ export class ChainsService {
      * @param chainID  The Chain ID
      * @returns The block information.
      */
-    public async getLatestBlock(chainID: string): Promise<BlockInfoResponse | undefined> {
+    public async getLatestBlock(chainID: string): Promise<BlockInfoResponse | null> {
         // Return the block if it's cached
         const savedChain = this._cachedChains[chainID];
         if (savedChain) {
@@ -72,7 +72,7 @@ export class ChainsService {
             .corecontracts()
             .blocklogGetLatestBlockInfo({ chainID })
             .then(newBlockInfo => newBlockInfo)
-            .catch(() => {});
+            .catch(() => null);
 
         if (blockInfo) {
             this._cachedChains[chainID].latestBlockInfo = blockInfo;
