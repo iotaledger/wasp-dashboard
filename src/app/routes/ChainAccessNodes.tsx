@@ -139,7 +139,7 @@ function ChainAccessNodes() {
                         title="Access nodes"
                         titleWithIcon={true}
                         icon={
-                            <button type="button" onClick={() => setIsPopupOpen(true)} className="edit-button">
+                            <button type="button" onClick={() => setIsPopupOpen(true)} className="action-button">
                                 <EditIcon />
                             </button>
                         }

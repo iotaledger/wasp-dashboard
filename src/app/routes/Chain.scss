@@ -2,18 +2,6 @@
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
 
-.edit-button {
-  border: 0;
-  outline: 0;
-  background: none;
-  color: var(--text-color-secondary);
-  cursor: pointer;
-
-  &:hover {
-    color: var(--accent-primary);
-  }
-}
-
 .access-nodes-list {
   display: flex;
   flex-direction: column;

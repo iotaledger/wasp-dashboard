@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { DeleteIcon, EditIcon } from "../../../assets";
 import { User } from "../../../lib";
 import { DeleteUserDialog, EditUserDialog } from "../../components";
 import "./UserTile.scss";
@@ -55,8 +56,26 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
     return (
         <div className="user-panel-item card">
             <div className="col user-data">
-                <h4>Username</h4>
-                <p>{user?.username}</p>
+                <div className="info-actions-data">
+                    <div>
+                        <h4>Username</h4>
+                        <p>{user?.username}</p>
+                    </div>
+                    <div className="buttons-wrapper">
+                        <button type="button" className="action-button" onClick={() => setShowEditUserDialog(true)}>
+                            <EditIcon />
+                        </button>
+                        {canBeDeleted && (
+                            <button
+                                type="button"
+                                className="action-button action-button-danger"
+                                onClick={() => setShowDeleteUserDialog(true)}
+                            >
+                                <DeleteIcon />
+                            </button>
+                        )}
+                    </div>
+                </div>
                 <div className="margin-t-s">
                     <h4>Permissions</h4>
                     <div className="permissions-wrapper">
@@ -68,20 +87,7 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
                     </div>
                 </div>
             </div>
-            <div className="buttons-wrapper">
-                <button type="button" className="edit-button" onClick={() => setShowEditUserDialog(true)}>
-                    Edit
-                </button>
-                {canBeDeleted && (
-                    <button
-                        type="button"
-                        className="delete-button card--action card--action-danger"
-                        onClick={() => setShowDeleteUserDialog(true)}
-                    >
-                        Delete
-                    </button>
-                )}
-            </div>
+
             {showDeleteUserDialog && (
                 <DeleteUserDialog
                     onClose={closeDeleteDialog}

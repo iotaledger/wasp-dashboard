@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { DeleteIcon } from "../../../assets";
 import { PeeringNodeStatusResponse, Action } from "../../../lib";
 import { DeletePeerDialog, Tile } from "../../components";
 
@@ -36,6 +37,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed }) => {
                 setShowDeleteDialog(true);
             },
             type: Action.Delete,
+            icon: <DeleteIcon />,
         },
     ];
 

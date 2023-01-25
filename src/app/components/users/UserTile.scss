@@ -5,20 +5,38 @@
 .user-panel-item {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: start;
     width: 100%;
 
     &.card {
         padding: 20px;
     }
 
-    @include desktop-down {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
     .user-data {
         width: 100%;
+
+        .info-actions-data {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .buttons-wrapper {
+            display: flex;
+            align-items: center;
+
+            button {
+                margin-left: 16px;
+
+                @include phone-down {
+                    margin-left: 8px;
+                }
+
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+        }
     }
 
     .permissions-wrapper {
@@ -29,47 +47,6 @@
         .permission-item {
             margin-right: 8px;
             color: var(--text-color-primary);
-        }
-    }
-
-    .buttons-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        @include desktop-down {
-            flex-direction: row;
-            width: 100%;
-            margin-top: 8px;
-        }
-
-        button {
-            width: 100%;
-            padding: 6px 12px;
-            border: 1px solid var(--text-color-secondary);
-            border-radius: $form-input-radius;
-            outline: 0;
-            background: var(--bar-color-2);
-            color: var(--text-color-primary);
-            font-family: $font-sans;
-            cursor: pointer;
-
-            @include desktop-down {
-                width: auto;
-            }
-
-            &:hover {
-                color: var(--accent-primary);
-            }
-
-            &.delete-button {
-                margin-top: 8px;
-
-                @include desktop-down {
-                    margin-top: 0;
-                    margin-left: 8px;
-                }
-            }
         }
     }
 }

@@ -1,6 +1,7 @@
 import "./Users.scss";
 import "./Route.scss";
 import React, { useEffect, useState } from "react";
+import { AddIcon } from "../../assets";
 import { WaspClientService, ServiceFactory, AuthService, User } from "../../lib";
 import { AddUserDialog, UsersList } from "../components";
 
@@ -70,11 +71,15 @@ const Users: React.FC = () => {
     return (
         <div className="main">
             <div className="main-wrapper">
-                <div className="row spread">
+                <div className="row spread middle">
                     <h2>Users</h2>
                     <div className="row">
-                        <button type="button" className="add-button" onClick={() => setShowAddUserDialog(true)}>
-                            Add User
+                        <button
+                            type="button"
+                            className="action-button padding-t"
+                            onClick={() => setShowAddUserDialog(true)}
+                        >
+                            <AddIcon />
                         </button>
                     </div>
                 </div>

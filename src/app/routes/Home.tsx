@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useEffect, useState } from "react";
+import { AddIcon } from "../../assets";
 import { ReactComponent as BannerCurve } from "../../assets/banner-curve.svg";
 import {
     ServiceFactory,
@@ -138,8 +139,8 @@ function Home() {
                         title="Peers"
                         titleWithIcon={true}
                         icon={
-                            <button type="button" className="add-button" onClick={() => setShowAddPeerDialog(true)}>
-                                Add Peer
+                            <button type="button" className="action-button" onClick={() => setShowAddPeerDialog(true)}>
+                                <AddIcon />
                             </button>
                         }
                     >
