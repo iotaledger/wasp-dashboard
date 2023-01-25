@@ -6,11 +6,11 @@
     flex-direction: row;
     align-items: center;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 
     @include tablet-down {
         flex-wrap: wrap;
         align-items: flex-start;
-        
     }
 
     .nav-link {
