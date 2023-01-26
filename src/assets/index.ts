@@ -3,3 +3,5 @@ export { ReactComponent as EyeIcon } from "./eye.svg";
 export { ReactComponent as HealthGood } from "./health-good.svg";
 export { ReactComponent as HealthWarning } from "./health-warning.svg";
 export { ReactComponent as EditIcon } from "./edit.svg";
+export { ReactComponent as MenuIcon } from "./menu.svg";
+export { ReactComponent as CloseIcon } from "./close.svg";

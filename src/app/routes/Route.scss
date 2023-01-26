@@ -7,20 +7,13 @@
   display: flex;
   flex: 1;
   justify-content: center;
-  padding: 60px;
+  padding: 60px 60px 60px 150px;
   font-family: $font-sans;
 
-  &.large {
-    padding: 40px;
-    .main-wrapper {
-      max-width: $large-content-width-desktop;
-    }
-  }
-
-  @include desktop-down {
+  @include tablet-down {
     padding: $spacing-small;
   }
-
+ 
   .main-wrapper {
     display: flex;
     flex: 1;
@@ -56,9 +49,13 @@
   .summary {
     padding: 16px;
 
+    @include tablet-down {
+      padding: 6px;
+    }
+
     .nav-link {
-      text-decoration: none;
       color: var(--text-color-secondary);
+      text-decoration: none;
       
       &:hover{
         color: var(--text-color-primary);
@@ -94,6 +91,10 @@
       overflow: hidden;
       border-radius: $spacing-small;
       background-color: var(--panel-background-highlight);
+      
+      h4 {
+        margin-bottom: 24px;
+      }
     }
 
     span {

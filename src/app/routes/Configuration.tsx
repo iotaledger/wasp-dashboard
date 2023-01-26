@@ -70,37 +70,35 @@ function Configuration() {
             <div className="main-wrapper">
                 <h2>Configuration</h2>
                 <div className="content">
-                    <div className="margin-t-s">
-                        {newConfigArrayBasedOnKeys && (
-                            <div className="grid-wrapper">
-                                {newConfigArrayBasedOnKeys.map((item, index) => {
-                                    const key = Object.keys(item)[0];
-                                    const value = Object.values(item)[0] as any;
-                                    return (
-                                        <InfoBox title={key} key={index}>
-                                            {Object.entries(value).map(([keyVal, val], valueIndex) =>
-                                                (typeof val === "boolean" ? (
-                                                    val ? (
-                                                        <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
-                                                    ) : (
-                                                        <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
-                                                    )
-                                                ) : (typeof val === "string" ? (
+                    {newConfigArrayBasedOnKeys && (
+                        <div className="grid-wrapper">
+                            {newConfigArrayBasedOnKeys.map((item, index) => {
+                                const key = Object.keys(item)[0];
+                                const value = Object.values(item)[0] as any;
+                                return (
+                                    <InfoBox title={key} key={index}>
+                                        {Object.entries(value).map(([keyVal, val], valueIndex) =>
+                                            (typeof val === "boolean" ? (
+                                                val ? (
                                                     <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
                                                 ) : (
-                                                    <KeyValueRow
-                                                        key={valueIndex}
-                                                        keyText={keyVal}
-                                                        value={JSON.stringify(val)}
-                                                    />
-                                                ))),
-                                            )}
-                                        </InfoBox>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </div>
+                                                    <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
+                                                )
+                                            ) : (typeof val === "string" ? (
+                                                <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
+                                            ) : (
+                                                <KeyValueRow
+                                                    key={valueIndex}
+                                                    keyText={keyVal}
+                                                    value={JSON.stringify(val)}
+                                                />
+                                            ))),
+                                        )}
+                                    </InfoBox>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

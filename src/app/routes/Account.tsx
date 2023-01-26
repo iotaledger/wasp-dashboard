@@ -16,6 +16,7 @@ function Account() {
     const blockBreadcrumbs = [
         { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
+        { goTo: `${chainURL}/accounts`, text: "Accounts" },
         { goTo: `${chainURL}/accounts/${accountID}`, text: `Account ${accountID}` },
     ];
 
@@ -36,7 +37,7 @@ function Account() {
     }, [accountID]);
 
     return (
-        <div className="main large">
+        <div className="main">
             <div className="main-wrapper">
                 <Breadcrumb breadcrumbs={blockBreadcrumbs} />
                 <div className="middle row">

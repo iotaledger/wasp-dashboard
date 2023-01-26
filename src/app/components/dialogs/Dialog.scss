@@ -3,7 +3,7 @@
 @use "../../../scss/variables" as *;
 
 .dialog-click-shield {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
@@ -11,6 +11,7 @@
     opacity: 0.2;
     background: var(--dialog-shield);
     z-index: 1;
+    height: 100%;
 }
 
 .dialog-container {
@@ -23,6 +24,7 @@
     align-items: center;
     justify-content: center;
     z-index: 1;
+    height: 100%;
     
 
     .dialog {
@@ -42,7 +44,8 @@
         }
 
         @include tablet-down {
-            min-width: 90%;
+            min-width: 80%;
+            max-width: 90%;
         }
 
         .dialog-header {

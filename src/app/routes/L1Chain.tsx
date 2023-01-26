@@ -50,7 +50,7 @@ function L1Chain() {
     }, []);
 
     return (
-        <div className="l1">
+        <div className="l1-main">
             <div className="l1-wrapper">
                 <Breadcrumb breadcrumbs={l1ChainBreadcrumbs} />
                 <div className="l1-header middle row">

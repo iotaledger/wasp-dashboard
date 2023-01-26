@@ -2,14 +2,14 @@
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
 
-.l1 {
+.l1-main {
   display: flex;
   flex: 1;
   justify-content: center;
-  padding: 60px;
+  padding: 60px 60px 60px 150px;
   font-family: $font-sans;
-
-  @include desktop-down {
+  
+  @include tablet-down {
     padding: $spacing-small;
   }
 
@@ -39,9 +39,15 @@
 
     @include desktop-down {
       flex-direction: column;
+      max-width: 600px;
+    }
+
+    @include tablet-down {
+      max-width: 100%;
     }
 
     .card {
+      width: 100%;
       .summary {
         width: 100%;
         min-width: 350px;
@@ -82,6 +88,10 @@
       overflow: hidden;
       border-radius: $spacing-small;
       background-color: var(--panel-background-highlight);
+
+      h4 { 
+        margin-bottom: 24px;
+      }
     }
   }
 }

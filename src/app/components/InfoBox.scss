@@ -1,4 +1,9 @@
+@use "../../scss/media-queries" as *;
+
 .summary {
   padding: 16px;
 
+  @include tablet-down {
+    padding: 7px;
+  }
 }

@@ -19,7 +19,7 @@ import {
 } from "../lib/classes";
 import { isNodeOnline } from "../lib/utils";
 import { AppState } from "./AppState";
-import { Breakpoint, NavPanel } from "./components";
+import { Breakpoint, DesktopMenu, MobileMenu } from "./components";
 import RoutesSwitcher from "./routes/RoutesSwitcher";
 
 /**
@@ -273,8 +273,15 @@ class App extends Component<object, AppState> {
 
         return (
             <div className="app">
-                <Breakpoint size="phone" aboveBelow="above">
-                    <NavPanel
+                <Breakpoint size="tablet" aboveBelow="above">
+                    <DesktopMenu
+                        fullWidth={false}
+                        middle={this.state.online ? sections : []}
+                        end={this.state.online ? endSections : []}
+                    />
+                </Breakpoint>
+                <Breakpoint size="tablet" aboveBelow="below">
+                    <MobileMenu
                         fullWidth={false}
                         middle={this.state.online ? sections : []}
                         end={this.state.online ? endSections : []}

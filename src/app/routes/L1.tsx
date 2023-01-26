@@ -71,7 +71,7 @@ function L1() {
     }, []);
 
     return (
-        <div className="l1">
+        <div className="l1-main">
             <div className="l1-wrapper">
                 <h2>L1</h2>
                 <div className="content">

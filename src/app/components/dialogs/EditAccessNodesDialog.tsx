@@ -57,7 +57,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({ onClose, onSu
                         setCheckedNodes([...checkedNodes]);
                     };
                     return (
-                        <div key={node.publicKey}>
+                        <div className="access-nodes-item" key={node.publicKey}>
                             <input id={node.publicKey} type="checkbox" checked={isChecked} onChange={onChecked} />
                             <label htmlFor={node.publicKey}>{node.publicKey}</label>
                         </div>
