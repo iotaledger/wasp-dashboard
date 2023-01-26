@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Route.scss";
+import { ChevronLeftIcon, ChevronRightIcon } from "../../assets";
 import { ServiceFactory } from "../../lib";
 import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
 import { Breadcrumb, InfoBox, KeyValueRow, Tile } from "../components";
@@ -16,9 +17,12 @@ function ChainBlockExplorer() {
 
     const [blockData, setBlockData] = useState<BlockData | null>(null);
     const [latestBlock, setLatestBlock] = useState<number>();
-    const { chainID, blockID } = useParams();
+    const [rangeOfBlocks, setRangeOfBlocks] = useState<number[]>([]);
 
+    const { chainID, blockID } = useParams();
     const blockIndex = Number(blockID);
+
+    const [selectedRange, setSelectedRange] = useState(blockIndex);
     const chainURL = `/chains/${chainID}`;
 
     const chainBreadcrumbs = [
@@ -53,6 +57,32 @@ function ChainBlockExplorer() {
             })
             .catch(() => setLatestBlock(0));
     }, [blockID]);
+
+    React.useEffect(() => {
+        if (!latestBlock) {
+            return;
+        }
+        setRangeOfBlocks(rangeBlocks(0, latestBlock));
+    }, [latestBlock]);
+
+    React.useEffect(() => {
+        // update block data when range changes
+        if (!chainID) {
+            return;
+        }
+
+        chainsService
+            .getBlock(chainID, selectedRange)
+            .then(newBlockData => {
+                if (newBlockData) {
+                    setBlockData(newBlockData);
+                }
+            })
+            .catch(e => {
+                console.error(e);
+                setBlockData(null);
+            });
+    }, [selectedRange]);
 
     const info = blockData?.info ? Object.entries(blockData.info).filter(([k]) => BLOCK_DATA_VALUES.has(k)) : null;
 
@@ -148,21 +178,53 @@ function ChainBlockExplorer() {
                             )}
                         </InfoBox>
                     </div>
+
                     <div className="card fill">
-                        <div className="summary row spread-centered">
-                            <BlockLink chainID={chainID} disabled={blockIndex === 0} blockIndex={0} label="⏮️ First" />
+                        <div className="summary row spread-centered middle">
+                            <BlockLink
+                                chainID={chainID}
+                                disabled={blockIndex === 0}
+                                blockIndex={0}
+                                label="First"
+                                icon={<ChevronLeftIcon />}
+                                doubledIcon
+                                iconFirst
+                            />
                             <BlockLink
                                 chainID={chainID}
                                 disabled={previousBlock < 0}
                                 blockIndex={previousBlock}
-                                label="⬅️ Previous"
+                                label="Previous"
+                                icon={<ChevronLeftIcon />}
+                                iconFirst
                             />
-                            <BlockLink chainID={chainID} disabled={!nextBlock} blockIndex={nextBlock} label="Next ➡️" />
+                            <div className="select-wrapper row middle range-wrapper">
+                                <select
+                                    value={selectedRange}
+                                    onChange={e => setSelectedRange(Number(e.target.value))}
+                                    className=""
+                                >
+                                    {rangeOfBlocks.map(block => (
+                                        <option key={block} value={block} className="padding-t">
+                                            <Link to={`/chains/${chainID}/blocks/${block}`}>{block}</Link>
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <BlockLink
+                                chainID={chainID}
+                                disabled={!nextBlock}
+                                blockIndex={nextBlock}
+                                label="Next"
+                                icon={<ChevronRightIcon />}
+                            />
                             <BlockLink
                                 chainID={chainID}
                                 disabled={latestBlock === blockIndex}
                                 blockIndex={latestBlock}
-                                label="Latest ⏭️"
+                                label="Latest"
+                                icon={<ChevronRightIcon />}
+                                doubledIcon
                             />
                         </div>
                     </div>
@@ -175,7 +237,23 @@ function ChainBlockExplorer() {
 BlockLink.defaultProps = {
     blockIndex: 1,
     chainID: "",
+    doubledIcon: false,
+    icon: undefined,
+    iconFirst: false,
 };
+
+/**
+ *
+ * Get a range of blocks.
+ * @param first
+ * @param last
+ * @returns The range of blocks.
+ */
+function rangeBlocks(first: number, last: number) {
+    // eslint-disable-next-line unicorn/no-new-array
+    return new Array(last - first + 1).fill(0)
+.map((_, i) => first + i);
+}
 
 /**
  * A Link to navigate between blocks.
@@ -184,6 +262,9 @@ BlockLink.defaultProps = {
  * @param param0.chainID ChainID.
  * @param param0.blockIndex The destination block index.
  * @param param0.disabled Disabled or not.
+ * @param param0.icon
+ * @param param0.doubledIcon
+ * @param param0.iconFirst
  * @returns The Node to render.
  */
 function BlockLink({
@@ -191,15 +272,39 @@ function BlockLink({
     chainID,
     blockIndex,
     disabled,
+    icon,
+    doubledIcon,
+    iconFirst,
 }: {
     label: string;
     chainID?: string;
     blockIndex?: number;
     disabled: boolean;
+    icon?: React.ReactNode;
+    doubledIcon?: boolean;
+    iconFirst?: boolean;
 }) {
     return (
         <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
-            {label}
+            {/* {icon}
+            {doubledIcon && icon} {label} */}
+            {iconFirst ? (
+                <React.Fragment>
+                    <div className="first-icon">
+                        {icon}
+                        {doubledIcon && icon}
+                    </div>
+                    <span>{label}</span>
+                </React.Fragment>
+            ) : (
+                <React.Fragment>
+                    <span>{label}</span>
+                    <div>
+                        {icon}
+                        {doubledIcon && icon}
+                    </div>
+                </React.Fragment>
+            )}
         </Link>
     );
 }

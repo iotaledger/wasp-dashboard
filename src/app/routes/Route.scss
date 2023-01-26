@@ -13,7 +13,7 @@
   @include tablet-down {
     padding: $spacing-small;
   }
- 
+
   .main-wrapper {
     display: flex;
     flex: 1;
@@ -33,17 +33,23 @@
     width: 100%;
 
     @include desktop-down {
-        grid-template-columns: 1fr;
+      grid-template-columns: 1fr;
     }
 
     .card {
       margin-bottom: 0;
     }
-
   }
 
   .card {
     margin-bottom: 16px;
+
+    .range-wrapper {
+      select {
+        padding: 0 12px;
+        height: 30px;
+      }
+    }
   }
 
   .summary {
@@ -54,15 +60,36 @@
     }
 
     .nav-link {
+      display: flex;
+      align-items: center;
       color: var(--text-color-secondary);
       text-decoration: none;
-      
-      &:hover{
+
+      div {
+        display: flex;
+        margin-left: 6px;
+
+        &.first-icon {
+          margin-right: 6px;
+          margin-left: 0;
+        }
+      }
+
+      &:hover {
         color: var(--text-color-primary);
       }
 
       &.disabled {
         opacity: 0.4;
+      }
+
+      @include tablet-down {
+        font-size: 14px;
+
+        svg {
+          width: 12px;
+          height: 12px;
+        }
       }
     }
   }
@@ -91,7 +118,7 @@
       overflow: hidden;
       border-radius: $spacing-small;
       background-color: var(--panel-background-highlight);
-      
+
       h4 {
         margin-bottom: 24px;
       }
