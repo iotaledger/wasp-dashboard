@@ -42,7 +42,7 @@ const TileContent: React.FC<TileProps> = ({
                             action.type === Action.Delete ? "action-button-danger action-button" : "action-button"
                         }`}
                         type="button"
-                        key={action.type}
+                        key={action.text}
                         onClick={action.handleAction}
                     >
                         {action.icon}
