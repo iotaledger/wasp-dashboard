@@ -24,7 +24,7 @@ interface PeersListProps {
 
     /**
      * Custom text when there are no peers.
-     * @default There are no peers.
+     * @default No peers found.
      */
     emptyText?: string;
 }
@@ -43,7 +43,7 @@ const PeersList: React.FC<PeersListProps> = ({ peers, detailedList, enableDelete
 
 PeersList.defaultProps = {
     detailedList: false,
-    emptyText: "There are no peers.",
+    emptyText: "No peers found.",
     enableDelete: true,
 };
 
