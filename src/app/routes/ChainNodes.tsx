@@ -10,15 +10,17 @@ import {
     PeersService,
     EventAggregator,
 } from "../../lib";
-import { Breadcrumb, InfoBox, Tile } from "../components";
+import { Breadcrumb, InfoBox, KeyValueRow, Tile } from "../components";
 import ChainNavbar from "../components/ChainNavbar";
 import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
 
+const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
+
 /**
- * ChainAccessNodes panel.
+ * ChainNodes panel.
  * @returns The node to render.
  */
-function ChainAccessNodes() {
+function ChainNodes() {
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
     const peersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
@@ -33,7 +35,7 @@ function ChainAccessNodes() {
     const chainBreadcrumbs = [
         { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
-        { goTo: `${chainURL}/access-nodes`, text: "Access Nodes" },
+        { goTo: `${chainURL}/nodes`, text: "Nodes" },
     ];
 
     React.useEffect(() => {
@@ -165,10 +167,33 @@ function ChainAccessNodes() {
                             />
                         )}
                     </InfoBox>
+                    <InfoBox title="Committee">
+                        {chainCommitteeInfo && (
+                            <React.Fragment>
+                                <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
+                                <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
+                            </React.Fragment>
+                        )}
+                        <br />
+                        <h4>Peers</h4>
+                        <br />
+                        {chainCommitteeInfo?.committeeNodes && chainCommitteeInfo?.committeeNodes?.length > 0 ? (
+                            chainCommitteeInfo?.committeeNodes?.map(({ node }) => (
+                                <Tile
+                                    key={node?.publicKey}
+                                    primaryText={node?.publicKey}
+                                    healthy={node?.isAlive}
+                                    displayHealth={true}
+                                />
+                            ))
+                        ) : (
+                            <Tile primaryText="No peer nodes found." />
+                        )}
+                    </InfoBox>
                 </div>
             </div>
         </div>
     );
 }
 
-export default ChainAccessNodes;
+export default ChainNodes;
