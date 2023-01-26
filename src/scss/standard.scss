@@ -161,6 +161,7 @@ table {
     outline: 0;
     background: none;
     color: var(--text-color-secondary);
+    transition: color 0.1s ease-in;
     cursor: pointer;
   
     &:hover {
