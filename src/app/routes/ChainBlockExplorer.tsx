@@ -175,11 +175,12 @@ function ChainBlockExplorer() {
                                     onChange={e => navigate(`/chains/${chainID}/blocks/${e.target.value}`)}
                                     className=""
                                 >
-                                    {createBlocksRange(blockIndex, 10).map((_, block) => (
-                                        <option key={block} value={block} className="padding-t">
-                                            <Link to={`/chains/${chainID}/blocks/${block}`}>{block}</Link>
-                                        </option>
-                                    ))}
+                                    {latestBlock &&
+                                        createBlocksRange(latestBlock).map((_, block) => (
+                                            <option key={block} value={block} className="padding-t">
+                                                <Link to={`/chains/${chainID}/blocks/${block}`}>{block}</Link>
+                                            </option>
+                                        ))}
                                 </select>
                             </div>
                             <BlockLink
@@ -213,10 +214,9 @@ BlockLink.defaultProps = {
     iconFirst: false,
 };
 
-const createBlocksRange = (startingIndex: number, maxLength: number) =>
+const createBlocksRange = (lastIndex: number) =>
     // eslint-disable-next-line unicorn/no-new-array
-    new Array(startingIndex + 1).fill(0)
-.slice(-maxLength) as number[];
+    new Array(lastIndex + 1).fill(0) as number[];
 
 /**
  * A Link to navigate between blocks.
