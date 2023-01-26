@@ -178,7 +178,7 @@ function ChainBlockExplorer() {
                                     {latestBlock &&
                                         createBlocksRange(latestBlock).map((_, block) => (
                                             <option key={block} value={block} className="padding-t">
-                                                <Link to={`/chains/${chainID}/blocks/${block}`}>{block}</Link>
+                                                {block}
                                             </option>
                                         ))}
                                 </select>
