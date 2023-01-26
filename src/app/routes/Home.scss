@@ -46,6 +46,7 @@
         align-items: center;
         justify-content: center;
         max-width: 350px;
+        height: 152px;
 
         @include desktop-down {
             display: none;
@@ -54,7 +55,7 @@
         .banner-curve {
             height: 100%;
             color: var(--panel-background-highlight);
-
+            
             @include desktop-down {
                 display: none;
             }
@@ -70,7 +71,7 @@
             flex: 1;
             align-items: center;
             justify-content: center;
-            width: 200px;
+            width: 203px;
             height: 100%;
             border-radius: 0 16px 16px 0;
             background-color: var(--panel-background-highlight);
