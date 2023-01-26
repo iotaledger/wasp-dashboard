@@ -18,10 +18,9 @@ function ChainBlockExplorer() {
     const navigate = useNavigate();
     const [blockData, setBlockData] = useState<BlockData | null>(null);
     const [latestBlock, setLatestBlock] = useState<number>();
-
     const { chainID, blockID } = useParams();
-    const blockIndex = Number(blockID);
 
+    const blockIndex = Number(blockID);
     const chainURL = `/chains/${chainID}`;
 
     const chainBreadcrumbs = [
@@ -151,7 +150,6 @@ function ChainBlockExplorer() {
                             )}
                         </InfoBox>
                     </div>
-
                     <div className="card fill">
                         <div className="summary row spread-centered middle">
                             <BlockLink
@@ -177,12 +175,11 @@ function ChainBlockExplorer() {
                                     onChange={e => navigate(`/chains/${chainID}/blocks/${e.target.value}`)}
                                     className=""
                                 >
-                                    {latestBlock &&
-                                        rangeBlocks(0, latestBlock).map(block => (
-                                            <option key={block} value={block} className="padding-t">
-                                                <Link to={`/chains/${chainID}/blocks/${block}`}>{block}</Link>
-                                            </option>
-                                        ))}
+                                    {createBlocksRange(blockIndex, 10).map((_, block) => (
+                                        <option key={block} value={block} className="padding-t">
+                                            <Link to={`/chains/${chainID}/blocks/${block}`}>{block}</Link>
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <BlockLink
@@ -216,18 +213,10 @@ BlockLink.defaultProps = {
     iconFirst: false,
 };
 
-/**
- *
- * Get a range of blocks.
- * @param first
- * @param last
- * @returns The range of blocks.
- */
-function rangeBlocks(first: number, last: number) {
+const createBlocksRange = (startingIndex: number, maxLength: number) =>
     // eslint-disable-next-line unicorn/no-new-array
-    return new Array(last - first + 1).fill(0)
-.map((_, i) => first + i);
-}
+    new Array(startingIndex + 1).fill(0)
+.slice(-maxLength) as number[];
 
 /**
  * A Link to navigate between blocks.
@@ -236,9 +225,9 @@ function rangeBlocks(first: number, last: number) {
  * @param param0.chainID ChainID.
  * @param param0.blockIndex The destination block index.
  * @param param0.disabled Disabled or not.
- * @param param0.icon
- * @param param0.doubledIcon
- * @param param0.iconFirst
+ * @param param0.icon Link's icon.
+ * @param param0.doubledIcon Double the icon or not.
+ * @param param0.iconFirst Show the icon before the text.
  * @returns The Node to render.
  */
 function BlockLink({
@@ -260,8 +249,6 @@ function BlockLink({
 }) {
     return (
         <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
-            {/* {icon}
-            {doubledIcon && icon} {label} */}
             {iconFirst ? (
                 <React.Fragment>
                     <div className="first-icon">
