@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "./Route.scss";
 import { ChevronLeftIcon, ChevronRightIcon } from "../../assets";
 import { ServiceFactory } from "../../lib";
@@ -15,14 +15,13 @@ import ChainNavbar from "../components/ChainNavbar";
 function ChainBlockExplorer() {
     const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
 
+    const navigate = useNavigate();
     const [blockData, setBlockData] = useState<BlockData | null>(null);
     const [latestBlock, setLatestBlock] = useState<number>();
-    const [rangeOfBlocks, setRangeOfBlocks] = useState<number[]>([]);
 
     const { chainID, blockID } = useParams();
     const blockIndex = Number(blockID);
 
-    const [selectedRange, setSelectedRange] = useState(blockIndex);
     const chainURL = `/chains/${chainID}`;
 
     const chainBreadcrumbs = [
@@ -57,32 +56,6 @@ function ChainBlockExplorer() {
             })
             .catch(() => setLatestBlock(0));
     }, [blockID]);
-
-    React.useEffect(() => {
-        if (!latestBlock) {
-            return;
-        }
-        setRangeOfBlocks(rangeBlocks(0, latestBlock));
-    }, [latestBlock]);
-
-    React.useEffect(() => {
-        // update block data when range changes
-        if (!chainID) {
-            return;
-        }
-
-        chainsService
-            .getBlock(chainID, selectedRange)
-            .then(newBlockData => {
-                if (newBlockData) {
-                    setBlockData(newBlockData);
-                }
-            })
-            .catch(e => {
-                console.error(e);
-                setBlockData(null);
-            });
-    }, [selectedRange]);
 
     const info = blockData?.info ? Object.entries(blockData.info).filter(([k]) => BLOCK_DATA_VALUES.has(k)) : null;
 
@@ -200,15 +173,16 @@ function ChainBlockExplorer() {
                             />
                             <div className="select-wrapper row middle range-wrapper">
                                 <select
-                                    value={selectedRange}
-                                    onChange={e => setSelectedRange(Number(e.target.value))}
+                                    value={blockIndex}
+                                    onChange={e => navigate(`/chains/${chainID}/blocks/${e.target.value}`)}
                                     className=""
                                 >
-                                    {rangeOfBlocks.map(block => (
-                                        <option key={block} value={block} className="padding-t">
-                                            <Link to={`/chains/${chainID}/blocks/${block}`}>{block}</Link>
-                                        </option>
-                                    ))}
+                                    {latestBlock &&
+                                        rangeBlocks(0, latestBlock).map(block => (
+                                            <option key={block} value={block} className="padding-t">
+                                                <Link to={`/chains/${chainID}/blocks/${block}`}>{block}</Link>
+                                            </option>
+                                        ))}
                                 </select>
                             </div>
                             <BlockLink
