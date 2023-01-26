@@ -186,7 +186,7 @@ function Chain() {
                                 url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
                             }}
                         />
-                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp} />
+                        <KeyValueRow keyText="Timestamp" value={formatDate(chainLatestBlock?.timestamp)} />
                     </InfoBox>
 
                     <InfoBox title="EVM">

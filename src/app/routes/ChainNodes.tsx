@@ -10,7 +10,7 @@ import {
     PeersService,
     EventAggregator,
 } from "../../lib";
-import { Breadcrumb, InfoBox, KeyValueRow, Tile } from "../components";
+import { Breadcrumb, InfoBox, KeyValueRow, PeersList } from "../components";
 import ChainNavbar from "../components/ChainNavbar";
 import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
 
@@ -156,18 +156,12 @@ function ChainNodes() {
                         }
                     >
                         <div className="sized-container">
-                            {accessNodes.length > 0 ? (
-                                accessNodes.map(node => (
-                                    <Tile
-                                        key={node?.publicKey}
-                                        primaryText={node?.publicKey}
-                                        healthy={node?.isAlive}
-                                        displayHealth={true}
-                                    />
-                                ))
-                            ) : (
-                                <Tile primaryText="No access nodes found." />
-                            )}
+                            <PeersList
+                                peers={accessNodes}
+                                detailedList
+                                enableDelete={false}
+                                emptyText="No access nodes found."
+                            />
                         </div>
                         {isPopupOpen && (
                             <EditAccessNodesDialog
@@ -180,18 +174,7 @@ function ChainNodes() {
                     </InfoBox>
                     <InfoBox title="Peers">
                         <div className="sized-container">
-                            {peersNodes.length > 0 ? (
-                                peersNodes.map(node => (
-                                    <Tile
-                                        key={node?.publicKey}
-                                        primaryText={node?.publicKey}
-                                        healthy={node?.isAlive}
-                                        displayHealth={true}
-                                    />
-                                ))
-                            ) : (
-                                <Tile primaryText="No peer nodes found." />
-                            )}
+                            <PeersList peers={peersNodes} detailedList enableDelete={false} />
                         </div>
                     </InfoBox>
                 </div>

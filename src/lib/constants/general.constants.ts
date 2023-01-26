@@ -3,7 +3,7 @@ export const METRICS_NAMES: Record<string, string> = {
     inOnLedgerRequest: "On ledger request",
     inOutput: "Output",
     inStateOutput: "State output",
-    inTxInclusionState: "InTxInclusionState",
+    inTxInclusionState: "Tx inclusion state",
     outPublishGovernanceTransaction: "Publish governance tx",
     outPullLatestOutput: "Pull latest output",
     outPullOutputByID: "Pull output by ID",

@@ -77,22 +77,16 @@ function Configuration() {
                                 const value = Object.values(item)[0] as any;
                                 return (
                                     <InfoBox title={key} key={index}>
-                                        {Object.entries(value).map(([keyVal, val], valueIndex) =>
-                                            (typeof val === "boolean" ? (
-                                                val ? (
-                                                    <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
-                                                ) : (
-                                                    <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
-                                                )
-                                            ) : (typeof val === "string" ? (
-                                                <KeyValueRow key={valueIndex} keyText={keyVal} value={val} />
+                                        {Object.entries(value).map(([keyVal, val]) =>
+                                            (typeof val === "boolean" || typeof val === "string" ? (
+                                                <KeyValueRow key={keyVal} keyText={keyVal} value={val} />
                                             ) : (
                                                 <KeyValueRow
-                                                    key={valueIndex}
+                                                    key={keyVal}
                                                     keyText={keyVal}
                                                     value={JSON.stringify(val)}
                                                 />
-                                            ))),
+                                            )),
                                         )}
                                     </InfoBox>
                                 );
