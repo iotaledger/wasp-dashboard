@@ -32,7 +32,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed, enableDelete }) => 
     }
 
     const primaryText = peer.publicKey;
-    const secondaryText = `${peer.netId} ${peer.numUsers === null ? "" : `- Users: ${peer.numUsers}`}`;
+    const secondaryText = `${peer.netId} ${Number.isInteger(peer.numUsers) ? `- Users: ${peer.numUsers}` : ""}`;
     const healthy = peer.isAlive;
 
     const actions = [

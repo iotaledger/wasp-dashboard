@@ -112,13 +112,17 @@ function ChainBlockExplorer() {
                                             <h4>Request</h4>
                                             {Object.entries(receipt.request ?? {})
                                                 .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
-                                                .map(([key, value]) => (
-                                                    <KeyValueRow
-                                                        key={key}
-                                                        keyText={key}
-                                                        value={JSON.stringify(value)}
-                                                    />
-                                                ))}
+                                                .map(([key, value]) =>
+                                                    (typeof value === "boolean" || typeof value === "string" ? (
+                                                        <KeyValueRow key={key} keyText={key} value={value} />
+                                                    ) : (
+                                                        <KeyValueRow
+                                                            key={key}
+                                                            keyText={key}
+                                                            value={JSON.stringify(value)}
+                                                        />
+                                                    )),
+                                                )}
                                         </div>
                                         <div className="main-info-item">
                                             <h4>Parameters</h4>

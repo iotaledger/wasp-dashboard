@@ -144,7 +144,12 @@ function ChainAccessNodes() {
                             </button>
                         }
                     >
-                        <PeersList peers={accessNodes} detailedList enableDelete={false} />
+                        <PeersList
+                            peers={accessNodes}
+                            detailedList
+                            enableDelete={false}
+                            emptyText="No access nodes found."
+                        />
                         {isPopupOpen && (
                             <EditAccessNodesDialog
                                 peerNodes={peersList}
