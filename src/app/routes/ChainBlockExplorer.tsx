@@ -67,117 +67,139 @@ function ChainBlockExplorer() {
             return blockIndex + 1;
         }
     })();
+    console.log("blockData", blockData);
 
     return (
         <div className="main">
             <div className="main-wrapper">
                 <Breadcrumb breadcrumbs={chainBreadcrumbs} />
-                <div className="middle row">
-                    <h2 className="l1-details-title">Chain {chainID}</h2>
-                </div>
-                <div className="content">
-                    <ChainNavbar chainID={chainID} block={blockIndex} />
-                    <div className="middle row">
-                        <h2>Block {blockID}</h2>
-                    </div>
-                    <div className="content">
-                        <InfoBox title="Info">
-                            {info?.map(([k, v]) => (
-                                <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={v} />
-                            ))}
-                        </InfoBox>
-                    </div>
-                    <div className="middle row">
-                        <h2>Requests</h2>
-                    </div>
-                    <div className="content">
-                        {blockData?.requests.length === 0 ? (
-                            <div className="card coll fill">
-                                <div className="summary">
-                                    <Tile primaryText="No requests found." />
+
+                {blockData?.info ? (
+                    <React.Fragment>
+                        <div className="middle row">
+                            <h2 className="l1-details-title">Chain {chainID}</h2>
+                        </div>
+                        <div className="content">
+                            <ChainNavbar chainID={chainID} block={blockIndex} />
+                            <div className="middle row">
+                                <h2>Block {blockID}</h2>
+                            </div>
+                            <div className="content">
+                                <InfoBox title="Info">
+                                    {info?.map(([k, v]) => (
+                                        <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={v} />
+                                    ))}
+                                </InfoBox>
+                            </div>
+                            <div className="middle row">
+                                <h2>Requests</h2>
+                            </div>
+                            <div className="content">
+                                {blockData?.requests.length === 0 ? (
+                                    <div className="card coll fill">
+                                        <div className="summary">
+                                            <Tile primaryText="No requests found." />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    blockData?.requests.map((receipt, index) => {
+                                        const params = receipt?.request?.params?.items;
+                                        const senderAccount = receipt.request?.senderAccount;
+                                        const attachedBaseTokens = receipt?.request?.fungibleTokens?.baseTokens;
+                                        const allowanceBaseTokens =
+                                            receipt?.request?.allowance?.fungibleTokens?.baseTokens;
+                                        return (
+                                            <InfoBox
+                                                key={receipt.request?.requestId}
+                                                title={`REQUEST #${receipt?.requestIndex}`}
+                                            >
+                                                <div className="info-content">
+                                                    <div className="main-info-item">
+                                                        <h4>info</h4>
+                                                        {Object.entries(receipt)
+                                                            .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
+                                                            .map(([k, v]) => (
+                                                                <KeyValueRow
+                                                                    key={k}
+                                                                    keyText={BLOCK_REQUEST_NAMES[k]}
+                                                                    value={JSON.stringify(v)}
+                                                                />
+                                                            ))}
+                                                        <KeyValueRow keyText="Sender" value={senderAccount} />
+                                                    </div>
+                                                    <div className="main-info-item">
+                                                        <h4>Parameters</h4>
+                                                        {params?.map(x => (
+                                                            <KeyValueRow
+                                                                key={x.key}
+                                                                keyText={x.key}
+                                                                value={JSON.stringify(x.value)}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                    <div className="main-info-item">
+                                                        <h4>Attached tokens</h4>
+
+                                                        <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
+                                                    </div>
+                                                    <div className="main-info-item">
+                                                        <h4>Allowance</h4>
+                                                        <KeyValueRow
+                                                            keyText="Base tokens"
+                                                            value={allowanceBaseTokens}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </InfoBox>
+                                        );
+                                    })
+                                )}
+                            </div>
+                            <div className="middle row">
+                                <h2>Events</h2>
+                            </div>
+                            <div className="content">
+                                <InfoBox>
+                                    {blockData?.events?.length === 0 ? (
+                                        <Tile primaryText="No events found." />
+                                    ) : (
+                                        blockData?.events?.map(event => <Tile key={event} primaryText={event} />)
+                                    )}
+                                </InfoBox>
+                            </div>
+                            <div className="card fill">
+                                <div className="summary row spread-centered">
+                                    <BlockLink
+                                        chainID={chainID}
+                                        disabled={blockIndex === 0}
+                                        blockIndex={0}
+                                        label="⏮️ First"
+                                    />
+                                    <BlockLink
+                                        chainID={chainID}
+                                        disabled={previousBlock < 0}
+                                        blockIndex={previousBlock}
+                                        label="⬅️ Previous"
+                                    />
+                                    <BlockLink
+                                        chainID={chainID}
+                                        disabled={!nextBlock}
+                                        blockIndex={nextBlock}
+                                        label="Next ➡️"
+                                    />
+                                    <BlockLink
+                                        chainID={chainID}
+                                        disabled={latestBlock === blockIndex}
+                                        blockIndex={latestBlock}
+                                        label="Latest ⏭️"
+                                    />
                                 </div>
                             </div>
-                        ) : (
-                            blockData?.requests.map((receipt, index) => {
-                                const params = receipt?.request?.params?.items;
-                                const senderAccount = receipt.request?.senderAccount;
-                                const attachedBaseTokens = receipt?.request?.fungibleTokens?.baseTokens;
-                                const allowanceBaseTokens = receipt?.request?.allowance?.fungibleTokens?.baseTokens;
-                                return (
-                                    <InfoBox
-                                        key={receipt.request?.requestId}
-                                        title={`REQUEST #${receipt?.requestIndex}`}
-                                    >
-                                        <div className="info-content">
-                                            <div className="main-info-item">
-                                                <h4>info</h4>
-                                                {Object.entries(receipt)
-                                                    .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
-                                                    .map(([k, v]) => (
-                                                        <KeyValueRow
-                                                            key={k}
-                                                            keyText={BLOCK_REQUEST_NAMES[k]}
-                                                            value={JSON.stringify(v)}
-                                                        />
-                                                    ))}
-                                                <KeyValueRow keyText="Sender" value={senderAccount} />
-                                            </div>
-                                            <div className="main-info-item">
-                                                <h4>Parameters</h4>
-                                                {params?.map(x => (
-                                                    <KeyValueRow
-                                                        key={x.key}
-                                                        keyText={x.key}
-                                                        value={JSON.stringify(x.value)}
-                                                    />
-                                                ))}
-                                            </div>
-                                            <div className="main-info-item">
-                                                <h4>Attached tokens</h4>
-
-                                                <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
-                                            </div>
-                                            <div className="main-info-item">
-                                                <h4>Allowance</h4>
-                                                <KeyValueRow keyText="Base tokens" value={allowanceBaseTokens} />
-                                            </div>
-                                        </div>
-                                    </InfoBox>
-                                );
-                            })
-                        )}
-                    </div>
-                    <div className="middle row">
-                        <h2>Events</h2>
-                    </div>
-                    <div className="content">
-                        <InfoBox>
-                            {blockData?.events?.length === 0 ? (
-                                <Tile primaryText="No events found." />
-                            ) : (
-                                blockData?.events?.map(event => <Tile key={event} primaryText={event} />)
-                            )}
-                        </InfoBox>
-                    </div>
-                    <div className="card fill">
-                        <div className="summary row spread-centered">
-                            <BlockLink chainID={chainID} disabled={blockIndex === 0} blockIndex={0} label="⏮️ First" />
-                            <BlockLink
-                                chainID={chainID}
-                                disabled={previousBlock < 0}
-                                blockIndex={previousBlock}
-                                label="⬅️ Previous"
-                            />
-                            <BlockLink chainID={chainID} disabled={!nextBlock} blockIndex={nextBlock} label="Next ➡️" />
-                            <BlockLink
-                                chainID={chainID}
-                                disabled={latestBlock === blockIndex}
-                                blockIndex={latestBlock}
-                                label="Latest ⏭️"
-                            />
                         </div>
-                    </div>
-                </div>
+                    </React.Fragment>
+                ) : (
+                    <Tile primaryText="Block not found" />
+                )}
             </div>
         </div>
     );

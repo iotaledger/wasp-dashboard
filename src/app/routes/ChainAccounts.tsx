@@ -48,9 +48,17 @@ function ChainAccounts() {
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
                     <InfoBox title="On-chain accounts">
-                        {chainAccounts.map(account => (
-                            <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
-                        ))}
+                        {chainAccounts.length === 0 ? (
+                            <Tile primaryText="No accounts found." />
+                        ) : (
+                            chainAccounts.map(account => (
+                                <Tile
+                                    key={account}
+                                    primaryText={account}
+                                    url={`/chains/${chainID}/accounts/${account}`}
+                                />
+                            ))
+                        )}
                     </InfoBox>
                 </div>
             </div>
