@@ -31,6 +31,7 @@ function ChainNodes() {
 
     const chainURL = `/chains/${chainID}`;
     const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
+    const peersNodes = chainCommitteeInfo?.committeeNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
 
     const chainBreadcrumbs = [
         { goTo: "/", text: "Home" },
@@ -137,6 +138,14 @@ function ChainNodes() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
+                    <InfoBox title="Committee">
+                        {chainCommitteeInfo && (
+                            <React.Fragment>
+                                <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
+                                <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
+                            </React.Fragment>
+                        )}
+                    </InfoBox>
                     <InfoBox
                         title="Access nodes"
                         titleWithIcon={true}
@@ -146,18 +155,20 @@ function ChainNodes() {
                             </button>
                         }
                     >
-                        {accessNodes.length > 0 ? (
-                            accessNodes?.map(node => (
-                                <Tile
-                                    key={node.publicKey}
-                                    primaryText={node.publicKey}
-                                    healthy={node.isAlive}
-                                    displayHealth={true}
-                                />
-                            ))
-                        ) : (
-                            <Tile primaryText="No access nodes found." />
-                        )}
+                        <div className="sized-container">
+                            {accessNodes.length > 0 ? (
+                                accessNodes.map(node => (
+                                    <Tile
+                                        key={node?.publicKey}
+                                        primaryText={node?.publicKey}
+                                        healthy={node?.isAlive}
+                                        displayHealth={true}
+                                    />
+                                ))
+                            ) : (
+                                <Tile primaryText="No access nodes found." />
+                            )}
+                        </div>
                         {isPopupOpen && (
                             <EditAccessNodesDialog
                                 peerNodes={peersList}
@@ -167,28 +178,21 @@ function ChainNodes() {
                             />
                         )}
                     </InfoBox>
-                    <InfoBox title="Committee">
-                        {chainCommitteeInfo && (
-                            <React.Fragment>
-                                <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
-                                <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
-                            </React.Fragment>
-                        )}
-                        <br />
-                        <h4>Peers</h4>
-                        <br />
-                        {chainCommitteeInfo?.committeeNodes && chainCommitteeInfo?.committeeNodes?.length > 0 ? (
-                            chainCommitteeInfo?.committeeNodes?.map(({ node }) => (
-                                <Tile
-                                    key={node?.publicKey}
-                                    primaryText={node?.publicKey}
-                                    healthy={node?.isAlive}
-                                    displayHealth={true}
-                                />
-                            ))
-                        ) : (
-                            <Tile primaryText="No peer nodes found." />
-                        )}
+                    <InfoBox title="Peers">
+                        <div className="sized-container">
+                            {peersNodes.length > 0 ? (
+                                peersNodes.map(node => (
+                                    <Tile
+                                        key={node?.publicKey}
+                                        primaryText={node?.publicKey}
+                                        healthy={node?.isAlive}
+                                        displayHealth={true}
+                                    />
+                                ))
+                            ) : (
+                                <Tile primaryText="No peer nodes found." />
+                            )}
+                        </div>
                     </InfoBox>
                 </div>
             </div>
