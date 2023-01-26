@@ -2,7 +2,7 @@ import React from "react";
 import "./InfoBox.scss";
 
 interface InfoBoxProps {
-    title: string;
+    title?: string;
     children: React.ReactNode;
     titleClassName?: string;
     cardClassName?: string;
@@ -15,11 +15,12 @@ function InfoBox({ title, children, titleClassName, cardClassName, titleWithIcon
     return (
         <div className={cardClassName ? `${cardClassName} card col fill` : "card col fill"}>
             <div className="summary">
-                <div className="row middle spread margin-b-m">
-                    <h4 className={titleClassName ?? ""}>{title}</h4>
-                    {titleWithIcon && icon}
-                </div>
-
+                {title && (
+                    <div className="row middle spread margin-b-m">
+                        <h4 className={titleClassName ?? ""}>{title}</h4>
+                        {titleWithIcon && icon}
+                    </div>
+                )}
                 {children}
             </div>
         </div>
@@ -29,6 +30,7 @@ function InfoBox({ title, children, titleClassName, cardClassName, titleWithIcon
 InfoBox.defaultProps = {
     cardClassName: "",
     icon: null,
+    title: "",
     titleClassName: "",
     titleWithIcon: false,
 };

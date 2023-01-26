@@ -91,56 +91,67 @@ function ChainBlockExplorer() {
                         <h2>Requests</h2>
                     </div>
                     <div className="content">
-                        {blockData?.requests.map((receipt, index) => {
-                            const params = receipt?.request?.params?.items;
-                            const senderAccount = receipt.request?.senderAccount;
-                            const attachedBaseTokens = receipt?.request?.fungibleTokens?.baseTokens;
-                            const allowanceBaseTokens = receipt?.request?.allowance?.fungibleTokens?.baseTokens;
-                            return (
-                                <InfoBox key={receipt.request?.requestId} title={`REQUEST #${receipt?.requestIndex}`}>
-                                    <div className="info-content">
-                                        <div className="main-info-item">
-                                            <h4>info</h4>
-                                            {Object.entries(receipt)
-                                                .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
-                                                .map(([k, v]) => (
+                        {blockData?.requests.length === 0 ? (
+                            <div className="card coll fill">
+                                <div className="summary">
+                                    <Tile primaryText="No requests found." />
+                                </div>
+                            </div>
+                        ) : (
+                            blockData?.requests.map((receipt, index) => {
+                                const params = receipt?.request?.params?.items;
+                                const senderAccount = receipt.request?.senderAccount;
+                                const attachedBaseTokens = receipt?.request?.fungibleTokens?.baseTokens;
+                                const allowanceBaseTokens = receipt?.request?.allowance?.fungibleTokens?.baseTokens;
+                                return (
+                                    <InfoBox
+                                        key={receipt.request?.requestId}
+                                        title={`REQUEST #${receipt?.requestIndex}`}
+                                    >
+                                        <div className="info-content">
+                                            <div className="main-info-item">
+                                                <h4>info</h4>
+                                                {Object.entries(receipt)
+                                                    .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
+                                                    .map(([k, v]) => (
+                                                        <KeyValueRow
+                                                            key={k}
+                                                            keyText={BLOCK_REQUEST_NAMES[k]}
+                                                            value={JSON.stringify(v)}
+                                                        />
+                                                    ))}
+                                                <KeyValueRow keyText="Sender" value={senderAccount} />
+                                            </div>
+                                            <div className="main-info-item">
+                                                <h4>Parameters</h4>
+                                                {params?.map(x => (
                                                     <KeyValueRow
-                                                        key={k}
-                                                        keyText={BLOCK_REQUEST_NAMES[k]}
-                                                        value={JSON.stringify(v)}
+                                                        key={x.key}
+                                                        keyText={x.key}
+                                                        value={JSON.stringify(x.value)}
                                                     />
                                                 ))}
-                                            <KeyValueRow keyText="Sender" value={senderAccount} />
-                                        </div>
-                                        <div className="main-info-item">
-                                            <h4>Parameters</h4>
-                                            {params?.map(x => (
-                                                <KeyValueRow
-                                                    key={x.key}
-                                                    keyText={x.key}
-                                                    value={JSON.stringify(x.value)}
-                                                />
-                                            ))}
-                                        </div>
-                                        <div className="main-info-item">
-                                            <h4>Attached tokens</h4>
+                                            </div>
+                                            <div className="main-info-item">
+                                                <h4>Attached tokens</h4>
 
-                                            <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
+                                                <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
+                                            </div>
+                                            <div className="main-info-item">
+                                                <h4>Allowance</h4>
+                                                <KeyValueRow keyText="Base tokens" value={allowanceBaseTokens} />
+                                            </div>
                                         </div>
-                                        <div className="main-info-item">
-                                            <h4>Allowance</h4>
-                                            <KeyValueRow keyText="Base tokens" value={allowanceBaseTokens} />
-                                        </div>
-                                    </div>
-                                </InfoBox>
-                            );
-                        })}
+                                    </InfoBox>
+                                );
+                            })
+                        )}
                     </div>
                     <div className="middle row">
                         <h2>Events</h2>
                     </div>
                     <div className="content">
-                        <InfoBox title="Events">
+                        <InfoBox>
                             {blockData?.events?.length === 0 ? (
                                 <Tile primaryText="No events found." />
                             ) : (
