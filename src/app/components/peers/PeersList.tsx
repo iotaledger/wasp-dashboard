@@ -15,20 +15,29 @@ interface PeersListProps {
      * @default false
      */
     detailedList?: boolean;
+
+    /**
+     * Enable the delete button.
+     * @default true
+     */
+    enableDelete?: boolean;
 }
 
-const PeersList: React.FC<PeersListProps> = ({ peers, detailedList }) => (
+const PeersList: React.FC<PeersListProps> = ({ peers, detailedList, enableDelete }) => (
     <div className="peer-list">
         {peers.length === 0 ? (
             <p className="margin-t-s">There are no peers.</p>
         ) : (
-            peers.map((peer, idx) => <PeerTile key={idx} peer={peer} detailed={detailedList} />)
+            peers.map((peer, idx) => (
+                <PeerTile key={idx} peer={peer} detailed={detailedList} enableDelete={enableDelete} />
+            ))
         )}
     </div>
 );
 
 PeersList.defaultProps = {
     detailedList: false,
+    enableDelete: true,
 };
 
 export default PeersList;

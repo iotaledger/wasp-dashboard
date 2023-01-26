@@ -10,7 +10,7 @@ import {
     PeersService,
     EventAggregator,
 } from "../../lib";
-import { Breadcrumb, InfoBox, Tile } from "../components";
+import { Breadcrumb, InfoBox, PeersList } from "../components";
 import ChainNavbar from "../components/ChainNavbar";
 import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
 
@@ -144,18 +144,7 @@ function ChainAccessNodes() {
                             </button>
                         }
                     >
-                        {accessNodes.length > 0 ? (
-                            accessNodes?.map(node => (
-                                <Tile
-                                    key={node.publicKey}
-                                    primaryText={node.publicKey}
-                                    healthy={node.isAlive}
-                                    displayHealth={true}
-                                />
-                            ))
-                        ) : (
-                            <Tile primaryText="No access nodes found." />
-                        )}
+                        <PeersList peers={accessNodes} detailedList enableDelete={false} />
                         {isPopupOpen && (
                             <EditAccessNodesDialog
                                 peerNodes={peersList}

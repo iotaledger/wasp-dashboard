@@ -14,9 +14,15 @@ interface PeerTileProps {
      * @default false
      */
     detailed?: boolean;
+
+    /**
+     * Enable the delete button.
+     * @default true
+     */
+    enableDelete?: boolean;
 }
 
-const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed }) => {
+const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed, enableDelete }) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
     /**
      *
@@ -26,7 +32,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed }) => {
     }
 
     const primaryText = peer.publicKey;
-    const secondaryText = peer.netId;
+    const secondaryText = `${peer.netId} ${peer.numUsers === null ? "" : `- Users: ${peer.numUsers}`}`;
     const healthy = peer.isAlive;
 
     const actions = [
@@ -46,7 +52,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed }) => {
                 healthy={healthy}
                 primaryText={primaryText}
                 secondaryText={detailed ? secondaryText : undefined}
-                actions={detailed ? actions : undefined}
+                actions={enableDelete ? actions : undefined}
             />
             {showDeleteDialog && (
                 <DeletePeerDialog onClose={closeDeletePeerDialog} onSuccess={closeDeletePeerDialog} peer={peer} />
@@ -57,6 +63,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed }) => {
 
 PeerTile.defaultProps = {
     detailed: false,
+    enableDelete: true,
 };
 
 export default PeerTile;
