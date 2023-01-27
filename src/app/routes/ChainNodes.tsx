@@ -148,8 +148,7 @@ function ChainNodes() {
                     </InfoBox>
                     <InfoBox
                         title="Access nodes"
-                        titleWithIcon={true}
-                        icon={
+                        cornerNode={
                             <button type="button" onClick={() => setIsPopupOpen(true)} className="edit-button">
                                 <EditIcon />
                             </button>

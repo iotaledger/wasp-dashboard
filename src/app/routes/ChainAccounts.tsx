@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Route.scss";
-import { WaspClientService, ServiceFactory } from "../../lib";
+import { ServiceFactory, WaspClientService } from "../../lib";
 import { Breadcrumb, InfoBox, Tile } from "../components";
 import ChainNavbar from "../components/ChainNavbar";
+
+const SEARCH_ACCOUNT_PLACEHOLDER = "Account address";
 
 /**
  * ChainAccount panel.
@@ -12,6 +14,9 @@ import ChainNavbar from "../components/ChainNavbar";
 function ChainAccounts() {
     const [chainAccounts, setChainAccounts] = useState<string[]>([]);
     const { chainID } = useParams();
+    const [search, setSearch] = useState("");
+
+    const results = search ? chainAccounts.filter(acc => acc.match(search)) : chainAccounts;
     const chainURL = `/chains/${chainID}`;
 
     const chainBreadcrumbs = [
@@ -38,6 +43,15 @@ function ChainAccounts() {
             });
     }, []);
 
+    // eslint-disable-next-line jsdoc/require-param-description
+    /**
+     *
+     * @param e
+     */
+    function onSearchChange(e: ChangeEvent<HTMLInputElement>) {
+        setSearch(e.target.value);
+    }
+
     return (
         <div className="main">
             <div className="main-wrapper">
@@ -47,8 +61,15 @@ function ChainAccounts() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
-                    <InfoBox title="On-chain accounts">
-                        {chainAccounts.map(account => (
+
+                    <InfoBox
+                        title="On-chain accounts"
+                        cornerNode={
+                            <input onChange={onSearchChange} value={search} placeholder={SEARCH_ACCOUNT_PLACEHOLDER} />
+                        }
+                    >
+                        {search.length > 0 && <h1 className="margin-b-m">{results.length} results found.</h1>}
+                        {results.map(account => (
                             <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
                         ))}
                     </InfoBox>
