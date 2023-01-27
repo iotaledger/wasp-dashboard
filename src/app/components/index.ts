@@ -13,6 +13,7 @@ export { default as Breadcrumb } from "./Breadcrumb";
 export { default as ChainNavbar } from "./ChainNavbar";
 export { default as Tab } from "./Tab";
 export { default as TabGroup } from "./TabGroup";
+export { default as IconButton } from "./IconButton";
 
 export * from "./dialogs";
 export * from "./peers";
