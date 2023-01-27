@@ -158,7 +158,7 @@ function ChainBlockExplorer() {
                                 blockIndex={0}
                                 label="First"
                                 icon={<ChevronLeftIcon />}
-                                doubledIcon
+                                codeRepetition={2}
                                 iconFirst
                             />
                             <BlockLink
@@ -196,7 +196,7 @@ function ChainBlockExplorer() {
                                 blockIndex={latestBlock}
                                 label="Latest"
                                 icon={<ChevronRightIcon />}
-                                doubledIcon
+                                codeRepetition={2}
                             />
                         </div>
                     </div>
@@ -209,7 +209,7 @@ function ChainBlockExplorer() {
 BlockLink.defaultProps = {
     blockIndex: 1,
     chainID: "",
-    doubledIcon: false,
+    codeRepetition: 1,
     icon: undefined,
     iconFirst: false,
 };
@@ -228,6 +228,7 @@ const createBlocksRange = (lastIndex: number) =>
  * @param param0.icon Link's icon.
  * @param param0.doubledIcon Double the icon or not.
  * @param param0.iconFirst Show the icon before the text.
+ * @param param0.codeRepetition How many times to repeat the code.
  * @returns The Node to render.
  */
 function BlockLink({
@@ -236,23 +237,22 @@ function BlockLink({
     blockIndex,
     disabled,
     icon,
-    doubledIcon,
     iconFirst,
+    codeRepetition = 1,
 }: {
     label: string;
     chainID?: string;
     blockIndex?: number;
     disabled: boolean;
     icon?: React.ReactNode;
-    doubledIcon?: boolean;
     iconFirst?: boolean;
+    codeRepetition?: number;
 }) {
     return (
         <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
             <div className={`${iconFirst ? "row" : "row-reverse"} middle`}>
                 <div className={`${iconFirst ? "margin-r-t" : "margin-l-t"} row`}>
-                    {icon}
-                    {doubledIcon && icon}
+                    {Array.from({ length: codeRepetition }, (_, i) => icon)}
                 </div>
                 <span>{label}</span>
             </div>
