@@ -197,7 +197,7 @@ function ChainBlockExplorer() {
                                 <h2>Events</h2>
                             </div>
                             <div className="content">
-                                <InfoBox title="Events">
+                                <InfoBox>
                                     {blockData?.events?.length === 0 ? (
                                         <Tile primaryText="No events found." />
                                     ) : (
