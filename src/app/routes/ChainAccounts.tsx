@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Route.scss";
 import { WaspClientService, ServiceFactory } from "../../lib";
-import { Breadcrumb, InfoBox, Tile } from "../components";
-import ChainNavbar from "../components/ChainNavbar";
+import { Breadcrumb, InfoBox, Tile, ChainNavbar, BottomNavbar } from "../components";
 
 /**
  * ChainAccount panel.
@@ -52,6 +51,24 @@ function ChainAccounts() {
                             <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
                         ))}
                     </InfoBox>
+                    <BottomNavbar
+                        firstButton={{
+                            enabled: false,
+                        }}
+                        previousButton={{
+                            enabled: false,
+                        }}
+                        nextButton={{
+                            enabled: false,
+                        }}
+                        lastButton={{
+                            enabled: false,
+                        }}
+                        navUrl=""
+                        location=""
+                        selectorOptions={[]}
+                        selectorChanged={() => {}}
+                    />
                 </div>
             </div>
         </div>
