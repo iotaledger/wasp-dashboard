@@ -54,6 +54,7 @@
   @include tablet-down {
     flex-direction: column;
   }
+
   .first-card {
     margin-right: $spacing-small;
 
