@@ -7,7 +7,6 @@ import {
     ChainInfoResponse,
     ContractInfoResponse,
     Blob,
-    CommitteeInfoResponse,
     WaspClientService,
     ServiceFactory,
     BlockInfoResponse,
@@ -38,8 +37,6 @@ function transformInfoIntoArray(chainInfo: ChainInfoResponse) {
     });
 }
 
-const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
-
 /**
  * Chain panel.
  * @returns The node to render.
@@ -52,7 +49,6 @@ function Chain() {
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
-    const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
         Record<string, ConsensusMetric> | null | ITableRow[]
@@ -136,26 +132,7 @@ function Chain() {
                 });
                 setChainConsensusMetrics(chainConsensusMetricsArray);
             });
-
-        loadCommitteeInfo();
     }, [chainID]);
-
-    /**
-     * Load the committee info
-     */
-    function loadCommitteeInfo() {
-        if (!chainID) {
-            return;
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .chains()
-            .getCommitteeInfo({ chainID })
-            .then(newCommitteeInfo => {
-                setChainCommitteeInfo(newCommitteeInfo);
-            });
-    }
 
     return (
         <div className="main">
@@ -209,30 +186,9 @@ function Chain() {
                                 url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
                             }}
                         />
-                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp} />
+                        <KeyValueRow keyText="Timestamp" value={formatDate(chainLatestBlock?.timestamp)} />
                     </InfoBox>
-                    <InfoBox title="Committee">
-                        {chainCommitteeInfo && (
-                            <React.Fragment>
-                                <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
-                                <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
-                            </React.Fragment>
-                        )}
-                        <br />
-                        <h4>Peers</h4>
-                        {chainCommitteeInfo?.committeeNodes && (
-                            <Table
-                                tHead={["Index", "Pubkey", "Status"]}
-                                tBody={
-                                    chainCommitteeInfo?.committeeNodes.map(({ node }, i) => [
-                                        i,
-                                        node?.publicKey,
-                                        getStatus(node?.isAlive ?? false),
-                                    ]) as unknown as ITableRow[]
-                                }
-                            />
-                        )}
-                    </InfoBox>
+
                     <InfoBox title="EVM">
                         {chainID && (
                             <React.Fragment>
