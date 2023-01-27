@@ -252,7 +252,9 @@ function BlockLink({
         <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
             <div className={`${iconFirst ? "row" : "row-reverse"} middle`}>
                 <div className={`${iconFirst ? "margin-r-t" : "margin-l-t"} row`}>
-                    {Array.from({ length: codeRepetition }, (_, i) => icon)}
+                    {Array.from({ length: codeRepetition }, (_, i) => (
+                        <React.Fragment key={i}>{icon}</React.Fragment>
+                    ))}
                 </div>
                 <span>{label}</span>
             </div>
