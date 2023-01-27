@@ -68,7 +68,7 @@ function ChainAccounts() {
                             />
                         }
                     >
-                        {search.length > 0 && <h1 className="margin-b-m">{results.length} results found.</h1>}
+                        {search.length > 0 && <h4 className="margin-b-m">{results.length} results found.</h4>}
                         {results.map(account => (
                             <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
                         ))}
