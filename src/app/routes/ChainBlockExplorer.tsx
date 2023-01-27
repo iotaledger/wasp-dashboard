@@ -249,23 +249,13 @@ function BlockLink({
 }) {
     return (
         <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
-            {iconFirst ? (
-                <React.Fragment>
-                    <div className="first-icon">
-                        {icon}
-                        {doubledIcon && icon}
-                    </div>
-                    <span>{label}</span>
-                </React.Fragment>
-            ) : (
-                <React.Fragment>
-                    <span>{label}</span>
-                    <div>
-                        {icon}
-                        {doubledIcon && icon}
-                    </div>
-                </React.Fragment>
-            )}
+            <div className={`${iconFirst ? "row" : "row-reverse"} middle`}>
+                <div className={`${iconFirst ? "margin-r-t" : "margin-l-t"} row`}>
+                    {icon}
+                    {doubledIcon && icon}
+                </div>
+                <span>{label}</span>
+            </div>
         </Link>
     );
 }
