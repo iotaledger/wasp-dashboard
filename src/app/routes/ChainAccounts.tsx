@@ -65,7 +65,12 @@ function ChainAccounts() {
                     <InfoBox
                         title="On-chain accounts"
                         cornerNode={
-                            <input onChange={onSearchChange} value={search} placeholder={SEARCH_ACCOUNT_PLACEHOLDER} />
+                            <input
+                                onChange={onSearchChange}
+                                value={search}
+                                placeholder={SEARCH_ACCOUNT_PLACEHOLDER}
+                                disabled={chainAccounts.length === 0}
+                            />
                         }
                     >
                         {search.length > 0 && <h1 className="margin-b-m">{results.length} results found.</h1>}
