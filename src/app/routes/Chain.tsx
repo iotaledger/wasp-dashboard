@@ -143,34 +143,24 @@ function Chain() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
-                    <InfoBox title="Info">
-                        {chainProperties
-                            .filter(([key]) => !INFO_SKIP_NAMES.has(key))
-                            .map(([key, val]) => (
-                                <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                    <div className="cols-wrapper">
+                        <InfoBox title="Info" cardClassName="first-card">
+                            {chainProperties
+                                .filter(([key]) => !INFO_SKIP_NAMES.has(key))
+                                .map(([key, val]) => (
+                                    <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                                ))}
+                        </InfoBox>
+                        <InfoBox title="Contracts">
+                            {chainContracts.map(({ name, hName, description, programHash }) => (
+                                <KeyValueRow
+                                    key={name}
+                                    keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
+                                    value={description}
+                                />
                             ))}
-                    </InfoBox>
-                    <InfoBox title="Contracts">
-                        {chainContracts.map(({ name, hName, description, programHash }) => (
-                            <KeyValueRow
-                                key={name}
-                                keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
-                                value={description}
-                            />
-                        ))}
-                    </InfoBox>
-                    <InfoBox title="Total Assets">
-                        {chainAssets?.baseTokens && (
-                            <KeyValueRow
-                                key={chainAssets?.baseTokens}
-                                keyText="Base Tokens"
-                                value={chainAssets?.baseTokens}
-                            />
-                        )}
-                        {chainAssets?.nativeTokens && chainAssets.nativeTokens.length > 0 && (
-                            <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
-                        )}
-                    </InfoBox>
+                        </InfoBox>
+                    </div>
                     <InfoBox title="Blobs">
                         {chainBlobs.length > 0 ? (
                             <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
@@ -178,16 +168,30 @@ function Chain() {
                             <Tile primaryText="No blobs found." />
                         )}
                     </InfoBox>
-                    <InfoBox title="Latest block">
-                        <KeyValueRow
-                            keyText="Block index"
-                            value={{
-                                text: chainLatestBlock?.blockIndex?.toString(),
-                                url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
-                            }}
-                        />
-                        <KeyValueRow keyText="Timestamp" value={formatDate(chainLatestBlock?.timestamp)} />
-                    </InfoBox>
+                    <div className="cols-wrapper">
+                        <InfoBox title="Total Assets" cardClassName="first-card">
+                            {chainAssets?.baseTokens && (
+                                <KeyValueRow
+                                    key={chainAssets?.baseTokens}
+                                    keyText="Base Tokens"
+                                    value={chainAssets?.baseTokens}
+                                />
+                            )}
+                            {chainAssets?.nativeTokens && chainAssets.nativeTokens.length > 0 && (
+                                <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
+                            )}
+                        </InfoBox>
+                        <InfoBox title="Latest block">
+                            <KeyValueRow
+                                keyText="Block index"
+                                value={{
+                                    text: chainLatestBlock?.blockIndex?.toString(),
+                                    url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
+                                }}
+                            />
+                            <KeyValueRow keyText="Timestamp" value={formatDate(chainLatestBlock?.timestamp)} />
+                        </InfoBox>
+                    </div>
 
                     <InfoBox title="EVM">
                         {chainID && (
