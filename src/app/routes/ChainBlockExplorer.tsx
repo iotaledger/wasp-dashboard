@@ -67,13 +67,11 @@ function ChainBlockExplorer() {
             return blockIndex + 1;
         }
     })();
-    console.log("blockData", blockData);
 
     return (
         <div className="main">
             <div className="main-wrapper">
                 <Breadcrumb breadcrumbs={chainBreadcrumbs} />
-
                 {blockData?.info ? (
                     <React.Fragment>
                         <div className="middle row">
@@ -104,10 +102,6 @@ function ChainBlockExplorer() {
                                 ) : (
                                     blockData?.requests.map((receipt, index) => {
                                         const params = receipt?.request?.params?.items;
-                                        const senderAccount = receipt.request?.senderAccount;
-                                        const attachedBaseTokens = receipt?.request?.fungibleTokens?.baseTokens;
-                                        const allowanceBaseTokens =
-                                            receipt?.request?.allowance?.fungibleTokens?.baseTokens;
                                         return (
                                             <InfoBox
                                                 key={receipt.request?.requestId}
@@ -117,7 +111,7 @@ function ChainBlockExplorer() {
                                                     <div className="main-info-item">
                                                         <h4>info</h4>
                                                         {Object.entries(receipt)
-                                                            .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
+                                                            .filter(([r]) => BLOCK_RECEIPTS_INFO_VALUES.has(r))
                                                             .map(([k, v]) => (
                                                                 <KeyValueRow
                                                                     key={k}
@@ -125,7 +119,27 @@ function ChainBlockExplorer() {
                                                                     value={JSON.stringify(v)}
                                                                 />
                                                             ))}
-                                                        <KeyValueRow keyText="Sender" value={senderAccount} />
+                                                    </div>
+                                                    <div className="main-info-item">
+                                                        <h4>Request</h4>
+                                                        {Object.entries(receipt.request ?? {})
+                                                            .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
+                                                            .map(([key, value]) =>
+                                                                (typeof value === "boolean" ||
+                                                                typeof value === "string" ? (
+                                                                    <KeyValueRow
+                                                                        key={key}
+                                                                        keyText={key}
+                                                                        value={value}
+                                                                    />
+                                                                ) : (
+                                                                    <KeyValueRow
+                                                                        key={key}
+                                                                        keyText={key}
+                                                                        value={JSON.stringify(value)}
+                                                                    />
+                                                                )),
+                                                            )}
                                                     </div>
                                                     <div className="main-info-item">
                                                         <h4>Parameters</h4>
@@ -138,16 +152,40 @@ function ChainBlockExplorer() {
                                                         ))}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>Attached tokens</h4>
-
-                                                        <KeyValueRow keyText="Base tokens" value={attachedBaseTokens} />
+                                                        <h4>Contracts</h4>
+                                                        {Object.entries(receipt.request?.callTarget ?? {}).map(
+                                                            ([key, value]) => (
+                                                                <KeyValueRow
+                                                                    key={key}
+                                                                    keyText={key}
+                                                                    value={JSON.stringify(value)}
+                                                                />
+                                                            ),
+                                                        )}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>Allowance</h4>
-                                                        <KeyValueRow
-                                                            keyText="Base tokens"
-                                                            value={allowanceBaseTokens}
-                                                        />
+                                                        <h4>Fungible Tokens</h4>
+                                                        {Object.entries(
+                                                            receipt.request?.allowance?.fungibleTokens ?? {},
+                                                        ).map(([key, value]) => (
+                                                            <KeyValueRow
+                                                                key={key}
+                                                                keyText={key}
+                                                                value={JSON.stringify(value)}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                    <div className="main-info-item">
+                                                        <h4>NFTs</h4>
+                                                        {Object.entries(receipt.request?.allowance?.nfts ?? {}).map(
+                                                            ([key, value]) => (
+                                                                <KeyValueRow
+                                                                    key={key}
+                                                                    keyText={key}
+                                                                    value={JSON.stringify(value)}
+                                                                />
+                                                            ),
+                                                        )}
                                                     </div>
                                                 </div>
                                             </InfoBox>
@@ -159,7 +197,7 @@ function ChainBlockExplorer() {
                                 <h2>Events</h2>
                             </div>
                             <div className="content">
-                                <InfoBox>
+                                <InfoBox title="Events">
                                     {blockData?.events?.length === 0 ? (
                                         <Tile primaryText="No events found." />
                                     ) : (
@@ -246,6 +284,10 @@ const BLOCK_DATA_NAMES: Record<string, string> = {
     totalStorageDeposit: "Total storage deposit",
     gasBurned: "Gas burned",
     gasFeeCharged: "Gas fee charged",
+    transactionSubEssenceHash: "Transaction subessence hash",
+    numOffLedgerRequests: "Off ledger requests",
+    numSuccessfulRequests: "Sucessful requests",
+    totalRequests: "Total requests",
 };
 
 const BLOCK_REQUEST_NAMES: Record<string, string> = {
@@ -254,6 +296,8 @@ const BLOCK_REQUEST_NAMES: Record<string, string> = {
     gasBurned: "Gas burned",
     gasFeeCharged: "Gas fee charged",
     requestIndex: "Request index",
+    senderAccount: "Sender Account",
+    targetAddress: "Target Address",
 };
 
 const BLOCK_DATA_VALUES = new Set([
@@ -265,8 +309,23 @@ const BLOCK_DATA_VALUES = new Set([
     "totalStorageDeposit",
     "gasBurned",
     "gasFeeCharged",
+    "transactionSubEssenceHash",
+    "numOffLedgerRequests",
+    "numSuccessfulRequests",
+    "totalRequests",
 ]);
 
-const BLOCK_REQUESTS_INFO_VALUES = new Set(["blockIndex", "gasBudget", "gasBurned", "gasFeeCharged", "requestIndex"]);
+const BLOCK_RECEIPTS_INFO_VALUES = new Set(["blockIndex", "gasBudget", "gasBurned", "gasFeeCharged", "requestIndex"]);
+
+const BLOCK_REQUESTS_INFO_VALUES = new Set([
+    "isOffLedger",
+    "senderAccount",
+    "targetAddress",
+    "gasBudget",
+    "requestId",
+    "senderAccount",
+    "targetAddress",
+    "isEVM",
+]);
 
 export default ChainBlockExplorer;

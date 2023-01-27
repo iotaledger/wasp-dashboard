@@ -15,20 +15,36 @@ interface PeersListProps {
      * @default false
      */
     detailedList?: boolean;
+
+    /**
+     * Enable the delete button.
+     * @default true
+     */
+    enableDelete?: boolean;
+
+    /**
+     * Custom text when there are no peers.
+     * @default No peers found.
+     */
+    emptyText?: string;
 }
 
-const PeersList: React.FC<PeersListProps> = ({ peers, detailedList }) => (
+const PeersList: React.FC<PeersListProps> = ({ peers, detailedList, enableDelete, emptyText }) => (
     <div className="peer-list">
         {peers.length === 0 ? (
-            <p className="margin-t-s">There are no peers.</p>
+            <p className="margin-t-s">{emptyText}</p>
         ) : (
-            peers.map((peer, idx) => <PeerTile key={idx} peer={peer} detailed={detailedList} />)
+            peers.map((peer, idx) => (
+                <PeerTile key={idx} peer={peer} detailed={detailedList} enableDelete={enableDelete} />
+            ))
         )}
     </div>
 );
 
 PeersList.defaultProps = {
     detailedList: false,
+    emptyText: "No peers found.",
+    enableDelete: true,
 };
 
 export default PeersList;
