@@ -6,17 +6,17 @@ interface InfoBoxProps {
     children: React.ReactNode;
     titleClassName?: string;
     cardClassName?: string;
-    cornerNode?: React.ReactNode;
+    action?: React.ReactNode;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-function InfoBox({ title, children, titleClassName, cardClassName, cornerNode }: InfoBoxProps) {
+function InfoBox({ title, children, titleClassName, cardClassName, action }: InfoBoxProps) {
     return (
         <div className={cardClassName ? `${cardClassName} card col fill` : "card col fill"}>
             <div className="summary">
                 <div className="row middle spread margin-b-m">
                     <h4 className={titleClassName ?? ""}>{title}</h4>
-                    {cornerNode}
+                    {action}
                 </div>
                 {children}
             </div>
@@ -25,8 +25,8 @@ function InfoBox({ title, children, titleClassName, cardClassName, cornerNode }:
 }
 
 InfoBox.defaultProps = {
+    action: null,
     cardClassName: "",
-    cornerNode: null,
     titleClassName: "",
 };
 export default InfoBox;

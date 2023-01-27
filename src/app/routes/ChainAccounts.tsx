@@ -61,10 +61,9 @@ function ChainAccounts() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
-
                     <InfoBox
                         title="On-chain accounts"
-                        cornerNode={
+                        action={
                             <input
                                 onChange={onSearchChange}
                                 value={search}
