@@ -7,7 +7,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as HealthGoodIcon } from "../../assets/health-good.svg";
 import { ReactComponent as HealthWarning } from "../../assets/health-warning.svg";
-import { IAction, Action } from "../../lib";
+import { IAction } from "../../lib";
+import IconButton from "./IconButton";
 
 interface TileProps {
     displayHealth?: boolean | undefined;
@@ -37,16 +38,7 @@ const TileContent: React.FC<TileProps> = ({
         {actions?.length && (
             <div className="actions">
                 {actions.map(action => (
-                    <button
-                        className={`${
-                            action.type === Action.Delete ? "action-button-danger action-button" : "action-button"
-                        }`}
-                        type="button"
-                        key={action.text}
-                        onClick={action.handleAction}
-                    >
-                        {action.icon}
-                    </button>
+                    <IconButton key={action.text} icon={action.icon} type={action.type} onClick={action.handleAction} />
                 ))}
             </div>
         )}

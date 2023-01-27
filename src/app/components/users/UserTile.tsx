@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { DeleteIcon, EditIcon } from "../../../assets";
-import { User } from "../../../lib";
-import { DeleteUserDialog, EditUserDialog } from "../../components";
+import { Action, User } from "../../../lib";
+import { DeleteUserDialog, EditUserDialog, IconButton } from "../../components";
 import "./UserTile.scss";
 
 interface UserTileProps {
@@ -62,17 +62,17 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
                         <p>{user?.username}</p>
                     </div>
                     <div className="buttons-wrapper">
-                        <button type="button" className="action-button" onClick={() => setShowEditUserDialog(true)}>
-                            <EditIcon />
-                        </button>
+                        <IconButton
+                            icon={<EditIcon />}
+                            onClick={() => setShowEditUserDialog(true)}
+                            type={Action.Edit}
+                        />
                         {canBeDeleted && (
-                            <button
-                                type="button"
-                                className="action-button action-button-danger"
+                            <IconButton
+                                icon={<DeleteIcon />}
                                 onClick={() => setShowDeleteUserDialog(true)}
-                            >
-                                <DeleteIcon />
-                            </button>
+                                type={Action.Delete}
+                            />
                         )}
                     </div>
                 </div>

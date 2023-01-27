@@ -13,8 +13,9 @@ import {
     PeeringNodeStatusResponse,
     WaspClientService,
     ChainInfoResponse,
+    Action,
 } from "../../lib/";
-import { PeersList, InfoBox, Tile, AddPeerDialog } from "../components";
+import { PeersList, InfoBox, Tile, AddPeerDialog, IconButton } from "../components";
 import "./Home.scss";
 
 /**
@@ -139,9 +140,11 @@ function Home() {
                         title="Peers"
                         titleWithIcon={true}
                         icon={
-                            <button type="button" className="action-button" onClick={() => setShowAddPeerDialog(true)}>
-                                <AddIcon />
-                            </button>
+                            <IconButton
+                                icon={<AddIcon />}
+                                onClick={() => setShowAddPeerDialog(true)}
+                                type={Action.Add}
+                            />
                         }
                     >
                         <div className="sized-container">

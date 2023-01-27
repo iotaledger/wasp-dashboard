@@ -2,8 +2,8 @@ import "./Users.scss";
 import "./Route.scss";
 import React, { useEffect, useState } from "react";
 import { AddIcon } from "../../assets";
-import { WaspClientService, ServiceFactory, AuthService, User } from "../../lib";
-import { AddUserDialog, UsersList } from "../components";
+import { WaspClientService, ServiceFactory, AuthService, User, Action } from "../../lib";
+import { AddUserDialog, IconButton, UsersList } from "../components";
 
 const Users: React.FC = () => {
     /**
@@ -74,13 +74,12 @@ const Users: React.FC = () => {
                 <div className="row spread middle">
                     <h2>Users</h2>
                     <div className="row">
-                        <button
-                            type="button"
-                            className="action-button padding-t"
+                        <IconButton
+                            icon={<AddIcon />}
                             onClick={() => setShowAddUserDialog(true)}
-                        >
-                            <AddIcon />
-                        </button>
+                            classnames="padding-t"
+                            type={Action.Add}
+                        />
                     </div>
                 </div>
                 <div className="content">
