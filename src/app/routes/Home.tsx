@@ -121,15 +121,19 @@ function Home() {
                 <div className="row fill margin-t-s desktop-down-column">
                     <InfoBox title="Chains" titleClassName="title">
                         <div className="sized-container">
-                            {chains?.map(chain => (
-                                <Tile
-                                    key={chain.chainID}
-                                    primaryText={chain.chainID}
-                                    url={`/chains/${chain.chainID}`}
-                                    displayHealth
-                                    healthy={chain.isActive}
-                                />
-                            ))}
+                            {chains?.length ? (
+                                chains?.map(chain => (
+                                    <Tile
+                                        key={chain.chainID}
+                                        primaryText={chain.chainID}
+                                        url={`/chains/${chain.chainID}`}
+                                        displayHealth
+                                        healthy={chain.isActive}
+                                    />
+                                ))
+                            ) : (
+                                <Tile primaryText="No chains found." />
+                            )}
                         </div>
                     </InfoBox>
                 </div>
@@ -144,7 +148,11 @@ function Home() {
                         }
                     >
                         <div className="sized-container">
-                            <PeersList peers={peersList} detailedList />
+                            {peersList.length === 0 ? (
+                                <Tile primaryText="No peers found." />
+                            ) : (
+                                <PeersList peers={peersList} detailedList />
+                            )}
                         </div>
                     </InfoBox>
                     {showAddPeerDialog && <AddPeerDialog onClose={closeAddPeerDialog} onSuccess={closeAddPeerDialog} />}

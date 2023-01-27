@@ -10,7 +10,7 @@ import {
     formatDate,
 } from "../../lib";
 import "./L1.scss";
-import { Breadcrumb, InfoBox, Table } from "../components";
+import { Breadcrumb, InfoBox, Table, Tile } from "../components";
 
 /**
  * L1 chain panel.
@@ -58,12 +58,14 @@ function L1Chain() {
                 </div>
                 <div className="content">
                     <InfoBox title="L1 Chain metrics" cardClassName="last-card">
-                        {l1ChainMetrics && (
+                        {l1ChainMetrics ? (
                             <Table
                                 tBody={l1ChainMetrics as ITableRow[]}
                                 tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
                                 classNames="chain-messages-table"
                             />
+                        ) : (
+                            <Tile primaryText="No metrics found." />
                         )}
                     </InfoBox>
                 </div>

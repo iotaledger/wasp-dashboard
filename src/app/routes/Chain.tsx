@@ -167,28 +167,38 @@ function Chain() {
                 <div className="content">
                     <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
                     <InfoBox title="Info">
-                        {chainProperties
-                            .filter(([key]) => !INFO_SKIP_NAMES.has(key))
-                            .map(([key, val]) => (
-                                <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
-                            ))}
+                        {chainProperties.length === 0 ? (
+                            <Tile primaryText="No info available." />
+                        ) : (
+                            chainProperties
+                                .filter(([key]) => !INFO_SKIP_NAMES.has(key))
+                                .map(([key, val]) => (
+                                    <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                                ))
+                        )}
                     </InfoBox>
                     <InfoBox title="Contracts">
-                        {chainContracts.map(({ name, hName, description, programHash }) => (
-                            <KeyValueRow
-                                key={name}
-                                keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
-                                value={description}
-                            />
-                        ))}
+                        {chainContracts ? (
+                            chainContracts.map(({ name, hName, description, programHash }) => (
+                                <KeyValueRow
+                                    key={name}
+                                    keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
+                                    value={description}
+                                />
+                            ))
+                        ) : (
+                            <Tile primaryText="No contracts available." />
+                        )}
                     </InfoBox>
                     <InfoBox title="Total Assets">
-                        {chainAssets?.baseTokens && (
+                        {chainAssets?.baseTokens ? (
                             <KeyValueRow
                                 key={chainAssets?.baseTokens}
                                 keyText="Base Tokens"
                                 value={chainAssets?.baseTokens}
                             />
+                        ) : (
+                            <Tile primaryText="No base tokens found." />
                         )}
                         {chainAssets?.nativeTokens && chainAssets.nativeTokens.length > 0 && (
                             <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
@@ -202,50 +212,69 @@ function Chain() {
                         )}
                     </InfoBox>
                     <InfoBox title="Latest block">
-                        <KeyValueRow
-                            keyText="Block index"
-                            value={{
-                                text: chainLatestBlock?.blockIndex?.toString(),
-                                url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
-                            }}
-                        />
-                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp} />
+                        {chainLatestBlock ? (
+                            <React.Fragment>
+                                <KeyValueRow
+                                    keyText="Block index"
+                                    value={{
+                                        text: chainLatestBlock?.blockIndex?.toString(),
+                                        url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
+                                    }}
+                                />
+                                <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp} />
+                            </React.Fragment>
+                        ) : (
+                            <Tile primaryText="No latest block found." />
+                        )}
                     </InfoBox>
                     <InfoBox title="Committee">
-                        {chainCommitteeInfo && (
+                        {chainCommitteeInfo ? (
                             <React.Fragment>
-                                <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
-                                <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
+                                <React.Fragment>
+                                    <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
+                                    <KeyValueRow
+                                        keyText="Status"
+                                        value={getStatus(chainCommitteeInfo.active ?? false)}
+                                    />
+                                </React.Fragment>
+                                <br />
+                                <h4>Peers</h4>
+                                {chainCommitteeInfo?.committeeNodes && (
+                                    <Table
+                                        tHead={["Index", "Pubkey", "Status"]}
+                                        tBody={
+                                            chainCommitteeInfo?.committeeNodes.map(({ node }, i) => [
+                                                i,
+                                                node?.publicKey,
+                                                getStatus(node?.isAlive ?? false),
+                                            ]) as unknown as ITableRow[]
+                                        }
+                                    />
+                                )}
                             </React.Fragment>
-                        )}
-                        <br />
-                        <h4>Peers</h4>
-                        {chainCommitteeInfo?.committeeNodes && (
-                            <Table
-                                tHead={["Index", "Pubkey", "Status"]}
-                                tBody={
-                                    chainCommitteeInfo?.committeeNodes.map(({ node }, i) => [
-                                        i,
-                                        node?.publicKey,
-                                        getStatus(node?.isAlive ?? false),
-                                    ]) as unknown as ITableRow[]
-                                }
-                            />
+                        ) : (
+                            <Tile primaryText="No committee found." />
                         )}
                     </InfoBox>
                     <InfoBox title="EVM">
-                        {chainID && (
+                        {chainID ? (
                             <React.Fragment>
                                 <KeyValueRow keyText="EVM ChainID" value={chainInfo?.evmChainId} />
                                 <KeyValueRow keyText="JSON-RPC URL" value={formatEVMJSONRPCUrl(chainID)} />
                             </React.Fragment>
+                        ) : (
+                            <Tile primaryText="No EVM info found." />
                         )}
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
-                        <Table
-                            tHead={["Flag name", "Status", "Trigger time"]}
-                            tBody={chainConsensusMetrics as ITableRow[]}
-                        />
+                        {chainConsensusMetrics ? (
+                            <Table
+                                tHead={["Flag name", "Status", "Trigger time"]}
+                                tBody={chainConsensusMetrics as ITableRow[]}
+                            />
+                        ) : (
+                            <Tile primaryText="No metrics found." />
+                        )}
                     </InfoBox>
                 </div>
             </div>

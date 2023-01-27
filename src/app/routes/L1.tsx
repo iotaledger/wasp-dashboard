@@ -97,23 +97,29 @@ function L1() {
                         </InfoBox>
                     )}
                     <InfoBox title="Chains">
-                        {chains?.map(chain => (
-                            <Tile
-                                key={chain.chainID}
-                                primaryText={chain.chainID}
-                                url={`/l1/${chain.chainID}`}
-                                displayHealth
-                                healthy={chain.isActive}
-                            />
-                        ))}
+                        {chains ? (
+                            chains.map(chain => (
+                                <Tile
+                                    key={chain.chainID}
+                                    primaryText={chain.chainID}
+                                    url={`/l1/${chain.chainID}`}
+                                    displayHealth
+                                    healthy={chain.isActive}
+                                />
+                            ))
+                        ) : (
+                            <Tile primaryText="No L1 chains found." />
+                        )}
                     </InfoBox>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
-                        {l1Metrics && (
+                        {l1Metrics ? (
                             <Table
                                 tBody={l1Metrics as ITableRow[]}
                                 tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
                                 classNames="chain-messages-table"
                             />
+                        ) : (
+                            <Tile primaryText="No L1 metrics found." />
                         )}
                     </InfoBox>
                 </div>
