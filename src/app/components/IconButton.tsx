@@ -4,7 +4,7 @@ import { Action } from "../../lib";
 interface IconButtonProps {
     classnames?: string;
     icon: React.ReactNode;
-    type?: Action | undefined;
+    type?: Action;
     onClick: () => void;
     tabIndex?: number;
 }
