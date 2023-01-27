@@ -5,7 +5,7 @@
 .user-panel-item {
     display: flex;
     flex-direction: row;
-    align-items: start;
+    align-items: flex-start;
     width: 100%;
 
     &.card {
