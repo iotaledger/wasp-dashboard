@@ -43,11 +43,7 @@ function ChainAccounts() {
             });
     }, []);
 
-    // eslint-disable-next-line jsdoc/require-param-description
-    /**
-     *
-     * @param e
-     */
+    // eslint-disable-next-line jsdoc/require-jsdoc
     function onSearchChange(e: ChangeEvent<HTMLInputElement>) {
         setSearch(e.target.value);
     }
