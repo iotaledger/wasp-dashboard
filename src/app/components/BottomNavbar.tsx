@@ -56,13 +56,15 @@ export default function BottomNavbar({
                     iconFirst
                 />
                 <div className="select-wrapper row middle range-wrapper">
-                    <select value={location} onChange={e => selectorChanged(`${navUrl}/${e.target.value}`)}>
-                        {selectorOptions?.map(option => (
-                            <option key={option} value={option} className="padding-t">
-                                {option}
-                            </option>
-                        ))}
-                    </select>
+                    {selectorOptions.length > 0 && (
+                        <select value={location} onChange={e => selectorChanged(`${navUrl}/${e.target.value}`)}>
+                            {selectorOptions?.map(option => (
+                                <option key={option} value={option} className="padding-t">
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                    )}
                 </div>
                 <NavLink navUrl={navUrl} button={nextButton} label="Next" icon={<ChevronRightIcon />} />
                 <NavLink navUrl={navUrl} button={lastButton} label="Latest" icon={<ChevronRightIcon />} doubledIcon />
