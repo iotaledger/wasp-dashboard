@@ -7,6 +7,8 @@ import {
     ChangeUserPasswordRequest,
     User,
     MIN_PASSWORD_STRENGTH,
+    ChangeUserPermissionsRequest,
+    Permissions,
 } from "../../../lib";
 import { Dialog, PasswordInput } from "../../components";
 
@@ -23,6 +25,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
     const [newPassword, setNewPassword] = useState<string>("");
     const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
     const [validForm, setValidForm] = useState<boolean>(false);
+    const [permissions, setPermissions] = useState<string[] | undefined>();
 
     useEffect(() => {
         validatePasswords();
@@ -45,6 +48,14 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
             setValidForm(true);
         }
     }
+    const handlePermissionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const permission = e.target.value as Permissions;
+        if (e.target.checked) {
+            setPermissions([...(permissions ?? []), permission]);
+        } else {
+            setPermissions(permissions?.filter(p => p !== permission));
+        }
+    };
 
     async function handleEditUser(): Promise<void> {
         setError(null);
@@ -54,6 +65,12 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                 ...user,
                 updateUserPasswordRequest: { password: confirmNewPassword },
             } as ChangeUserPasswordRequest);
+
+            await waspClientService.users().changeUserPermissions({
+                ...user,
+                updateUserPermissionsRequest: { permissions: permissions ?? [] },
+            } as ChangeUserPermissionsRequest);
+
             if (onSuccess && typeof onSuccess === "function") {
                 onSuccess();
             }
@@ -107,7 +124,20 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                             setConfirmNewPassword(e.target.value)}
                         disabled={isBusy}
                     />
-
+                    <div className="dialog-content-label">Check permissions</div>
+                    <div className="dialog-content-value">
+                        {Object.values(Permissions).map(permission => (
+                            <div key={permission} className="row middle">
+                                <input
+                                    type="checkbox"
+                                    value={permission}
+                                    onChange={handlePermissionChange}
+                                    checked={permissions?.includes(permission)}
+                                />
+                                <span className="margin-l-t">{permission}</span>
+                            </div>
+                        ))}
+                    </div>
                     {error && <p className="dialog-content-error">{error}</p>}
                 </div>
             </React.Fragment>
