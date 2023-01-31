@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction, useMemo, useState } from "react";
 import zxcvbn from "zxcvbn";
 import {
     ServiceFactory,
@@ -23,31 +23,40 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [newPassword, setNewPassword] = useState<string>("");
+    const [permissions, setPermissions] = useState<string[] | undefined>(user.permissions ? [...user.permissions] : []);
+
     const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
-    const [validForm, setValidForm] = useState<boolean>(false);
-    const [permissions, setPermissions] = useState<string[] | undefined>();
 
-    useEffect(() => {
-        validatePasswords();
-    }, [confirmNewPassword, newPassword]);
-
-    function validatePasswords(): void {
-        if (confirmNewPassword?.length <= 0 || newPassword?.length <= 0) {
-            setValidForm(false);
-        } else if (confirmNewPassword === newPassword) {
-            const passwordStrength = zxcvbn(newPassword);
-            if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
-                setValidForm(false);
-                setError(passwordStrength.feedback.suggestions.join(" "));
-            } else {
-                setValidForm(true);
-                setError(null);
+    const [passwordIsValid, permissionsAreValid] = useMemo(() => {
+        // Check if both passwords are valid
+        const passwordCheck = (() => {
+            if (confirmNewPassword?.length <= 0 || newPassword?.length <= 0) {
+                return false;
+            } else if (confirmNewPassword === newPassword) {
+                const passwordStrength = zxcvbn(newPassword);
+                if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
+                    setError(passwordStrength.feedback.suggestions.join(" "));
+                    return false;
+                }
+                    setError(null);
+                    return true;
             }
-        } else {
-            setError("Passwords do not match!");
-            setValidForm(true);
-        }
-    }
+                setError("Passwords do not match!");
+                return false;
+        })();
+        // Check if permissions are different
+        const permissionsCheck = (() => {
+            if (!Array.isArray(permissions) || !Array.isArray(user.permissions)) {
+return false;
+}
+            return !(
+                user.permissions?.every(p => permissions.includes(p)) &&
+                permissions.length === user.permissions.length
+            );
+        })();
+        return [passwordCheck, permissionsCheck];
+    }, [confirmNewPassword, newPassword, permissions, user]);
+
     const handlePermissionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const permission = e.target.value as Permissions;
         if (e.target.checked) {
@@ -61,15 +70,23 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
         setError(null);
         try {
             const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
-            await waspClientService.users().changeUserPassword({
-                ...user,
-                updateUserPasswordRequest: { password: confirmNewPassword },
-            } as ChangeUserPasswordRequest);
+            await Promise.all([
+                // Update the password if has changed and is valid
+                passwordIsValid
+                    ? waspClientService.users().changeUserPassword({
+                          ...user,
+                          updateUserPasswordRequest: { password: confirmNewPassword },
+                      } as ChangeUserPasswordRequest)
+                    : Promise.resolve(),
 
-            await waspClientService.users().changeUserPermissions({
-                ...user,
-                updateUserPermissionsRequest: { permissions: permissions ?? [] },
-            } as ChangeUserPermissionsRequest);
+                // Update the permissions if have changed
+                permissionsAreValid
+                    ? waspClientService.users().changeUserPermissions({
+                          ...user,
+                          updateUserPermissionsRequest: { permissions: permissions ?? [] },
+                      } as ChangeUserPermissionsRequest)
+                    : Promise.resolve(),
+            ]);
 
             if (onSuccess && typeof onSuccess === "function") {
                 onSuccess();
@@ -86,6 +103,8 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
         }
     }
 
+    const formIsValid = passwordIsValid || permissionsAreValid;
+
     return (
         <Dialog
             onClose={onClose}
@@ -96,7 +115,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                         type="button"
                         className="button button--primary"
                         onClick={handleEditUser}
-                        disabled={isBusy || !validForm}
+                        disabled={!formIsValid}
                     >
                         Save
                     </button>
