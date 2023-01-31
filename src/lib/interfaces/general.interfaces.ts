@@ -1,3 +1,4 @@
+import React from "react";
 import { Action } from "../enums";
 
 export interface StandardMessage {
@@ -12,6 +13,7 @@ export interface ILink {
 }
 
 export interface IAction {
+    icon?: React.ReactNode | undefined;
     text: string | undefined | null;
     handleAction: () => unknown;
     type?: Action;
