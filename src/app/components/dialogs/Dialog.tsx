@@ -1,4 +1,6 @@
 import React, { FC, ReactNode, useEffect, useRef } from "react";
+import { CloseIcon } from "../../../assets";
+import IconButton from "../IconButton";
 import "./Dialog.scss";
 
 interface DialogProps extends React.PropsWithChildren {
@@ -43,9 +45,11 @@ const Dialog: FC<DialogProps> = ({ title, children, actions, onClose, classnames
                     <div className="dialog-header row">
                         <h1>{title}</h1>
                         {onClose && (
-                            <button type="button" className="icon-button dialog-header-close" onClick={onClose}>
-                                &#x2715;
-                            </button>
+                            <IconButton
+                                icon={<CloseIcon />}
+                                onClick={onClose}
+                                classnames="icon-button dialog-header-close"
+                            />
                         )}
                     </div>
                     <div className="dialog-content">{children}</div>

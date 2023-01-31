@@ -9,6 +9,7 @@ import {
     CommitteeInfoResponse,
     PeersService,
     EventAggregator,
+    Action,
 } from "../../lib";
 import {
     Breadcrumb,
@@ -19,6 +20,7 @@ import {
     ChainNavbar,
     EditAccessNodesDialog,
     LoadingTile,
+    IconButton,
 } from "../components";
 
 const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
@@ -157,9 +159,7 @@ function ChainNodes() {
                         title="Access nodes"
                         titleWithIcon={true}
                         icon={
-                            <button type="button" onClick={() => setIsPopupOpen(true)} className="edit-button">
-                                <EditIcon />
-                            </button>
+                            <IconButton onClick={() => setIsPopupOpen(true)} icon={<EditIcon />} type={Action.Edit} />
                         }
                     >
                         <div className="sized-container">

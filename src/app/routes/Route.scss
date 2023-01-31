@@ -65,16 +65,6 @@
       color: var(--text-color-secondary);
       text-decoration: none;
 
-      div {
-        display: flex;
-        margin-left: 6px;
-
-        &.first-icon {
-          margin-right: 6px;
-          margin-left: 0;
-        }
-      }
-
       &:hover {
         color: var(--text-color-primary);
       }
@@ -85,11 +75,11 @@
       }
 
       @include tablet-down {
-        font-size: 14px;
+        font-size: 12px;
 
         svg {
-          width: 12px;
-          height: 12px;
+          width: 10px;
+          height: 10px;
         }
       }
     }

@@ -7,7 +7,7 @@ export interface NavLinkButton {
 }
 
 NavLink.defaultProps = {
-    doubledIcon: false,
+    codeRepetition: 1,
     icon: undefined,
     iconFirst: false,
 };
@@ -18,9 +18,9 @@ NavLink.defaultProps = {
  * @param param0.label Label.
  * @param param0.button Button configuration.
  * @param param0.icon Link's icon.
- * @param param0.doubledIcon Double the icon or not.
  * @param param0.iconFirst Show the icon before the text.
  * @param param0.navUrl The navigatio URL prefix for the links.
+ * @param param0.codeRepetition How many times to repeat the code.
  * @returns The Node to render.
  */
 export default function NavLink({
@@ -28,35 +28,26 @@ export default function NavLink({
     navUrl,
     button,
     icon,
-    doubledIcon,
+    codeRepetition = 1,
     iconFirst,
 }: {
     label: string;
     navUrl: string;
     button: NavLinkButton;
     icon?: React.ReactNode;
-    doubledIcon?: boolean;
     iconFirst?: boolean;
+    codeRepetition?: number;
 }) {
     return (
         <Link to={`${navUrl}${button.value}`} className={`nav-link ${!button.enabled && "disabled"}`}>
-            {iconFirst ? (
-                <React.Fragment>
-                    <div className="first-icon">
-                        {icon}
-                        {doubledIcon && icon}
-                    </div>
-                    <span>{label}</span>
-                </React.Fragment>
-            ) : (
-                <React.Fragment>
-                    <span>{label}</span>
-                    <div>
-                        {icon}
-                        {doubledIcon && icon}
-                    </div>
-                </React.Fragment>
-            )}
+            <div className={`${iconFirst ? "row" : "row-reverse"} middle`}>
+                <div className={`${iconFirst ? "margin-r-t" : "margin-l-t"} row`}>
+                    {Array.from({ length: codeRepetition }, (_, i) => (
+                        <React.Fragment key={i}>{icon}</React.Fragment>
+                    ))}
+                </div>
+                <span>{label}</span>
+            </div>
         </Link>
     );
 }
