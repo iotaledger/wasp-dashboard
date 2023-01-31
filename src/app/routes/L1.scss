@@ -55,11 +55,9 @@
     }
 
     .first-card {
-      margin-right: $spacing-small;
       margin-bottom: 0;
 
       @include desktop-down {
-        margin-right: 0;
         margin-bottom: $spacing-small;
       }
     }

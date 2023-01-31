@@ -45,22 +45,3 @@
     }
   }
 }
-
-.cols-wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
-  @include tablet-down {
-    flex-direction: column;
-  }
-
-  .first-card {
-    margin-right: $spacing-small;
-
-    @include tablet-down {
-      margin-right: 0;
-    }
-  }
-
-}

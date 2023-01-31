@@ -154,3 +154,23 @@ table {
         margin-top: $spacing-large;
     }
 }
+
+.cols-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  
+    @include desktop-down {
+      flex-direction: column;
+    }
+  
+    .first-card {
+      margin-right: $spacing-small;
+  
+      @include tablet-down {
+        margin-right: 0;
+      }
+    }
+  
+  }

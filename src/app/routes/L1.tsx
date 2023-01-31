@@ -75,38 +75,40 @@ function L1() {
             <div className="l1-wrapper">
                 <h2>L1</h2>
                 <div className="content">
-                    {l1Params && (
-                        <InfoBox title="L1 params" cardClassName="first-card">
-                            {Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
-                                const isObject = typeof val === "object";
-                                return (
-                                    <div key={key} className="l1-info-item">
-                                        <h4>{key}</h4>
-                                        {isObject ? (
-                                            <div>
-                                                {Object.entries(val).map(([prop, propVal]) => (
-                                                    <KeyValueRow key={prop} keyText={prop} value={propVal} />
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <p>{val}</p>
-                                        )}
-                                    </div>
-                                );
-                            })}
+                    <div className="cols-wrapper">
+                        {l1Params && (
+                            <InfoBox title="L1 params" cardClassName="first-card">
+                                {Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
+                                    const isObject = typeof val === "object";
+                                    return (
+                                        <div key={key} className="l1-info-item">
+                                            <h4>{key}</h4>
+                                            {isObject ? (
+                                                <div>
+                                                    {Object.entries(val).map(([prop, propVal]) => (
+                                                        <KeyValueRow key={prop} keyText={prop} value={propVal} />
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p>{val}</p>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </InfoBox>
+                        )}
+                        <InfoBox title="Chains">
+                            {chains?.map(chain => (
+                                <Tile
+                                    key={chain.chainID}
+                                    primaryText={chain.chainID}
+                                    url={`/l1/${chain.chainID}`}
+                                    displayHealth
+                                    healthy={chain.isActive}
+                                />
+                            ))}
                         </InfoBox>
-                    )}
-                    <InfoBox title="Chains">
-                        {chains?.map(chain => (
-                            <Tile
-                                key={chain.chainID}
-                                primaryText={chain.chainID}
-                                url={`/l1/${chain.chainID}`}
-                                displayHealth
-                                healthy={chain.isActive}
-                            />
-                        ))}
-                    </InfoBox>
+                    </div>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
                         {l1Metrics && (
                             <Table
