@@ -38,17 +38,17 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                     setError(passwordStrength.feedback.suggestions.join(" "));
                     return false;
                 }
-                    setError(null);
-                    return true;
+                setError(null);
+                return true;
             }
-                setError("Passwords do not match!");
-                return false;
+            setError("Passwords do not match!");
+            return false;
         })();
         // Check if permissions are different
         const permissionsCheck = (() => {
             if (!Array.isArray(permissions) || !Array.isArray(user.permissions)) {
-return false;
-}
+                return false;
+            }
             return !(
                 user.permissions?.every(p => permissions.includes(p)) &&
                 permissions.length === user.permissions.length
@@ -115,7 +115,7 @@ return false;
                         type="button"
                         className="button button--primary"
                         onClick={handleEditUser}
-                        disabled={!formIsValid}
+                        disabled={isBusy || !formIsValid}
                     >
                         Save
                     </button>
