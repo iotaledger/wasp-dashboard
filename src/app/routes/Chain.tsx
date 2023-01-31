@@ -7,7 +7,6 @@ import {
     ChainInfoResponse,
     ContractInfoResponse,
     Blob,
-    CommitteeInfoResponse,
     WaspClientService,
     ServiceFactory,
     BlockInfoResponse,
@@ -15,8 +14,16 @@ import {
 import { ChainsService } from "../../lib/classes/services/chainsService";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
-import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
-import ChainNavbar from "../components/ChainNavbar";
+import {
+    Breadcrumb,
+    InfoBox,
+    KeyValueRow,
+    Table,
+    Tile,
+    LoadingChainContractsBox,
+    LoadingChainInfoBox,
+    ChainNavbar,
+} from "../components";
 
 interface ConsensusMetric {
     status: string;
@@ -38,8 +45,6 @@ function transformInfoIntoArray(chainInfo: ChainInfoResponse) {
     });
 }
 
-const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
-
 /**
  * Chain panel.
  * @returns The node to render.
@@ -49,10 +54,9 @@ function Chain() {
     const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
 
     const [chainInfo, setChainInfo] = useState<ChainInfoResponse | null>(null);
-    const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
+    const [chainContracts, setChainContracts] = useState<ContractInfoResponse[] | null>(null);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
-    const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
         Record<string, ConsensusMetric> | null | ITableRow[]
@@ -136,26 +140,7 @@ function Chain() {
                 });
                 setChainConsensusMetrics(chainConsensusMetricsArray);
             });
-
-        loadCommitteeInfo();
     }, [chainID]);
-
-    /**
-     * Load the committee info
-     */
-    function loadCommitteeInfo() {
-        if (!chainID) {
-            return;
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
-            .chains()
-            .getCommitteeInfo({ chainID })
-            .then(newCommitteeInfo => {
-                setChainCommitteeInfo(newCommitteeInfo);
-            });
-    }
 
     return (
         <div className="main">
@@ -166,22 +151,30 @@ function Chain() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
-                    <InfoBox title="Info">
-                        {chainProperties
-                            .filter(([key]) => !INFO_SKIP_NAMES.has(key))
-                            .map(([key, val]) => (
-                                <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                    {chainProperties.length > 0 ? (
+                        <InfoBox title="Info">
+                            {chainProperties
+                                .filter(([key]) => !INFO_SKIP_NAMES.has(key))
+                                .map(([key, val]) => (
+                                    <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                                ))}
+                        </InfoBox>
+                    ) : (
+                        <LoadingChainInfoBox />
+                    )}
+                    {chainContracts ? (
+                        <InfoBox title="Contracts">
+                            {chainContracts.map(({ name, hName, description, programHash }) => (
+                                <KeyValueRow
+                                    key={name}
+                                    keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
+                                    value={description}
+                                />
                             ))}
-                    </InfoBox>
-                    <InfoBox title="Contracts">
-                        {chainContracts.map(({ name, hName, description, programHash }) => (
-                            <KeyValueRow
-                                key={name}
-                                keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
-                                value={description}
-                            />
-                        ))}
-                    </InfoBox>
+                        </InfoBox>
+                    ) : (
+                        <LoadingChainContractsBox />
+                    )}
                     <InfoBox title="Total Assets">
                         {chainAssets?.baseTokens && (
                             <KeyValueRow
@@ -209,30 +202,9 @@ function Chain() {
                                 url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
                             }}
                         />
-                        <KeyValueRow keyText="Last updated" value={chainLatestBlock?.timestamp} />
+                        <KeyValueRow keyText="Timestamp" value={formatDate(chainLatestBlock?.timestamp)} />
                     </InfoBox>
-                    <InfoBox title="Committee">
-                        {chainCommitteeInfo && (
-                            <React.Fragment>
-                                <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
-                                <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
-                            </React.Fragment>
-                        )}
-                        <br />
-                        <h4>Peers</h4>
-                        {chainCommitteeInfo?.committeeNodes && (
-                            <Table
-                                tHead={["Index", "Pubkey", "Status"]}
-                                tBody={
-                                    chainCommitteeInfo?.committeeNodes.map(({ node }, i) => [
-                                        i,
-                                        node?.publicKey,
-                                        getStatus(node?.isAlive ?? false),
-                                    ]) as unknown as ITableRow[]
-                                }
-                            />
-                        )}
-                    </InfoBox>
+
                     <InfoBox title="EVM">
                         {chainID && (
                             <React.Fragment>

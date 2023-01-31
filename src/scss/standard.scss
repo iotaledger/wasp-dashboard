@@ -154,3 +154,24 @@ table {
         margin-top: $spacing-large;
     }
 }
+
+.action-button {
+    padding: 6px;
+    border: 0;
+    outline: 0;
+    background: none;
+    color: var(--text-color-secondary);
+    transition: color 0.1s ease-in;
+    cursor: pointer;
+  
+    &:hover {
+      color: var(--accent-primary);
+    }
+
+    &.action-button-danger {
+        &:hover {
+            color: transparentize($danger, 0.4);
+      }
+    }
+  }
+  

@@ -80,6 +80,7 @@ function MobileMenu(props: MenuProps) {
                         <React.Fragment key={b.label}>
                             {!b.hidden && b.route && (
                                 <Link
+                                    onClick={toggleMenu}
                                     to={b.route}
                                     className={classNames("mobile-panel-item", {
                                         "mobile-panel-item-selected":
@@ -88,9 +89,7 @@ function MobileMenu(props: MenuProps) {
                                     })}
                                 >
                                     {b.icon}
-                                    <span className="mobile-panel-item-label" onClick={toggleMenu}>
-                                        {b.label}
-                                    </span>
+                                    <span className="mobile-panel-item-label">{b.label}</span>
                                 </Link>
                             )}
                             {!b.hidden && b.function && (

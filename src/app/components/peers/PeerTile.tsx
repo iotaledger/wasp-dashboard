@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { DeleteIcon } from "../../../assets";
 import { PeeringNodeStatusResponse, Action } from "../../../lib";
 import { DeletePeerDialog, Tile } from "../../components";
 
@@ -14,9 +15,15 @@ interface PeerTileProps {
      * @default false
      */
     detailed?: boolean;
+
+    /**
+     * Enable the delete button.
+     * @default true
+     */
+    enableDelete?: boolean;
 }
 
-const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed }) => {
+const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed, enableDelete }) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
     /**
      *
@@ -26,7 +33,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed }) => {
     }
 
     const primaryText = peer.publicKey;
-    const secondaryText = peer.netId;
+    const secondaryText = `${peer.netId} ${Number.isInteger(peer.numUsers) ? `- Users: ${peer.numUsers}` : ""}`;
     const healthy = peer.isAlive;
 
     const actions = [
@@ -36,6 +43,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed }) => {
                 setShowDeleteDialog(true);
             },
             type: Action.Delete,
+            icon: <DeleteIcon />,
         },
     ];
 
@@ -46,7 +54,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed }) => {
                 healthy={healthy}
                 primaryText={primaryText}
                 secondaryText={detailed ? secondaryText : undefined}
-                actions={detailed ? actions : undefined}
+                actions={enableDelete ? actions : undefined}
             />
             {showDeleteDialog && (
                 <DeletePeerDialog onClose={closeDeletePeerDialog} onSuccess={closeDeletePeerDialog} peer={peer} />
@@ -57,6 +65,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed }) => {
 
 PeerTile.defaultProps = {
     detailed: false,
+    enableDelete: true,
 };
 
 export default PeerTile;

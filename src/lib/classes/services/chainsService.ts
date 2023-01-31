@@ -1,5 +1,5 @@
 import { WaspClientService, ServiceFactory, LocalStorageService } from "../../classes";
-import { BlockInfoResponse, RequestReceiptResponse } from "../../wasp_client";
+import { BlockInfoResponse, BlockInfoResponseFromJSON, RequestReceiptResponse } from "../../wasp_client";
 
 // Information about a Block
 export interface BlockData {
@@ -74,7 +74,11 @@ export class ChainsService {
         if (savedChain) {
             const savedBlock = savedChain.blocks[blockIndex];
             if (savedBlock?.info && savedBlock?.events && savedBlock?.requests) {
-                return savedBlock;
+                return {
+                    ...savedBlock,
+                    // eslint-disable-next-line new-cap
+                    info: BlockInfoResponseFromJSON(savedBlock.info),
+                };
             }
         } else {
             this._cachedChains[chainID] = {
