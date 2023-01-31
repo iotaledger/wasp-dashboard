@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useEffect, useState } from "react";
+import { AddIcon } from "../../assets";
 import { ReactComponent as BannerCurve } from "../../assets/banner-curve.svg";
 import {
     ServiceFactory,
@@ -12,8 +13,9 @@ import {
     PeeringNodeStatusResponse,
     WaspClientService,
     ChainInfoResponse,
+    Action,
 } from "../../lib/";
-import { PeersList, InfoBox, Tile, AddPeerDialog, LoadingTile } from "../components";
+import { PeersList, InfoBox, Tile, AddPeerDialog, LoadingTile, IconButton } from "../components";
 import "./Home.scss";
 
 /**
@@ -142,9 +144,11 @@ function Home() {
                         title="Peers"
                         titleWithIcon={true}
                         icon={
-                            <button type="button" className="add-button" onClick={() => setShowAddPeerDialog(true)}>
-                                Add Peer
-                            </button>
+                            <IconButton
+                                icon={<AddIcon />}
+                                onClick={() => setShowAddPeerDialog(true)}
+                                type={Action.Add}
+                            />
                         }
                     >
                         <div className="sized-container">
