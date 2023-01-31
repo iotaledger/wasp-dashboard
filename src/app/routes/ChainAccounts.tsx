@@ -1,9 +1,8 @@
 import React, { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Route.scss";
-import { ServiceFactory, WaspClientService } from "../../lib";
-import { Breadcrumb, InfoBox, Tile } from "../components";
-import ChainNavbar from "../components/ChainNavbar";
+import { WaspClientService, ServiceFactory } from "../../lib";
+import { Breadcrumb, InfoBox, Tile, LoadingTile, ChainNavbar } from "../components";
 
 const SEARCH_ACCOUNT_PLACEHOLDER = "Account address";
 
@@ -69,9 +68,13 @@ function ChainAccounts() {
                         }
                     >
                         {search.length > 0 && <h4 className="margin-b-m">{results.length} results found.</h4>}
-                        {results.map(account => (
+                        {chainAccounts.length > 0 ? (
+                          results.map(account => (
                             <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
-                        ))}
+                          ))
+                        ):(
+                          Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} />)
+                        )}
                     </InfoBox>
                 </div>
             </div>

@@ -10,9 +10,16 @@ import {
     PeersService,
     EventAggregator,
 } from "../../lib";
-import { Breadcrumb, InfoBox, KeyValueRow, PeersList } from "../components";
-import ChainNavbar from "../components/ChainNavbar";
-import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
+import {
+    Breadcrumb,
+    InfoBox,
+    KeyValueRow,
+    PeersList,
+    LoadingChainCommitteeBox,
+    ChainNavbar,
+    EditAccessNodesDialog,
+    LoadingTile,
+} from "../components";
 
 const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
 
@@ -30,8 +37,8 @@ function ChainNodes() {
     const { chainID } = useParams();
 
     const chainURL = `/chains/${chainID}`;
-    const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
-    const peersNodes = chainCommitteeInfo?.committeeNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
+    const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse);
+    const peersNodes = chainCommitteeInfo?.committeeNodes?.map(({ node }) => node as PeeringNodeStatusResponse);
 
     const chainBreadcrumbs = [
         { goTo: "/", text: "Home" },
@@ -86,7 +93,7 @@ function ChainNodes() {
      * @param newAccessNodes Updated access nodes.
      */
     async function updateAccessNodes(newAccessNodes: PeeringNodeStatusResponse[]) {
-        if (!chainID) {
+        if (!chainID || !accessNodes) {
             return;
         }
 
@@ -138,14 +145,14 @@ function ChainNodes() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
-                    <InfoBox title="Committee">
-                        {chainCommitteeInfo && (
-                            <React.Fragment>
-                                <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
-                                <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
-                            </React.Fragment>
-                        )}
-                    </InfoBox>
+                    {chainCommitteeInfo ? (
+                        <InfoBox title="Committee">
+                            <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
+                            <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
+                        </InfoBox>
+                    ) : (
+                        <LoadingChainCommitteeBox />
+                    )}
                     <InfoBox
                         title="Access nodes"
                         action={
@@ -155,14 +162,18 @@ function ChainNodes() {
                         }
                     >
                         <div className="sized-container">
-                            <PeersList
-                                peers={accessNodes}
-                                detailedList
-                                enableDelete={false}
-                                emptyText="No access nodes found."
-                            />
+                            {accessNodes ? (
+                                <PeersList
+                                    peers={accessNodes}
+                                    detailedList
+                                    enableDelete={false}
+                                    emptyText="No access nodes found."
+                                />
+                            ) : (
+                                Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} displayHealth={true} />)
+                            )}
                         </div>
-                        {isPopupOpen && (
+                        {isPopupOpen && accessNodes && (
                             <EditAccessNodesDialog
                                 peerNodes={peersList}
                                 accessNodes={accessNodes}
@@ -173,7 +184,11 @@ function ChainNodes() {
                     </InfoBox>
                     <InfoBox title="Peers">
                         <div className="sized-container">
-                            <PeersList peers={peersNodes} detailedList enableDelete={false} />
+                            {peersNodes ? (
+                                <PeersList peers={peersNodes} detailedList enableDelete={false} />
+                            ) : (
+                                Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} displayHealth={true} />)
+                            )}
                         </div>
                     </InfoBox>
                 </div>
