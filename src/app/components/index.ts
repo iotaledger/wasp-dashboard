@@ -16,6 +16,7 @@ export { default as TabGroup } from "./TabGroup";
 export { default as NavLink } from "./Navlink";
 export { default as BottomNavbar } from "./BottomNavbar";
 
+export * from "./loading";
 export * from "./dialogs";
 export * from "./peers";
 export * from "./users";

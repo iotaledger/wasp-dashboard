@@ -10,15 +10,24 @@ import {
     PeersService,
     EventAggregator,
 } from "../../lib";
-import { Breadcrumb, InfoBox, Tile } from "../components";
-import ChainNavbar from "../components/ChainNavbar";
-import EditAccessNodesDialog from "../components/dialogs/EditAccessNodesDialog";
+import {
+    Breadcrumb,
+    InfoBox,
+    KeyValueRow,
+    PeersList,
+    LoadingChainCommitteeBox,
+    ChainNavbar,
+    EditAccessNodesDialog,
+    LoadingTile,
+} from "../components";
+
+const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
 
 /**
- * ChainAccessNodes panel.
+ * ChainNodes panel.
  * @returns The node to render.
  */
-function ChainAccessNodes() {
+function ChainNodes() {
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
     const peersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
@@ -28,12 +37,13 @@ function ChainAccessNodes() {
     const { chainID } = useParams();
 
     const chainURL = `/chains/${chainID}`;
-    const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse) ?? [];
+    const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse);
+    const peersNodes = chainCommitteeInfo?.committeeNodes?.map(({ node }) => node as PeeringNodeStatusResponse);
 
     const chainBreadcrumbs = [
         { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
-        { goTo: `${chainURL}/access-nodes`, text: "Access Nodes" },
+        { goTo: `${chainURL}/nodes`, text: "Nodes" },
     ];
 
     React.useEffect(() => {
@@ -83,7 +93,7 @@ function ChainAccessNodes() {
      * @param newAccessNodes Updated access nodes.
      */
     async function updateAccessNodes(newAccessNodes: PeeringNodeStatusResponse[]) {
-        if (!chainID) {
+        if (!chainID || !accessNodes) {
             return;
         }
 
@@ -135,6 +145,14 @@ function ChainAccessNodes() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
+                    {chainCommitteeInfo ? (
+                        <InfoBox title="Committee">
+                            <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
+                            <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
+                        </InfoBox>
+                    ) : (
+                        <LoadingChainCommitteeBox />
+                    )}
                     <InfoBox
                         title="Access nodes"
                         titleWithIcon={true}
@@ -144,19 +162,19 @@ function ChainAccessNodes() {
                             </button>
                         }
                     >
-                        {accessNodes.length > 0 ? (
-                            accessNodes?.map(node => (
-                                <Tile
-                                    key={node.publicKey}
-                                    primaryText={node.publicKey}
-                                    healthy={node.isAlive}
-                                    displayHealth={true}
+                        <div className="sized-container">
+                            {accessNodes ? (
+                                <PeersList
+                                    peers={accessNodes}
+                                    detailedList
+                                    enableDelete={false}
+                                    emptyText="No access nodes found."
                                 />
-                            ))
-                        ) : (
-                            <Tile primaryText="No access nodes found." />
-                        )}
-                        {isPopupOpen && (
+                            ) : (
+                                Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} displayHealth={true} />)
+                            )}
+                        </div>
+                        {isPopupOpen && accessNodes && (
                             <EditAccessNodesDialog
                                 peerNodes={peersList}
                                 accessNodes={accessNodes}
@@ -165,10 +183,19 @@ function ChainAccessNodes() {
                             />
                         )}
                     </InfoBox>
+                    <InfoBox title="Peers">
+                        <div className="sized-container">
+                            {peersNodes ? (
+                                <PeersList peers={peersNodes} detailedList enableDelete={false} />
+                            ) : (
+                                Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} displayHealth={true} />)
+                            )}
+                        </div>
+                    </InfoBox>
                 </div>
             </div>
         </div>
     );
 }
 
-export default ChainAccessNodes;
+export default ChainNodes;
