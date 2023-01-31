@@ -156,6 +156,7 @@ function ChainNodes() {
                         <LoadingChainCommitteeBox />
                     )}
                     <InfoBox
+                        title="Access nodes"
                         action={
                             <IconButton onClick={() => setIsPopupOpen(true)} icon={<EditIcon />} type={Action.Edit} />
                         }
