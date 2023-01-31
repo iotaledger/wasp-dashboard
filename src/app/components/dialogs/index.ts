@@ -4,3 +4,4 @@ export { default as EditUserDialog } from "./EditUserDialog";
 export { default as DeleteUserDialog } from "./DeleteUserDialog";
 export { default as AddUserDialog } from "./AddUserDialog";
 export { default as Dialog } from "./Dialog";
+export { default as EditAccessNodesDialog } from "./EditAccessNodesDialog";

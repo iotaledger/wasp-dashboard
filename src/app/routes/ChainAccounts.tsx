@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Route.scss";
 import { WaspClientService, ServiceFactory } from "../../lib";
-import { Breadcrumb, InfoBox, Tile } from "../components";
-import ChainNavbar from "../components/ChainNavbar";
+import { Breadcrumb, InfoBox, Tile, LoadingTile, ChainNavbar } from "../components";
 
 /**
  * ChainAccount panel.
@@ -48,9 +47,15 @@ function ChainAccounts() {
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
                     <InfoBox title="On-chain accounts">
-                        {chainAccounts.map(account => (
-                            <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
-                        ))}
+                        {chainAccounts.length > 0
+                            ? chainAccounts.map(account => (
+                                <Tile
+                                    key={account}
+                                    primaryText={account}
+                                    url={`/chains/${chainID}/accounts/${account}`}
+                                />
+                              ))
+                            : Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} />)}
                     </InfoBox>
                 </div>
             </div>
