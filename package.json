@@ -15,13 +15,14 @@
         "humanize-duration": "^3.27.3",
         "moment": "^2.29.4",
         "react": "^18.2.0",
+        "react-content-loader": "^6.2.0",
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.4.5",
         "vivagraphjs": "^0.12.0",
         "zxcvbn": "^4.4.2"
     },
     "engines": {
-        "node": ">=14 <=16.16"
+        "node": ">=14 <=18.12.1"
     },
     "scripts": {
         "start": "cross-env PORT=9090 REACT_APP_BRAND_ID=wasp craco start",

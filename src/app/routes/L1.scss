@@ -48,22 +48,16 @@
 
     .card {
       width: 100%;
+      margin-bottom: $spacing-small;
+      
       .summary {
         width: 100%;
         min-width: 350px;
       }
     }
 
-    .first-card {
-      margin-bottom: 0;
-
-      @include desktop-down {
-        margin-bottom: $spacing-small;
-      }
-    }
-
     .last-card {
-      margin-top: $spacing-small;
+      margin-bottom: 0;
 
       .chain-messages-table {
         th:nth-of-type(1),

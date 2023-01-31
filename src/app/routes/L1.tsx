@@ -12,7 +12,7 @@ import {
     formatDate,
 } from "../../lib";
 import "./L1.scss";
-import { KeyValueRow, InfoBox, Table, Tile } from "../components";
+import { KeyValueRow, InfoBox, Table, Tile, LoadingTile } from "../components";
 
 /**
  * L1 panel.
@@ -109,6 +109,22 @@ function L1() {
                             ))}
                         </InfoBox>
                     </div>
+
+                    <InfoBox title="Chains">
+                        {chains
+                            ? chains.map(chain => (
+                                <Tile
+                                    key={chain.chainID}
+                                    primaryText={chain.chainID}
+                                    url={`/l1/${chain.chainID}`}
+                                    displayHealth
+                                    healthy={chain.isActive}
+                                />
+                              ))
+                            : Array.from({ length: 2 }).map((_, i) => (
+                                <LoadingTile yAxis={8} height={38} key={i} displayHealth={true} />
+                              ))}
+                    </InfoBox>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
                         {l1Metrics && (
                             <Table
