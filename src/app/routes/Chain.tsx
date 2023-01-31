@@ -14,16 +14,8 @@ import {
 import { ChainsService } from "../../lib/classes/services/chainsService";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
-import {
-    Breadcrumb,
-    InfoBox,
-    KeyValueRow,
-    Table,
-    Tile,
-    LoadingChainContractsBox,
-    LoadingChainInfoBox,
-    ChainNavbar,
-} from "../components";
+import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile, ChainNavbar } from "../components";
+import LoadingKeyValue from "../components/loading/LoadingKeyValue";
 
 interface ConsensusMetric {
     status: string;
@@ -54,13 +46,19 @@ function Chain() {
     const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
 
     const [chainInfo, setChainInfo] = useState<ChainInfoResponse | null>(null);
+    const [isChainInfoLoading, setIsChainInfoLoading] = useState<boolean>(false);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[] | null>(null);
+    const [isChainContractsLoading, setIsChainContractsLoading] = useState<boolean>(false);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
+    const [isChainAssetsLoading, setIsChainAssetsLoading] = useState<boolean>(false);
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
+    const [isChainBlobsLoading, setIsChainBlobsLoading] = useState<boolean>(false);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
+    const [isChainLatestBlockLoading, setIsChainLatestBlockLoading] = useState<boolean>(false);
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
         Record<string, ConsensusMetric> | null | ITableRow[]
     >(null);
+    const [isChainConsensusMetricsLoading, setIsChainConsensusMetricsLoading] = useState<boolean>(false);
     const { chainID } = useParams();
 
     const chainURL = `/chains/${chainID}`;
@@ -76,12 +74,23 @@ function Chain() {
             return;
         }
 
+        setIsChainInfoLoading(true);
+        setIsChainContractsLoading(true);
+        setIsChainAssetsLoading(true);
+        setIsChainBlobsLoading(true);
+        setIsChainLatestBlockLoading(true);
+        setIsChainConsensusMetricsLoading(true);
+
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .chains()
             .getChainInfo({ chainID })
             .then(newChainInfo => {
                 setChainInfo(newChainInfo);
+                setIsChainInfoLoading(false);
+            })
+            .catch(() => {
+                setChainInfo(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -90,6 +99,10 @@ function Chain() {
             .getContracts({ chainID })
             .then(newChainContracts => {
                 setChainContracts(newChainContracts);
+                setIsChainContractsLoading(false);
+            })
+            .catch(() => {
+                setChainContracts(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -98,6 +111,10 @@ function Chain() {
             .accountsGetTotalAssets({ chainID })
             .then(newTotalAssets => {
                 setChainAssets(newTotalAssets);
+                setIsChainAssetsLoading(false);
+            })
+            .catch(() => {
+                setChainAssets(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -107,15 +124,25 @@ function Chain() {
             .then(newBlobs => {
                 if (newBlobs.blobs) {
                     setChainBlobs(newBlobs.blobs);
+                    setIsChainBlobsLoading(false);
                 }
+            })
+            .catch(() => {
+                setChainBlobs([]);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        chainsService.getLatestBlock(chainID).then(newLatestBlock => {
-            if (newLatestBlock) {
-                setChainLatestBlock(newLatestBlock);
-            }
-        });
+        chainsService
+            .getLatestBlock(chainID)
+            .then(newLatestBlock => {
+                if (newLatestBlock) {
+                    setChainLatestBlock(newLatestBlock);
+                    setIsChainLatestBlockLoading(false);
+                }
+            })
+            .catch(() => {
+                setChainLatestBlock(null);
+            });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
@@ -139,6 +166,10 @@ function Chain() {
                     return { flagName, status, triggerTime };
                 });
                 setChainConsensusMetrics(chainConsensusMetricsArray);
+                setIsChainConsensusMetricsLoading(false);
+            })
+            .catch(() => {
+                setChainConsensusMetrics(null);
             });
     }, [chainID]);
 
@@ -151,53 +182,70 @@ function Chain() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
-                    {chainProperties.length > 0 ? (
-                        <InfoBox title="Info">
-                            {chainProperties
-                                .filter(([key]) => !INFO_SKIP_NAMES.has(key))
-                                .map(([key, val]) => (
-                                    <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                    <InfoBox title="Info">
+                        {isChainInfoLoading ? (
+                            <LoadingKeyValue large={true} />
+                        ) : (chainProperties.length > 0 ? (
+                            <React.Fragment>
+                                {" "}
+                                {chainProperties
+                                    .filter(([key]) => !INFO_SKIP_NAMES.has(key))
+                                    .map(([key, val]) => (
+                                        <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                                    ))}{" "}
+                            </React.Fragment>
+                        ) : (
+                            <Tile primaryText="No info available for this chain." />
+                        ))}
+                    </InfoBox>
+                    <InfoBox title="Contracts">
+                        {isChainContractsLoading ? (
+                            <LoadingKeyValue large={true} />
+                        ) : (chainContracts ? (
+                            <React.Fragment>
+                                {chainContracts.map(({ name, hName, description, programHash }) => (
+                                    <KeyValueRow
+                                        key={name}
+                                        keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
+                                        value={description}
+                                    />
                                 ))}
-                        </InfoBox>
-                    ) : (
-                        <LoadingChainInfoBox />
-                    )}
-                    {chainContracts ? (
-                        <InfoBox title="Contracts">
-                            {chainContracts.map(({ name, hName, description, programHash }) => (
-                                <KeyValueRow
-                                    key={name}
-                                    keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
-                                    value={description}
-                                />
-                            ))}
-                        </InfoBox>
-                    ) : (
-                        <LoadingChainContractsBox />
-                    )}
+                            </React.Fragment>
+                        ) : (
+                            <Tile primaryText="No contracts found." />
+                        ))}
+                    </InfoBox>
                     <InfoBox title="Total Assets">
-                        {chainAssets?.baseTokens ? (
+                        {isChainAssetsLoading ? (
+                            <LoadingKeyValue />
+                        ) : (chainAssets?.baseTokens ? (
                             <KeyValueRow
                                 key={chainAssets?.baseTokens}
                                 keyText="Base Tokens"
                                 value={chainAssets?.baseTokens}
                             />
                         ) : (
-                            <Tile primaryText="No base tokens found." />
-                        )}
+                            <InfoBox title="Base Tokens">
+                                <Tile primaryText="No base tokens found." />
+                            </InfoBox>
+                        ))}
                         {chainAssets?.nativeTokens && chainAssets.nativeTokens.length > 0 && (
                             <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
                         )}
                     </InfoBox>
                     <InfoBox title="Blobs">
-                        {chainBlobs.length > 0 ? (
+                        {isChainBlobsLoading ? (
+                            <LoadingKeyValue />
+                        ) : (chainBlobs ? (
                             <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
                         ) : (
                             <Tile primaryText="No blobs found." />
-                        )}
+                        ))}
                     </InfoBox>
                     <InfoBox title="Latest block">
-                        {chainLatestBlock ? (
+                        {isChainLatestBlockLoading ? (
+                            <LoadingKeyValue />
+                        ) : (chainLatestBlock ? (
                             <React.Fragment>
                                 <KeyValueRow
                                     keyText="Block index"
@@ -210,28 +258,32 @@ function Chain() {
                             </React.Fragment>
                         ) : (
                             <Tile primaryText="No latest block found." />
-                        )}
+                        ))}
                     </InfoBox>
 
                     <InfoBox title="EVM">
-                        {chainID ? (
+                        {isChainInfoLoading ? (
+                            <LoadingKeyValue />
+                        ) : (chainID ? (
                             <React.Fragment>
                                 <KeyValueRow keyText="EVM ChainID" value={chainInfo?.evmChainId} />
                                 <KeyValueRow keyText="JSON-RPC URL" value={formatEVMJSONRPCUrl(chainID)} />
                             </React.Fragment>
                         ) : (
                             <Tile primaryText="No EVM info found." />
-                        )}
+                        ))}
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
-                        {chainConsensusMetrics ? (
+                        {isChainConsensusMetricsLoading ? (
+                            <LoadingKeyValue large={true} />
+                        ) : (chainConsensusMetrics ? (
                             <Table
                                 tHead={["Flag name", "Status", "Trigger time"]}
                                 tBody={chainConsensusMetrics as ITableRow[]}
                             />
                         ) : (
                             <Tile primaryText="No metrics found." />
-                        )}
+                        ))}
                     </InfoBox>
                 </div>
             </div>
