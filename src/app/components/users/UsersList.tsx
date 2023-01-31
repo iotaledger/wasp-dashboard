@@ -24,18 +24,19 @@ const UsersList: React.FC<UsersListProps> = ({ users, onDeleteSuccess, canBeDele
     const orderedUsers = users ? users.sort((a, b) => a.username?.localeCompare(b.username as string) as number) : [];
     return (
         <div className="users-list">
-            {users 
-              ? orderedUsers.map((user, idx) => (
-                <UserTile
-                    key={idx}
-                    user={user}
-                    onDeleteSuccess={() => onDeleteSuccess(user)}
-                    canBeDeleted={canBeDeleted}
-                />
-              ))
-            : Array.from({ length: 1 }).map((_, i) => <LoadingUserTile key={i} />)}
-    </div>
-);
+            {users
+                ? orderedUsers.map((user, idx) => (
+                    <UserTile
+                        key={idx}
+                        user={user}
+                        onDeleteSuccess={() => onDeleteSuccess(user)}
+                        canBeDeleted={canBeDeleted}
+                    />
+                  ))
+                : Array.from({ length: 1 }).map((_, i) => <LoadingUserTile key={i} />)}
+        </div>
+    );
+};
 
 UsersList.defaultProps = {
     users: undefined,
