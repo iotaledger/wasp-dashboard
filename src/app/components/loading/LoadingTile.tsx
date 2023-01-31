@@ -36,7 +36,7 @@ const LoadingTile = ({ displayHealth, width, height }: LoadingTileProps) => (
 
 LoadingTile.defaultProps = {
     displayHealth: false,
-    height: 20,
+    height: 28,
     width: 350,
 };
 
