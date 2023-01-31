@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { ReactComponent as HealthGoodIcon } from "../../assets/health-good.svg";
 import { ReactComponent as HealthWarning } from "../../assets/health-warning.svg";
 import { IAction } from "../../lib/interfaces";
-
 interface TileProps {
     displayHealth?: boolean | undefined;
     healthy?: boolean | undefined;

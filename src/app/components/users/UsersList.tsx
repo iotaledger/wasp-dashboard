@@ -1,14 +1,14 @@
 import "./UsersList.scss";
 import React from "react";
 import { User } from "../../../lib";
-import UserTile from "./UserTile";
+import { UserTile, LoadingUserTile } from "../index";
 
 interface UsersListProps {
     /**
      * List of users.
      * @type {User[]}
      */
-    users: User[];
+    users?: User[];
     /**
      * Refresh the list of users.
      */
@@ -21,19 +21,24 @@ interface UsersListProps {
 }
 
 const UsersList: React.FC<UsersListProps> = ({ users, onDeleteSuccess, canBeDeleted }) => {
-    const orderedUsers = users.sort((a, b) => a.username?.localeCompare(b.username as string) as number);
+    const orderedUsers = users ? users.sort((a, b) => a.username?.localeCompare(b.username as string) as number) : [];
     return (
         <div className="users-list">
-            {orderedUsers.map((user, idx) => (
+            {users 
+              ? orderedUsers.map((user, idx) => (
                 <UserTile
                     key={idx}
                     user={user}
                     onDeleteSuccess={() => onDeleteSuccess(user)}
                     canBeDeleted={canBeDeleted}
                 />
-            ))}
-        </div>
-    );
+              ))
+            : Array.from({ length: 1 }).map((_, i) => <LoadingUserTile key={i} />)}
+    </div>
+);
+
+UsersList.defaultProps = {
+    users: undefined,
 };
 
 export default UsersList;
