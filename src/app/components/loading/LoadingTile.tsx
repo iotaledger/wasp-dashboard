@@ -24,10 +24,10 @@ const LoadingTile = ({ displayHealth, width, height }: LoadingTileProps) => (
                     height={height}
                     width={width}
                     viewBox={`0 0 ${width} ${height}`}
-                    backgroundColor="rgb(40, 50, 85)"
-                    foregroundColor="rgb(33, 45, 80)"
+                    backgroundColor="var(--loading-background)"
+                    foregroundColor="var(--loading-foreground)"
                 >
-                    <rect x="0" y="0" rx="5" ry="5" width={width} height="20" />
+                    <rect x="0" y="8" rx="5" ry="5" width={width} height="20" />
                 </ContentLoader>
             </div>
         </div>

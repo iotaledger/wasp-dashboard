@@ -131,7 +131,7 @@ function Home() {
                                         healthy={chain.isActive}
                                     />
                                   ))
-                                : Array.from({ length: 1 }).map((_, i) => <LoadingTile key={i} />)}
+                                : Array.from({ length: 1 }).map((_, i) => <LoadingTile key={i} displayHealth={true} />)}
                         </div>
                     </InfoBox>
                 </div>

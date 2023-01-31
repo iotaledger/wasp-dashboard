@@ -12,11 +12,10 @@ export default function LoadingUserTile() {
                     height={19}
                     width={100}
                     viewBox="0 0 100 19"
-                    backgroundColor="rgb(40, 50, 85)"
-                    foregroundColor="rgb(33, 45, 80)"
-                    className=""
+                    backgroundColor="var(--loading-background)"
+                    foregroundColor="var(--loading-foreground)"
                 >
-                    <rect x="0" y="3" rx="5" ry="5" width="100" height="16" />
+                    <rect x="0" y="8" rx="5" ry="5" width="100" height="11" />
                 </ContentLoader>
                 <div className="margin-t-s">
                     <h4>Permissions</h4>
@@ -26,11 +25,10 @@ export default function LoadingUserTile() {
                             height={19}
                             width={150}
                             viewBox="0 0 150 19"
-                            backgroundColor="rgb(40, 50, 85)"
-                            foregroundColor="rgb(33, 45, 80)"
-                            className=""
+                            backgroundColor="var(--loading-background)"
+                            foregroundColor="var(--loading-foreground)"
                         >
-                            <rect x="0" y="3" rx="5" ry="5" width="150" height="16" />
+                            <rect x="0" y="8" rx="5" ry="5" width="150" height="11" />
                         </ContentLoader>
                     </div>
                 </div>

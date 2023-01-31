@@ -14,8 +14,8 @@ export default function LoadingChainContractsBox() {
                     height={198}
                     width={280}
                     viewBox="0 0 280 198"
-                    backgroundColor="rgb(40, 50, 85)"
-                    foregroundColor="rgb(33, 45, 80)"
+                    backgroundColor="var(--loading-background)"
+                    foregroundColor="var(--loading-foreground)"
                 >
                     <rect x="0" y="0" rx="5" ry="5" width="100" height="17" />
                     <rect x="0" y="25" rx="5" ry="5" width="130" height="17" />
