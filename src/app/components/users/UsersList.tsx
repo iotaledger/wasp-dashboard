@@ -36,7 +36,7 @@ const UsersList: React.FC<UsersListProps> = ({ users, onDeleteSuccess, canBeDele
 );
 
 UsersList.defaultProps = {
-    users: [],
+    users: undefined,
 };
 
 export default UsersList;

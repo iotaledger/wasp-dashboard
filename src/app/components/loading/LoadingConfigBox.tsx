@@ -9,7 +9,7 @@ export default function LoadingConfigBox() {
                 <ContentLoader
                     speed={2}
                     height={140}
-                    width={350}
+                    width="100%"
                     backgroundColor="var(--loading-background)"
                     foregroundColor="var(--loading-foreground)"
                 >
