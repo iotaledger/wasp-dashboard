@@ -9,6 +9,7 @@ import {
     MIN_PASSWORD_STRENGTH,
     ChangeUserPermissionsRequest,
     Permissions,
+    AuthService,
 } from "../../../lib";
 import { Dialog, PasswordInput } from "../../components";
 
@@ -20,12 +21,16 @@ interface IEditUserDialog {
 }
 
 const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, onError }) => {
+    const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+    const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
+
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [newPassword, setNewPassword] = useState<string>("");
     const [permissions, setPermissions] = useState<string[] | undefined>(user.permissions ? [...user.permissions] : []);
-
     const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
+
+    const editingMySelf = authService.getUsername() === user.username;
 
     const [passwordIsValid, permissionsAreValid] = useMemo(() => {
         // Check if both passwords are valid
@@ -69,7 +74,6 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
     async function handleEditUser(): Promise<void> {
         setError(null);
         try {
-            const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
             await Promise.all([
                 // Update the password if has changed and is valid
                 passwordIsValid
@@ -151,6 +155,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                                     type="checkbox"
                                     value={permission}
                                     onChange={handlePermissionChange}
+                                    disabled={editingMySelf}
                                     checked={permissions?.includes(permission)}
                                 />
                                 <span className="margin-l-t">{permission}</span>
