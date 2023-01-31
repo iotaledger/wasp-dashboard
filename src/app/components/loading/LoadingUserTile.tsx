@@ -11,7 +11,6 @@ export default function LoadingUserTile() {
                     speed={2}
                     height={19}
                     width={100}
-                    viewBox="0 0 100 19"
                     backgroundColor="var(--loading-background)"
                     foregroundColor="var(--loading-foreground)"
                 >

@@ -13,7 +13,6 @@ export default function LoadingChainCommitteeBox() {
                     speed={2}
                     height={43}
                     width={350}
-                    viewBox="0 0 350 43"
                     backgroundColor="var(--loading-background)"
                     foregroundColor="var(--loading-foreground)"
                 >

@@ -13,7 +13,6 @@ export default function LoadingChainContractsBox() {
                     speed={2}
                     height={200}
                     width={280}
-                    viewBox="0 0 280 200"
                     backgroundColor="var(--loading-background)"
                     foregroundColor="var(--loading-foreground)"
                 >

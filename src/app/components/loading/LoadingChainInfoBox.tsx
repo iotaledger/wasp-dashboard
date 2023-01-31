@@ -13,7 +13,6 @@ export default function LoadingChainInfoBox() {
                     speed={2}
                     height={235}
                     width={350}
-                    viewBox="0 0 350 235"
                     backgroundColor="var(--loading-background)"
                     foregroundColor="var(--loading-foreground)"
                 >

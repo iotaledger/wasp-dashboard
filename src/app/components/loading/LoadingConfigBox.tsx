@@ -10,7 +10,6 @@ export default function LoadingConfigBox() {
                     speed={2}
                     height={140}
                     width={350}
-                    viewBox="0 0 350 140"
                     backgroundColor="var(--loading-background)"
                     foregroundColor="var(--loading-foreground)"
                 >
