@@ -142,8 +142,7 @@ function Home() {
                 <div className="row fill margin-t-s desktop-down-column">
                     <InfoBox
                         title="Peers"
-                        titleWithIcon={true}
-                        icon={
+                        action={
                             <IconButton
                                 icon={<AddIcon />}
                                 onClick={() => setShowAddPeerDialog(true)}
