@@ -20,7 +20,7 @@ import {
     LoadingTile,
     Tile,
 } from "../components";
-import { LoadingKeyValue } from "../components/loading";
+import { LoadingInfo } from "../components/loading";
 
 const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
 
@@ -155,7 +155,7 @@ function ChainNodes() {
                     <ChainNavbar chainID={chainID} />
                     <InfoBox title="Committee">
                         {isChainCommitteeInfoLoading ? (
-                            <LoadingKeyValue />
+                            <LoadingInfo />
                         ) : (chainCommitteeInfo ? (
                             <React.Fragment>
                                 <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />

@@ -1,11 +1,11 @@
 import React from "react";
 import ContentLoader from "react-content-loader";
 
-interface LoadingKeyValueProps {
+interface LoadingInfoProps {
     large?: boolean;
 }
 // eslint-disable-next-line jsdoc/require-jsdoc
-function LoadingKeyValue({ large }: LoadingKeyValueProps): JSX.Element {
+function LoadingInfo({ large }: LoadingInfoProps): JSX.Element {
     return (
         <ContentLoader
             speed={2}
@@ -27,8 +27,8 @@ function LoadingKeyValue({ large }: LoadingKeyValueProps): JSX.Element {
     );
 }
 
-LoadingKeyValue.defaultProps = {
+LoadingInfo.defaultProps = {
     large: false,
 };
 
-export default LoadingKeyValue;
+export default LoadingInfo;

@@ -14,8 +14,7 @@ import {
 import { ChainsService } from "../../lib/classes/services/chainsService";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
-import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile, ChainNavbar } from "../components";
-import LoadingKeyValue from "../components/loading/LoadingKeyValue";
+import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile, ChainNavbar, LoadingTable, LoadingInfo } from "../components";
 
 interface ConsensusMetric {
     status: string;
@@ -184,7 +183,7 @@ function Chain() {
                     <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
                     <InfoBox title="Info">
                         {isChainInfoLoading ? (
-                            <LoadingKeyValue large={true} />
+                            <LoadingInfo large />
                         ) : (chainProperties.length > 0 ? (
                             <React.Fragment>
                                 {" "}
@@ -200,7 +199,7 @@ function Chain() {
                     </InfoBox>
                     <InfoBox title="Contracts">
                         {isChainContractsLoading ? (
-                            <LoadingKeyValue large={true} />
+                            <LoadingInfo large />
                         ) : (chainContracts ? (
                             <React.Fragment>
                                 {chainContracts.map(({ name, hName, description, programHash }) => (
@@ -217,7 +216,7 @@ function Chain() {
                     </InfoBox>
                     <InfoBox title="Total Assets">
                         {isChainAssetsLoading ? (
-                            <LoadingKeyValue />
+                            <LoadingInfo />
                         ) : (chainAssets?.baseTokens ? (
                             <KeyValueRow
                                 key={chainAssets?.baseTokens}
@@ -235,7 +234,7 @@ function Chain() {
                     </InfoBox>
                     <InfoBox title="Blobs">
                         {isChainBlobsLoading ? (
-                            <LoadingKeyValue />
+                            <LoadingInfo />
                         ) : (chainBlobs ? (
                             <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
                         ) : (
@@ -244,7 +243,7 @@ function Chain() {
                     </InfoBox>
                     <InfoBox title="Latest block">
                         {isChainLatestBlockLoading ? (
-                            <LoadingKeyValue />
+                            <LoadingInfo />
                         ) : (chainLatestBlock ? (
                             <React.Fragment>
                                 <KeyValueRow
@@ -263,7 +262,7 @@ function Chain() {
 
                     <InfoBox title="EVM">
                         {isChainInfoLoading ? (
-                            <LoadingKeyValue />
+                            <LoadingInfo />
                         ) : (chainID ? (
                             <React.Fragment>
                                 <KeyValueRow keyText="EVM ChainID" value={chainInfo?.evmChainId} />
@@ -275,7 +274,7 @@ function Chain() {
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
                         {isChainConsensusMetricsLoading ? (
-                            <LoadingKeyValue large={true} />
+                            <LoadingTable large />
                         ) : (chainConsensusMetrics ? (
                             <Table
                                 tHead={["Flag name", "Status", "Trigger time"]}

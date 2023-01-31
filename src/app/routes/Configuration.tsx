@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { WaspClientService, ServiceFactory } from "../../lib/classes";
 import "./Route.scss";
-import { KeyValueRow, InfoBox, LoadingConfigBox } from "../components";
+import { KeyValueRow, InfoBox, LoadingInfo } from "../components";
 
 interface ConfigMap {
     [key: string]: never;
@@ -96,7 +96,9 @@ function Configuration() {
                     ) : (
                         <div className="grid-wrapper">
                             {Array.from({ length: 10 }).map((item, index) => (
-                                <LoadingConfigBox key={index} />
+                                <InfoBox key={index}>
+                                    <LoadingInfo key={index} large />
+                                </InfoBox>
                             ))}
                         </div>
                     )}
