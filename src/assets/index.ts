@@ -1,7 +1,11 @@
+export { ReactComponent as ChevronLeftIcon } from "./chevron-left.svg";
+export { ReactComponent as ChevronRightIcon } from "./chevron-right.svg";
+export { ReactComponent as CloseIcon } from "./close.svg";
+export { ReactComponent as DeleteIcon } from "./delete.svg";
+export { ReactComponent as EditIcon } from "./edit.svg";
 export { ReactComponent as EyeClosedIcon } from "./eye-closed.svg";
 export { ReactComponent as EyeIcon } from "./eye.svg";
 export { ReactComponent as HealthGood } from "./health-good.svg";
 export { ReactComponent as HealthWarning } from "./health-warning.svg";
-export { ReactComponent as EditIcon } from "./edit.svg";
 export { ReactComponent as MenuIcon } from "./menu.svg";
-export { ReactComponent as CloseIcon } from "./close.svg";
+export { ReactComponent as AddIcon } from "./plus.svg";
