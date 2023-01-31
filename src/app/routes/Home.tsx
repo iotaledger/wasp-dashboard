@@ -15,7 +15,7 @@ import {
     ChainInfoResponse,
     Action,
 } from "../../lib/";
-import { PeersList, InfoBox, Tile, AddPeerDialog, IconButton } from "../components";
+import { PeersList, InfoBox, Tile, AddPeerDialog, LoadingTile, IconButton } from "../components";
 import "./Home.scss";
 
 /**
@@ -27,7 +27,7 @@ function Home() {
     const [publicKey, setPublicKey] = useState<undefined | string>();
     const [version, setVersion] = useState<undefined | string>();
     const [networkId, setNetworkId] = useState<undefined | string>();
-    const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>([]);
+    const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[] | null>(null);
     const [chains, setChains] = useState<ChainInfoResponse[] | null>(null);
     const [showAddPeerDialog, setShowAddPeerDialog] = useState<boolean>(false);
 
@@ -123,15 +123,19 @@ function Home() {
                 <div className="row fill margin-t-s desktop-down-column">
                     <InfoBox title="Chains" titleClassName="title">
                         <div className="sized-container">
-                            {chains?.map(chain => (
-                                <Tile
-                                    key={chain.chainID}
-                                    primaryText={chain.chainID}
-                                    url={`/chains/${chain.chainID}`}
-                                    displayHealth
-                                    healthy={chain.isActive}
-                                />
-                            ))}
+                            {chains
+                                ? chains.map(chain => (
+                                    <Tile
+                                        key={chain.chainID}
+                                        primaryText={chain.chainID}
+                                        url={`/chains/${chain.chainID}`}
+                                        displayHealth
+                                        healthy={chain.isActive}
+                                    />
+                                  ))
+                                : Array.from({ length: 1 }).map((_, i) => (
+                                    <LoadingTile key={i} height={20} displayHealth={true} />
+                                  ))}
                         </div>
                     </InfoBox>
                 </div>
@@ -148,7 +152,11 @@ function Home() {
                         }
                     >
                         <div className="sized-container">
-                            <PeersList peers={peersList} detailedList />
+                            {peersList ? (
+                                <PeersList peers={peersList} detailedList />
+                            ) : (
+                                Array.from({ length: 1 }).map((_, i) => <LoadingTile key={i} displayHealth={true} />)
+                            )}
                         </div>
                     </InfoBox>
                     {showAddPeerDialog && <AddPeerDialog onClose={closeAddPeerDialog} onSuccess={closeAddPeerDialog} />}

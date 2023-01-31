@@ -9,7 +9,7 @@ const Users: React.FC = () => {
     /**
      * The users state.
      */
-    const [usersList, setUsersList] = useState<User[]>([]);
+    const [usersList, setUsersList] = useState<User[] | undefined>();
 
     /**
      * The state to handle "Add User" dialog.
@@ -90,7 +90,7 @@ const Users: React.FC = () => {
                         <UsersList
                             users={usersList}
                             onDeleteSuccess={onDeleteSuccess}
-                            canBeDeleted={usersList.length > 1}
+                            canBeDeleted={usersList ? usersList.length > 1 : false}
                         />
                     </div>
                 </div>
