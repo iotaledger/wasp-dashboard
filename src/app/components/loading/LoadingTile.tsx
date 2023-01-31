@@ -4,7 +4,7 @@ import { ReactComponent as HealthGoodIcon } from "../../../assets/health-good.sv
 
 interface LoadingTileProps {
     displayHealth?: boolean;
-    width?: number;
+    width?: number | string;
     height?: number;
 }
 
@@ -36,7 +36,7 @@ const LoadingTile = ({ displayHealth, width, height }: LoadingTileProps) => (
 
 LoadingTile.defaultProps = {
     displayHealth: false,
-    height: 28,
+    height: 38,
     width: 350,
 };
 
