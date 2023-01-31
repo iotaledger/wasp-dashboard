@@ -15,11 +15,12 @@ import {
     InfoBox,
     KeyValueRow,
     PeersList,
-    LoadingChainCommitteeBox,
     ChainNavbar,
     EditAccessNodesDialog,
     LoadingTile,
+    Tile,
 } from "../components";
+import { LoadingKeyValue } from "../components/loading";
 
 const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
 
@@ -32,6 +33,7 @@ function ChainNodes() {
     const peersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
+    const [isChainCommitteeInfoLoading, setIsChainCommitteeInfoLoading] = useState(false);
     const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const { chainID } = useParams();
@@ -79,12 +81,18 @@ function ChainNodes() {
             return;
         }
 
+        setIsChainCommitteeInfoLoading(true);
+
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .chains()
             .getCommitteeInfo({ chainID })
             .then(newCommitteeInfo => {
                 setChainCommitteeInfo(newCommitteeInfo);
+                setIsChainCommitteeInfoLoading(false);
+            })
+            .catch(() => {
+                setChainCommitteeInfo(null);
             });
     }
 
@@ -145,14 +153,18 @@ function ChainNodes() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
-                    {chainCommitteeInfo ? (
-                        <InfoBox title="Committee">
-                            <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
-                            <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
-                        </InfoBox>
-                    ) : (
-                        <LoadingChainCommitteeBox />
-                    )}
+                    <InfoBox title="Committee">
+                        {isChainCommitteeInfoLoading ? (
+                            <LoadingKeyValue />
+                        ) : (chainCommitteeInfo ? (
+                            <React.Fragment>
+                                <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
+                                <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
+                            </React.Fragment>
+                        ) : (
+                            <Tile primaryText="No committee found." />
+                        ))}
+                    </InfoBox>
                     <InfoBox
                         title="Access nodes"
                         titleWithIcon={true}
