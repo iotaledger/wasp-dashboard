@@ -10,6 +10,7 @@ import { Breadcrumb, InfoBox, Tile, LoadingTile, ChainNavbar } from "../componen
  */
 function ChainAccounts() {
     const [chainAccounts, setChainAccounts] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
     const { chainID } = useParams();
     const chainURL = `/chains/${chainID}`;
 
@@ -26,6 +27,8 @@ function ChainAccounts() {
 
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
+        setIsLoading(true);
+
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .corecontracts()
@@ -33,7 +36,11 @@ function ChainAccounts() {
             .then(newAccounts => {
                 if (newAccounts.accounts) {
                     setChainAccounts(newAccounts.accounts);
+                    setIsLoading(false);
                 }
+            })
+            .catch(() => {
+                setChainAccounts([]);
             });
     }, []);
 
@@ -47,15 +54,19 @@ function ChainAccounts() {
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
                     <InfoBox title="On-chain accounts">
-                        {chainAccounts.length > 0
-                            ? chainAccounts.map(account => (
+                        {isLoading ? (
+                            Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} />)
+                        ) : (chainAccounts.length > 0 ? (
+                            chainAccounts.map(account => (
                                 <Tile
                                     key={account}
                                     primaryText={account}
                                     url={`/chains/${chainID}/accounts/${account}`}
                                 />
-                              ))
-                            : Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} />)}
+                            ))
+                        ) : (
+                            <Tile primaryText="No accounts found." />
+                        ))}
                     </InfoBox>
                 </div>
             </div>
