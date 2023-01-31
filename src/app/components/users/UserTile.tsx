@@ -43,9 +43,6 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
      */
     function closeEditDialog(): void {
         setShowEditUserDialog(false);
-        if (onDeleteSuccess && typeof onDeleteSuccess === "function") {
-            onDeleteSuccess();
-        }
     }
 
     /**
