@@ -45,7 +45,7 @@ export default function BottomNavbar({
                     button={firstButton}
                     label="First"
                     icon={<ChevronLeftIcon />}
-                    doubledIcon
+                    codeRepetition={2}
                     iconFirst
                 />
                 <NavLink
@@ -67,7 +67,13 @@ export default function BottomNavbar({
                     )}
                 </div>
                 <NavLink navUrl={navUrl} button={nextButton} label="Next" icon={<ChevronRightIcon />} />
-                <NavLink navUrl={navUrl} button={lastButton} label="Latest" icon={<ChevronRightIcon />} doubledIcon />
+                <NavLink
+                    navUrl={navUrl}
+                    button={lastButton}
+                    label="Latest"
+                    icon={<ChevronRightIcon />}
+                    codeRepetition={2}
+                />
             </div>
         </div>
     );
