@@ -12,12 +12,12 @@ export default function LoadingChainCommitteeBox() {
                 <ContentLoader
                     speed={2}
                     height={43}
-                    width={700}
-                    viewBox="0 0 700 43"
+                    width={350}
+                    viewBox="0 0 350 43"
                     backgroundColor="var(--loading-background)"
                     foregroundColor="var(--loading-foreground)"
                 >
-                    <rect x="0" y="0" rx="5" ry="5" width="600" height="17" />
+                    <rect x="0" y="0" rx="5" ry="5" width="340" height="17" />
                     <rect x="0" y="25" rx="5" ry="5" width="100" height="17" />
                 </ContentLoader>
             </div>

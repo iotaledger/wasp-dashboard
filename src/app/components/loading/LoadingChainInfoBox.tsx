@@ -11,15 +11,15 @@ export default function LoadingChainInfoBox() {
                 </div>
                 <ContentLoader
                     speed={2}
-                    height={225}
-                    width={1000}
-                    viewBox="0 0 1000 225"
+                    height={235}
+                    width={350}
+                    viewBox="0 0 350 235"
                     backgroundColor="var(--loading-background)"
                     foregroundColor="var(--loading-foreground)"
                 >
-                    <rect x="0" y="0" rx="5" ry="5" width="600" height="17" />
-                    <rect x="0" y="25" rx="5" ry="5" width="600" height="17" />
-                    <rect x="0" y="50" rx="5" ry="5" width="200" height="17" />
+                    <rect x="0" y="0" rx="5" ry="5" width="340" height="17" />
+                    <rect x="0" y="25" rx="5" ry="5" width="300" height="17" />
+                    <rect x="0" y="50" rx="5" ry="5" width="320" height="17" />
                     <rect x="0" y="75" rx="5" ry="5" width="250" height="17" />
                     <rect x="0" y="100" rx="5" ry="5" width="300" height="17" />
                     <rect x="0" y="125" rx="5" ry="5" width="200" height="17" />

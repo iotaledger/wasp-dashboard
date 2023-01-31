@@ -108,7 +108,7 @@ function L1() {
                                 />
                               ))
                             : Array.from({ length: 2 }).map((_, i) => (
-                                <LoadingTile width={380} height={38} key={i} displayHealth={true} />
+                                <LoadingTile width={350} height={38} key={i} displayHealth={true} />
                               ))}
                     </InfoBox>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
