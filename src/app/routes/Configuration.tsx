@@ -4,7 +4,8 @@
 import React, { useEffect, useState } from "react";
 import { WaspClientService, ServiceFactory } from "../../lib/classes";
 import "./Route.scss";
-import { KeyValueRow, InfoBox } from "../components";
+import { KeyValueRow, InfoBox, LoadingConfigBox } from "../components";
+
 interface ConfigMap {
     [key: string]: never;
 }
@@ -70,7 +71,7 @@ function Configuration() {
             <div className="main-wrapper">
                 <h2>Configuration</h2>
                 <div className="content">
-                    {newConfigArrayBasedOnKeys && (
+                    {newConfigArrayBasedOnKeys.length > 0 ? (
                         <div className="grid-wrapper">
                             {newConfigArrayBasedOnKeys.map((item, index) => {
                                 const key = Object.keys(item)[0];
@@ -91,6 +92,12 @@ function Configuration() {
                                     </InfoBox>
                                 );
                             })}
+                        </div>
+                    ) : (
+                        <div className="grid-wrapper">
+                            {Array.from({ length: 10 }).map((item, index) => (
+                                <LoadingConfigBox key={index} />
+                            ))}
                         </div>
                     )}
                 </div>

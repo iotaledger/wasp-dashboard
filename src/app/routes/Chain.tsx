@@ -14,8 +14,16 @@ import {
 import { ChainsService } from "../../lib/classes/services/chainsService";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
-import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile } from "../components";
-import ChainNavbar from "../components/ChainNavbar";
+import {
+    Breadcrumb,
+    InfoBox,
+    KeyValueRow,
+    Table,
+    Tile,
+    LoadingChainContractsBox,
+    LoadingChainInfoBox,
+    ChainNavbar,
+} from "../components";
 
 interface ConsensusMetric {
     status: string;
@@ -46,7 +54,7 @@ function Chain() {
     const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
 
     const [chainInfo, setChainInfo] = useState<ChainInfoResponse | null>(null);
-    const [chainContracts, setChainContracts] = useState<ContractInfoResponse[]>([]);
+    const [chainContracts, setChainContracts] = useState<ContractInfoResponse[] | null>(null);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
     const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
@@ -143,30 +151,30 @@ function Chain() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
-                    <InfoBox title="Info">
-                        {chainProperties.length === 0 ? (
-                            <Tile primaryText="No info available." />
-                        ) : (
-                            chainProperties
+                    {chainProperties.length > 0 ? (
+                        <InfoBox title="Info">
+                            {chainProperties
                                 .filter(([key]) => !INFO_SKIP_NAMES.has(key))
                                 .map(([key, val]) => (
                                     <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
-                                ))
-                        )}
-                    </InfoBox>
-                    <InfoBox title="Contracts">
-                        {chainContracts ? (
-                            chainContracts.map(({ name, hName, description, programHash }) => (
+                                ))}
+                        </InfoBox>
+                    ) : (
+                        <LoadingChainInfoBox />
+                    )}
+                    {chainContracts ? (
+                        <InfoBox title="Contracts">
+                            {chainContracts.map(({ name, hName, description, programHash }) => (
                                 <KeyValueRow
                                     key={name}
                                     keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
                                     value={description}
                                 />
-                            ))
-                        ) : (
-                            <Tile primaryText="No contracts available." />
-                        )}
-                    </InfoBox>
+                            ))}
+                        </InfoBox>
+                    ) : (
+                        <LoadingChainContractsBox />
+                    )}
                     <InfoBox title="Total Assets">
                         {chainAssets?.baseTokens ? (
                             <KeyValueRow
