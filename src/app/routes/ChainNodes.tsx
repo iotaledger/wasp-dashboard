@@ -157,8 +157,7 @@ function ChainNodes() {
                     )}
                     <InfoBox
                         title="Access nodes"
-                        titleWithIcon={true}
-                        icon={
+                        action={
                             <IconButton onClick={() => setIsPopupOpen(true)} icon={<EditIcon />} type={Action.Edit} />
                         }
                     >

@@ -38,6 +38,12 @@ input[type="file"]::file-selector-button {
     display: none;
 }
 
+input[type="text"], input[type="checkbox"]{
+    &:disabled {
+        opacity: 0.8;
+    }
+}
+
 input[type="checkbox"] {
     width: 16px;
     height: 16px;
@@ -51,10 +57,6 @@ input[type="checkbox"] {
 
     &:focus {
         box-shadow: 0 0 3px 0 var(--accent-primary);
-    }
-
-    &:disabled {
-        opacity: 0.8;
     }
 
     &:checked {

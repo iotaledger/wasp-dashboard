@@ -4,6 +4,13 @@ import "./Route.scss";
 import { WaspClientService, ServiceFactory } from "../../lib";
 import { Breadcrumb, Tile, ChainNavbar, Paginator } from "../components";
 
+const SEARCH_ACCOUNT_PLACEHOLDER = "Account address";
+
+// eslint-disable-next-line jsdoc/require-jsdoc
+function searchFilter(item: string, search: string) {
+    return item.match(search);
+}
+
 /**
  * ChainAccount panel.
  * @returns The node to render.
@@ -11,6 +18,7 @@ import { Breadcrumb, Tile, ChainNavbar, Paginator } from "../components";
 function ChainAccounts() {
     const [chainAccounts, setChainAccounts] = useState<string[]>([]);
     const { chainID } = useParams();
+
     const chainURL = `/chains/${chainID}`;
 
     const chainBreadcrumbs = [
@@ -47,18 +55,16 @@ function ChainAccounts() {
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
                     <Paginator
+                        searchPlaceholder={SEARCH_ACCOUNT_PLACEHOLDER}
+                        searchFilter={searchFilter}
                         title="On-chain accounts"
                         navUrl={`/chains/${chainID}/accounts/`}
                         data={chainAccounts}
                         size={5}
                     >
                         {account => (
-                            <Tile
-                                key={account}
-                                primaryText={account}
-                                url={`/chains/${chainID}/account/${account}`}
-                            />
-                            )}
+                            <Tile key={account} primaryText={account} url={`/chains/${chainID}/account/${account}`} />
+                        )}
                     </Paginator>
                 </div>
             </div>
