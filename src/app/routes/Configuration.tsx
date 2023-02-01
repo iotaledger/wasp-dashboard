@@ -97,7 +97,7 @@ function Configuration() {
                         <div className="grid-wrapper">
                             {Array.from({ length: 10 }).map((item, index) => (
                                 <InfoBox key={index}>
-                                    <LoadingInfo key={index} large />
+                                    <LoadingInfo key={index} medium />
                                 </InfoBox>
                             ))}
                         </div>

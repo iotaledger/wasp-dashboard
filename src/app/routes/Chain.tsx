@@ -183,7 +183,7 @@ function Chain() {
                     <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
                     <InfoBox title="Info">
                         {isChainInfoLoading ? (
-                            <LoadingInfo large />
+                            <LoadingInfo extraLarge />
                         ) : (chainProperties.length > 0 ? (
                             <React.Fragment>
                                 {" "}
