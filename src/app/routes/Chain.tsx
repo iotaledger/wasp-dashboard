@@ -177,19 +177,6 @@ function Chain() {
                             <LoadingChainContractsBox />
                         )}
                     </div>
-                    <InfoBox title="Total Assets">
-                        {chainAssets?.baseTokens && (
-                            <KeyValueRow
-                                key={chainAssets?.baseTokens}
-                                keyText="Base Tokens"
-                                value={chainAssets?.baseTokens}
-                            />
-                        )}
-                        {chainAssets?.nativeTokens && chainAssets.nativeTokens.length > 0 && (
-                            <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
-                        )}
-                    </InfoBox>
-
                     <InfoBox title="Blobs">
                         {chainBlobs.length > 0 ? (
                             <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
