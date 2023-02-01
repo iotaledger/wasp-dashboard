@@ -5,6 +5,7 @@ import { WaspClientService, ServiceFactory } from "../../lib";
 import { Breadcrumb, Tile, ChainNavbar, Paginator } from "../components";
 
 const SEARCH_ACCOUNT_PLACEHOLDER = "Account address";
+const PAGE_SIZE = 5;
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 function searchFilter(item: string, search: string) {
@@ -60,7 +61,7 @@ function ChainAccounts() {
                         title="On-chain accounts"
                         navUrl={`/chains/${chainID}/accounts/`}
                         data={chainAccounts}
-                        size={5}
+                        size={PAGE_SIZE}
                     >
                         {account => (
                             <Tile key={account} primaryText={account} url={`/chains/${chainID}/account/${account}`} />
