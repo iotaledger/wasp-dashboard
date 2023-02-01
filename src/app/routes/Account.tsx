@@ -33,6 +33,10 @@ function Account() {
             .accountsGetAccountBalance({ chainID, agentID: accountID })
             .then(newBlockInfo => {
                 setAccountBalance(newBlockInfo);
+            })
+            .catch(e => {
+                setAccountBalance(null);
+                console.error(e);
             });
     }, [accountID]);
 

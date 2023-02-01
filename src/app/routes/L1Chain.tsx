@@ -46,6 +46,10 @@ function L1Chain() {
                     },
                 );
                 setChainL1Metrics(chainMetricsArray);
+            })
+            .catch(e => {
+                setChainL1Metrics(null);
+                console.error(e);
             });
     }, []);
 

@@ -36,6 +36,10 @@ function Contract() {
                 if (contract) {
                     setContractInfo(contract);
                 }
+            })
+            .catch(e => {
+                setContractInfo(null);
+                console.error(e);
             });
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
@@ -43,6 +47,10 @@ function Contract() {
             .blocklogGetEventsOfContract({ chainID, contractHname: contractHName })
             .then(events => {
                 setContractEvents(events);
+            })
+            .catch(e => {
+                setContractEvents(null);
+                console.error(e);
             });
     }, []);
 

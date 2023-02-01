@@ -35,6 +35,11 @@ const Users: React.FC = () => {
             .getUsers()
             .then(allUsers => {
                 setUsersList(allUsers);
+            })
+            .catch(e => {
+                // eslint-disable-next-line unicorn/no-useless-undefined
+                setUsersList(undefined);
+                console.error(e);
             });
     }
 

@@ -18,9 +18,13 @@ function DesktopMenu(props: MenuProps) {
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        BrandHelper.getLogoNavigation(settingsService.getTheme()).then(logo => {
-            setLogoSrc(logo);
-        });
+        BrandHelper.getLogoNavigation(settingsService.getTheme())
+            .then(logo => {
+                setLogoSrc(logo);
+            })
+            .catch(e => {
+                console.error(e);
+            });
 
         EventAggregator.subscribe("theme", "navmenu", async (theme: string) => {
             setLogoSrc(await BrandHelper.getLogoNavigation(theme));

@@ -70,9 +70,13 @@ function ChainNodes() {
      */
     function onAccessNodesEdited(newAccessNodes: PeeringNodeStatusResponse[]) {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        updateAccessNodes(newAccessNodes).then(() => {
-            loadCommitteeInfo();
-        });
+        updateAccessNodes(newAccessNodes)
+            .then(() => {
+                loadCommitteeInfo();
+            })
+            .catch(e => {
+                console.error(e);
+            });
     }
 
     /**
