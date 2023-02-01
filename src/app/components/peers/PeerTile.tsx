@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { DeleteIcon } from "../../../assets";
 import { PeeringNodeStatusResponse, Action } from "../../../lib";
 import { DeletePeerDialog, Tile } from "../../components";
+import usePermissions from "../../hooks/usePermissions";
 
 interface PeerTileProps {
     /**
@@ -24,6 +25,7 @@ interface PeerTileProps {
 }
 
 const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed, enableDelete }) => {
+    const [hasWritePermission] = usePermissions();
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
     /**
      *
@@ -43,6 +45,7 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed, enableDelete }) => 
                 setShowDeleteDialog(true);
             },
             type: Action.Delete,
+            disabled: !hasWritePermission,
             icon: <DeleteIcon />,
         },
     ];

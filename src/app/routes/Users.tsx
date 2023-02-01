@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import { AddIcon } from "../../assets";
 import { WaspClientService, ServiceFactory, AuthService, User, Action } from "../../lib";
 import { AddUserDialog, IconButton, UsersList } from "../components";
+import usePermissions from "../hooks/usePermissions";
 
 const Users: React.FC = () => {
+    const [hasWritePermission] = usePermissions();
     /**
      * The users state.
      */
@@ -75,6 +77,7 @@ const Users: React.FC = () => {
                     <h2>Users</h2>
                     <div className="row">
                         <IconButton
+                            disabled={!hasWritePermission}
                             icon={<AddIcon />}
                             onClick={() => setShowAddUserDialog(true)}
                             classnames="padding-t"

@@ -110,8 +110,9 @@ export class AuthService {
 
     /**
      * Check if the JWT has expired
-     * @param now
-     * @param expiryDate
+     * @param now Current date
+     * @param expiryDate Expiry date
+     * @returns If the JWT has expired or not
      */
     public isJWTExpired(now: Moment, expiryDate: Moment): boolean {
         return now.isAfter(expiryDate);
@@ -191,6 +192,22 @@ export class AuthService {
             this._waspClientService.initialize();
             this.clearTokenExpiryInterval();
             EventAggregator.publish("auth-state", false);
+        }
+    }
+
+    /**
+     * Gets the current logged user permissions.
+     * @returns A list of permissions.
+     */
+    public getPermissions(): string[] {
+        if (!this._jwt) {
+            return [];
+        }
+        try {
+            const { permissions } = decodeJWTPayload<Record<string, string>>(this._jwt);
+            return Object.keys(permissions);
+        } catch {
+            return [];
         }
     }
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { DeleteIcon, EditIcon } from "../../../assets";
 import { Action, User } from "../../../lib";
 import { DeleteUserDialog, EditUserDialog, IconButton } from "../../components";
+import usePermissions from "../../hooks/usePermissions";
 import "./UserTile.scss";
 
 interface UserTileProps {
@@ -26,6 +27,7 @@ interface UserTileProps {
 }
 
 const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess, onDeleteError }) => {
+    const [hasWritePermission] = usePermissions();
     const [showDeleteUserDialog, setShowDeleteUserDialog] = useState<boolean>(false);
     const [showEditUserDialog, setShowEditUserDialog] = useState<boolean>(false);
 
@@ -63,12 +65,14 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
                     </div>
                     <div className="buttons-wrapper">
                         <IconButton
+                            disabled={!hasWritePermission}
                             icon={<EditIcon />}
                             onClick={() => setShowEditUserDialog(true)}
                             type={Action.Edit}
                         />
                         {canBeDeleted && (
                             <IconButton
+                                disabled={!hasWritePermission}
                                 icon={<DeleteIcon />}
                                 onClick={() => setShowDeleteUserDialog(true)}
                                 type={Action.Delete}

@@ -16,6 +16,7 @@ import {
     Action,
 } from "../../lib/";
 import { PeersList, InfoBox, Tile, AddPeerDialog, LoadingTile, IconButton } from "../components";
+import usePermissions from "../hooks/usePermissions";
 import "./Home.scss";
 
 /**
@@ -23,6 +24,7 @@ import "./Home.scss";
  * @returns The node to render.
  */
 function Home() {
+    const [hasWritePermission] = usePermissions();
     const [bannerSrc, setBannerSrc] = useState<undefined | string>();
     const [publicKey, setPublicKey] = useState<undefined | string>();
     const [version, setVersion] = useState<undefined | string>();
@@ -144,6 +146,7 @@ function Home() {
                         title="Peers"
                         action={
                             <IconButton
+                                disabled={!hasWritePermission}
                                 icon={<AddIcon />}
                                 onClick={() => setShowAddPeerDialog(true)}
                                 type={Action.Add}
