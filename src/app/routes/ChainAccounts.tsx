@@ -63,30 +63,6 @@ function ChainAccounts() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
-                    <InfoBox
-                        title="On-chain accounts"
-                        action={
-                            <input
-                                onChange={onSearchChange}
-                                value={search}
-                                placeholder={SEARCH_ACCOUNT_PLACEHOLDER}
-                                disabled={chainAccounts.length === 0}
-                            />
-                        }
-                    >
-                        {search.length > 0 && <h4 className="margin-b-m">{results.length} results found.</h4>}
-                        {chainAccounts.length > 0 ? (
-                            results.map(account => (
-                                <Tile
-                                    key={account}
-                                    primaryText={account}
-                                    url={`/chains/${chainID}/accounts/${account}`}
-                                />
-                            ))
-                        ) : (
-                            <Tile primaryText="No accounts found." />
-                        )}
-                    </InfoBox>
                     {isLoading ? (
                         <InfoBox title="On-chain accounts">
                             {Array.from({ length: 2 }).map((_, i) => (
