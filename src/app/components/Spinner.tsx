@@ -1,19 +1,15 @@
 import classNames from "classnames";
-import React, { Component, ReactNode } from "react";
+import React from "react";
 import "./Spinner.scss";
 import { SpinnerProps } from "./SpinnerProps";
 
 /**
  * Component which will display a spinner.
+ * @param props The props.
+ * @returns The node to render.
  */
-class Spinner extends Component<SpinnerProps> {
-    /**
-     * Render the component.
-     * @returns The node to render.
-     */
-    public render(): ReactNode {
-        return <div className={classNames("spinner", { "spinner-compact": this.props.compact })} />;
-    }
+function Spinner(props: SpinnerProps): JSX.Element {
+    return <div className={classNames("spinner", { "spinner-compact": props.compact })} />;
 }
 
 export default Spinner;
