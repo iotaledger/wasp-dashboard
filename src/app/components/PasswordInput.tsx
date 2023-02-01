@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { EyeClosedIcon, EyeIcon } from "../../assets";
+import IconButton from "./IconButton";
 import "./PasswordInput.scss";
 interface PasswordInputProps {
     disabled?: boolean;
@@ -36,9 +37,12 @@ const PasswordInput = ({ disabled, onChange, inputValue }: PasswordInputProps) =
                 onChange={onChange}
                 autoComplete="new-password"
             />
-            <button tabIndex={-1} type="button" className="blindmode-input-button" onClick={toggleBlindMode}>
-                {blindMode ? <EyeIcon /> : <EyeClosedIcon />}
-            </button>
+            <IconButton
+                tabIndex={-1}
+                icon={blindMode ? <EyeIcon /> : <EyeClosedIcon />}
+                onClick={toggleBlindMode}
+                classnames="blindmode-input-button"
+            />
         </div>
     );
 };

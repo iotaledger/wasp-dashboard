@@ -39,6 +39,15 @@
     }
 }
 
+.row-reverse {
+    display: flex;
+    flex-direction: row-reverse;
+
+    &.middle {
+        align-items: center;
+    }
+}
+
 .col {
     display: flex;
     flex-direction: column;

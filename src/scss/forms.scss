@@ -38,6 +38,12 @@ input[type="file"]::file-selector-button {
     display: none;
 }
 
+input[type="text"], input[type="checkbox"]{
+    &:disabled {
+        opacity: 0.8;
+    }
+}
+
 input[type="checkbox"] {
     width: 16px;
     height: 16px;
@@ -56,7 +62,7 @@ input[type="checkbox"] {
     &:disabled {
         opacity: 0.5;
     }
-
+    
     &:checked {
         padding: 2px;
         background-color: var(--panel-background);
@@ -115,6 +121,7 @@ input[type="checkbox"] {
         color: var(--text-color-primary);
         font-family: $font-sans;
         appearance: none;
+        cursor: pointer;
 
         &:focus {
             box-shadow: 0 0 3px 0 var(--accent-primary);
@@ -132,6 +139,7 @@ input[type="checkbox"] {
         option {
             background-color: var(--panel-background);
             color: var(--text-color-primary);
+            text-align: center;
         }
     }
 }
