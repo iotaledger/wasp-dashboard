@@ -115,7 +115,9 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
         }
     }
 
-    const formIsValid = passwordValidation !== PasswordValidation.Error && permissionsAreValid;
+    const formIsValid =
+        passwordValidation === PasswordValidation.Valid ||
+        (passwordValidation === PasswordValidation.Empty && permissionsAreValid);
 
     return (
         <Dialog
