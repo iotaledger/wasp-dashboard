@@ -9,6 +9,7 @@ import {
     CommitteeInfoResponse,
     PeersService,
     EventAggregator,
+    Action,
 } from "../../lib";
 import {
     Breadcrumb,
@@ -19,6 +20,7 @@ import {
     EditAccessNodesDialog,
     LoadingTile,
     Tile,
+    IconButton,
 } from "../components";
 import { LoadingInfo } from "../components/loading";
 
@@ -167,11 +169,8 @@ function ChainNodes() {
                     </InfoBox>
                     <InfoBox
                         title="Access nodes"
-                        titleWithIcon={true}
-                        icon={
-                            <button type="button" onClick={() => setIsPopupOpen(true)} className="edit-button">
-                                <EditIcon />
-                            </button>
+                        action={
+                            <IconButton onClick={() => setIsPopupOpen(true)} icon={<EditIcon />} type={Action.Edit} />
                         }
                     >
                         <div className="sized-container">

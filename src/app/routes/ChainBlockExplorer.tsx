@@ -1,7 +1,8 @@
 /* eslint-disable react/no-multi-comp */
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "./Route.scss";
+import { ChevronLeftIcon, ChevronRightIcon } from "../../assets";
 import { ServiceFactory } from "../../lib";
 import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
 import { Breadcrumb, InfoBox, KeyValueRow, Tile } from "../components";
@@ -14,6 +15,7 @@ import ChainNavbar from "../components/ChainNavbar";
 function ChainBlockExplorer() {
     const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
 
+    const navigate = useNavigate();
     const [blockData, setBlockData] = useState<BlockData | null>(null);
     const [latestBlock, setLatestBlock] = useState<number>();
     const { chainID, blockID } = useParams();
@@ -205,33 +207,55 @@ function ChainBlockExplorer() {
                                     )}
                                 </InfoBox>
                             </div>
-                            <div className="card fill">
-                                <div className="summary row spread-centered">
-                                    <BlockLink
-                                        chainID={chainID}
-                                        disabled={blockIndex === 0}
-                                        blockIndex={0}
-                                        label="⏮️ First"
-                                    />
-                                    <BlockLink
-                                        chainID={chainID}
-                                        disabled={previousBlock < 0}
-                                        blockIndex={previousBlock}
-                                        label="⬅️ Previous"
-                                    />
-                                    <BlockLink
-                                        chainID={chainID}
-                                        disabled={!nextBlock}
-                                        blockIndex={nextBlock}
-                                        label="Next ➡️"
-                                    />
-                                    <BlockLink
-                                        chainID={chainID}
-                                        disabled={latestBlock === blockIndex}
-                                        blockIndex={latestBlock}
-                                        label="Latest ⏭️"
-                                    />
+                        </div>
+                        <div className="card fill">
+                            <div className="summary row spread-centered middle">
+                                <BlockLink
+                                    chainID={chainID}
+                                    disabled={blockIndex === 0}
+                                    blockIndex={0}
+                                    label="First"
+                                    icon={<ChevronLeftIcon />}
+                                    codeRepetition={2}
+                                    iconFirst
+                                />
+                                <BlockLink
+                                    chainID={chainID}
+                                    disabled={previousBlock < 0}
+                                    blockIndex={previousBlock}
+                                    label="Previous"
+                                    icon={<ChevronLeftIcon />}
+                                    iconFirst
+                                />
+                                <div className="select-wrapper row middle range-wrapper">
+                                    <select
+                                        value={blockIndex}
+                                        onChange={e => navigate(`/chains/${chainID}/blocks/${e.target.value}`)}
+                                        className=""
+                                    >
+                                        {latestBlock &&
+                                            createBlocksRange(latestBlock).map((_, block) => (
+                                                <option key={block} value={block} className="padding-t">
+                                                    {block}
+                                                </option>
+                                            ))}
+                                    </select>
                                 </div>
+                                <BlockLink
+                                    chainID={chainID}
+                                    disabled={!nextBlock}
+                                    blockIndex={nextBlock}
+                                    label="Next"
+                                    icon={<ChevronRightIcon />}
+                                />
+                                <BlockLink
+                                    chainID={chainID}
+                                    disabled={latestBlock === blockIndex}
+                                    blockIndex={latestBlock}
+                                    label="Latest"
+                                    icon={<ChevronRightIcon />}
+                                    codeRepetition={2}
+                                />
                             </div>
                         </div>
                     </React.Fragment>
@@ -246,7 +270,14 @@ function ChainBlockExplorer() {
 BlockLink.defaultProps = {
     blockIndex: 1,
     chainID: "",
+    codeRepetition: 1,
+    icon: undefined,
+    iconFirst: false,
 };
+
+const createBlocksRange = (lastIndex: number) =>
+    // eslint-disable-next-line unicorn/no-new-array
+    new Array(lastIndex + 1).fill(0) as number[];
 
 /**
  * A Link to navigate between blocks.
@@ -255,6 +286,10 @@ BlockLink.defaultProps = {
  * @param param0.chainID ChainID.
  * @param param0.blockIndex The destination block index.
  * @param param0.disabled Disabled or not.
+ * @param param0.icon Link's icon.
+ * @param param0.doubledIcon Double the icon or not.
+ * @param param0.iconFirst Show the icon before the text.
+ * @param param0.codeRepetition How many times to repeat the code.
  * @returns The Node to render.
  */
 function BlockLink({
@@ -262,15 +297,28 @@ function BlockLink({
     chainID,
     blockIndex,
     disabled,
+    icon,
+    iconFirst,
+    codeRepetition = 1,
 }: {
     label: string;
     chainID?: string;
     blockIndex?: number;
     disabled: boolean;
+    icon?: React.ReactNode;
+    iconFirst?: boolean;
+    codeRepetition?: number;
 }) {
     return (
         <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
-            {label}
+            <div className={`${iconFirst ? "row" : "row-reverse"} middle`}>
+                <div className={`${iconFirst ? "margin-r-t" : "margin-l-t"} row`}>
+                    {Array.from({ length: codeRepetition }, (_, i) => (
+                        <React.Fragment key={i}>{icon}</React.Fragment>
+                    ))}
+                </div>
+                <span>{label}</span>
+            </div>
         </Link>
     );
 }
