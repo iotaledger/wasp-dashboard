@@ -13,6 +13,12 @@ import {
 } from "../../../lib";
 import { Dialog, PasswordInput } from "../../components";
 
+enum PasswordValidation {
+    Error,
+    Empty,
+    Valid,
+}
+
 interface IEditUserDialog {
     onClose: () => void;
     user: User;
@@ -32,22 +38,24 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
 
     const editingMySelf = authService.getUsername() === user.username;
 
-    const [passwordIsValid, permissionsAreValid] = useMemo(() => {
+    const [passwordValidation, permissionsAreValid] = useMemo(() => {
         // Check if both passwords are valid
         const passwordCheck = (() => {
-            if (confirmNewPassword?.length <= 0 || newPassword?.length <= 0) {
-                return false;
-            } else if (confirmNewPassword === newPassword) {
+            if (confirmNewPassword.length === 0 && newPassword.length === 0) {
+                setError(null);
+                return PasswordValidation.Empty;
+            }
+            if (confirmNewPassword === newPassword) {
                 const passwordStrength = zxcvbn(newPassword);
                 if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
                     setError(passwordStrength.feedback.suggestions.join(" "));
-                    return false;
+                    return PasswordValidation.Error;
                 }
                 setError(null);
-                return true;
+                return PasswordValidation.Valid;
             }
             setError("Passwords do not match!");
-            return false;
+            return PasswordValidation.Error;
         })();
         // Check if permissions are different
         const permissionsCheck = (() => {
@@ -76,7 +84,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
         try {
             await Promise.all([
                 // Update the password if has changed and is valid
-                passwordIsValid
+                passwordValidation === PasswordValidation.Valid
                     ? waspClientService.users().changeUserPassword({
                           ...user,
                           updateUserPasswordRequest: { password: confirmNewPassword },
@@ -107,7 +115,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
         }
     }
 
-    const formIsValid = passwordIsValid || permissionsAreValid;
+    const formIsValid = passwordValidation !== PasswordValidation.Error && permissionsAreValid;
 
     return (
         <Dialog
