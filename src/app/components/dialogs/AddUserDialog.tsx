@@ -5,7 +5,7 @@ import { PasswordInput, Dialog } from "../../components";
 
 const FORM_INITIAL_VALUES: IFormValues = {
     username: "",
-    permissions: ["write", "read"],
+    permissions: [Permissions.Write, Permissions.Read],
     password: "",
 };
 
@@ -71,13 +71,13 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
         if (formValues?.username?.length <= 0 || formValues?.password?.length <= 0) {
             return false;
         }
-            const passwordStrength = zxcvbn(formValues?.password);
-            if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
-                setError(passwordStrength.feedback.suggestions.join(" "));
-                return false;
-            }
-                setError(null);
-                return true;
+        const passwordStrength = zxcvbn(formValues?.password);
+        if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
+            setError(passwordStrength.feedback.suggestions.join(" "));
+            return false;
+        }
+        setError(null);
+        return true;
     }, [formValues]);
 
     /**
