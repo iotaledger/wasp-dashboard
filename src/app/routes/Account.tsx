@@ -17,7 +17,7 @@ function Account() {
         { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
         { goTo: `${chainURL}/accounts`, text: "Accounts" },
-        { goTo: `${chainURL}/accounts/${accountID}`, text: `Account ${accountID}` },
+        { goTo: `${chainURL}/account/${accountID}`, text: `Account ${accountID}` },
     ];
 
     React.useEffect(() => {

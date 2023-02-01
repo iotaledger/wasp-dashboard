@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Route.scss";
 import { WaspClientService, ServiceFactory } from "../../lib";
-import { Breadcrumb, InfoBox, Tile, LoadingTile, ChainNavbar, BottomNavbar } from "../components";
+import { Breadcrumb, Tile, ChainNavbar, Paginator } from "../components";
 
 /**
  * ChainAccount panel.
@@ -46,35 +46,20 @@ function ChainAccounts() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
-                    <InfoBox title="On-chain accounts">
-                        {chainAccounts.length > 0
-                            ? chainAccounts.map(account => (
-                                <Tile
-                                    key={account}
-                                    primaryText={account}
-                                    url={`/chains/${chainID}/accounts/${account}`}
-                                />
-                              ))
-                            : Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} />)}
-                    </InfoBox>
-                    <BottomNavbar
-                        firstButton={{
-                            enabled: false,
-                        }}
-                        previousButton={{
-                            enabled: false,
-                        }}
-                        nextButton={{
-                            enabled: false,
-                        }}
-                        lastButton={{
-                            enabled: false,
-                        }}
-                        navUrl=""
-                        location=""
-                        selectorOptions={[]}
-                        selectorChanged={() => {}}
-                    />
+                    <Paginator
+                        title="On-chain accounts"
+                        navUrl={`/chains/${chainID}/accounts/`}
+                        data={chainAccounts}
+                        size={5}
+                    >
+                        {account => (
+                            <Tile
+                                key={account}
+                                primaryText={account}
+                                url={`/chains/${chainID}/account/${account}`}
+                            />
+                            )}
+                    </Paginator>
                 </div>
             </div>
         </div>
