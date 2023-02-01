@@ -1,127 +1,90 @@
-import React, { ReactNode } from "react";
+import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthService, ServiceFactory } from "../../lib/classes";
-import { AsyncComponent, InfoBox, Spinner } from "../components";
+import { InfoBox, Spinner } from "../components";
 import "./Route.scss";
-import { LoginState } from "./LoginState";
 
 /**
  * Login panel.
+ * @returns The node to render.
  */
-class Login extends AsyncComponent<unknown, LoginState> {
-    /**
-     * The auth service.
-     */
-    private readonly _authService: AuthService;
+function Login(): JSX.Element {
+    const [user, setUser] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [isBusy, setIsBusy] = useState<boolean>(false);
+    const [error, setError] = useState<boolean>(false);
+    const [redirect, setRedirect] = useState<string>("");
 
-    /**
-     * Create a new instance of Login.
-     * @param props The props.
-     */
-    constructor(props: unknown) {
-        super(props);
+    const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
 
-        this._authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
+    React.useEffect(() => {
+        setRedirect(authService.isLoggedIn() ? "/" : "");
+    }, []);
 
-        this.state = {
-            user: "",
-            password: "",
-            isBusy: false,
-            error: false,
-            redirect: this._authService.isLoggedIn() ? "/" : "",
-        };
+    if (redirect.length > 0) {
+        return <Navigate to={redirect} />;
     }
 
-    /**
-     * Render the component.
-     * @returns The node to render.
-     */
-    public render(): ReactNode {
-        if (this.state.redirect.length > 0) {
-            return <Navigate to={this.state.redirect} />;
-        }
-        return (
-            <div className="main">
-                <div className="content">
-                    <h2>Login</h2>
-                    <InfoBox title="" cardClassName="margin-t-s padding-l">
-                        <form>
-                            <p>Please enter your credentials to unlock the full dashboard.</p>
-                            <div className="card--label">User</div>
-                            <div className="card--value row">
-                                <input
-                                    type="text"
-                                    autoComplete="username"
-                                    value={this.state.user}
-                                    disabled={this.state.isBusy}
-                                    onChange={e => this.setState({ user: e.target.value })}
-                                    autoFocus={true}
-                                />
-                            </div>
-                            <div className="card--label">Password</div>
-                            <div className="card--value row">
-                                <input
-                                    type="password"
-                                    autoComplete="current-password"
-                                    value={this.state.password}
-                                    disabled={this.state.isBusy}
-                                    onChange={e => this.setState({ password: e.target.value })}
-                                    onKeyDown={e => {
-                                        if (
-                                            e.key === "Enter" &&
-                                            this.state.password.trim().length > 0 &&
-                                            this.state.user.trim().length > 0
-                                        ) {
-                                            this.login();
-                                        }
-                                    }}
-                                />
-                            </div>
-                            <hr />
-                            <div className="card--value row middle">
-                                <button
-                                    className="card--action margin-r-s"
-                                    type="button"
-                                    disabled={
-                                        this.state.isBusy ||
-                                        this.state.user.trim().length === 0 ||
-                                        this.state.password.trim().length === 0
+    const login = async () => {
+        setIsBusy(true);
+        setError(false);
+
+        const success = await authService.login(user, password);
+
+        setIsBusy(false);
+        setError(!success);
+    };
+
+    return (
+        <div className="main">
+            <div className="content">
+                <h2>Login</h2>
+                <InfoBox title="" cardClassName="margin-t-s padding-l">
+                    <form>
+                        <p>Please enter your credentials to unlock the full dashboard.</p>
+                        <div className="card--label">User</div>
+                        <div className="card--value row">
+                            <input
+                                type="text"
+                                autoComplete="username"
+                                value={user}
+                                disabled={isBusy}
+                                onChange={e => setUser(e.target.value)}
+                                autoFocus={true}
+                            />
+                        </div>
+                        <div className="card--label">Password</div>
+                        <div className="card--value row">
+                            <input
+                                type="password"
+                                autoComplete="current-password"
+                                value={password}
+                                disabled={isBusy}
+                                onChange={e => setPassword(e.target.value)}
+                                onKeyDown={async e => {
+                                    if (e.key === "Enter" && password.trim().length > 0 && user.trim().length > 0) {
+                                        await login();
                                     }
-                                    onClick={e => this.login()}
-                                >
-                                    Login
-                                </button>
-                                {this.state.isBusy && <Spinner compact={true} />}
-                                {this.state.error && (
-                                    <p className="danger margin-l-t">Your login attempt failed, please try again.</p>
-                                )}
-                            </div>
-                        </form>
-                    </InfoBox>
-                </div>
+                                }}
+                            />
+                        </div>
+                        <hr />
+                        <div className="card--value row middle">
+                            <button
+                                className="card--action margin-r-s"
+                                type="button"
+                                disabled={isBusy || user.trim().length === 0 || password.trim().length === 0}
+                                onClick={async e => login()}
+                            >
+                                Login
+                            </button>
+                            {isBusy && <Spinner compact={true} />}
+                            {error && <p className="danger margin-l-t">Your login attempt failed, please try again.</p>}
+                        </div>
+                    </form>
+                </InfoBox>
             </div>
-        );
-    }
-
-    /**
-     * Try the login.
-     */
-    private login(): void {
-        this.setState(
-            {
-                isBusy: true,
-                error: false,
-            },
-            async () => {
-                const success = await this._authService.login(this.state.user, this.state.password);
-
-                this.setState({
-                    isBusy: false,
-                    error: !success,
-                });
-            },
-        );
-    }
+        </div>
+    );
 }
-
 export default Login;
