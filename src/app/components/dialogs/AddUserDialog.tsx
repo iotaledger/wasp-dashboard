@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from "react";
 import zxcvbn from "zxcvbn";
-import { ServiceFactory, AddUserRequest, WaspClientService, MIN_PASSWORD_STRENGTH, Permissions } from "../../../lib";
+import { ServiceFactory, AddUserRequest, WaspClientService, MIN_PASSWORD_STRENGTH, UserPermission } from "../../../lib";
 import { PasswordInput, Dialog } from "../../components";
 
 const FORM_INITIAL_VALUES: IFormValues = {
     username: "",
-    permissions: [Permissions.Write, Permissions.Read],
+    permissions: [UserPermission.Write, UserPermission.Read],
     password: "",
 };
 
@@ -85,7 +85,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
      * @param e The event.
      */
     const handlePermissionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const permission = e.target.value as Permissions;
+        const permission = e.target.value as UserPermission;
         if (e.target.checked) {
             setFormValues({ ...formValues, permissions: [...formValues.permissions, permission] });
         } else {
@@ -133,7 +133,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
                 </div>
                 <div className="dialog-content-label">Permissions</div>
                 <div className="dialog-content-value">
-                    {Object.values(Permissions).map(permission => (
+                    {Object.values(UserPermission).map(permission => (
                         <div key={permission} className="row middle">
                             <input
                                 type="checkbox"

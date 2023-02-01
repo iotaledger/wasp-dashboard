@@ -8,7 +8,7 @@ import {
     User,
     MIN_PASSWORD_STRENGTH,
     ChangeUserPermissionsRequest,
-    Permissions,
+    UserPermission,
     AuthService,
 } from "../../../lib";
 import { Dialog, PasswordInput } from "../../components";
@@ -63,7 +63,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
     }, [confirmNewPassword, newPassword, permissions, user]);
 
     const handlePermissionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const permission = e.target.value as Permissions;
+        const permission = e.target.value as UserPermission;
         if (e.target.checked) {
             setPermissions([...(permissions ?? []), permission]);
         } else {
@@ -149,7 +149,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                     />
                     <div className="dialog-content-label">Check permissions</div>
                     <div className="dialog-content-value">
-                        {Object.values(Permissions).map(permission => (
+                        {Object.values(UserPermission).map(permission => (
                             <div key={permission} className="row middle">
                                 <input
                                     type="checkbox"

@@ -1,4 +1,4 @@
-export enum Permissions {
+export enum UserPermission {
     Read = "read",
     Write = "write",
 }
