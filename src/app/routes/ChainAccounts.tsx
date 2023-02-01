@@ -11,12 +11,10 @@ const SEARCH_ACCOUNT_PLACEHOLDER = "Account address";
  * @returns The node to render.
  */
 function ChainAccounts() {
-    const [chainAccounts, setChainAccounts] = useState<string[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [chainAccounts, setChainAccounts] = useState<string[] | null>(null);
+    const [search, setSearch] = useState<string>("");
     const { chainID } = useParams();
-    const [search, setSearch] = useState("");
-
-    const results = search ? chainAccounts.filter(acc => acc.match(search)) : chainAccounts;
+    const results = search ? chainAccounts?.filter(acc => acc.match(search)) : chainAccounts;
     const chainURL = `/chains/${chainID}`;
 
     const chainBreadcrumbs = [
@@ -32,8 +30,6 @@ function ChainAccounts() {
 
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
-        setIsLoading(true);
-
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .corecontracts()
@@ -41,11 +37,10 @@ function ChainAccounts() {
             .then(newAccounts => {
                 if (newAccounts.accounts) {
                     setChainAccounts(newAccounts.accounts);
-                    setIsLoading(false);
                 }
             })
             .catch(() => {
-                setChainAccounts([]);
+                setChainAccounts(null);
             });
     }, []);
 
@@ -63,7 +58,7 @@ function ChainAccounts() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
-                    {isLoading ? (
+                    {chainAccounts === null ? (
                         <InfoBox title="On-chain accounts">
                             {Array.from({ length: 2 }).map((_, i) => (
                                 <LoadingTile key={i} />
@@ -81,9 +76,9 @@ function ChainAccounts() {
                                 />
                             }
                         >
-                            {search.length > 0 && <h4 className="margin-b-m">{results.length} results found.</h4>}
+                            {search.length > 0 && <h4 className="margin-b-m">{results?.length} results found.</h4>}
                             {chainAccounts.length > 0 ? (
-                                results.map(account => (
+                                results?.map(account => (
                                     <Tile
                                         key={account}
                                         primaryText={account}

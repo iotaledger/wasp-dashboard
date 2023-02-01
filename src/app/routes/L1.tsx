@@ -12,8 +12,7 @@ import {
     formatDate,
 } from "../../lib";
 import "./L1.scss";
-import { KeyValueRow, InfoBox, Table, Tile, LoadingTile } from "../components";
-import { LoadingInfo, LoadingTable } from "../components/loading";
+import { KeyValueRow, InfoBox, Table, Tile, LoadingTile, LoadingInfo, LoadingTable } from "../components";
 
 /**
  * L1 panel.
@@ -21,19 +20,12 @@ import { LoadingInfo, LoadingTable } from "../components/loading";
  */
 function L1() {
     const [l1Params, setL1Params] = useState<L1Params | null>(null);
-    const [isL1ParamsLoading, setIsL1ParamsLoading] = useState<boolean>(false);
     const [chains, setChains] = useState<ChainInfoResponse[] | null>(null);
-    const [isChainsLoading, setIsChainsLoading] = useState<boolean>(false);
     const [l1Metrics, setl1Metrics] = useState<ChainMetrics | null | ITableRow[]>(null);
-    const [isL1MetricsLoading, setIsL1MetricsLoading] = useState<boolean>(false);
 
     React.useEffect(() => {
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
         const nodeService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
-
-        setIsL1ParamsLoading(true);
-        setIsChainsLoading(true);
-        setIsL1MetricsLoading(true);
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         nodeService
@@ -43,11 +35,11 @@ function L1() {
                 if (params) {
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                     setL1Params(params);
-                    setIsL1ParamsLoading(false);
                 }
             })
             .catch(e => {
                 console.error(e);
+                setL1Params(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -56,10 +48,10 @@ function L1() {
             .getChains()
             .then(newChains => {
                 setChains(newChains);
-                setIsChainsLoading(false);
             })
             .catch(e => {
                 console.error(e);
+                setChains(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -85,10 +77,10 @@ function L1() {
                     },
                 );
                 setl1Metrics(chainMetricsArray);
-                setIsL1MetricsLoading(false);
             })
             .catch(e => {
                 console.error(e);
+                setl1Metrics(null);
             });
     }, []);
 
@@ -98,7 +90,7 @@ function L1() {
                 <h2>L1</h2>
                 <div className="content">
                     <InfoBox title="L1 params" cardClassName="first-card">
-                        {isL1ParamsLoading ? (
+                        {l1Params === null ? (
                             <LoadingInfo large />
                         ) : (
                             l1Params &&
@@ -122,7 +114,7 @@ function L1() {
                         )}
                     </InfoBox>
                     <InfoBox title="Chains">
-                        {isChainsLoading ? (
+                        {chains === null ? (
                             Array.from({ length: 1 }).map((_, i) => (
                                 <LoadingTile yAxis={8} height={38} key={i} displayHealth={true} />
                             ))
@@ -141,7 +133,7 @@ function L1() {
                         ))}
                     </InfoBox>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
-                        {isL1MetricsLoading ? (
+                        {l1Metrics === null ? (
                             <LoadingTable large />
                         ) : (l1Metrics ? (
                             <Table

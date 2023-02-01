@@ -45,19 +45,13 @@ function Chain() {
     const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
 
     const [chainInfo, setChainInfo] = useState<ChainInfoResponse | null>(null);
-    const [isChainInfoLoading, setIsChainInfoLoading] = useState<boolean>(false);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[] | null>(null);
-    const [isChainContractsLoading, setIsChainContractsLoading] = useState<boolean>(false);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
-    const [isChainAssetsLoading, setIsChainAssetsLoading] = useState<boolean>(false);
-    const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
-    const [isChainBlobsLoading, setIsChainBlobsLoading] = useState<boolean>(false);
+    const [chainBlobs, setChainBlobs] = useState<Blob[] | null>(null);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
-    const [isChainLatestBlockLoading, setIsChainLatestBlockLoading] = useState<boolean>(false);
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
         Record<string, ConsensusMetric> | null | ITableRow[]
     >(null);
-    const [isChainConsensusMetricsLoading, setIsChainConsensusMetricsLoading] = useState<boolean>(false);
     const { chainID } = useParams();
 
     const chainURL = `/chains/${chainID}`;
@@ -73,20 +67,12 @@ function Chain() {
             return;
         }
 
-        setIsChainInfoLoading(true);
-        setIsChainContractsLoading(true);
-        setIsChainAssetsLoading(true);
-        setIsChainBlobsLoading(true);
-        setIsChainLatestBlockLoading(true);
-        setIsChainConsensusMetricsLoading(true);
-
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .chains()
             .getChainInfo({ chainID })
             .then(newChainInfo => {
                 setChainInfo(newChainInfo);
-                setIsChainInfoLoading(false);
             })
             .catch(() => {
                 setChainInfo(null);
@@ -98,7 +84,6 @@ function Chain() {
             .getContracts({ chainID })
             .then(newChainContracts => {
                 setChainContracts(newChainContracts);
-                setIsChainContractsLoading(false);
             })
             .catch(() => {
                 setChainContracts(null);
@@ -110,7 +95,6 @@ function Chain() {
             .accountsGetTotalAssets({ chainID })
             .then(newTotalAssets => {
                 setChainAssets(newTotalAssets);
-                setIsChainAssetsLoading(false);
             })
             .catch(() => {
                 setChainAssets(null);
@@ -123,11 +107,10 @@ function Chain() {
             .then(newBlobs => {
                 if (newBlobs.blobs) {
                     setChainBlobs(newBlobs.blobs);
-                    setIsChainBlobsLoading(false);
                 }
             })
             .catch(() => {
-                setChainBlobs([]);
+                setChainBlobs(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -136,7 +119,6 @@ function Chain() {
             .then(newLatestBlock => {
                 if (newLatestBlock) {
                     setChainLatestBlock(newLatestBlock);
-                    setIsChainLatestBlockLoading(false);
                 }
             })
             .catch(() => {
@@ -165,7 +147,6 @@ function Chain() {
                     return { flagName, status, triggerTime };
                 });
                 setChainConsensusMetrics(chainConsensusMetricsArray);
-                setIsChainConsensusMetricsLoading(false);
             })
             .catch(() => {
                 setChainConsensusMetrics(null);
@@ -182,23 +163,22 @@ function Chain() {
                 <div className="content">
                     <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
                     <InfoBox title="Info">
-                        {isChainInfoLoading ? (
+                        {chainInfo === null ? (
                             <LoadingInfo extraLarge />
                         ) : (chainProperties.length > 0 ? (
                             <React.Fragment>
-                                {" "}
                                 {chainProperties
                                     .filter(([key]) => !INFO_SKIP_NAMES.has(key))
                                     .map(([key, val]) => (
                                         <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
-                                    ))}{" "}
+                                    ))}
                             </React.Fragment>
                         ) : (
                             <Tile primaryText="No info available for this chain." />
                         ))}
                     </InfoBox>
                     <InfoBox title="Contracts">
-                        {isChainContractsLoading ? (
+                        {chainContracts === null ? (
                             <LoadingInfo large />
                         ) : (chainContracts ? (
                             <React.Fragment>
@@ -215,7 +195,7 @@ function Chain() {
                         ))}
                     </InfoBox>
                     <InfoBox title="Total Assets">
-                        {isChainAssetsLoading ? (
+                        {chainAssets === null ? (
                             <LoadingInfo />
                         ) : (chainAssets?.baseTokens ? (
                             <KeyValueRow
@@ -233,7 +213,7 @@ function Chain() {
                         )}
                     </InfoBox>
                     <InfoBox title="Blobs">
-                        {isChainBlobsLoading ? (
+                        {chainBlobs === null ? (
                             <LoadingInfo />
                         ) : (chainBlobs ? (
                             <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
@@ -242,7 +222,7 @@ function Chain() {
                         ))}
                     </InfoBox>
                     <InfoBox title="Latest block">
-                        {isChainLatestBlockLoading ? (
+                        {chainLatestBlock === null ? (
                             <LoadingInfo />
                         ) : (chainLatestBlock ? (
                             <React.Fragment>
@@ -261,7 +241,7 @@ function Chain() {
                     </InfoBox>
 
                     <InfoBox title="EVM">
-                        {isChainInfoLoading ? (
+                        {chainInfo === null ? (
                             <LoadingInfo />
                         ) : (chainID ? (
                             <React.Fragment>
@@ -273,7 +253,7 @@ function Chain() {
                         ))}
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
-                        {isChainConsensusMetricsLoading ? (
+                        {chainConsensusMetrics === null ? (
                             <LoadingTable large />
                         ) : (chainConsensusMetrics ? (
                             <Table

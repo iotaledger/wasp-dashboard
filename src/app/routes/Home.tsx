@@ -29,7 +29,6 @@ function Home() {
     const [networkId, setNetworkId] = useState<undefined | string>();
     const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[] | null>(null);
     const [chains, setChains] = useState<ChainInfoResponse[] | null>(null);
-    const [isChainsLoading, setIsChainsLoading] = useState<boolean>(false);
     const [showAddPeerDialog, setShowAddPeerDialog] = useState<boolean>(false);
 
     const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
@@ -57,18 +56,16 @@ function Home() {
 
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
-        setIsChainsLoading(true);
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .chains()
             .getChains()
             .then(newChains => {
                 setChains(newChains);
-                setIsChainsLoading(false);
             })
             .catch(e => {
                 console.error(e);
-                setIsChainsLoading(true);
+                setChains(null);
             });
 
         setPeersList(peersService.get());
@@ -130,7 +127,7 @@ function Home() {
                 <div className="row fill margin-t-s desktop-down-column">
                     <InfoBox title="Chains" titleClassName="title">
                         <div className="sized-container">
-                            {isChainsLoading ? (
+                            {chains === null ? (
                                 Array.from({ length: 1 }).map((_, i) => (
                                     <LoadingTile key={i} height={20} displayHealth={true} />
                                 ))
