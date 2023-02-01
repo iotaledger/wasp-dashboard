@@ -1,83 +1,40 @@
-import { Component, ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 import { BreakpointProps } from "./BreakpointProps";
-import { BreakpointState } from "./BreakpointState";
 
-/**
- * Component to show/hide children based on media size breakpoints.
- */
-class Breakpoint extends Component<BreakpointProps, BreakpointState> {
-    /**
-     * The size for the breakpoints.
-     */
-    private static readonly SIZE_BREAKPOINTS = {
+const Breakpoint: React.FC<BreakpointProps> = props => {
+    const [isVisible, setIsVisible] = useState<boolean>(false);
+
+    const SIZE_BREAKPOINTS = {
         phone: 480,
         tablet: 768,
         desktop: 1024,
     };
 
     /**
-     * The resize method
+     * Resize handler.
      */
-    private readonly _resize: () => void;
-
-    /**
-     * Create a new instance of Breakpoint.
-     * @param props The props.
-     */
-    constructor(props: BreakpointProps) {
-        super(props);
-
-        this._resize = () => this.resize();
-
-        this.state = {
-            isVisible: this.calculateVisible(),
-        };
-    }
-
-    /**
-     * The component mounted.
-     */
-    public componentDidMount(): void {
-        window.addEventListener("resize", this._resize);
-    }
-
-    /**
-     * The component will unmount so update flag.
-     */
-    public componentWillUnmount(): void {
-        window.removeEventListener("resize", this._resize);
-    }
-
-    /**
-     * Render the component.
-     * @returns The node to render.
-     */
-    public render(): ReactNode {
-        return this.state.isVisible ? this.props.children : null;
-    }
-
-    /**
-     * Handle the window resize.
-     */
-    private resize(): void {
-        const isVisible = this.calculateVisible();
-
-        this.setState({
-            isVisible,
-        });
-    }
-
-    /**
-     * Calculate if the child components should be visible.
-     * @returns True if the children should be visible.
-     */
-    private calculateVisible(): boolean {
+    function resize() {
         const windowSize = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
-        return this.props.aboveBelow === "above"
-            ? windowSize >= Breakpoint.SIZE_BREAKPOINTS[this.props.size]
-            : windowSize < Breakpoint.SIZE_BREAKPOINTS[this.props.size];
+        setIsVisible(
+            props.aboveBelow === "above"
+                ? windowSize >= SIZE_BREAKPOINTS[props.size]
+                : windowSize < SIZE_BREAKPOINTS[props.size],
+        );
     }
-}
+
+    useEffect(() => {
+        resize();
+        window.addEventListener("resize", resize);
+        return () => {
+            window.removeEventListener("resize", resize);
+        };
+    }, [props.aboveBelow, props.size]);
+
+    return isVisible ? (
+        // eslint-disable-next-line react/jsx-no-useless-fragment
+        <React.Fragment>{props.children}</React.Fragment>
+    ) : null;
+};
 
 export default Breakpoint;
