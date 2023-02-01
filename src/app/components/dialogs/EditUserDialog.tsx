@@ -157,6 +157,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                                     onChange={handlePermissionChange}
                                     disabled={editingMySelf}
                                     checked={permissions?.includes(permission)}
+                                    className={`${editingMySelf ? "opacity-50" : ""}`}
                                 />
                                 <span className={`${editingMySelf ? "opacity-50" : ""} margin-l-t`}>{permission}</span>
                             </div>
