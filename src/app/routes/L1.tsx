@@ -98,33 +98,21 @@ function L1() {
                             </InfoBox>
                         )}
                         <InfoBox title="Chains">
-                            {chains?.map(chain => (
-                                <Tile
-                                    key={chain.chainID}
-                                    primaryText={chain.chainID}
-                                    url={`/l1/${chain.chainID}`}
-                                    displayHealth
-                                    healthy={chain.isActive}
-                                />
-                            ))}
+                            {chains
+                                ? chains.map(chain => (
+                                    <Tile
+                                        key={chain.chainID}
+                                        primaryText={chain.chainID}
+                                        url={`/l1/${chain.chainID}`}
+                                        displayHealth
+                                        healthy={chain.isActive}
+                                    />
+                                  ))
+                                : Array.from({ length: 2 }).map((_, i) => (
+                                    <LoadingTile yAxis={8} height={38} key={i} displayHealth={true} />
+                                  ))}
                         </InfoBox>
                     </div>
-
-                    <InfoBox title="Chains">
-                        {chains
-                            ? chains.map(chain => (
-                                <Tile
-                                    key={chain.chainID}
-                                    primaryText={chain.chainID}
-                                    url={`/l1/${chain.chainID}`}
-                                    displayHealth
-                                    healthy={chain.isActive}
-                                />
-                              ))
-                            : Array.from({ length: 2 }).map((_, i) => (
-                                <LoadingTile yAxis={8} height={38} key={i} displayHealth={true} />
-                              ))}
-                    </InfoBox>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
                         {l1Metrics && (
                             <Table
