@@ -10,8 +10,8 @@ interface PaginatorProps<T> {
     children: (item: T, index: number) => React.ReactNode;
     size: number;
     navUrl: string;
-    searchFilter: (item: T, search: string) => RegExpMatchArray | null;
-    searchPlaceholder: string;
+    searchFilter?: (item: T, search: string) => RegExpMatchArray | null;
+    searchPlaceholder?: string;
 }
 
 /**
@@ -40,7 +40,7 @@ export default function Paginator<T>({
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
 
-    const results = search ? data.filter(item => searchFilter(item, search)) : data;
+    const results = search && searchFilter ? data.filter(item => searchFilter(item, search)) : data;
     const numericPage = Number(page);
 
     const pagesQuantity = Math.ceil(data.length / size);
@@ -65,19 +65,13 @@ export default function Paginator<T>({
         }
     }
 
+    const action = searchFilter ? (
+        <input onChange={onSearchChange} value={search} placeholder={searchPlaceholder} disabled={data.length === 0} />
+    ) : undefined;
+
     return (
         <React.Fragment>
-            <InfoBox
-                title={title}
-                action={
-                    <input
-                        onChange={onSearchChange}
-                        value={search}
-                        placeholder={searchPlaceholder}
-                        disabled={data.length === 0}
-                    />
-                }
-            >
+            <InfoBox title={title} action={action}>
                 {search.length > 0 && <h4 className="margin-b-m">{results.length} results found.</h4>}
                 {data.length > 0
                     ? dataRange.map((item, i) => children(item, i))
@@ -108,3 +102,8 @@ export default function Paginator<T>({
         </React.Fragment>
     );
 }
+
+Paginator.defaultProps = {
+    searchFilter: undefined,
+    searchPlaceholder: undefined,
+};
