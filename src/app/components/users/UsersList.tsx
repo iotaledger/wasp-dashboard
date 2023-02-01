@@ -18,9 +18,13 @@ interface UsersListProps {
      * @type {boolean}
      */
     canBeDeleted: boolean;
+    /**
+     * Refresh the list of users.
+     */
+    onEditSuccess: () => void;
 }
 
-const UsersList: React.FC<UsersListProps> = ({ users, onDeleteSuccess, canBeDeleted }) => {
+const UsersList: React.FC<UsersListProps> = ({ users, onDeleteSuccess, canBeDeleted, onEditSuccess }) => {
     const orderedUsers = users ? users.sort((a, b) => a.username?.localeCompare(b.username as string) as number) : [];
     return (
         <div className="users-list">
@@ -29,6 +33,7 @@ const UsersList: React.FC<UsersListProps> = ({ users, onDeleteSuccess, canBeDele
                     <UserTile
                         key={idx}
                         user={user}
+                        onEditSuccess={onEditSuccess}
                         onDeleteSuccess={() => onDeleteSuccess(user)}
                         canBeDeleted={canBeDeleted}
                     />

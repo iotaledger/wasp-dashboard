@@ -53,6 +53,13 @@ const Users: React.FC = () => {
     }
 
     /**
+     * When a user is successfully edited.
+     */
+    function handleEditUserSuccess(): void {
+        loadAllUsers();
+    }
+
+    /**
      *
      */
     function handleAddUserSuccess(): void {
@@ -87,6 +94,7 @@ const Users: React.FC = () => {
                             users={usersList}
                             onDeleteSuccess={onDeleteSuccess}
                             canBeDeleted={usersList ? usersList.length > 1 : false}
+                            onEditSuccess={handleEditUserSuccess}
                         />
                     </div>
                 </div>
