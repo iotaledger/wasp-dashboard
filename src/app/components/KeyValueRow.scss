@@ -18,6 +18,13 @@
             font-size: 13px;
         }
 
+        &.key {
+            flex-shrink: 0;
+            @include phone-down {
+                flex-shrink: inherit;
+            }
+        }
+
         &.value {
             max-height: 400px;
             overflow-x: hidden;
