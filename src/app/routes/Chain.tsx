@@ -165,7 +165,7 @@ function Chain() {
                     <InfoBox title="Info">
                         {chainInfo === null ? (
                             <LoadingInfo extraLarge />
-                        ) : (chainProperties.length > 0 ? (
+                        ) : (chainProperties?.length > 0 ? (
                             <React.Fragment>
                                 {chainProperties
                                     .filter(([key]) => !INFO_SKIP_NAMES.has(key))
@@ -180,7 +180,7 @@ function Chain() {
                     <InfoBox title="Contracts">
                         {chainContracts === null ? (
                             <LoadingInfo large />
-                        ) : (chainContracts.length > 0 ? (
+                        ) : (chainContracts?.length > 0 ? (
                             <React.Fragment>
                                 {chainContracts.map(({ name, hName, description, programHash }) => (
                                     <KeyValueRow
@@ -208,14 +208,14 @@ function Chain() {
                                 <Tile primaryText="No base tokens found." />
                             </InfoBox>
                         ))}
-                        {chainAssets?.nativeTokens && chainAssets.nativeTokens.length > 0 && (
+                        {chainAssets?.nativeTokens && chainAssets?.nativeTokens?.length > 0 && (
                             <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
                         )}
                     </InfoBox>
                     <InfoBox title="Blobs">
                         {chainBlobs === null ? (
                             <LoadingInfo />
-                        ) : (chainBlobs.length > 0 ? (
+                        ) : (chainBlobs?.length > 0 ? (
                             <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
                         ) : (
                             <Tile primaryText="No blobs found." />
@@ -255,7 +255,7 @@ function Chain() {
                     <InfoBox title="Consensus metrics">
                         {chainConsensusMetrics === null ? (
                             <LoadingTable large />
-                        ) : (chainConsensusMetrics.length > 0 ? (
+                        ) : (chainConsensusMetrics?.length > 0 ? (
                             <Table
                                 tHead={["Flag name", "Status", "Trigger time"]}
                                 tBody={chainConsensusMetrics as ITableRow[]}

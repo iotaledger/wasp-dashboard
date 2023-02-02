@@ -71,7 +71,7 @@ function Configuration() {
             <div className="main-wrapper">
                 <h2>Configuration</h2>
                 <div className="content">
-                    {newConfigArrayBasedOnKeys.length > 0 ? (
+                    {newConfigArrayBasedOnKeys?.length > 0 ? (
                         <div className="grid-wrapper">
                             {newConfigArrayBasedOnKeys.map((item, index) => {
                                 const key = Object.keys(item)[0];

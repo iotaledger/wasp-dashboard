@@ -92,7 +92,7 @@ function ChainBlockExplorer() {
                                 <h2>Requests</h2>
                             </div>
                             <div className="content">
-                                {blockData?.requests.length === 0 ? (
+                                {blockData?.requests?.length === 0 ? (
                                     <div className="card coll fill">
                                         <div className="summary">
                                             <Tile primaryText="No requests found." />
