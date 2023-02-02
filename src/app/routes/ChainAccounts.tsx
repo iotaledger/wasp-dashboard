@@ -1,10 +1,16 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Route.scss";
 import { WaspClientService, ServiceFactory } from "../../lib";
-import { Breadcrumb, InfoBox, Tile, LoadingTile, ChainNavbar } from "../components";
+import { Breadcrumb, Tile, ChainNavbar, Paginator } from "../components";
 
 const SEARCH_ACCOUNT_PLACEHOLDER = "Account address";
+const PAGE_SIZE = 5;
+
+// eslint-disable-next-line jsdoc/require-jsdoc
+function searchFilter(item: string, search: string) {
+    return item.match(search);
+}
 
 /**
  * ChainAccount panel.
@@ -13,15 +19,13 @@ const SEARCH_ACCOUNT_PLACEHOLDER = "Account address";
 function ChainAccounts() {
     const [chainAccounts, setChainAccounts] = useState<string[]>([]);
     const { chainID } = useParams();
-    const [search, setSearch] = useState("");
 
-    const results = search ? chainAccounts.filter(acc => acc.match(search)) : chainAccounts;
     const chainURL = `/chains/${chainID}`;
 
     const chainBreadcrumbs = [
         { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
-        { goTo: `${chainURL}/accounts`, text: "Accounts" },
+        { goTo: `${chainURL}/accounts/1`, text: "Accounts" },
     ];
 
     React.useEffect(() => {
@@ -42,11 +46,6 @@ function ChainAccounts() {
             });
     }, []);
 
-    // eslint-disable-next-line jsdoc/require-jsdoc
-    function onSearchChange(e: ChangeEvent<HTMLInputElement>) {
-        setSearch(e.target.value);
-    }
-
     return (
         <div className="main">
             <div className="main-wrapper">
@@ -56,26 +55,18 @@ function ChainAccounts() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
-                    <InfoBox
+                    <Paginator
+                        searchPlaceholder={SEARCH_ACCOUNT_PLACEHOLDER}
+                        searchFilter={searchFilter}
                         title="On-chain accounts"
-                        action={
-                            <input
-                                onChange={onSearchChange}
-                                value={search}
-                                placeholder={SEARCH_ACCOUNT_PLACEHOLDER}
-                                disabled={chainAccounts.length === 0}
-                            />
-                        }
+                        navUrl={`/chains/${chainID}/accounts/`}
+                        data={chainAccounts}
+                        size={PAGE_SIZE}
                     >
-                        {search.length > 0 && <h4 className="margin-b-m">{results.length} results found.</h4>}
-                        {chainAccounts.length > 0 ? (
-                          results.map(account => (
-                            <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
-                          ))
-                        ):(
-                          Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} />)
+                        {account => (
+                            <Tile key={account} primaryText={account} url={`/chains/${chainID}/account/${account}`} />
                         )}
-                    </InfoBox>
+                    </Paginator>
                 </div>
             </div>
         </div>
