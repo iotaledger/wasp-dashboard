@@ -36,7 +36,7 @@ const IconButton: React.FC<IconButtonProps> = ({
 
 IconButton.defaultProps = {
     classnames: "",
-    disabled: undefined,
+    disabled: false,
     tabIndex: undefined,
     type: undefined,
 };
