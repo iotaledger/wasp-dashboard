@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { BreakpointProps } from "./BreakpointProps";
 
+const SIZE_BREAKPOINTS = {
+    phone: 480,
+    tablet: 768,
+    desktop: 1024,
+};
+
 const Breakpoint: React.FC<BreakpointProps> = props => {
     const [isVisible, setIsVisible] = useState<boolean>(false);
-
-    const SIZE_BREAKPOINTS = {
-        phone: 480,
-        tablet: 768,
-        desktop: 1024,
-    };
 
     /**
      * Resize handler.
