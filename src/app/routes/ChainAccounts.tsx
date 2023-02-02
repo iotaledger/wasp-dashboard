@@ -25,7 +25,7 @@ function ChainAccounts() {
     const chainBreadcrumbs = [
         { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
-        { goTo: `${chainURL}/accounts`, text: "Accounts" },
+        { goTo: `${chainURL}/accounts/1`, text: "Accounts" },
     ];
 
     React.useEffect(() => {
