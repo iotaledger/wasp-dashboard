@@ -62,6 +62,10 @@ function Home() {
             .getChains()
             .then(newChains => {
                 setChains(newChains);
+            })
+            .catch(e => {
+                console.error(e);
+                setChains(null);
             });
 
         setPeersList(peersService.get());
@@ -123,8 +127,14 @@ function Home() {
                 <div className="row fill margin-t-s desktop-down-column">
                     <InfoBox title="Chains" titleClassName="title">
                         <div className="sized-container">
-                            {chains
-                                ? chains.map(chain => (
+                            {chains === null ? (
+                                Array.from({ length: 1 }).map((_, i) => (
+                                    <LoadingTile key={i} height={20} displayHealth={true} />
+                                ))
+                            ) : (chains?.length === 0 ? (
+                                <Tile primaryText="No chains found" />
+                            ) : (
+                                chains.map(chain => (
                                     <Tile
                                         key={chain.chainID}
                                         primaryText={chain.chainID}
@@ -132,10 +142,8 @@ function Home() {
                                         displayHealth
                                         healthy={chain.isActive}
                                     />
-                                  ))
-                                : Array.from({ length: 1 }).map((_, i) => (
-                                    <LoadingTile key={i} height={20} displayHealth={true} />
-                                  ))}
+                                ))
+                            ))}
                         </div>
                     </InfoBox>
                 </div>

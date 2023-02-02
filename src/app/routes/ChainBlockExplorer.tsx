@@ -71,138 +71,166 @@ function ChainBlockExplorer() {
         <div className="main">
             <div className="main-wrapper">
                 <Breadcrumb breadcrumbs={chainBreadcrumbs} />
-                <div className="middle row">
-                    <h2 className="l1-details-title">Chain {chainID}</h2>
-                </div>
-                <div className="content">
-                    <ChainNavbar chainID={chainID} block={blockIndex} />
-                    <div className="middle row">
-                        <h2>Block {blockID}</h2>
-                    </div>
-                    <div className="content">
-                        <InfoBox title="Info">
-                            {info?.map(([k, v]) => (
-                                <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={v} />
-                            ))}
-                        </InfoBox>
-                    </div>
-                    <div className="middle row">
-                        <h2>Requests</h2>
-                    </div>
-                    <div className="content">
-                        {blockData?.requests.map((receipt, index) => {
-                            const params = receipt?.request?.params?.items;
-                            return (
-                                <InfoBox key={receipt.request?.requestId} title={`REQUEST #${receipt?.requestIndex}`}>
-                                    <div className="info-content">
-                                        <div className="main-info-item">
-                                            <h4>info</h4>
-                                            {Object.entries(receipt)
-                                                .filter(([r]) => BLOCK_RECEIPTS_INFO_VALUES.has(r))
-                                                .map(([k, v]) => (
-                                                    <KeyValueRow
-                                                        key={k}
-                                                        keyText={BLOCK_REQUEST_NAMES[k]}
-                                                        value={JSON.stringify(v)}
-                                                    />
-                                                ))}
-                                        </div>
-                                        <div className="main-info-item">
-                                            <h4>Request</h4>
-                                            {Object.entries(receipt.request ?? {})
-                                                .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
-                                                .map(([key, value]) =>
-                                                    (typeof value === "boolean" || typeof value === "string" ? (
-                                                        <KeyValueRow key={key} keyText={key} value={value} />
-                                                    ) : (
-                                                        <KeyValueRow
-                                                            key={key}
-                                                            keyText={key}
-                                                            value={JSON.stringify(value)}
-                                                        />
-                                                    )),
-                                                )}
-                                        </div>
-                                        <div className="main-info-item">
-                                            <h4>Parameters</h4>
-                                            {params?.map(x => (
-                                                <KeyValueRow
-                                                    key={x.key}
-                                                    keyText={x.key}
-                                                    value={JSON.stringify(x.value)}
-                                                />
-                                            ))}
-                                        </div>
-                                        <div className="main-info-item">
-                                            <h4>Contracts</h4>
-                                            {Object.entries(receipt.request?.callTarget ?? {}).map(([key, value]) => (
-                                                <KeyValueRow key={key} keyText={key} value={JSON.stringify(value)} />
-                                            ))}
-                                        </div>
-                                        <div className="main-info-item">
-                                            <h4>Fungible Tokens</h4>
-                                            {Object.entries(receipt.request?.allowance?.fungibleTokens ?? {}).map(
-                                                ([key, value]) => (
-                                                    <KeyValueRow
-                                                        key={key}
-                                                        keyText={key}
-                                                        value={JSON.stringify(value)}
-                                                    />
-                                                ),
-                                            )}
-                                        </div>
-                                        <div className="main-info-item">
-                                            <h4>NFTs</h4>
-                                            {Object.entries(receipt.request?.allowance?.nfts ?? {}).map(
-                                                ([key, value]) => (
-                                                    <KeyValueRow
-                                                        key={key}
-                                                        keyText={key}
-                                                        value={JSON.stringify(value)}
-                                                    />
-                                                ),
-                                            )}
+                {info ? (
+                    <React.Fragment>
+                        <div className="middle row">
+                            <h2 className="l1-details-title">Chain {chainID}</h2>
+                        </div>
+                        <div className="content">
+                            <ChainNavbar chainID={chainID} block={blockIndex} />
+                            <div className="middle row">
+                                <h2>Block {blockID}</h2>
+                            </div>
+                            <div className="content">
+                                <InfoBox title="Info">
+                                    {info?.map(([k, v]) => (
+                                        <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={v} />
+                                    ))}
+                                </InfoBox>
+                            </div>
+                            <div className="middle row">
+                                <h2>Requests</h2>
+                            </div>
+                            <div className="content">
+                                {blockData?.requests?.length === 0 ? (
+                                    <div className="card coll fill">
+                                        <div className="summary">
+                                            <Tile primaryText="No requests found." />
                                         </div>
                                     </div>
+                                ) : (
+                                    blockData?.requests.map((receipt, index) => {
+                                        const params = receipt?.request?.params?.items;
+                                        return (
+                                            <InfoBox
+                                                key={receipt.request?.requestId}
+                                                title={`REQUEST #${receipt?.requestIndex}`}
+                                            >
+                                                <div className="info-content">
+                                                    <div className="main-info-item">
+                                                        <h4>info</h4>
+                                                        {Object.entries(receipt)
+                                                            .filter(([r]) => BLOCK_RECEIPTS_INFO_VALUES.has(r))
+                                                            .map(([k, v]) => (
+                                                                <KeyValueRow
+                                                                    key={k}
+                                                                    keyText={BLOCK_REQUEST_NAMES[k]}
+                                                                    value={JSON.stringify(v)}
+                                                                />
+                                                            ))}
+                                                    </div>
+                                                    <div className="main-info-item">
+                                                        <h4>Request</h4>
+                                                        {Object.entries(receipt.request ?? {})
+                                                            .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
+                                                            .map(([key, value]) =>
+                                                                (typeof value === "boolean" ||
+                                                                typeof value === "string" ? (
+                                                                    <KeyValueRow
+                                                                        key={key}
+                                                                        keyText={key}
+                                                                        value={value}
+                                                                    />
+                                                                ) : (
+                                                                    <KeyValueRow
+                                                                        key={key}
+                                                                        keyText={key}
+                                                                        value={JSON.stringify(value)}
+                                                                    />
+                                                                )),
+                                                            )}
+                                                    </div>
+                                                    <div className="main-info-item">
+                                                        <h4>Parameters</h4>
+                                                        {params?.map(x => (
+                                                            <KeyValueRow
+                                                                key={x.key}
+                                                                keyText={x.key}
+                                                                value={JSON.stringify(x.value)}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                    <div className="main-info-item">
+                                                        <h4>Contracts</h4>
+                                                        {Object.entries(receipt.request?.callTarget ?? {}).map(
+                                                            ([key, value]) => (
+                                                                <KeyValueRow
+                                                                    key={key}
+                                                                    keyText={key}
+                                                                    value={JSON.stringify(value)}
+                                                                />
+                                                            ),
+                                                        )}
+                                                    </div>
+                                                    <div className="main-info-item">
+                                                        <h4>Fungible Tokens</h4>
+                                                        {Object.entries(
+                                                            receipt.request?.allowance?.fungibleTokens ?? {},
+                                                        ).map(([key, value]) => (
+                                                            <KeyValueRow
+                                                                key={key}
+                                                                keyText={key}
+                                                                value={JSON.stringify(value)}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                    <div className="main-info-item">
+                                                        <h4>NFTs</h4>
+                                                        {Object.entries(receipt.request?.allowance?.nfts ?? {}).map(
+                                                            ([key, value]) => (
+                                                                <KeyValueRow
+                                                                    key={key}
+                                                                    keyText={key}
+                                                                    value={JSON.stringify(value)}
+                                                                />
+                                                            ),
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </InfoBox>
+                                        );
+                                    })
+                                )}
+                            </div>
+                            <div className="middle row">
+                                <h2>Events</h2>
+                            </div>
+                            <div className="content">
+                                <InfoBox>
+                                    {blockData?.events?.length === 0 ? (
+                                        <Tile primaryText="No events found." />
+                                    ) : (
+                                        blockData?.events?.map(event => <Tile key={event} primaryText={event} />)
+                                    )}
                                 </InfoBox>
-                            );
-                        })}
-                    </div>
-                    <div className="middle row">
-                        <h2>Events</h2>
-                    </div>
-                    <div className="content">
-                        <InfoBox title="Events">
-                            {blockData?.events?.length === 0 ? (
-                                <Tile primaryText="No events found." />
-                            ) : (
-                                blockData?.events?.map(event => <Tile key={event} primaryText={event} />)
-                            )}
-                        </InfoBox>
-                    </div>
-                    <BottomNavbar
-                        firstButton={{
-                            enabled: blockIndex > 0,
-                            value: "0",
-                        }}
-                        previousButton={{
-                            enabled: previousBlock >= 0,
-                            value: previousBlock.toString(),
-                        }}
-                        nextButton={{
-                            enabled: Number.isInteger(nextBlock),
-                            value: nextBlock?.toString(),
-                        }}
-                        lastButton={{
-                            enabled: latestBlock !== blockIndex,
-                            value: latestBlock?.toString(),
-                        }}
-                        selectorOptions={latestBlock ? createBlocksRange(latestBlock) : []}
-                        selectorChanged={navigate}
-                        navUrl={`/chains/${chainID}/blocks/`}
-                        location={blockIndex.toString()}
-                    />
-                </div>
+                            </div>
+                            <BottomNavbar
+                                firstButton={{
+                                    enabled: blockIndex > 0,
+                                    value: "0",
+                                }}
+                                previousButton={{
+                                    enabled: previousBlock >= 0,
+                                    value: previousBlock.toString(),
+                                }}
+                                nextButton={{
+                                    enabled: Number.isInteger(nextBlock),
+                                    value: nextBlock?.toString(),
+                                }}
+                                lastButton={{
+                                    enabled: latestBlock !== blockIndex,
+                                    value: latestBlock?.toString(),
+                                }}
+                                selectorOptions={latestBlock ? createBlocksRange(latestBlock) : []}
+                                selectorChanged={navigate}
+                                navUrl={`/chains/${chainID}/blocks/`}
+                                location={blockIndex.toString()}
+                            />
+                        </div>
+                    </React.Fragment>
+                ) : (
+                    <Tile primaryText="Block not found" />
+                )}
             </div>
         </div>
     );
