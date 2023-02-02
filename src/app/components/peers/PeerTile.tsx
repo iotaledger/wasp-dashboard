@@ -32,11 +32,11 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed, enableDelete }) => 
         setShowDeleteDialog(false);
     }
 
-    const primaryText = peer.publicKey;
-    const secondaryText = `${peer.netId} ${Number.isInteger(peer.numUsers) ? `- Users: ${peer.numUsers}` : ""}`;
-    const healthy = peer.isAlive;
+    const PRIMARY_TEXT = peer.publicKey;
+    const SECONDARY_TEXT = `${peer.netId} ${Number.isInteger(peer.numUsers) ? `- Users: ${peer.numUsers}` : ""}`;
+    const HEALTHY = peer.isAlive;
 
-    const actions = [
+    const ACTIONS = [
         {
             text: "Delete",
             handleAction: () => {
@@ -51,10 +51,10 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed, enableDelete }) => 
         <React.Fragment>
             <Tile
                 displayHealth
-                healthy={healthy}
-                primaryText={primaryText}
-                secondaryText={detailed ? secondaryText : undefined}
-                actions={enableDelete ? actions : undefined}
+                healthy={HEALTHY}
+                primaryText={PRIMARY_TEXT}
+                secondaryText={detailed ? SECONDARY_TEXT : undefined}
+                actions={enableDelete ? ACTIONS : undefined}
             />
             {showDeleteDialog && (
                 <DeletePeerDialog onClose={closeDeletePeerDialog} onSuccess={closeDeletePeerDialog} peer={peer} />

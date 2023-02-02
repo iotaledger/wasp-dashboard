@@ -12,12 +12,12 @@ function Contract() {
     const { contractHName, chainID } = useParams();
     const [contractEvents, setContractEvents] = useState<EventsResponse | null>(null);
 
-    const chainURL = `/chains/${chainID}`;
+    const CHAIN_URL = `/chains/${chainID}`;
 
-    const contractBreadcrumbs = [
+    const CONTRACT_BREADCRUMBS = [
         { goTo: "/", text: "Home" },
-        { goTo: chainURL, text: `Chain ${chainID}` },
-        { goTo: `${chainURL}/contract/${contractHName}`, text: `Contract ${contractHName}` },
+        { goTo: CHAIN_URL, text: `Chain ${chainID}` },
+        { goTo: `${CHAIN_URL}/contract/${contractHName}`, text: `Contract ${contractHName}` },
     ];
 
     React.useEffect(() => {
@@ -49,7 +49,7 @@ function Contract() {
     return (
         <div className="main">
             <div className="main-wrapper">
-                <Breadcrumb breadcrumbs={contractBreadcrumbs} />
+                <Breadcrumb breadcrumbs={CONTRACT_BREADCRUMBS} />
                 <h2>Contract {contractInfo?.name}</h2>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />

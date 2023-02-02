@@ -63,12 +63,12 @@ function Chain() {
     >(null);
     const { chainID } = useParams();
 
-    const chainURL = `/chains/${chainID}`;
-    const chainProperties = chainInfo ? transformInfoIntoArray(chainInfo) : [];
+    const CHAIN_URL = `/chains/${chainID}`;
+    const CHAIN_PROPERTIES = chainInfo ? transformInfoIntoArray(chainInfo) : [];
 
-    const chainBreadcrumbs = [
+    const CHAIN_BREADCRUMBS = [
         { goTo: "/", text: "Home" },
-        { goTo: chainURL, text: `Chain ${chainID}` },
+        { goTo: CHAIN_URL, text: `Chain ${chainID}` },
     ];
 
     React.useEffect(() => {
@@ -145,19 +145,17 @@ function Chain() {
     return (
         <div className="main">
             <div className="main-wrapper">
-                <Breadcrumb breadcrumbs={chainBreadcrumbs} />
+                <Breadcrumb breadcrumbs={CHAIN_BREADCRUMBS} />
                 <div className="middle row">
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
-                    {chainProperties.length > 0 ? (
+                    {CHAIN_PROPERTIES.length > 0 ? (
                         <InfoBox title="Info">
-                            {chainProperties
-                                .filter(([key]) => !INFO_SKIP_NAMES.has(key))
-                                .map(([key, val]) => (
-                                    <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
-                                ))}
+                            {CHAIN_PROPERTIES.filter(([key]) => !INFO_SKIP_NAMES.has(key)).map(([key, val]) => (
+                                <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                            ))}
                         </InfoBox>
                     ) : (
                         <LoadingChainInfoBox />
@@ -199,7 +197,7 @@ function Chain() {
                             keyText="Block index"
                             value={{
                                 text: chainLatestBlock?.blockIndex?.toString(),
-                                url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
+                                url: `${CHAIN_URL}/blocks/${chainLatestBlock?.blockIndex}`,
                             }}
                         />
                         <KeyValueRow keyText="Timestamp" value={formatDate(chainLatestBlock?.timestamp)} />

@@ -21,12 +21,12 @@ function ChainBlockExplorer() {
     const { chainID, blockID } = useParams();
 
     const blockIndex = Number(blockID);
-    const chainURL = `/chains/${chainID}`;
+    const CHAIN_URL = `/chains/${chainID}`;
 
-    const chainBreadcrumbs = [
+    const CHAIN_BREADCRUMBS = [
         { goTo: "/", text: "Home" },
-        { goTo: chainURL, text: `Chain ${chainID}` },
-        { goTo: `${chainURL}/blocks/${blockID}`, text: `Block ${blockID}` },
+        { goTo: CHAIN_URL, text: `Chain ${chainID}` },
+        { goTo: `${CHAIN_URL}/blocks/${blockID}`, text: `Block ${blockID}` },
     ];
 
     React.useEffect(() => {
@@ -73,7 +73,7 @@ function ChainBlockExplorer() {
     return (
         <div className="main">
             <div className="main-wrapper">
-                <Breadcrumb breadcrumbs={chainBreadcrumbs} />
+                <Breadcrumb breadcrumbs={CHAIN_BREADCRUMBS} />
                 <div className="middle row">
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>

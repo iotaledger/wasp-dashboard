@@ -216,7 +216,7 @@ class App extends Component<object, AppState> {
      * @returns The node to render.
      */
     public render(): ReactNode {
-        const sections = [
+        const SECTIONS = [
             {
                 label: "Home",
                 icon: <HomeIcon />,
@@ -256,7 +256,7 @@ class App extends Component<object, AppState> {
             },
         ];
 
-        const endSections = [
+        const END_SECTIONS = [
             {
                 label: "Light",
                 icon: <SunIcon />,
@@ -276,15 +276,15 @@ class App extends Component<object, AppState> {
                 <Breakpoint size="tablet" aboveBelow="above">
                     <DesktopMenu
                         fullWidth={false}
-                        middle={this.state.online ? sections : []}
-                        end={this.state.online ? endSections : []}
+                        middle={this.state.online ? SECTIONS : []}
+                        end={this.state.online ? END_SECTIONS : []}
                     />
                 </Breakpoint>
                 <Breakpoint size="tablet" aboveBelow="below">
                     <MobileMenu
                         fullWidth={false}
-                        middle={this.state.online ? sections : []}
-                        end={this.state.online ? endSections : []}
+                        middle={this.state.online ? SECTIONS : []}
+                        end={this.state.online ? END_SECTIONS : []}
                     />
                 </Breakpoint>
                 <div className="col fill">

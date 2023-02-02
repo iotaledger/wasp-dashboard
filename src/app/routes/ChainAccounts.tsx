@@ -16,12 +16,12 @@ function ChainAccounts() {
     const [search, setSearch] = useState("");
 
     const results = search ? chainAccounts.filter(acc => acc.match(search)) : chainAccounts;
-    const chainURL = `/chains/${chainID}`;
+    const CHAIN_URL = `/chains/${chainID}`;
 
-    const chainBreadcrumbs = [
+    const CHAIN_BREADCRUMBS = [
         { goTo: "/", text: "Home" },
-        { goTo: chainURL, text: `Chain ${chainID}` },
-        { goTo: `${chainURL}/accounts`, text: "Accounts" },
+        { goTo: CHAIN_URL, text: `Chain ${chainID}` },
+        { goTo: `${CHAIN_URL}/accounts`, text: "Accounts" },
     ];
 
     React.useEffect(() => {
@@ -50,7 +50,7 @@ function ChainAccounts() {
     return (
         <div className="main">
             <div className="main-wrapper">
-                <Breadcrumb breadcrumbs={chainBreadcrumbs} />
+                <Breadcrumb breadcrumbs={CHAIN_BREADCRUMBS} />
                 <div className="middle row">
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>
@@ -68,13 +68,15 @@ function ChainAccounts() {
                         }
                     >
                         {search.length > 0 && <h4 className="margin-b-m">{results.length} results found.</h4>}
-                        {chainAccounts.length > 0 ? (
-                          results.map(account => (
-                            <Tile key={account} primaryText={account} url={`/chains/${chainID}/accounts/${account}`} />
-                          ))
-                        ):(
-                          Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} />)
-                        )}
+                        {chainAccounts.length > 0
+                            ? results.map(account => (
+                                <Tile
+                                    key={account}
+                                    primaryText={account}
+                                    url={`/chains/${chainID}/accounts/${account}`}
+                                />
+                              ))
+                            : Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} />)}
                     </InfoBox>
                 </div>
             </div>

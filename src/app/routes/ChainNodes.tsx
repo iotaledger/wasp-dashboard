@@ -38,14 +38,14 @@ function ChainNodes() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const { chainID } = useParams();
 
-    const chainURL = `/chains/${chainID}`;
+    const CHAIN_URL = `/chains/${chainID}`;
     const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse);
     const peersNodes = chainCommitteeInfo?.committeeNodes?.map(({ node }) => node as PeeringNodeStatusResponse);
 
-    const chainBreadcrumbs = [
+    const CHAIN_BREADCRUMBS = [
         { goTo: "/", text: "Home" },
-        { goTo: chainURL, text: `Chain ${chainID}` },
-        { goTo: `${chainURL}/nodes`, text: "Nodes" },
+        { goTo: CHAIN_URL, text: `Chain ${chainID}` },
+        { goTo: `${CHAIN_URL}/nodes`, text: "Nodes" },
     ];
 
     React.useEffect(() => {
@@ -141,7 +141,7 @@ function ChainNodes() {
     return (
         <div className="main">
             <div className="main-wrapper">
-                <Breadcrumb breadcrumbs={chainBreadcrumbs} />
+                <Breadcrumb breadcrumbs={CHAIN_BREADCRUMBS} />
                 <div className="middle row">
                     <h2 className="l1-details-title">Chain {chainID}</h2>
                 </div>

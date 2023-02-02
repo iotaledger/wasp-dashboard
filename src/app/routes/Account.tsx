@@ -12,12 +12,12 @@ function Account() {
     const [accountBalance, setAccountBalance] = useState<AssetsResponse | null>(null);
     const { chainID, accountID } = useParams();
 
-    const chainURL = `/chains/${chainID}`;
-    const blockBreadcrumbs = [
+    const CHAIN_URL = `/chains/${chainID}`;
+    const BLOCK_BREADCRUMBS = [
         { goTo: "/", text: "Home" },
-        { goTo: chainURL, text: `Chain ${chainID}` },
-        { goTo: `${chainURL}/accounts`, text: "Accounts" },
-        { goTo: `${chainURL}/accounts/${accountID}`, text: `Account ${accountID}` },
+        { goTo: CHAIN_URL, text: `Chain ${chainID}` },
+        { goTo: `${CHAIN_URL}/accounts`, text: "Accounts" },
+        { goTo: `${CHAIN_URL}/accounts/${accountID}`, text: `Account ${accountID}` },
     ];
 
     React.useEffect(() => {
@@ -39,7 +39,7 @@ function Account() {
     return (
         <div className="main">
             <div className="main-wrapper">
-                <Breadcrumb breadcrumbs={blockBreadcrumbs} />
+                <Breadcrumb breadcrumbs={BLOCK_BREADCRUMBS} />
                 <div className="middle row">
                     <h2>Account {accountID}</h2>
                 </div>

@@ -20,7 +20,7 @@ export default function ChainNavbar({ chainID, block }: ChainNavbarProps) {
 
     const [latestBlock, setLatestBLock] = useState(block);
 
-    const chainURL = `/chains/${chainID}`;
+    const CHAIN_URL = `/chains/${chainID}`;
 
     useEffect(() => {
         if (block !== latestBlock) {
@@ -43,10 +43,10 @@ export default function ChainNavbar({ chainID, block }: ChainNavbarProps) {
 
     return (
         <TabGroup>
-            <Tab to={`${chainURL}`} label="Info" extraMatchingRoutes={[`${chainURL}/contract`]} exact={true} />
-            <Tab to={`${chainURL}/accounts`} label="Accounts" />
-            <Tab to={`${chainURL}/nodes`} label="Nodes" />
-            <Tab to={`${chainURL}/blocks/${latestBlock}`} label="Block explorer" exact={true} />
+            <Tab to={`${CHAIN_URL}`} label="Info" extraMatchingRoutes={[`${CHAIN_URL}/contract`]} exact={true} />
+            <Tab to={`${CHAIN_URL}/accounts`} label="Accounts" />
+            <Tab to={`${CHAIN_URL}/nodes`} label="Nodes" />
+            <Tab to={`${CHAIN_URL}/blocks/${latestBlock}`} label="Block explorer" exact={true} />
         </TabGroup>
     );
 }
