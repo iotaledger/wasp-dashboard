@@ -131,7 +131,9 @@ function Home() {
                                 Array.from({ length: 1 }).map((_, i) => (
                                     <LoadingTile key={i} height={20} displayHealth={true} />
                                 ))
-                            ) : (chains ? (
+                            ) : (chains.length === 0 ? (
+                                <Tile primaryText="No chains found" />
+                            ) : (
                                 chains.map(chain => (
                                     <Tile
                                         key={chain.chainID}
@@ -141,8 +143,6 @@ function Home() {
                                         healthy={chain.isActive}
                                     />
                                 ))
-                            ) : (
-                                <Tile primaryText="No chains found" />
                             ))}
                         </div>
                     </InfoBox>
