@@ -14,6 +14,7 @@ export { default as ChainNavbar } from "./ChainNavbar";
 export { default as Tab } from "./Tab";
 export { default as TabGroup } from "./TabGroup";
 export { default as IconButton } from "./IconButton";
+export { default as Toggle } from "./Toggle";
 
 export * from "./loading";
 export * from "./dialogs";

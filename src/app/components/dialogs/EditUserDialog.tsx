@@ -11,7 +11,7 @@ import {
     UserPermission,
     AuthService,
 } from "../../../lib";
-import { Dialog, PasswordInput } from "../../components";
+import { Dialog, PasswordInput, Toggle } from "../../components";
 
 enum PasswordValidation {
     Error,
@@ -70,12 +70,14 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
         return [passwordCheck, permissionsCheck];
     }, [confirmNewPassword, newPassword, permissions, user]);
 
-    const handlePermissionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const permission = e.target.value as UserPermission;
-        if (e.target.checked) {
-            setPermissions([...(permissions ?? []), permission]);
-        } else {
+    const setWritePermission = (isCurrentlyEnabled: boolean) => {
+        const permission = UserPermission.Write;
+        if (isCurrentlyEnabled) {
+            // Eisable
             setPermissions(permissions?.filter(p => p !== permission));
+        } else {
+            // Enable
+            setPermissions([...(permissions ?? []), permission]);
         }
     };
 
@@ -114,6 +116,8 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
             setIsBusy(false);
         }
     }
+
+    const isWritePermissionEnabled = permissions?.includes(UserPermission.Write) ?? false;
 
     const formIsValid =
         passwordValidation === PasswordValidation.Valid ||
@@ -157,21 +161,16 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                             setConfirmNewPassword(e.target.value)}
                         disabled={isBusy}
                     />
-                    <div className="dialog-content-label">Check permissions</div>
+                    <div className="dialog-content-label">Permissions</div>
                     <div className="dialog-content-value">
-                        {Object.values(UserPermission).map(permission => (
-                            <div key={permission} className="row middle">
-                                <input
-                                    type="checkbox"
-                                    value={permission}
-                                    onChange={handlePermissionChange}
-                                    disabled={editingMySelf}
-                                    checked={permissions?.includes(permission)}
-                                    className={`${editingMySelf ? "opacity-50" : ""}`}
-                                />
-                                <span className={`${editingMySelf ? "opacity-50" : ""} margin-l-t`}>{permission}</span>
-                            </div>
-                        ))}
+                        <div className="row middle">
+                            <Toggle
+                                disabled={editingMySelf}
+                                enabled={isWritePermissionEnabled}
+                                onToggle={setWritePermission}
+                            />
+                            <span className={`${editingMySelf ? "opacity-50" : ""} margin-l-t`}>Write</span>
+                        </div>
                     </div>
                     {error && <p className="dialog-content-error">{error}</p>}
                 </div>

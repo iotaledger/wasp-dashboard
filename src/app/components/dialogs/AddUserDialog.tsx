@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import zxcvbn from "zxcvbn";
 import { ServiceFactory, AddUserRequest, WaspClientService, MIN_PASSWORD_STRENGTH, UserPermission } from "../../../lib";
-import { PasswordInput, Dialog } from "../../components";
+import { PasswordInput, Dialog, Toggle } from "../../components";
 
 const FORM_INITIAL_VALUES: IFormValues = {
     username: "",
@@ -80,18 +80,18 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
         return true;
     }, [formValues]);
 
-    /**
-     * Handle the change of the permission checkboxes.
-     * @param e The event.
-     */
-    const handlePermissionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const permission = e.target.value as UserPermission;
-        if (e.target.checked) {
-            setFormValues({ ...formValues, permissions: [...formValues.permissions, permission] });
-        } else {
+    const setWritePermission = (isCurrentlyEnabled: boolean) => {
+        const permission = UserPermission.Write;
+        if (isCurrentlyEnabled) {
+            // Eisable
             setFormValues({ ...formValues, permissions: formValues.permissions?.filter(p => p !== permission) });
+        } else {
+            // Enable
+            setFormValues({ ...formValues, permissions: [...formValues.permissions, permission] });
         }
     };
+
+    const isWritePermissionEnabled = formValues.permissions?.includes(UserPermission.Write) ?? false;
 
     return (
         <Dialog
@@ -133,17 +133,10 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
                 </div>
                 <div className="dialog-content-label">Permissions</div>
                 <div className="dialog-content-value">
-                    {Object.values(UserPermission).map(permission => (
-                        <div key={permission} className="row middle">
-                            <input
-                                type="checkbox"
-                                value={permission}
-                                onChange={handlePermissionChange}
-                                checked={formValues.permissions?.includes(permission)}
-                            />
-                            <span className="margin-l-t">{permission}</span>
-                        </div>
-                    ))}
+                    <div className="row middle">
+                        <Toggle enabled={isWritePermissionEnabled} onToggle={setWritePermission} />
+                        <span className="margin-l-t">Write</span>
+                    </div>
                 </div>
                 {error && <p className="dialog-content-error">{error}</p>}
             </React.Fragment>
