@@ -1,12 +1,9 @@
-/* eslint-disable react/no-multi-comp */
 import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Route.scss";
-import { ChevronLeftIcon, ChevronRightIcon } from "../../assets";
 import { ServiceFactory } from "../../lib";
 import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
-import { Breadcrumb, InfoBox, KeyValueRow, Tile } from "../components";
-import ChainNavbar from "../components/ChainNavbar";
+import { Breadcrumb, InfoBox, KeyValueRow, Tile, ChainNavbar, BottomNavbar } from "../components";
 
 /**
  * ChainBlockExplorer panel.
@@ -74,7 +71,7 @@ function ChainBlockExplorer() {
         <div className="main">
             <div className="main-wrapper">
                 <Breadcrumb breadcrumbs={chainBreadcrumbs} />
-                {blockData?.info ? (
+                {info ? (
                     <React.Fragment>
                         <div className="middle row">
                             <h2 className="l1-details-title">Chain {chainID}</h2>
@@ -95,111 +92,98 @@ function ChainBlockExplorer() {
                                 <h2>Requests</h2>
                             </div>
                             <div className="content">
-                                {blockData?.requests.length === 0 ? (
-                                    <div className="card coll fill">
-                                        <div className="summary">
-                                            <Tile primaryText="No requests found." />
-                                        </div>
-                                    </div>
-                                ) : (
-                                    blockData?.requests.map((receipt, index) => {
-                                        const params = receipt?.request?.params?.items;
-                                        return (
-                                            <InfoBox
-                                                key={receipt.request?.requestId}
-                                                title={`REQUEST #${receipt?.requestIndex}`}
-                                            >
-                                                <div className="info-content">
-                                                    <div className="main-info-item">
-                                                        <h4>info</h4>
-                                                        {Object.entries(receipt)
-                                                            .filter(([r]) => BLOCK_RECEIPTS_INFO_VALUES.has(r))
-                                                            .map(([k, v]) => (
-                                                                <KeyValueRow
-                                                                    key={k}
-                                                                    keyText={BLOCK_REQUEST_NAMES[k]}
-                                                                    value={JSON.stringify(v)}
-                                                                />
-                                                            ))}
-                                                    </div>
-                                                    <div className="main-info-item">
-                                                        <h4>Request</h4>
-                                                        {Object.entries(receipt.request ?? {})
-                                                            .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
-                                                            .map(([key, value]) =>
-                                                                (typeof value === "boolean" ||
-                                                                typeof value === "string" ? (
-                                                                    <KeyValueRow
-                                                                        key={key}
-                                                                        keyText={key}
-                                                                        value={value}
-                                                                    />
-                                                                ) : (
-                                                                    <KeyValueRow
-                                                                        key={key}
-                                                                        keyText={key}
-                                                                        value={JSON.stringify(value)}
-                                                                    />
-                                                                )),
-                                                            )}
-                                                    </div>
-                                                    <div className="main-info-item">
-                                                        <h4>Parameters</h4>
-                                                        {params?.map(x => (
+                                {blockData?.requests.map((receipt, index) => {
+                                    const params = receipt?.request?.params?.items;
+                                    return (
+                                        <InfoBox
+                                            key={receipt.request?.requestId}
+                                            title={`REQUEST #${receipt?.requestIndex}`}
+                                        >
+                                            <div className="info-content">
+                                                <div className="main-info-item">
+                                                    <h4>info</h4>
+                                                    {Object.entries(receipt)
+                                                        .filter(([r]) => BLOCK_RECEIPTS_INFO_VALUES.has(r))
+                                                        .map(([k, v]) => (
                                                             <KeyValueRow
-                                                                key={x.key}
-                                                                keyText={x.key}
-                                                                value={JSON.stringify(x.value)}
+                                                                key={k}
+                                                                keyText={BLOCK_REQUEST_NAMES[k]}
+                                                                value={JSON.stringify(v)}
                                                             />
                                                         ))}
-                                                    </div>
-                                                    <div className="main-info-item">
-                                                        <h4>Contracts</h4>
-                                                        {Object.entries(receipt.request?.callTarget ?? {}).map(
-                                                            ([key, value]) => (
+                                                </div>
+                                                <div className="main-info-item">
+                                                    <h4>Request</h4>
+                                                    {Object.entries(receipt.request ?? {})
+                                                        .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
+                                                        .map(([key, value]) =>
+                                                            (typeof value === "boolean" || typeof value === "string" ? (
+                                                                <KeyValueRow key={key} keyText={key} value={value} />
+                                                            ) : (
                                                                 <KeyValueRow
                                                                     key={key}
                                                                     keyText={key}
                                                                     value={JSON.stringify(value)}
                                                                 />
-                                                            ),
+                                                            )),
                                                         )}
-                                                    </div>
-                                                    <div className="main-info-item">
-                                                        <h4>Fungible Tokens</h4>
-                                                        {Object.entries(
-                                                            receipt.request?.allowance?.fungibleTokens ?? {},
-                                                        ).map(([key, value]) => (
+                                                </div>
+                                                <div className="main-info-item">
+                                                    <h4>Parameters</h4>
+                                                    {params?.map(x => (
+                                                        <KeyValueRow
+                                                            key={x.key}
+                                                            keyText={x.key}
+                                                            value={JSON.stringify(x.value)}
+                                                        />
+                                                    ))}
+                                                </div>
+                                                <div className="main-info-item">
+                                                    <h4>Contracts</h4>
+                                                    {Object.entries(receipt.request?.callTarget ?? {}).map(
+                                                        ([key, value]) => (
                                                             <KeyValueRow
                                                                 key={key}
                                                                 keyText={key}
                                                                 value={JSON.stringify(value)}
                                                             />
-                                                        ))}
-                                                    </div>
-                                                    <div className="main-info-item">
-                                                        <h4>NFTs</h4>
-                                                        {Object.entries(receipt.request?.allowance?.nfts ?? {}).map(
-                                                            ([key, value]) => (
-                                                                <KeyValueRow
-                                                                    key={key}
-                                                                    keyText={key}
-                                                                    value={JSON.stringify(value)}
-                                                                />
-                                                            ),
-                                                        )}
-                                                    </div>
+                                                        ),
+                                                    )}
                                                 </div>
-                                            </InfoBox>
-                                        );
-                                    })
-                                )}
+                                                <div className="main-info-item">
+                                                    <h4>Fungible Tokens</h4>
+                                                    {Object.entries(
+                                                        receipt.request?.allowance?.fungibleTokens ?? {},
+                                                    ).map(([key, value]) => (
+                                                        <KeyValueRow
+                                                            key={key}
+                                                            keyText={key}
+                                                            value={JSON.stringify(value)}
+                                                        />
+                                                    ))}
+                                                </div>
+                                                <div className="main-info-item">
+                                                    <h4>NFTs</h4>
+                                                    {Object.entries(receipt.request?.allowance?.nfts ?? {}).map(
+                                                        ([key, value]) => (
+                                                            <KeyValueRow
+                                                                key={key}
+                                                                keyText={key}
+                                                                value={JSON.stringify(value)}
+                                                            />
+                                                        ),
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </InfoBox>
+                                    );
+                                })}
                             </div>
                             <div className="middle row">
                                 <h2>Events</h2>
                             </div>
                             <div className="content">
-                                <InfoBox>
+                                <InfoBox title="Events">
                                     {blockData?.events?.length === 0 ? (
                                         <Tile primaryText="No events found." />
                                     ) : (
@@ -207,56 +191,28 @@ function ChainBlockExplorer() {
                                     )}
                                 </InfoBox>
                             </div>
-                        </div>
-                        <div className="card fill">
-                            <div className="summary row spread-centered middle">
-                                <BlockLink
-                                    chainID={chainID}
-                                    disabled={blockIndex === 0}
-                                    blockIndex={0}
-                                    label="First"
-                                    icon={<ChevronLeftIcon />}
-                                    codeRepetition={2}
-                                    iconFirst
-                                />
-                                <BlockLink
-                                    chainID={chainID}
-                                    disabled={previousBlock < 0}
-                                    blockIndex={previousBlock}
-                                    label="Previous"
-                                    icon={<ChevronLeftIcon />}
-                                    iconFirst
-                                />
-                                <div className="select-wrapper row middle range-wrapper">
-                                    <select
-                                        value={blockIndex}
-                                        onChange={e => navigate(`/chains/${chainID}/blocks/${e.target.value}`)}
-                                        className=""
-                                    >
-                                        {latestBlock &&
-                                            createBlocksRange(latestBlock).map((_, block) => (
-                                                <option key={block} value={block} className="padding-t">
-                                                    {block}
-                                                </option>
-                                            ))}
-                                    </select>
-                                </div>
-                                <BlockLink
-                                    chainID={chainID}
-                                    disabled={!nextBlock}
-                                    blockIndex={nextBlock}
-                                    label="Next"
-                                    icon={<ChevronRightIcon />}
-                                />
-                                <BlockLink
-                                    chainID={chainID}
-                                    disabled={latestBlock === blockIndex}
-                                    blockIndex={latestBlock}
-                                    label="Latest"
-                                    icon={<ChevronRightIcon />}
-                                    codeRepetition={2}
-                                />
-                            </div>
+                            <BottomNavbar
+                                firstButton={{
+                                    enabled: blockIndex > 0,
+                                    value: "0",
+                                }}
+                                previousButton={{
+                                    enabled: previousBlock >= 0,
+                                    value: previousBlock.toString(),
+                                }}
+                                nextButton={{
+                                    enabled: Number.isInteger(nextBlock),
+                                    value: nextBlock?.toString(),
+                                }}
+                                lastButton={{
+                                    enabled: latestBlock !== blockIndex,
+                                    value: latestBlock?.toString(),
+                                }}
+                                selectorOptions={latestBlock ? createBlocksRange(latestBlock) : []}
+                                selectorChanged={navigate}
+                                navUrl={`/chains/${chainID}/blocks/`}
+                                location={blockIndex.toString()}
+                            />
                         </div>
                     </React.Fragment>
                 ) : (
@@ -267,61 +223,10 @@ function ChainBlockExplorer() {
     );
 }
 
-BlockLink.defaultProps = {
-    blockIndex: 1,
-    chainID: "",
-    codeRepetition: 1,
-    icon: undefined,
-    iconFirst: false,
-};
-
 const createBlocksRange = (lastIndex: number) =>
     // eslint-disable-next-line unicorn/no-new-array
-    new Array(lastIndex + 1).fill(0) as number[];
-
-/**
- * A Link to navigate between blocks.
- * @param param0 BlockLink options
- * @param param0.label Label.
- * @param param0.chainID ChainID.
- * @param param0.blockIndex The destination block index.
- * @param param0.disabled Disabled or not.
- * @param param0.icon Link's icon.
- * @param param0.doubledIcon Double the icon or not.
- * @param param0.iconFirst Show the icon before the text.
- * @param param0.codeRepetition How many times to repeat the code.
- * @returns The Node to render.
- */
-function BlockLink({
-    label,
-    chainID,
-    blockIndex,
-    disabled,
-    icon,
-    iconFirst,
-    codeRepetition = 1,
-}: {
-    label: string;
-    chainID?: string;
-    blockIndex?: number;
-    disabled: boolean;
-    icon?: React.ReactNode;
-    iconFirst?: boolean;
-    codeRepetition?: number;
-}) {
-    return (
-        <Link to={`/chains/${chainID}/blocks/${blockIndex}`} className={`nav-link ${disabled && "disabled"}`}>
-            <div className={`${iconFirst ? "row" : "row-reverse"} middle`}>
-                <div className={`${iconFirst ? "margin-r-t" : "margin-l-t"} row`}>
-                    {Array.from({ length: codeRepetition }, (_, i) => (
-                        <React.Fragment key={i}>{icon}</React.Fragment>
-                    ))}
-                </div>
-                <span>{label}</span>
-            </div>
-        </Link>
-    );
-}
+    new Array(lastIndex + 1).fill(0)
+.map((_, n) => n.toString());
 
 const BLOCK_DATA_NAMES: Record<string, string> = {
     blockIndex: "Block Index",

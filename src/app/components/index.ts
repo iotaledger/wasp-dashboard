@@ -13,7 +13,10 @@ export { default as Breadcrumb } from "./Breadcrumb";
 export { default as ChainNavbar } from "./ChainNavbar";
 export { default as Tab } from "./Tab";
 export { default as TabGroup } from "./TabGroup";
+export { default as NavLink } from "./Navlink";
+export { default as BottomNavbar } from "./BottomNavbar";
 export { default as IconButton } from "./IconButton";
+export { default as Paginator } from "./Paginator";
 
 export * from "./loading";
 export * from "./dialogs";
