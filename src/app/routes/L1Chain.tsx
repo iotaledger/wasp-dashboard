@@ -64,7 +64,7 @@ function L1Chain() {
                     <InfoBox title="L1 Chain metrics" cardClassName="last-card">
                         {l1ChainMetrics === null ? (
                             <LoadingTable large />
-                        ) : (l1ChainMetrics ? (
+                        ) : (l1ChainMetrics.length > 0 ? (
                             <Table
                                 tBody={l1ChainMetrics}
                                 tHead={["Message name", "Type", "Total", "Last time", "Last message"]}

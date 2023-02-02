@@ -180,7 +180,7 @@ function Chain() {
                     <InfoBox title="Contracts">
                         {chainContracts === null ? (
                             <LoadingInfo large />
-                        ) : (chainContracts ? (
+                        ) : (chainContracts.length > 0 ? (
                             <React.Fragment>
                                 {chainContracts.map(({ name, hName, description, programHash }) => (
                                     <KeyValueRow
@@ -215,7 +215,7 @@ function Chain() {
                     <InfoBox title="Blobs">
                         {chainBlobs === null ? (
                             <LoadingInfo />
-                        ) : (chainBlobs ? (
+                        ) : (chainBlobs.length > 0 ? (
                             <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
                         ) : (
                             <Tile primaryText="No blobs found." />
@@ -255,7 +255,7 @@ function Chain() {
                     <InfoBox title="Consensus metrics">
                         {chainConsensusMetrics === null ? (
                             <LoadingTable large />
-                        ) : (chainConsensusMetrics ? (
+                        ) : (chainConsensusMetrics.length > 0 ? (
                             <Table
                                 tHead={["Flag name", "Status", "Trigger time"]}
                                 tBody={chainConsensusMetrics as ITableRow[]}

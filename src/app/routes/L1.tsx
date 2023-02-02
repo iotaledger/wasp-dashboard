@@ -118,7 +118,7 @@ function L1() {
                             Array.from({ length: 1 }).map((_, i) => (
                                 <LoadingTile yAxis={8} height={38} key={i} displayHealth={true} />
                             ))
-                        ) : (chains ? (
+                        ) : (chains.length > 0 ? (
                             chains.map(chain => (
                                 <Tile
                                     key={chain.chainID}
@@ -135,7 +135,7 @@ function L1() {
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
                         {l1Metrics === null ? (
                             <LoadingTable large />
-                        ) : (l1Metrics ? (
+                        ) : ((l1Metrics as ITableRow[]).length > 0 ? (
                             <Table
                                 tBody={l1Metrics as ITableRow[]}
                                 tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
