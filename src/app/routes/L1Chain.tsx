@@ -10,14 +10,14 @@ import {
     formatDate,
 } from "../../lib";
 import "./L1.scss";
-import { Breadcrumb, InfoBox, Table } from "../components";
+import { Breadcrumb, InfoBox, Table, Tile, LoadingTable } from "../components";
 
 /**
  * L1 chain panel.
  * @returns The node to render.
  */
 function L1Chain() {
-    const [l1ChainMetrics, setChainL1Metrics] = useState<ChainMetrics | null | ITableRow[]>(null);
+    const [l1ChainMetrics, setChainL1Metrics] = useState<null | ITableRow[]>(null);
     const { chainID } = useParams();
     const l1ChainBreadcrumbs = [
         { goTo: "/l1", text: "L1" },
@@ -46,6 +46,10 @@ function L1Chain() {
                     },
                 );
                 setChainL1Metrics(chainMetricsArray);
+            })
+            .catch(e => {
+                setChainL1Metrics(null);
+                console.error(e);
             });
     }, []);
 
@@ -58,13 +62,17 @@ function L1Chain() {
                 </div>
                 <div className="content">
                     <InfoBox title="L1 Chain metrics" cardClassName="last-card">
-                        {l1ChainMetrics && (
+                        {l1ChainMetrics === null ? (
+                            <LoadingTable large />
+                        ) : (l1ChainMetrics?.length > 0 ? (
                             <Table
-                                tBody={l1ChainMetrics as ITableRow[]}
+                                tBody={l1ChainMetrics}
                                 tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
                                 classNames="chain-messages-table"
                             />
-                        )}
+                        ) : (
+                            <Tile primaryText="No metrics found." />
+                        ))}
                     </InfoBox>
                 </div>
             </div>

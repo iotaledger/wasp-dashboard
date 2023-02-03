@@ -31,7 +31,7 @@ interface PeersListProps {
 
 const PeersList: React.FC<PeersListProps> = ({ peers, detailedList, enableDelete, emptyText }) => (
     <div className="peer-list">
-        {peers.length === 0 ? (
+        {peers?.length === 0 ? (
             <p className="margin-t-s">{emptyText}</p>
         ) : (
             peers.map((peer, idx) => (

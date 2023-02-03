@@ -16,8 +16,8 @@ function Account() {
     const blockBreadcrumbs = [
         { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
-        { goTo: `${chainURL}/accounts`, text: "Accounts" },
-        { goTo: `${chainURL}/accounts/${accountID}`, text: `Account ${accountID}` },
+        { goTo: `${chainURL}/accounts/1`, text: "Accounts" },
+        { goTo: `${chainURL}/account/${accountID}`, text: `Account ${accountID}` },
     ];
 
     React.useEffect(() => {
@@ -33,6 +33,10 @@ function Account() {
             .accountsGetAccountBalance({ chainID, agentID: accountID })
             .then(newBlockInfo => {
                 setAccountBalance(newBlockInfo);
+            })
+            .catch(e => {
+                setAccountBalance(null);
+                console.error(e);
             });
     }, [accountID]);
 
