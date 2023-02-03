@@ -72,7 +72,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
                 onSuccess();
             })
             .catch(e => {
-                setError(e as string);
+                setError(e.toString() as string);
             });
     }
 
