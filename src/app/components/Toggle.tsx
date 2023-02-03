@@ -15,7 +15,7 @@ interface ToggleProps {
 export default function Toggle(props: ToggleProps) {
     return (
         <div
-            className={`toggle-container ${props.active ? "enabled" : ""} ${props.disabled ? "disabled" : ""}`}
+            className={`toggle-container ${props.active ? "active" : ""} ${props.disabled ? "disabled" : ""}`}
             onClick={() => props.onToggle(props.active)}
         >
             <div className="toggle-indicator" />

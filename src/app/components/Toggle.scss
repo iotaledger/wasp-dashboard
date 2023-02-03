@@ -9,7 +9,7 @@
 
     &.disabled {
         pointer-events: none;
-        opacity: 0.5s;
+        opacity: 0.5;
     }
 
     .toggle-indicator {
@@ -20,11 +20,11 @@
         transition: 0.2s ease-in-out;
     }
 
-    &.enabled {
-        background: var(--toggle-container-enabled);
+    &.active {
+        background: var(--toggle-container-active);
 
         .toggle-indicator {
-           background: var(--toggle-indicator-enabled);
+           background: var(--toggle-indicator-active);
            transform: translateX(50px - 20px - 8px);
         }
     }
