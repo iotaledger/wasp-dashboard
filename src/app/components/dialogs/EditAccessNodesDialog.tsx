@@ -100,46 +100,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
             }
         >
             <div className="access-nodes-list">
-                {[
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                    ...peerNodes,
-                ].map(node => {
+                {peerNodes.map(node => {
                     const nodeIndex = checkedNodes.findIndex(n => n.publicKey === node.publicKey);
                     const isChecked = nodeIndex >= 0;
                     const onChecked = () => {
