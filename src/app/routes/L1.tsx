@@ -89,49 +89,51 @@ function L1() {
             <div className="l1-wrapper">
                 <h2>L1</h2>
                 <div className="content">
-                    <InfoBox title="L1 params" cardClassName="first-card">
-                        {l1Params === null ? (
-                            <LoadingInfo large />
-                        ) : (
-                            l1Params &&
-                            Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
-                                const isObject = typeof val === "object";
-                                return (
-                                    <div key={key} className="l1-info-item">
-                                        <h4>{key}</h4>
-                                        {isObject ? (
-                                            <div>
-                                                {Object.entries(val).map(([prop, propVal]) => (
-                                                    <KeyValueRow key={prop} keyText={prop} value={propVal} />
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <p>{val}</p>
-                                        )}
-                                    </div>
-                                );
-                            })
-                        )}
-                    </InfoBox>
-                    <InfoBox title="Chains">
-                        {chains === null ? (
-                            Array.from({ length: 1 }).map((_, i) => (
-                                <LoadingTile yAxis={8} height={38} key={i} displayHealth={true} />
-                            ))
-                        ) : (chains?.length > 0 ? (
-                            chains.map(chain => (
-                                <Tile
-                                    key={chain.chainID}
-                                    primaryText={chain.chainID}
-                                    url={`/l1/${chain.chainID}`}
-                                    displayHealth
-                                    healthy={chain.isActive}
-                                />
-                            ))
-                        ) : (
-                            <Tile primaryText="No chains found." />
-                        ))}
-                    </InfoBox>
+                    <div className="cols-wrapper">
+                        <InfoBox title="L1 params" cardClassName="first-card">
+                            {l1Params === null ? (
+                                <LoadingInfo large />
+                            ) : (
+                                l1Params &&
+                                Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
+                                    const isObject = typeof val === "object";
+                                    return (
+                                        <div key={key} className="l1-info-item">
+                                            <h4>{key}</h4>
+                                            {isObject ? (
+                                                <div>
+                                                    {Object.entries(val).map(([prop, propVal]) => (
+                                                        <KeyValueRow key={prop} keyText={prop} value={propVal} />
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p>{val}</p>
+                                            )}
+                                        </div>
+                                    );
+                                })
+                            )}
+                        </InfoBox>
+                        <InfoBox title="Chains">
+                            {chains === null ? (
+                                Array.from({ length: 1 }).map((_, i) => (
+                                    <LoadingTile yAxis={8} height={38} key={i} displayHealth={true} />
+                                ))
+                            ) : (chains?.length > 0 ? (
+                                chains.map(chain => (
+                                    <Tile
+                                        key={chain.chainID}
+                                        primaryText={chain.chainID}
+                                        url={`/l1/${chain.chainID}`}
+                                        displayHealth
+                                        healthy={chain.isActive}
+                                    />
+                                ))
+                            ) : (
+                                <Tile primaryText="No chains found." />
+                            ))}
+                        </InfoBox>
+                    </div>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
                         {l1Metrics === null ? (
                             <LoadingTable large />
