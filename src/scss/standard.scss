@@ -184,16 +184,20 @@ table {
     background: none;
     color: var(--text-color-secondary);
     transition: color 0.1s ease-in;
-    cursor: pointer;
-  
-    &:hover {
-      color: var(--accent-primary);
+   
+    &:hover:not(.disabled) {
+        cursor: pointer;
+        color: var(--accent-primary);
     }
 
-    &.action-button-danger {
+    &.action-button-danger:not(.disabled) {
         &:hover {
             color: transparentize($danger, 0.4);
       }
+    }
+
+    &.disabled {
+        opacity: 0.4;
     }
   }
   

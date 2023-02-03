@@ -23,6 +23,7 @@ import {
     IconButton,
     LoadingInfo,
 } from "../components";
+import { usePermissions } from "../hooks";
 
 const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
 
@@ -34,6 +35,7 @@ function ChainNodes() {
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
     const peersService = ServiceFactory.get<PeersService>(PeersService.ServiceName);
 
+    const [hasWritePermission] = usePermissions();
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
     const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -170,7 +172,12 @@ function ChainNodes() {
                     <InfoBox
                         title="Access nodes"
                         action={
-                            <IconButton onClick={() => setIsPopupOpen(true)} icon={<EditIcon />} type={Action.Edit} />
+                            <IconButton
+                                disabled={!hasWritePermission}
+                                onClick={() => setIsPopupOpen(true)}
+                                icon={<EditIcon />}
+                                type={Action.Edit}
+                            />
                         }
                     >
                         <div className="sized-container">

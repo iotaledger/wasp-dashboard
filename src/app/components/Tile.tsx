@@ -39,7 +39,13 @@ const TileContent: React.FC<TileProps> = ({
         {actions?.length && (
             <div className="actions">
                 {actions.map(action => (
-                    <IconButton key={action.text} icon={action.icon} type={action.type} onClick={action.handleAction} />
+                    <IconButton
+                        disabled={action.disabled}
+                        key={action.text}
+                        icon={action.icon}
+                        type={action.type}
+                        onClick={action.handleAction}
+                    />
                 ))}
             </div>
         )}
