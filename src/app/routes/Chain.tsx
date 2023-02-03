@@ -14,16 +14,7 @@ import {
 import { ChainsService } from "../../lib/classes/services/chainsService";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
-import {
-    Breadcrumb,
-    InfoBox,
-    KeyValueRow,
-    Table,
-    Tile,
-    LoadingChainContractsBox,
-    LoadingChainInfoBox,
-    ChainNavbar,
-} from "../components";
+import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile, ChainNavbar, LoadingTable, LoadingInfo } from "../components";
 
 interface ConsensusMetric {
     status: string;
@@ -56,7 +47,7 @@ function Chain() {
     const [chainInfo, setChainInfo] = useState<ChainInfoResponse | null>(null);
     const [chainContracts, setChainContracts] = useState<ContractInfoResponse[] | null>(null);
     const [chainAssets, setChainAssets] = useState<AssetsResponse | null>(null);
-    const [chainBlobs, setChainBlobs] = useState<Blob[]>([]);
+    const [chainBlobs, setChainBlobs] = useState<Blob[] | null>(null);
     const [chainLatestBlock, setChainLatestBlock] = useState<BlockInfoResponse | null>(null);
     const [chainConsensusMetrics, setChainConsensusMetrics] = useState<
         Record<string, ConsensusMetric> | null | ITableRow[]
@@ -82,6 +73,9 @@ function Chain() {
             .getChainInfo({ chainID })
             .then(newChainInfo => {
                 setChainInfo(newChainInfo);
+            })
+            .catch(() => {
+                setChainInfo(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -90,6 +84,9 @@ function Chain() {
             .getContracts({ chainID })
             .then(newChainContracts => {
                 setChainContracts(newChainContracts);
+            })
+            .catch(() => {
+                setChainContracts(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -98,6 +95,9 @@ function Chain() {
             .accountsGetTotalAssets({ chainID })
             .then(newTotalAssets => {
                 setChainAssets(newTotalAssets);
+            })
+            .catch(() => {
+                setChainAssets(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -108,14 +108,22 @@ function Chain() {
                 if (newBlobs.blobs) {
                     setChainBlobs(newBlobs.blobs);
                 }
+            })
+            .catch(() => {
+                setChainBlobs(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        chainsService.getLatestBlock(chainID).then(newLatestBlock => {
-            if (newLatestBlock) {
-                setChainLatestBlock(newLatestBlock);
-            }
-        });
+        chainsService
+            .getLatestBlock(chainID)
+            .then(newLatestBlock => {
+                if (newLatestBlock) {
+                    setChainLatestBlock(newLatestBlock);
+                }
+            })
+            .catch(() => {
+                setChainLatestBlock(null);
+            });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
@@ -139,6 +147,9 @@ function Chain() {
                     return { flagName, status, triggerTime };
                 });
                 setChainConsensusMetrics(chainConsensusMetricsArray);
+            })
+            .catch(() => {
+                setChainConsensusMetrics(null);
             });
     }, [chainID]);
 
@@ -152,76 +163,111 @@ function Chain() {
                 <div className="content">
                     <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
                     <div className="cols-wrapper">
-                        {chainProperties.length > 0 ? (
-                            <InfoBox title="Info" cardClassName="first-card">
-                                {chainProperties
-                                    .filter(([key]) => !INFO_SKIP_NAMES.has(key))
-                                    .map(([key, val]) => (
-                                        <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                        <InfoBox title="Info" cardClassName="first-card">
+                            {chainInfo === null ? (
+                                <LoadingInfo extraLarge />
+                            ) : (chainProperties?.length > 0 ? (
+                                <React.Fragment>
+                                    {chainProperties
+                                        .filter(([key]) => !INFO_SKIP_NAMES.has(key))
+                                        .map(([key, val]) => (
+                                            <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                                        ))}
+                                </React.Fragment>
+                            ) : (
+                                <Tile primaryText="No info available for this chain." />
+                            ))}
+                        </InfoBox>
+                        <InfoBox title="Contracts">
+                            {chainContracts === null ? (
+                                <LoadingInfo large />
+                            ) : (chainContracts?.length > 0 ? (
+                                <React.Fragment>
+                                    {chainContracts.map(({ name, hName, description, programHash }) => (
+                                        <KeyValueRow
+                                            key={name}
+                                            keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
+                                            value={description}
+                                        />
                                     ))}
-                            </InfoBox>
-                        ) : (
-                            <LoadingChainInfoBox />
-                        )}
-                        {chainContracts ? (
-                            <InfoBox title="Contracts">
-                                {chainContracts.map(({ name, hName, description, programHash }) => (
-                                    <KeyValueRow
-                                        key={name}
-                                        keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
-                                        value={description}
-                                    />
-                                ))}
-                            </InfoBox>
-                        ) : (
-                            <LoadingChainContractsBox />
-                        )}
+                                </React.Fragment>
+                            ) : (
+                                <Tile primaryText="No contracts found." />
+                            ))}
+                        </InfoBox>
                     </div>
                     <InfoBox title="Blobs">
-                        {chainBlobs.length > 0 ? (
+                        {chainBlobs === null ? (
+                            <LoadingInfo />
+                        ) : (chainBlobs?.length > 0 ? (
                             <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
                         ) : (
                             <Tile primaryText="No blobs found." />
-                        )}
+                        ))}
                     </InfoBox>
+
                     <div className="cols-wrapper">
                         <InfoBox title="Total Assets" cardClassName="first-card">
-                            {chainAssets?.baseTokens && (
+                            {chainAssets === null ? (
+                                <LoadingInfo />
+                            ) : (chainAssets?.baseTokens ? (
                                 <KeyValueRow
                                     key={chainAssets?.baseTokens}
                                     keyText="Base Tokens"
                                     value={chainAssets?.baseTokens}
                                 />
-                            )}
-                            {chainAssets?.nativeTokens && chainAssets.nativeTokens.length > 0 && (
+                            ) : (
+                                <InfoBox title="Base Tokens">
+                                    <Tile primaryText="No base tokens found." />
+                                </InfoBox>
+                            ))}
+                            {chainAssets?.nativeTokens && chainAssets?.nativeTokens?.length > 0 && (
                                 <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
                             )}
                         </InfoBox>
                         <InfoBox title="Latest block">
-                            <KeyValueRow
-                                keyText="Block index"
-                                value={{
-                                    text: chainLatestBlock?.blockIndex?.toString(),
-                                    url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
-                                }}
-                            />
-                            <KeyValueRow keyText="Timestamp" value={formatDate(chainLatestBlock?.timestamp)} />
+                            {chainLatestBlock === null ? (
+                                <LoadingInfo />
+                            ) : (chainLatestBlock ? (
+                                <React.Fragment>
+                                    <KeyValueRow
+                                        keyText="Block index"
+                                        value={{
+                                            text: chainLatestBlock?.blockIndex?.toString(),
+                                            url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
+                                        }}
+                                    />
+                                    <KeyValueRow keyText="Timestamp" value={formatDate(chainLatestBlock?.timestamp)} />
+                                </React.Fragment>
+                            ) : (
+                                <Tile primaryText="No latest block found." />
+                            ))}
                         </InfoBox>
                     </div>
 
                     <InfoBox title="EVM">
-                        {chainID && (
+                        {chainInfo === null ? (
+                            <LoadingInfo />
+                        ) : (chainID ? (
                             <React.Fragment>
                                 <KeyValueRow keyText="EVM ChainID" value={chainInfo?.evmChainId} />
                                 <KeyValueRow keyText="JSON-RPC URL" value={formatEVMJSONRPCUrl(chainID)} />
                             </React.Fragment>
-                        )}
+                        ) : (
+                            <Tile primaryText="No EVM info found." />
+                        ))}
                     </InfoBox>
                     <InfoBox title="Consensus metrics">
-                        <Table
-                            tHead={["Flag name", "Status", "Trigger time"]}
-                            tBody={chainConsensusMetrics as ITableRow[]}
-                        />
+                        {chainConsensusMetrics === null ? (
+                            <LoadingTable large />
+                        ) : (chainConsensusMetrics?.length > 0 ? (
+                            <Table
+                                tHead={["Flag name", "Status", "Trigger time"]}
+                                tBody={chainConsensusMetrics as ITableRow[]}
+                            />
+                        ) : (
+                            <Tile primaryText="No metrics found." />
+                        ))}
                     </InfoBox>
                 </div>
             </div>

@@ -2,21 +2,30 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Route.scss";
 import { WaspClientService, ServiceFactory } from "../../lib";
-import { Breadcrumb, InfoBox, Tile, LoadingTile, ChainNavbar } from "../components";
+import { Breadcrumb, Tile, ChainNavbar, Paginator, LoadingTile, InfoBox } from "../components";
+
+const SEARCH_ACCOUNT_PLACEHOLDER = "Account address";
+const PAGE_SIZE = 5;
+
+// eslint-disable-next-line jsdoc/require-jsdoc
+function searchFilter(item: string, search: string) {
+    return item.match(search);
+}
 
 /**
  * ChainAccount panel.
  * @returns The node to render.
  */
 function ChainAccounts() {
-    const [chainAccounts, setChainAccounts] = useState<string[]>([]);
+    const [chainAccounts, setChainAccounts] = useState<string[] | null>(null);
     const { chainID } = useParams();
+
     const chainURL = `/chains/${chainID}`;
 
     const chainBreadcrumbs = [
         { goTo: "/", text: "Home" },
         { goTo: chainURL, text: `Chain ${chainID}` },
-        { goTo: `${chainURL}/accounts`, text: "Accounts" },
+        { goTo: `${chainURL}/accounts/1`, text: "Accounts" },
     ];
 
     React.useEffect(() => {
@@ -34,6 +43,10 @@ function ChainAccounts() {
                 if (newAccounts.accounts) {
                     setChainAccounts(newAccounts.accounts);
                 }
+            })
+            .catch(e => {
+                setChainAccounts(null);
+                console.error(e);
             });
     }, []);
 
@@ -46,17 +59,30 @@ function ChainAccounts() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
-                    <InfoBox title="On-chain accounts">
-                        {chainAccounts.length > 0
-                            ? chainAccounts.map(account => (
+                    {chainAccounts === null ? (
+                        <InfoBox title="On-chain accounts">
+                            {Array.from({ length: 2 }).map((_, i) => (
+                                <LoadingTile key={i} />
+                            ))}
+                        </InfoBox>
+                    ) : (
+                        <Paginator
+                            searchPlaceholder={SEARCH_ACCOUNT_PLACEHOLDER}
+                            searchFilter={searchFilter}
+                            title="On-chain accounts"
+                            navUrl={`/chains/${chainID}/accounts/`}
+                            data={chainAccounts}
+                            size={PAGE_SIZE}
+                        >
+                            {account => (
                                 <Tile
                                     key={account}
                                     primaryText={account}
-                                    url={`/chains/${chainID}/accounts/${account}`}
+                                    url={`/chains/${chainID}/account/${account}`}
                                 />
-                              ))
-                            : Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} />)}
-                    </InfoBox>
+                            )}
+                        </Paginator>
+                    )}
                 </div>
             </div>
         </div>

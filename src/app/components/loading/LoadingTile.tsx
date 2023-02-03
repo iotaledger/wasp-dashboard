@@ -1,6 +1,5 @@
 import React from "react";
 import ContentLoader from "react-content-loader";
-import { ReactComponent as HealthGoodIcon } from "../../../assets/health-good.svg";
 
 interface LoadingTileProps {
     displayHealth?: boolean;
@@ -13,8 +12,16 @@ const LoadingTile = ({ displayHealth, height, yAxis }: LoadingTileProps) => (
     <div className="tile-content">
         <div className="text-content">
             {displayHealth && (
-                <div className="health-icon">
-                    <HealthGoodIcon />
+                <div className="health-icon loader">
+                    <ContentLoader
+                        speed={2}
+                        height="20"
+                        width="100%"
+                        backgroundColor="var(--loading-background)"
+                        foregroundColor="var(--loading-foreground)"
+                    >
+                        <circle cx="10" cy="10" r="10" />
+                    </ContentLoader>
                 </div>
             )}
 

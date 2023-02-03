@@ -50,6 +50,12 @@
     .health-icon {
       width: 16px;
       margin-right: $spacing-small;
+
+      &.loader {
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+      }
     }
 
     .text {

@@ -31,11 +31,11 @@ function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
                         component={(props: PeerRouteProps) => <Peer {...props} />}
                         key="peer"
                     >*/}
-                    <Route path="/chains/:chainID/accounts/:accountID" element={<Account />} key="account" />
+                    <Route path="/chains/:chainID/account/:accountID" element={<Account />} key="account" />
                     <Route path="/chains/:chainID/contract/:contractHName" element={<Contract />} key="contract" />
                     <Route path="/chains/:chainID/blocks/:blockID" element={<ChainBlockExplorer />} key="chain-block" />
                     <Route path="/chains/:chainID/nodes" element={<ChainNodes />} key="chain-nodes" />
-                    <Route path="/chains/:chainID/accounts" element={<ChainAccounts />} key="chain-accounts" />
+                    <Route path="/chains/:chainID/accounts/:page" element={<ChainAccounts />} key="chain-accounts" />
                     <Route path="/chains/:chainID" element={<Chain />} key="chain" />
                     <Route path="/configuration" element={<Configuration />} key="configuration" />
                     <Route path="/l1" element={<L1 />} key="l1" />

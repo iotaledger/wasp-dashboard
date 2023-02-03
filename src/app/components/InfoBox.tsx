@@ -2,24 +2,24 @@ import React from "react";
 import "./InfoBox.scss";
 
 interface InfoBoxProps {
-    title: string;
+    title?: string;
     children: React.ReactNode;
     titleClassName?: string;
     cardClassName?: string;
-    titleWithIcon?: boolean;
-    icon?: React.ReactNode;
+    action?: React.ReactNode;
 }
 
 // eslint-disable-next-line jsdoc/require-jsdoc
-function InfoBox({ title, children, titleClassName, cardClassName, titleWithIcon, icon }: InfoBoxProps) {
+function InfoBox({ title, children, titleClassName, cardClassName, action }: InfoBoxProps) {
     return (
         <div className={cardClassName ? `${cardClassName} card col fill` : "card col fill"}>
             <div className="summary">
-                <div className="row middle spread margin-b-m">
-                    <h4 className={titleClassName ?? ""}>{title}</h4>
-                    {titleWithIcon && icon}
-                </div>
-
+                {title && (
+                    <div className="row middle spread margin-b-m">
+                        <h4 className={titleClassName ?? ""}>{title}</h4>
+                        {action}
+                    </div>
+                )}
                 {children}
             </div>
         </div>
@@ -27,9 +27,9 @@ function InfoBox({ title, children, titleClassName, cardClassName, titleWithIcon
 }
 
 InfoBox.defaultProps = {
+    action: null,
     cardClassName: "",
-    icon: null,
+    title: "",
     titleClassName: "",
-    titleWithIcon: false,
 };
 export default InfoBox;

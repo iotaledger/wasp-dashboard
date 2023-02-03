@@ -44,7 +44,11 @@ export default function ChainNavbar({ chainID, block }: ChainNavbarProps) {
     return (
         <TabGroup>
             <Tab to={`${chainURL}`} label="Info" extraMatchingRoutes={[`${chainURL}/contract`]} exact={true} />
-            <Tab to={`${chainURL}/accounts`} label="Accounts" />
+            <Tab
+                to={`${chainURL}/accounts/1`}
+                label="Accounts"
+                extraMatchingRoutes={[`${chainURL}/accounts/`, `${chainURL}/account/`]}
+            />
             <Tab to={`${chainURL}/nodes`} label="Nodes" />
             <Tab to={`${chainURL}/blocks/${latestBlock}`} label="Block explorer" exact={true} />
         </TabGroup>

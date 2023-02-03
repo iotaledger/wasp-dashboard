@@ -110,11 +110,15 @@ class App extends Component<object, AppState> {
      */
     public async componentDidMount(): Promise<void> {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        isNodeOnline().then(online => {
-            this.setState({
-                online,
+        isNodeOnline()
+            .then(online => {
+                this.setState({
+                    online,
+                });
+            })
+            .catch(e => {
+                console.error(e);
             });
-        });
 
         EventAggregator.subscribe("auth-state", "app", isLoggedIn => {
             this.setState({

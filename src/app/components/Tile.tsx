@@ -5,6 +5,7 @@
 import "./Tile.scss";
 import React from "react";
 import { Link } from "react-router-dom";
+import { ChevronRightIcon } from "../../assets";
 import { ReactComponent as HealthGoodIcon } from "../../assets/health-good.svg";
 import { ReactComponent as HealthWarning } from "../../assets/health-warning.svg";
 import { IAction } from "../../lib";
@@ -42,7 +43,11 @@ const TileContent: React.FC<TileProps> = ({
                 ))}
             </div>
         )}
-        {url && <div className="arrow">{">"}</div>}
+        {url && (
+            <div className="arrow">
+                <ChevronRightIcon />
+            </div>
+        )}
     </div>
 );
 
