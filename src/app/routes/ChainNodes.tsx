@@ -54,6 +54,7 @@ function ChainNodes() {
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         loadCommitteeInfo();
 
         EventAggregator.subscribe("peers-state", "chain-accounts", setPeersList);
@@ -64,31 +65,14 @@ function ChainNodes() {
     }, [chainID]);
 
     /**
-     * When the access nodes are edited.
-     * @param newAccessNodes Updated access nodes.
-     */
-    function onAccessNodesEdited(newAccessNodes: PeeringNodeStatusResponse[]) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        updateAccessNodes(newAccessNodes)
-            .then(() => {
-                setIsPopupOpen(false);
-                loadCommitteeInfo();
-            })
-            .catch(e => {
-                console.error(e);
-            });
-    }
-
-    /**
      * Load the committee info
      */
-    function loadCommitteeInfo() {
+    async function loadCommitteeInfo() {
         if (!chainID) {
             return;
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        waspClientService
+        await waspClientService
             .chains()
             .getCommitteeInfo({ chainID })
             .then(newCommitteeInfo => {
@@ -100,45 +84,13 @@ function ChainNodes() {
     }
 
     /**
-     * Add and remove the access nodes.
-     * @param newAccessNodes Updated access nodes.
+     * When the user has edited the access nodes
      */
-    async function updateAccessNodes(newAccessNodes: PeeringNodeStatusResponse[]) {
-        if (!chainID || !accessNodes) {
-            return;
-        }
-
-        // Filter what new access nodes were not previously enabled
-        const newNodes = newAccessNodes.filter(
-            peer => !accessNodes.some(node => node.publicKey === peer.publicKey),
-        );
-        // Filter what trusted nodes are not access nodes
-        const removedNodes = peersList.filter(
-            peer => !newAccessNodes.some(node => node.publicKey === peer.publicKey),
-        );
-
-        // Add peer nodes as access nodes
-        await Promise.all(
-            newNodes.map(async ({ publicKey }) => {
-                if (!publicKey) {
-                    return;
-                }
-                // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                await waspClientService.chains().addAccessNode({ chainID, publicKey });
-            }),
-        );
-
-        // Remove peer nodes as access nodes
-        await Promise.all(
-            removedNodes.map(async ({ publicKey }) => {
-                if (!publicKey) {
-                    return;
-                }
-
-                // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                await waspClientService.chains().removeAccessNode({ chainID, publicKey });
-            }),
-        );
+    function onEditSuccess() {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        loadCommitteeInfo().then(() => {
+            setIsPopupOpen(false);
+        });
     }
 
     return (
@@ -180,11 +132,12 @@ function ChainNodes() {
                                 Array.from({ length: 2 }).map((_, i) => <LoadingTile key={i} displayHealth={true} />)
                             )}
                         </div>
-                        {isPopupOpen && accessNodes && (
+                        {isPopupOpen && accessNodes && chainID && (
                             <EditAccessNodesDialog
                                 peerNodes={peersList}
                                 accessNodes={accessNodes}
-                                onSuccess={onAccessNodesEdited}
+                                onSuccess={onEditSuccess}
+                                chainID={chainID}
                                 onClose={() => setIsPopupOpen(false)}
                             />
                         )}
