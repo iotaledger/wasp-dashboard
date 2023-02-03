@@ -3,7 +3,7 @@ import "./Route.scss";
 import React, { useEffect, useState } from "react";
 import { AddIcon } from "../../assets";
 import { WaspClientService, ServiceFactory, AuthService, User, Action } from "../../lib";
-import { AddUserDialog, IconButton, UsersList } from "../components";
+import { AddUserDialog, Tile, UsersList, IconButton } from "../components";
 import usePermissions from "../hooks/usePermissions";
 
 const Users: React.FC = () => {
@@ -37,6 +37,11 @@ const Users: React.FC = () => {
             .getUsers()
             .then(allUsers => {
                 setUsersList(allUsers);
+            })
+            .catch(e => {
+                // eslint-disable-next-line unicorn/no-useless-undefined
+                setUsersList(undefined);
+                console.error(e);
             });
     }
 
@@ -90,11 +95,15 @@ const Users: React.FC = () => {
                         <AddUserDialog onClose={closeAddUserDialog} onSuccess={handleAddUserSuccess} />
                     )}
                     <div className="users-panel">
-                        <UsersList
-                            users={usersList}
-                            onDeleteSuccess={onDeleteSuccess}
-                            canBeDeleted={usersList ? usersList.length > 1 : false}
-                        />
+                        {usersList?.length === 0 ? (
+                            <Tile primaryText="No users found." />
+                        ) : (
+                            <UsersList
+                                users={usersList}
+                                onDeleteSuccess={onDeleteSuccess}
+                                canBeDeleted={usersList ? usersList.length > 1 : false}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

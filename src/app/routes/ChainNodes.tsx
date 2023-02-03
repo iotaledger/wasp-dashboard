@@ -16,11 +16,12 @@ import {
     InfoBox,
     KeyValueRow,
     PeersList,
-    LoadingChainCommitteeBox,
     ChainNavbar,
     EditAccessNodesDialog,
     LoadingTile,
+    Tile,
     IconButton,
+    LoadingInfo,
 } from "../components";
 import usePermissions from "../hooks/usePermissions";
 
@@ -70,9 +71,13 @@ function ChainNodes() {
      */
     function onAccessNodesEdited(newAccessNodes: PeeringNodeStatusResponse[]) {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        updateAccessNodes(newAccessNodes).then(() => {
-            loadCommitteeInfo();
-        });
+        updateAccessNodes(newAccessNodes)
+            .then(() => {
+                loadCommitteeInfo();
+            })
+            .catch(e => {
+                console.error(e);
+            });
     }
 
     /**
@@ -89,6 +94,9 @@ function ChainNodes() {
             .getCommitteeInfo({ chainID })
             .then(newCommitteeInfo => {
                 setChainCommitteeInfo(newCommitteeInfo);
+            })
+            .catch(() => {
+                setChainCommitteeInfo(null);
             });
     }
 
@@ -149,14 +157,18 @@ function ChainNodes() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} />
-                    {chainCommitteeInfo ? (
-                        <InfoBox title="Committee">
-                            <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
-                            <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
-                        </InfoBox>
-                    ) : (
-                        <LoadingChainCommitteeBox />
-                    )}
+                    <InfoBox title="Committee">
+                        {chainCommitteeInfo === null ? (
+                            <LoadingInfo />
+                        ) : (chainCommitteeInfo ? (
+                            <React.Fragment>
+                                <KeyValueRow keyText="Address" value={chainCommitteeInfo.stateAddress} />
+                                <KeyValueRow keyText="Status" value={getStatus(chainCommitteeInfo.active ?? false)} />
+                            </React.Fragment>
+                        ) : (
+                            <Tile primaryText="No committee found." />
+                        ))}
+                    </InfoBox>
                     <InfoBox
                         title="Access nodes"
                         action={
