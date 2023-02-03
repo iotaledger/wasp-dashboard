@@ -83,7 +83,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
     const setWritePermission = (isCurrentlyEnabled: boolean) => {
         const permission = UserPermission.Write;
         if (isCurrentlyEnabled) {
-            // Eisable
+            // Disable
             setFormValues({ ...formValues, permissions: formValues.permissions?.filter(p => p !== permission) });
         } else {
             // Enable
@@ -134,7 +134,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
                 <div className="dialog-content-label">Permissions</div>
                 <div className="dialog-content-value">
                     <div className="row middle">
-                        <Toggle enabled={isWritePermissionEnabled} onToggle={setWritePermission} />
+                        <Toggle active={isWritePermissionEnabled} onToggle={setWritePermission} />
                         <span className="margin-l-t">Write</span>
                     </div>
                 </div>
