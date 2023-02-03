@@ -17,6 +17,7 @@ export interface IAction {
     text: string | undefined | null;
     handleAction: () => unknown;
     type?: Action;
+    disabled?: boolean;
 }
 
 export interface ITableRow {

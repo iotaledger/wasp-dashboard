@@ -3,9 +3,11 @@ import "./Route.scss";
 import React, { useEffect, useState } from "react";
 import { AddIcon } from "../../assets";
 import { WaspClientService, ServiceFactory, AuthService, User, Action } from "../../lib";
-import { AddUserDialog, IconButton, UsersList } from "../components";
+import { AddUserDialog, Tile, UsersList, IconButton } from "../components";
+import { usePermissions } from "../hooks";
 
 const Users: React.FC = () => {
+    const [hasWritePermission] = usePermissions();
     /**
      * The users state.
      */
@@ -35,6 +37,11 @@ const Users: React.FC = () => {
             .getUsers()
             .then(allUsers => {
                 setUsersList(allUsers);
+            })
+            .catch(e => {
+                // eslint-disable-next-line unicorn/no-useless-undefined
+                setUsersList(undefined);
+                console.error(e);
             });
     }
 
@@ -51,6 +58,13 @@ const Users: React.FC = () => {
         } else {
             loadAllUsers();
         }
+    }
+
+    /**
+     * When a user is successfully edited.
+     */
+    function handleEditUserSuccess(): void {
+        loadAllUsers();
     }
 
     /**
@@ -75,6 +89,7 @@ const Users: React.FC = () => {
                     <h2>Users</h2>
                     <div className="row">
                         <IconButton
+                            disabled={!hasWritePermission}
                             icon={<AddIcon />}
                             onClick={() => setShowAddUserDialog(true)}
                             classnames="padding-t"
@@ -87,11 +102,16 @@ const Users: React.FC = () => {
                         <AddUserDialog onClose={closeAddUserDialog} onSuccess={handleAddUserSuccess} />
                     )}
                     <div className="users-panel">
-                        <UsersList
-                            users={usersList}
-                            onDeleteSuccess={onDeleteSuccess}
-                            canBeDeleted={usersList ? usersList.length > 1 : false}
-                        />
+                        {usersList?.length === 0 ? (
+                            <Tile primaryText="No users found." />
+                        ) : (
+                            <UsersList
+                                users={usersList}
+                                onDeleteSuccess={onDeleteSuccess}
+                                canBeDeleted={usersList ? usersList.length > 1 : false}
+                                onEditSuccess={handleEditUserSuccess}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

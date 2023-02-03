@@ -12,7 +12,7 @@ import {
     formatDate,
 } from "../../lib";
 import "./L1.scss";
-import { KeyValueRow, InfoBox, Table, Tile, LoadingTile } from "../components";
+import { KeyValueRow, InfoBox, Table, Tile, LoadingTile, LoadingInfo, LoadingTable } from "../components";
 
 /**
  * L1 panel.
@@ -28,13 +28,19 @@ function L1() {
         const nodeService = ServiceFactory.get<NodeConfigService>(NodeConfigService.ServiceName);
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        nodeService.initialize().then(() => {
-            const params = nodeService.getL1Params();
-            if (params) {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                setL1Params(params);
-            }
-        });
+        nodeService
+            .initialize()
+            .then(() => {
+                const params = nodeService.getL1Params();
+                if (params) {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                    setL1Params(params);
+                }
+            })
+            .catch(e => {
+                console.error(e);
+                setL1Params(null);
+            });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
@@ -42,6 +48,10 @@ function L1() {
             .getChains()
             .then(newChains => {
                 setChains(newChains);
+            })
+            .catch(e => {
+                console.error(e);
+                setChains(null);
             });
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -67,6 +77,10 @@ function L1() {
                     },
                 );
                 setl1Metrics(chainMetricsArray);
+            })
+            .catch(e => {
+                console.error(e);
+                setl1Metrics(null);
             });
     }, []);
 
@@ -75,50 +89,63 @@ function L1() {
             <div className="l1-wrapper">
                 <h2>L1</h2>
                 <div className="content">
-                    {l1Params && (
+                    <div className="cols-wrapper">
                         <InfoBox title="L1 params" cardClassName="first-card">
-                            {Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
-                                const isObject = typeof val === "object";
-                                return (
-                                    <div key={key} className="l1-info-item">
-                                        <h4>{key}</h4>
-                                        {isObject ? (
-                                            <div>
-                                                {Object.entries(val).map(([prop, propVal]) => (
-                                                    <KeyValueRow key={prop} keyText={prop} value={propVal} />
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <p>{val}</p>
-                                        )}
-                                    </div>
-                                );
-                            })}
+                            {l1Params === null ? (
+                                <LoadingInfo large />
+                            ) : (
+                                l1Params &&
+                                Object.entries(l1Params).map(([key, val]: [string, Record<string, string>]) => {
+                                    const isObject = typeof val === "object";
+                                    return (
+                                        <div key={key} className="l1-info-item">
+                                            <h4>{key}</h4>
+                                            {isObject ? (
+                                                <div>
+                                                    {Object.entries(val).map(([prop, propVal]) => (
+                                                        <KeyValueRow key={prop} keyText={prop} value={propVal} />
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p>{val}</p>
+                                            )}
+                                        </div>
+                                    );
+                                })
+                            )}
                         </InfoBox>
-                    )}
-                    <InfoBox title="Chains">
-                        {chains
-                            ? chains.map(chain => (
-                                <Tile
-                                    key={chain.chainID}
-                                    primaryText={chain.chainID}
-                                    url={`/l1/${chain.chainID}`}
-                                    displayHealth
-                                    healthy={chain.isActive}
-                                />
-                              ))
-                            : Array.from({ length: 2 }).map((_, i) => (
-                                <LoadingTile yAxis={8} height={38} key={i} displayHealth={true} />
-                              ))}
-                    </InfoBox>
+                        <InfoBox title="Chains">
+                            {chains === null ? (
+                                Array.from({ length: 1 }).map((_, i) => (
+                                    <LoadingTile yAxis={8} height={38} key={i} displayHealth={true} />
+                                ))
+                            ) : (chains?.length > 0 ? (
+                                chains.map(chain => (
+                                    <Tile
+                                        key={chain.chainID}
+                                        primaryText={chain.chainID}
+                                        url={`/l1/${chain.chainID}`}
+                                        displayHealth
+                                        healthy={chain.isActive}
+                                    />
+                                ))
+                            ) : (
+                                <Tile primaryText="No chains found." />
+                            ))}
+                        </InfoBox>
+                    </div>
                     <InfoBox title="L1 global metrics" cardClassName="last-card">
-                        {l1Metrics && (
+                        {l1Metrics === null ? (
+                            <LoadingTable large />
+                        ) : ((l1Metrics as ITableRow[])?.length > 0 ? (
                             <Table
                                 tBody={l1Metrics as ITableRow[]}
                                 tHead={["Message name", "Type", "Total", "Last time", "Last message"]}
                                 classNames="chain-messages-table"
                             />
-                        )}
+                        ) : (
+                            <Tile primaryText="No L1 metrics found." />
+                        ))}
                     </InfoBox>
                 </div>
             </div>

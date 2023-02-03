@@ -16,6 +16,7 @@ import {
     Action,
 } from "../../lib/";
 import { PeersList, InfoBox, Tile, AddPeerDialog, LoadingTile, IconButton } from "../components";
+import { usePermissions } from "../hooks";
 import "./Home.scss";
 
 /**
@@ -23,6 +24,7 @@ import "./Home.scss";
  * @returns The node to render.
  */
 function Home() {
+    const [hasWritePermission] = usePermissions();
     const [bannerSrc, setBannerSrc] = useState<undefined | string>();
     const [publicKey, setPublicKey] = useState<undefined | string>();
     const [version, setVersion] = useState<undefined | string>();
@@ -62,6 +64,10 @@ function Home() {
             .getChains()
             .then(newChains => {
                 setChains(newChains);
+            })
+            .catch(e => {
+                console.error(e);
+                setChains(null);
             });
 
         setPeersList(peersService.get());
@@ -123,8 +129,14 @@ function Home() {
                 <div className="row fill margin-t-s desktop-down-column">
                     <InfoBox title="Chains" titleClassName="title">
                         <div className="sized-container">
-                            {chains
-                                ? chains.map(chain => (
+                            {chains === null ? (
+                                Array.from({ length: 1 }).map((_, i) => (
+                                    <LoadingTile key={i} height={20} displayHealth={true} />
+                                ))
+                            ) : (chains?.length === 0 ? (
+                                <Tile primaryText="No chains found" />
+                            ) : (
+                                chains.map(chain => (
                                     <Tile
                                         key={chain.chainID}
                                         primaryText={chain.chainID}
@@ -132,10 +144,8 @@ function Home() {
                                         displayHealth
                                         healthy={chain.isActive}
                                     />
-                                  ))
-                                : Array.from({ length: 1 }).map((_, i) => (
-                                    <LoadingTile key={i} height={20} displayHealth={true} />
-                                  ))}
+                                ))
+                            ))}
                         </div>
                     </InfoBox>
                 </div>
@@ -144,6 +154,7 @@ function Home() {
                         title="Peers"
                         action={
                             <IconButton
+                                disabled={!hasWritePermission}
                                 icon={<AddIcon />}
                                 onClick={() => setShowAddPeerDialog(true)}
                                 type={Action.Add}

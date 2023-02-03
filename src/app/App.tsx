@@ -70,9 +70,13 @@ function App() {
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        isNodeOnline().then(_online => {
-            setOnline(_online);
-        });
+        isNodeOnline()
+            .then(_online => {
+                setOnline(_online);
+            })
+            .catch(e => {
+                console.error(e);
+            });
 
         EventAggregator.subscribe("auth-state", "app", (_isLoggedIn: boolean) => {
             setIsLoggedIn(_isLoggedIn);

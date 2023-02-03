@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction, useMemo, useState } from "react";
 import zxcvbn from "zxcvbn";
 import {
     ServiceFactory,
@@ -7,8 +7,17 @@ import {
     ChangeUserPasswordRequest,
     User,
     MIN_PASSWORD_STRENGTH,
+    ChangeUserPermissionsRequest,
+    UserPermission,
+    AuthService,
 } from "../../../lib";
-import { Dialog, PasswordInput } from "../../components";
+import { Dialog, PasswordInput, Toggle } from "../../components";
+
+enum PasswordValidation {
+    Error,
+    Empty,
+    Valid,
+}
 
 interface IEditUserDialog {
     onClose: () => void;
@@ -18,42 +27,81 @@ interface IEditUserDialog {
 }
 
 const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, onError }) => {
+    const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
+    const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
+
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [newPassword, setNewPassword] = useState<string>("");
+    const [permissions, setPermissions] = useState<string[] | undefined>(user.permissions ? [...user.permissions] : []);
     const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
-    const [validForm, setValidForm] = useState<boolean>(false);
 
-    useEffect(() => {
-        validatePasswords();
-    }, [confirmNewPassword, newPassword]);
+    const editingMySelf = authService.getUsername() === user.username;
 
-    function validatePasswords(): void {
-        if (confirmNewPassword?.length <= 0 || newPassword?.length <= 0) {
-            setValidForm(false);
-        } else if (confirmNewPassword === newPassword) {
-            const passwordStrength = zxcvbn(newPassword);
-            if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
-                setValidForm(false);
-                setError(passwordStrength.feedback.suggestions.join(" "));
-            } else {
-                setValidForm(true);
+    const [passwordValidation, permissionsAreValid] = useMemo(() => {
+        // Check if both passwords are valid
+        const passwordCheck = (() => {
+            if (confirmNewPassword.length === 0 && newPassword.length === 0) {
                 setError(null);
+                return PasswordValidation.Empty;
             }
-        } else {
+            if (confirmNewPassword === newPassword) {
+                const passwordStrength = zxcvbn(newPassword);
+                if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
+                    setError(passwordStrength.feedback.suggestions.join(" "));
+                    return PasswordValidation.Error;
+                }
+                setError(null);
+                return PasswordValidation.Valid;
+            }
             setError("Passwords do not match!");
-            setValidForm(true);
+            return PasswordValidation.Error;
+        })();
+        // Check if permissions are different
+        const permissionsCheck = (() => {
+            if (!Array.isArray(permissions) || !Array.isArray(user.permissions)) {
+                return false;
+            }
+            return !(
+                user.permissions?.every(p => permissions.includes(p)) &&
+                permissions.length === user.permissions.length
+            );
+        })();
+        return [passwordCheck, permissionsCheck];
+    }, [confirmNewPassword, newPassword, permissions, user]);
+
+    const setWritePermission = (isCurrentlyEnabled: boolean) => {
+        const permission = UserPermission.Write;
+        if (isCurrentlyEnabled) {
+            // Eisable
+            setPermissions(permissions?.filter(p => p !== permission));
+        } else {
+            // Enable
+            setPermissions([...(permissions ?? []), permission]);
         }
-    }
+    };
 
     async function handleEditUser(): Promise<void> {
         setError(null);
         try {
-            const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
-            await waspClientService.users().changeUserPassword({
-                ...user,
-                updateUserPasswordRequest: { password: confirmNewPassword },
-            } as ChangeUserPasswordRequest);
+            await Promise.all([
+                // Update the password if has changed and is valid
+                passwordValidation === PasswordValidation.Valid
+                    ? waspClientService.users().changeUserPassword({
+                          ...user,
+                          updateUserPasswordRequest: { password: confirmNewPassword },
+                      } as ChangeUserPasswordRequest)
+                    : Promise.resolve(),
+
+                // Update the permissions if have changed
+                permissionsAreValid
+                    ? waspClientService.users().changeUserPermissions({
+                          ...user,
+                          updateUserPermissionsRequest: { permissions: permissions ?? [] },
+                      } as ChangeUserPermissionsRequest)
+                    : Promise.resolve(),
+            ]);
+
             if (onSuccess && typeof onSuccess === "function") {
                 onSuccess();
             }
@@ -69,6 +117,12 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
         }
     }
 
+    const isWritePermissionEnabled = permissions?.includes(UserPermission.Write) ?? false;
+
+    const formIsValid =
+        passwordValidation === PasswordValidation.Valid ||
+        (passwordValidation === PasswordValidation.Empty && permissionsAreValid);
+
     return (
         <Dialog
             onClose={onClose}
@@ -79,7 +133,7 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                         type="button"
                         className="button button--primary"
                         onClick={handleEditUser}
-                        disabled={isBusy || !validForm}
+                        disabled={isBusy || !formIsValid}
                     >
                         Save
                     </button>
@@ -107,7 +161,17 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                             setConfirmNewPassword(e.target.value)}
                         disabled={isBusy}
                     />
-
+                    <div className="dialog-content-label">Permissions</div>
+                    <div className="dialog-content-value">
+                        <div className="row middle">
+                            <Toggle
+                                disabled={editingMySelf}
+                                active={isWritePermissionEnabled}
+                                onToggle={setWritePermission}
+                            />
+                            <span className={`${editingMySelf ? "opacity-50" : ""} margin-l-t`}>Write</span>
+                        </div>
+                    </div>
                     {error && <p className="dialog-content-error">{error}</p>}
                 </div>
             </React.Fragment>
