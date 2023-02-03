@@ -20,6 +20,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
     const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
     const [checkedNodes, setCheckedNodes] = useState([...accessNodes]);
+    const [error, setError] = useState<string | null>(null);
 
     /**
      * Add and remove the access nodes.
@@ -71,7 +72,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
                 onSuccess();
             })
             .catch(e => {
-                console.error(e);
+                setError(e as string);
             });
     }
 
@@ -109,6 +110,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
                             // Insert node in the original position
                             checkedNodes.splice(nodeIndex, 0, node);
                         }
+                        setError(null);
                         setCheckedNodes([...checkedNodes]);
                     };
                     return (
@@ -119,6 +121,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
                     );
                 })}
             </div>
+            {error && <p className="dialog-content-error">{error}</p>}
         </Dialog>
     );
 };
