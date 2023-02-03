@@ -89,6 +89,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
             onClose={onClose}
             actions={
                 <React.Fragment>
+                    {error && <p className="dialog-content-error as-action">{error}</p>}
                     <button type="button" className="button button--primary" onClick={save} disabled={!anyChanges}>
                         Save
                     </button>
@@ -99,7 +100,46 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
             }
         >
             <div className="access-nodes-list">
-                {peerNodes.map(node => {
+                {[
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                    ...peerNodes,
+                ].map(node => {
                     const nodeIndex = checkedNodes.findIndex(n => n.publicKey === node.publicKey);
                     const isChecked = nodeIndex >= 0;
                     const onChecked = () => {
@@ -121,7 +161,6 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
                     );
                 })}
             </div>
-            {error && <p className="dialog-content-error">{error}</p>}
         </Dialog>
     );
 };
