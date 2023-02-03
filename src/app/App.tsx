@@ -18,7 +18,7 @@ import {
     BrandHelper,
 } from "../lib/classes";
 import { isNodeOnline } from "../lib/utils";
-import { Breakpoint, DesktopMenu, MobileMenu } from "./components";
+import { Breakpoint, DesktopMenu, MobileMenu, Spinner } from "./components";
 import RoutesSwitcher from "./routes/RoutesSwitcher";
 
 /**
@@ -39,6 +39,7 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(Boolean(authService.isLoggedIn()));
     const [theme, setTheme] = useState<string>(settingsService.getTheme());
     const [online, setOnline] = useState<boolean>(false);
+    const [isNodeLoading, setIsNodeLoading] = useState<boolean>(false);
     // const [syncHealth, setSyncHealth] = useState<boolean>(false);
     // const [nodeHealth, setNodeHealth] = useState<boolean>(false);
 
@@ -69,12 +70,16 @@ function App() {
      */
 
     useEffect(() => {
+        setIsNodeLoading(true);
+
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         isNodeOnline()
             .then(_online => {
                 setOnline(_online);
+                setIsNodeLoading(false);
             })
             .catch(e => {
+                setOnline(false);
                 console.error(e);
             });
 
@@ -233,8 +238,19 @@ function App() {
             </Breakpoint>
             <div className="col fill">
                 <div className="fill scroll-content">
-                    {!online && <p className="padding-l">The node is offline or loading.</p>}
-                    {online && <RoutesSwitcher isLoggedIn={isLoggedIn} />}
+                    {isNodeLoading && !online ? (
+                        <div className="main">
+                            <div className="row middle margin-t-m">
+                                <Spinner />
+                            </div>
+                        </div>
+                    ) : (!isNodeLoading && !online ? (
+                        <div className="main">
+                            <p className="margin-t-m">The node is offline.</p>
+                        </div>
+                    ) : (
+                        <RoutesSwitcher isLoggedIn={isLoggedIn} />
+                    ))}
                 </div>
             </div>
         </div>
