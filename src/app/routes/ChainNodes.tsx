@@ -23,7 +23,7 @@ import {
     IconButton,
     LoadingInfo,
 } from "../components";
-import usePermissions from "../hooks/usePermissions";
+import { usePermissions } from "../hooks";
 
 const getStatus = (status: boolean) => (status ? "UP" : "DOWN");
 

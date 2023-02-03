@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DeleteIcon, EditIcon } from "../../../assets";
 import { Action, User } from "../../../lib";
 import { DeleteUserDialog, EditUserDialog, IconButton } from "../../components";
-import usePermissions from "../../hooks/usePermissions";
+import { usePermissions } from "../../hooks";
 import "./UserTile.scss";
 
 interface UserTileProps {

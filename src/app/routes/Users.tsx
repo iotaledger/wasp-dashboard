@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { AddIcon } from "../../assets";
 import { WaspClientService, ServiceFactory, AuthService, User, Action } from "../../lib";
 import { AddUserDialog, Tile, UsersList, IconButton } from "../components";
-import usePermissions from "../hooks/usePermissions";
+import { usePermissions } from "../hooks";
 
 const Users: React.FC = () => {
     const [hasWritePermission] = usePermissions();

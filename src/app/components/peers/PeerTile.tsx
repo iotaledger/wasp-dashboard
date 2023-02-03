@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DeleteIcon } from "../../../assets";
 import { PeeringNodeStatusResponse, Action } from "../../../lib";
 import { DeletePeerDialog, Tile } from "../../components";
-import usePermissions from "../../hooks/usePermissions";
+import { usePermissions } from "../../hooks";
 
 interface PeerTileProps {
     /**

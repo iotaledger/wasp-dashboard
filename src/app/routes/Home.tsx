@@ -16,7 +16,7 @@ import {
     Action,
 } from "../../lib/";
 import { PeersList, InfoBox, Tile, AddPeerDialog, LoadingTile, IconButton } from "../components";
-import usePermissions from "../hooks/usePermissions";
+import { usePermissions } from "../hooks";
 import "./Home.scss";
 
 /**
