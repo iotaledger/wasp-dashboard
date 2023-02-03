@@ -58,7 +58,7 @@ input[type="checkbox"] {
     &:focus {
         box-shadow: 0 0 3px 0 var(--accent-primary);
     }
-
+    
     &:checked {
         padding: 2px;
         background-color: var(--panel-background);

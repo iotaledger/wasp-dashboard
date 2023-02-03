@@ -61,7 +61,7 @@ function L1Chain() {
                     <h2 className="l1-details-title">L1 Chain {chainID}</h2>
                 </div>
                 <div className="content">
-                    <InfoBox title="L1 Chain metrics" cardClassName="last-card">
+                    <InfoBox title="L1 Chain metrics" cardClassName="last-card margin-t-s">
                         {l1ChainMetrics === null ? (
                             <LoadingTable large />
                         ) : (l1ChainMetrics?.length > 0 ? (

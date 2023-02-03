@@ -162,56 +162,40 @@ function Chain() {
                 </div>
                 <div className="content">
                     <ChainNavbar chainID={chainID} block={chainLatestBlock?.blockIndex} />
-                    <InfoBox title="Info">
-                        {chainInfo === null ? (
-                            <LoadingInfo extraLarge />
-                        ) : (chainProperties?.length > 0 ? (
-                            <React.Fragment>
-                                {chainProperties
-                                    .filter(([key]) => !INFO_SKIP_NAMES.has(key))
-                                    .map(([key, val]) => (
-                                        <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                    <div className="cols-wrapper">
+                        <InfoBox title="Info" cardClassName="first-card">
+                            {chainInfo === null ? (
+                                <LoadingInfo extraLarge />
+                            ) : (chainProperties?.length > 0 ? (
+                                <React.Fragment>
+                                    {chainProperties
+                                        .filter(([key]) => !INFO_SKIP_NAMES.has(key))
+                                        .map(([key, val]) => (
+                                            <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                                        ))}
+                                </React.Fragment>
+                            ) : (
+                                <Tile primaryText="No info available for this chain." />
+                            ))}
+                        </InfoBox>
+                        <InfoBox title="Contracts">
+                            {chainContracts === null ? (
+                                <LoadingInfo large />
+                            ) : (chainContracts?.length > 0 ? (
+                                <React.Fragment>
+                                    {chainContracts.map(({ name, hName, description, programHash }) => (
+                                        <KeyValueRow
+                                            key={name}
+                                            keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
+                                            value={description}
+                                        />
                                     ))}
-                            </React.Fragment>
-                        ) : (
-                            <Tile primaryText="No info available for this chain." />
-                        ))}
-                    </InfoBox>
-                    <InfoBox title="Contracts">
-                        {chainContracts === null ? (
-                            <LoadingInfo large />
-                        ) : (chainContracts?.length > 0 ? (
-                            <React.Fragment>
-                                {chainContracts.map(({ name, hName, description, programHash }) => (
-                                    <KeyValueRow
-                                        key={name}
-                                        keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
-                                        value={description}
-                                    />
-                                ))}
-                            </React.Fragment>
-                        ) : (
-                            <Tile primaryText="No contracts found." />
-                        ))}
-                    </InfoBox>
-                    <InfoBox title="Total Assets">
-                        {chainAssets === null ? (
-                            <LoadingInfo />
-                        ) : (chainAssets?.baseTokens ? (
-                            <KeyValueRow
-                                key={chainAssets?.baseTokens}
-                                keyText="Base Tokens"
-                                value={chainAssets?.baseTokens}
-                            />
-                        ) : (
-                            <InfoBox title="Base Tokens">
-                                <Tile primaryText="No base tokens found." />
-                            </InfoBox>
-                        ))}
-                        {chainAssets?.nativeTokens && chainAssets?.nativeTokens?.length > 0 && (
-                            <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
-                        )}
-                    </InfoBox>
+                                </React.Fragment>
+                            ) : (
+                                <Tile primaryText="No contracts found." />
+                            ))}
+                        </InfoBox>
+                    </div>
                     <InfoBox title="Blobs">
                         {chainBlobs === null ? (
                             <LoadingInfo />
@@ -221,24 +205,45 @@ function Chain() {
                             <Tile primaryText="No blobs found." />
                         ))}
                     </InfoBox>
-                    <InfoBox title="Latest block">
-                        {chainLatestBlock === null ? (
-                            <LoadingInfo />
-                        ) : (chainLatestBlock ? (
-                            <React.Fragment>
+
+                    <div className="cols-wrapper">
+                        <InfoBox title="Total Assets" cardClassName="first-card">
+                            {chainAssets === null ? (
+                                <LoadingInfo />
+                            ) : (chainAssets?.baseTokens ? (
                                 <KeyValueRow
-                                    keyText="Block index"
-                                    value={{
-                                        text: chainLatestBlock?.blockIndex?.toString(),
-                                        url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
-                                    }}
+                                    key={chainAssets?.baseTokens}
+                                    keyText="Base Tokens"
+                                    value={chainAssets?.baseTokens}
                                 />
-                                <KeyValueRow keyText="Timestamp" value={formatDate(chainLatestBlock?.timestamp)} />
-                            </React.Fragment>
-                        ) : (
-                            <Tile primaryText="No latest block found." />
-                        ))}
-                    </InfoBox>
+                            ) : (
+                                <InfoBox title="Base Tokens">
+                                    <Tile primaryText="No base tokens found." />
+                                </InfoBox>
+                            ))}
+                            {chainAssets?.nativeTokens && chainAssets?.nativeTokens?.length > 0 && (
+                                <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
+                            )}
+                        </InfoBox>
+                        <InfoBox title="Latest block">
+                            {chainLatestBlock === null ? (
+                                <LoadingInfo />
+                            ) : (chainLatestBlock ? (
+                                <React.Fragment>
+                                    <KeyValueRow
+                                        keyText="Block index"
+                                        value={{
+                                            text: chainLatestBlock?.blockIndex?.toString(),
+                                            url: `${chainURL}/blocks/${chainLatestBlock?.blockIndex}`,
+                                        }}
+                                    />
+                                    <KeyValueRow keyText="Timestamp" value={formatDate(chainLatestBlock?.timestamp)} />
+                                </React.Fragment>
+                            ) : (
+                                <Tile primaryText="No latest block found." />
+                            ))}
+                        </InfoBox>
+                    </div>
 
                     <InfoBox title="EVM">
                         {chainInfo === null ? (
