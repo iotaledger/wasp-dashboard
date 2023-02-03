@@ -238,18 +238,18 @@ function App() {
             </Breakpoint>
             <div className="col fill">
                 <div className="fill scroll-content">
-                    {isNodeLoading && !online ? (
+                    {isNodeLoading ? (
                         <div className="main">
                             <div className="row middle margin-t-m">
                                 <Spinner />
                             </div>
                         </div>
-                    ) : (!isNodeLoading && !online ? (
+                    ) : (online ? (
+                        <RoutesSwitcher isLoggedIn={isLoggedIn} />
+                    ) : (
                         <div className="main">
                             <p className="margin-t-m">The node is offline.</p>
                         </div>
-                    ) : (
-                        <RoutesSwitcher isLoggedIn={isLoggedIn} />
                     ))}
                 </div>
             </div>
