@@ -1,6 +1,5 @@
 export { default as KeyValueRow } from "./KeyValueRow";
 export { default as Tile } from "./Tile";
-export { default as AsyncComponent } from "./AsyncComponent";
 export { default as Breakpoint } from "./Breakpoint";
 export { default as InfoBox } from "./InfoBox";
 export { default as DesktopMenu } from "./DesktopMenu";
