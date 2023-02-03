@@ -63,6 +63,7 @@
 
         .dialog-content {
             flex: 1;
+            overflow: auto;
             
             .dialog-content-label {
                 @include font-size(10px);
@@ -75,16 +76,26 @@
                 text-transform: uppercase;
             }
 
-            .dialog-content-error {
-                margin-top: $spacing-small;
-                color: $danger;
-                font-weight: 500;
+        }
+
+        .dialog-content-error {
+            margin-top: $spacing-small;
+            color: $danger;
+            font-weight: 500;
+
+            &.as-action {
+                margin-top: $spacing-tiny;
+                position: absolute;
+                left: 0;
             }
         }
 
         .dialog-footer {
+            position: relative;
             display: flex;
             justify-content: flex-end;
+            vertical-align: middle;
+            padding: $spacing-tiny;
 
             button {
                 @include font-size(14px);
@@ -92,7 +103,6 @@
                 display: flex;
                 flex-direction: row;
                 align-items: center;
-                margin-top: $spacing-medium;
                 padding: 6px 12px;
                 border: 1px solid var(--text-color-secondary);
                 border-radius: $form-input-radius;
