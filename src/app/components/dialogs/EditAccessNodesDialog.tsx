@@ -17,7 +17,6 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({ onClose, onSu
      */
     function save() {
         onSuccess(checkedNodes);
-        onClose();
     }
 
     // Check if there has been any change at all

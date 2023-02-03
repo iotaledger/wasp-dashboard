@@ -71,6 +71,7 @@ function ChainNodes() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         updateAccessNodes(newAccessNodes)
             .then(() => {
+                setIsPopupOpen(false);
                 loadCommitteeInfo();
             })
             .catch(e => {
@@ -123,10 +124,7 @@ function ChainNodes() {
                     return;
                 }
                 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                waspClientService
-                    .chains()
-                    .addAccessNode({ chainID, publicKey })
-                    .catch(() => {});
+                await waspClientService.chains().addAccessNode({ chainID, publicKey });
             }),
         );
 
@@ -138,10 +136,7 @@ function ChainNodes() {
                 }
 
                 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                waspClientService
-                    .chains()
-                    .removeAccessNode({ chainID, publicKey })
-                    .catch(() => {});
+                await waspClientService.chains().removeAccessNode({ chainID, publicKey });
             }),
         );
     }
