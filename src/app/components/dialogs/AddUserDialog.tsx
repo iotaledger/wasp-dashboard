@@ -1,23 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import zxcvbn from "zxcvbn";
-import { ServiceFactory, AddUserRequest, WaspClientService, MIN_PASSWORD_STRENGTH } from "../../../lib";
-import { PasswordInput, Dialog } from "../../components";
+import { ServiceFactory, AddUserRequest, WaspClientService, MIN_PASSWORD_STRENGTH, UserPermission } from "../../../lib";
+import { PasswordInput, Dialog, Toggle } from "../../components";
 
 const FORM_INITIAL_VALUES: IFormValues = {
     username: "",
-    permissions: [
-        "users.write",
-        "node.write",
-        "peering.write",
-        "metrics.read",
-        "users.read",
-        "chain.read",
-        "chain.write",
-        "dashboard",
-        "node.read",
-        "peering.read",
-        "api",
-    ],
+    permissions: [UserPermission.Write, UserPermission.Read],
     password: "",
 };
 
@@ -37,14 +25,9 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
     const [formValues, setFormValues] = useState<IFormValues>(FORM_INITIAL_VALUES);
     const [isBusy, setIsBusy] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [validForm, setValidForm] = useState<boolean>(false);
-
-    useEffect(() => {
-        validateForm();
-    }, [formValues]);
 
     /**
-     *
+     * Add the user.
      */
     async function handleAddUser(): Promise<void> {
         setError(null);
@@ -84,20 +67,31 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
     /**
      * Validate the form.
      */
-    function validateForm(): void {
+    const validForm = useMemo(() => {
         if (formValues?.username?.length <= 0 || formValues?.password?.length <= 0) {
-            setValidForm(false);
-        } else {
-            const passwordStrength = zxcvbn(formValues?.password);
-            if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
-                setValidForm(false);
-                setError(passwordStrength.feedback.suggestions.join(" "));
-            } else {
-                setValidForm(true);
-                setError(null);
-            }
+            return false;
         }
-    }
+        const passwordStrength = zxcvbn(formValues?.password);
+        if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
+            setError(passwordStrength.feedback.suggestions.join(" "));
+            return false;
+        }
+        setError(null);
+        return true;
+    }, [formValues]);
+
+    const setWritePermission = (isCurrentlyEnabled: boolean) => {
+        const permission = UserPermission.Write;
+        if (isCurrentlyEnabled) {
+            // Disable
+            setFormValues({ ...formValues, permissions: formValues.permissions?.filter(p => p !== permission) });
+        } else {
+            // Enable
+            setFormValues({ ...formValues, permissions: [...formValues.permissions, permission] });
+        }
+    };
+
+    const isWritePermissionEnabled = formValues.permissions?.includes(UserPermission.Write) ?? false;
 
     return (
         <Dialog
@@ -139,14 +133,10 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
                 </div>
                 <div className="dialog-content-label">Permissions</div>
                 <div className="dialog-content-value">
-                    <input
-                        type="textarea"
-                        className="input--stretch"
-                        placeholder="e.g. permissions"
-                        name="permissions"
-                        value={formValues.permissions.join(", ")}
-                        disabled
-                    />
+                    <div className="row middle">
+                        <Toggle active={isWritePermissionEnabled} onToggle={setWritePermission} />
+                        <span className="margin-l-t">Write</span>
+                    </div>
                 </div>
                 {error && <p className="dialog-content-error">{error}</p>}
             </React.Fragment>

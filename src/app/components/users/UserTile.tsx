@@ -23,9 +23,13 @@ interface UserTileProps {
      * Error callback when the user is deleted.
      */
     onDeleteError?: () => void;
+    /**
+     * Success callback when the user is edited.
+     */
+    onEditSuccess?: () => void;
 }
 
-const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess, onDeleteError }) => {
+const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess, onDeleteError, onEditSuccess }) => {
     const [showDeleteUserDialog, setShowDeleteUserDialog] = useState<boolean>(false);
     const [showEditUserDialog, setShowEditUserDialog] = useState<boolean>(false);
 
@@ -44,6 +48,9 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
      */
     function closeEditDialog(): void {
         setShowEditUserDialog(false);
+        if (onEditSuccess && typeof onEditSuccess === "function") {
+            onEditSuccess();
+        }
     }
 
     /**
@@ -103,6 +110,7 @@ const UserTile: React.FC<UserTileProps> = ({ user, canBeDeleted, onDeleteSuccess
 UserTile.defaultProps = {
     onDeleteError: () => {},
     onDeleteSuccess: () => {},
+    onEditSuccess: () => {},
 };
 
 export default UserTile;
