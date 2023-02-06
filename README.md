@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://discord.iota.org/" style="text-decoration:none;"><img src="https://img.shields.io/badge/Discord-9cf.svg?logo=discord" alt="Discord"></a>
     <a href="https://iota.stackexchange.com/" style="text-decoration:none;"><img src="https://img.shields.io/badge/StackExchange-9cf.svg?logo=stackexchange" alt="StackExchange"></a>
-    <a href="https://github.com/iotaledger/node-dashboard/blob/master/LICENSE" style="text-decoration:none;"><img src="https://img.shields.io/github/license/iotaledger/node-dashboard.svg" alt="Apache-2.0 license"></a>
+    <a href="https://github.com/iotaledger/wasp-dashboard/blob/master/LICENSE" style="text-decoration:none;"><img src="https://img.shields.io/github/license/iotaledger/wasp-dashboard.svg" alt="Apache-2.0 license"></a>
 </p>
       
 <p align="center">
@@ -44,7 +44,7 @@ The dashboard is hot-reload enabled.
 
 ## Supporting the project
 
-If the Node Dashboard has been useful to you and you feel like contributing, consider submitting a [bug report](https://github.com/iotaledger/node-dashboard/issues/new), [feature request](https://github.com/iotaledger/node-dashboard/issues/new) or a [pull request](https://github.com/iotaledger/node-dashboard/pulls/).
+If the Node Dashboard has been useful to you and you feel like contributing, consider submitting a [bug report](https://github.com/iotaledger/wasp-dashboard/issues/new), [feature request](https://github.com/iotaledger/wasp-dashboard/issues/new) or a [pull request](https://github.com/iotaledger/wasp-dashboard/pulls/).
 
 See our [contributing guidelines](.github/CONTRIBUTING.md) for more information.
 
