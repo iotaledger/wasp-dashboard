@@ -179,20 +179,21 @@ table {
 
 .action-button {
     padding: 6px;
+    transition: color 0.1s ease-in;
     border: 0;
     outline: 0;
     background: none;
     color: var(--text-color-secondary);
-    transition: color 0.1s ease-in;
    
     &:hover:not(.disabled) {
-        cursor: pointer;
         color: var(--accent-primary);
+        cursor: pointer;
     }
 
     &.action-button-danger:not(.disabled) {
         &:hover {
-            color: transparentize($danger, 0.4);
+            // scss-lint:disable-block function-no-unknown
+            color: transparentize($danger, 0.4); // sass-lint:disable-line function-no-unknown
       }
     }
 

@@ -38,7 +38,7 @@ input[type="file"]::file-selector-button {
     display: none;
 }
 
-input[type="text"], input[type="checkbox"]{
+input[type="text"] {
     &:disabled {
         opacity: 0.8;
     }
@@ -54,6 +54,10 @@ input[type="checkbox"] {
     background-color: transparent;
     color: var(--text-color-primary);
     appearance: none;
+
+    &:disabled {
+        opacity: 0.8;
+    }
 
     &:focus {
         box-shadow: 0 0 3px 0 var(--accent-primary);
