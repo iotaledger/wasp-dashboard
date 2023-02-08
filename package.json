@@ -7,7 +7,7 @@
         "type": "git",
         "url": "https://github.com/iotaledger/wasp-dashboard"
     },
-    "homepage": "/dashboard",
+    "homepage": "/",
     "license": "MIT",
     "dependencies": {
         "@iota/iota.js": "^2.0.0-rc.1",
@@ -22,7 +22,7 @@
         "zxcvbn": "^4.4.2"
     },
     "engines": {
-        "node": ">=14 <=18.12.1"
+        "node": ">=14 <=18.15.1"
     },
     "scripts": {
         "start": "cross-env PORT=9090 REACT_APP_BRAND_ID=wasp craco start",

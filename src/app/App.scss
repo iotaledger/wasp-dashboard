@@ -8,9 +8,11 @@
     align-items: stretch;
     min-width: 320px;
     overflow: hidden;
+    
     @include tablet-down {
         display: block;
     }
+
     .scroll-content {
         overflow: auto;
     }
