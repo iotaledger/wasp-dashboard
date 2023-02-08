@@ -1,0 +1,51 @@
+name: Release Docker image
+
+on:
+    release:
+        types: [published]
+
+jobs:
+    release-docker:
+        name: Release Docker
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out the repo
+              uses: actions/checkout@v3
+
+            - name: Query git tag
+              id: tagger
+              uses: jimschubert/query-tag-action@v2
+              with:
+                  include: "v*"
+                  exclude: ""
+                  commit-ish: "HEAD"
+                  skip-unshallow: "true"
+
+            - name: Extract metadata (tags, labels) for Docker
+              id: meta
+              uses: docker/metadata-action@v4
+              with:
+                  images: iotaledger/wasp-dashboard
+                  tags: |
+                      type=semver,pattern={{version}}
+                      type=semver,pattern={{major}}.{{minor}}
+                      type=semver,pattern={{major}}
+                      type=match,pattern=v(\d+.\d+),suffix=-alpha,group=1,enable=${{ contains(github.ref, '-alpha') }}
+                      type=match,pattern=v(\d+.\d+),suffix=-beta,group=1,enable=${{ contains(github.ref, '-beta') }}
+                      type=match,pattern=v(\d+.\d+),suffix=-rc,group=1,enable=${{ contains(github.ref, '-rc') }}
+
+            - name: Login to DockerHub
+              uses: docker/login-action@v2
+              with:
+                  username: ${{ secrets.IOTALEDGER_DOCKER_USERNAME }}
+                  password: ${{ secrets.IOTALEDGER_DOCKER_PASSWORD }}
+
+            - name: Build and push to Dockerhub
+              uses: docker/build-push-action@v4
+              with:
+                  context: .
+                  file: ./Dockerfile
+                  platforms: linux/amd64
+                  push: true
+                  tags: ${{ steps.meta.outputs.tags }}
+                  labels: ${{ steps.meta.outputs.labels }}
