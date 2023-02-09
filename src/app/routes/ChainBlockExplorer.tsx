@@ -163,9 +163,9 @@ function ChainBlockExplorer() {
                                                         )}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>Fungible Tokens</h4>
+                                                        <h4>Native Tokens</h4>
                                                         {Object.entries(
-                                                            receipt.request?.allowance?.fungibleTokens ?? {},
+                                                            receipt.request?.allowance?.nativeTokens ?? {},
                                                         ).map(([key, value]) => (
                                                             <KeyValueRow
                                                                 key={key}

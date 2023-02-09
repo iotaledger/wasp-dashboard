@@ -5,12 +5,12 @@ import { EditIcon } from "../../assets";
 import {
     WaspClientService,
     ServiceFactory,
-    PeeringNodeStatusResponse,
     CommitteeInfoResponse,
     PeersService,
     EventAggregator,
     Action,
 } from "../../lib";
+import { PeeringNode } from "../../lib/classes/services/peersService";
 import {
     Breadcrumb,
     InfoBox,
@@ -37,13 +37,13 @@ function ChainNodes() {
 
     const [hasWritePermission] = usePermissions();
     const [chainCommitteeInfo, setChainCommitteeInfo] = useState<CommitteeInfoResponse | null>(null);
-    const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[]>(peersService.get());
+    const [peersList, setPeersList] = useState<PeeringNode[]>(peersService.get());
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const { chainID } = useParams();
 
     const chainURL = `/chains/${chainID}`;
-    const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNodeStatusResponse);
-    const peersNodes = chainCommitteeInfo?.committeeNodes?.map(({ node }) => node as PeeringNodeStatusResponse);
+    const accessNodes = chainCommitteeInfo?.accessNodes?.map(({ node }) => node as PeeringNode);
+    const peersNodes = chainCommitteeInfo?.committeeNodes?.map(({ node }) => node as PeeringNode);
 
     const chainBreadcrumbs = [
         { goTo: "/", text: "Home" },
