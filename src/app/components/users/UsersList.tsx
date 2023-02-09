@@ -25,7 +25,7 @@ interface UsersListProps {
 }
 
 const UsersList: React.FC<UsersListProps> = ({ users, onDeleteSuccess, canBeDeleted, onEditSuccess }) => {
-    const orderedUsers = users ? users.sort((a, b) => a.username?.localeCompare(b.username as string) as number) : [];
+    const orderedUsers = users ? users.sort((a, b) => a.username?.localeCompare(b.username)) : [];
     return (
         <div className="users-list">
             {users
