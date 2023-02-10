@@ -209,9 +209,10 @@ export class WebSocketService {
     private subscribeTopic(topicId: number) {
         if (this._subscriptions[topicId]) {
             const requiresAuth = this._subscriptions[topicId].requiresAuth;
-            const jwt = this._authService.isLoggedIn();
+            const isApiAuthRequired = this._authService.isAuthRequired();
+            const jwt = this._authService.getJWT();
 
-            if (!requiresAuth || (requiresAuth && jwt)) {
+            if (!requiresAuth || (requiresAuth && isApiAuthRequired && jwt)) {
                 this._subscriptions[topicId].isSubscribed = true;
 
                 const arrayBuf = new ArrayBuffer(2 + (jwt && requiresAuth ? jwt.length : 0));
