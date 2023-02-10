@@ -5,7 +5,7 @@ import { Environment } from "../../environment";
  */
 export async function isNodeOnline(): Promise<boolean> {
     try {
-        const res = await fetch(`${Environment.WaspApiUrl}/v2/node/version`);
+        const res = await fetch(`${Environment.WaspApiUrl}/node/version`);
         return res.status === 200;
     } catch {
         return false;
