@@ -130,7 +130,7 @@ function Chain() {
             .metrics()
             .getChainWorkflowMetrics({ chainID })
             .then(data => {
-                const newConsensusMetrics = data as Record<string, string>;
+                const newConsensusMetrics = data as unknown as Record<string, string>;
                 const metrics: Record<string, ConsensusMetric> = {};
                 const keys = Object.keys(newConsensusMetrics).filter(k => !k.startsWith("time"));
                 for (const key of keys) {
@@ -200,7 +200,7 @@ function Chain() {
                         {chainBlobs === null ? (
                             <LoadingInfo />
                         ) : (chainBlobs?.length > 0 ? (
-                            <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as ITableRow[]} />
+                            <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as unknown as ITableRow[]} />
                         ) : (
                             <Tile primaryText="No blobs found." />
                         ))}
@@ -222,7 +222,10 @@ function Chain() {
                                 </InfoBox>
                             ))}
                             {chainAssets?.nativeTokens && chainAssets?.nativeTokens?.length > 0 && (
-                                <Table tHead={["ID", "Amount"]} tBody={chainAssets.nativeTokens as ITableRow[]} />
+                                <Table
+                                    tHead={["ID", "Amount"]}
+                                    tBody={chainAssets.nativeTokens as unknown as ITableRow[]}
+                                />
                             )}
                         </InfoBox>
                         <InfoBox title="Latest block">

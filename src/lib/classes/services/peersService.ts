@@ -1,5 +1,39 @@
 import { AuthService, EventAggregator, WaspClientService, ServiceFactory } from "../../classes";
-import { PeeringNodeStatusResponse, PeeringTrustRequest } from "../../wasp_client";
+import { PeeringTrustRequest } from "../../wasp_client";
+
+export interface PeeringNode {
+    /**
+     * Whether or not the peer is activated
+     * @type {boolean}
+     * @memberof PeeringNodeStatusResponse
+     */
+    isAlive?: boolean;
+    /**
+     *
+     * @type {boolean}
+     * @memberof PeeringNodeStatusResponse
+     */
+    isTrusted: boolean;
+    /**
+     * The NetID of the peer
+     * @type {string}
+     * @memberof PeeringNodeStatusResponse
+     */
+    netId: string;
+    /**
+     * The amount of users attached to the peer
+     * @type {number}
+     * @memberof PeeringNodeStatusResponse
+     */
+    numUsers?: number;
+    /**
+     * The peers public key encoded in Hex
+     * @type {string}
+     * @memberof PeeringNodeStatusResponse
+     */
+    publicKey: string;
+}
+
 /**
  * Class to manage peers.
  */
@@ -8,9 +42,9 @@ export class PeersService {
 
     /**
      * The peers.
-     * @type {PeeringNodeStatusResponse[]}
+     * @type {PeeringNode[]}
      */
-    private _peers: PeeringNodeStatusResponse[] = [];
+    private _peers: PeeringNode[] = [];
 
     /**
      * Poll Timeout Id
@@ -55,7 +89,7 @@ export class PeersService {
      * Get the peers.
      * @returns Array of peers.
      */
-    public get: () => PeeringNodeStatusResponse[] = () => this._peers;
+    public get: () => PeeringNode[] = () => this._peers;
 
     /**
      * Trust a peer and refetch the list of peers.

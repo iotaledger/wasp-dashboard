@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Dialog } from "..";
-import { PeeringNodeStatusResponse, ServiceFactory, WaspClientService } from "../../../lib";
+import { ServiceFactory, WaspClientService } from "../../../lib";
+import { PeeringNode } from "../../../lib/classes/services/peersService";
 
 interface IEditAccessNodesDialog {
     onClose: () => void;
     onSuccess: () => void;
-    accessNodes: PeeringNodeStatusResponse[];
-    peerNodes: PeeringNodeStatusResponse[];
+    accessNodes: PeeringNode[];
+    peerNodes: PeeringNode[];
     chainID: string;
 }
 
@@ -26,7 +27,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
      * Add and remove the access nodes.
      * @param newAccessNodes Updated access nodes.
      */
-    async function updateAccessNodes(newAccessNodes: PeeringNodeStatusResponse[]) {
+    async function updateAccessNodes(newAccessNodes: PeeringNode[]) {
         if (!chainID || !accessNodes) {
             return;
         }

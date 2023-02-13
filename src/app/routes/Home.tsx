@@ -14,6 +14,7 @@ import {
     WaspClientService,
     ChainInfoResponse,
     Action,
+    PeeringNodeIdentityResponse,
 } from "../../lib/";
 import { PeersList, InfoBox, Tile, AddPeerDialog, LoadingTile, IconButton } from "../components";
 import { usePermissions } from "../hooks";
@@ -29,7 +30,7 @@ function Home() {
     const [publicKey, setPublicKey] = useState<undefined | string>();
     const [version, setVersion] = useState<undefined | string>();
     const [networkId, setNetworkId] = useState<undefined | string>();
-    const [peersList, setPeersList] = useState<PeeringNodeStatusResponse[] | null>(null);
+    const [peersList, setPeersList] = useState<PeeringNodeIdentityResponse[] | null>(null);
     const [chains, setChains] = useState<ChainInfoResponse[] | null>(null);
     const [showAddPeerDialog, setShowAddPeerDialog] = useState<boolean>(false);
 
