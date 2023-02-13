@@ -59,16 +59,43 @@ export class AuthService {
         }
     }
 
+    public async getAuthRequired(): Promise<boolean> {
+        const response = await FetchHelper.json<
+            null,
+            {
+                scheme?: string;
+            }
+        >(Environment.WaspApiUrl, "/auth/info", "get");
+
+        if (response.scheme === "jwt") {
+            return true;
+        }
+
+        return false;
+    }
+
+    public isAuthRequired(): boolean {
+        return this._storageService.load<boolean>("dashboard-auth-required");
+    }
+
     /**
      * Initialise service.
      */
     public async initialize(): Promise<void> {
         const jwt = this._storageService.load<string>("dashboard-jwt");
         this._jwt = jwt;
-        if (await this.isJWTValid()) {
-            this.validateTokenPeriodically();
+
+        const isAuthRequred = await this.getAuthRequired();
+        this._storageService.save<boolean>("dashboard-auth-required", isAuthRequred);
+
+        if (isAuthRequred) {
+            if (await this.isJWTValid()) {
+                this.validateTokenPeriodically();
+            } else {
+                this.logout();
+            }
         } else {
-            this.logout();
+            EventAggregator.publish("auth-state", true);
         }
     }
 
@@ -200,6 +227,10 @@ export class AuthService {
      * @returns A list of permissions.
      */
     public getPermissions(): string[] {
+        if (!this.isAuthRequired()) {
+            return ["read", "write"];
+        }
+
         if (!this._jwt) {
             return [];
         }
@@ -215,7 +246,19 @@ export class AuthService {
      * Get the jwt.
      * @returns The jwt if logged in.
      */
-    public isLoggedIn(): string | undefined {
+    public isLoggedIn(): boolean {
+        if (this.isAuthRequired() && this._jwt !== undefined) {
+            return true;
+        }
+
+        if (!this.isAuthRequired()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public getJWT(): string | undefined {
         return this._jwt;
     }
 
@@ -249,13 +292,17 @@ export class AuthService {
      */
     public buildAuthHeaders(): Record<string, string> {
         const headers: Record<string, string> = {};
-        const jwt = this.isLoggedIn();
-        if (jwt) {
-            headers.Authorization = `Bearer ${jwt}`;
-        }
-        const csrf = this.csrf();
-        if (csrf) {
-            headers["X-CSRF-Token"] = csrf;
+        const isLoggedIn = this.isLoggedIn();
+
+        if (isLoggedIn) {
+            const jwt = this.getJWT();
+            if (jwt) {
+                headers.Authorization = `Bearer ${jwt}`;
+            }
+            const csrf = this.csrf();
+            if (csrf) {
+                headers["X-CSRF-Token"] = csrf;
+            }
         }
 
         return headers;

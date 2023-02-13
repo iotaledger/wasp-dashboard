@@ -7,7 +7,7 @@
         "type": "git",
         "url": "https://github.com/iotaledger/wasp-dashboard"
     },
-    "homepage": "/",
+    "homepage": "/wasp/dashboard",
     "license": "MIT",
     "dependencies": {
         "@iota/iota.js": "^2.0.0-rc.1",
