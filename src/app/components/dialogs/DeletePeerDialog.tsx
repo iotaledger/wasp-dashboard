@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Dialog } from "../";
-import { ServiceFactory, PeersService, PeeringNodeStatusResponse } from "../../../lib";
+import { ServiceFactory, PeersService } from "../../../lib";
+import { PeeringNode } from "../../../lib/classes/services/peersService";
 
 interface IDeletePeerDialog {
     onClose: () => void;
-    peer: PeeringNodeStatusResponse;
+    peer: PeeringNode;
     onError?: () => void;
     onSuccess?: () => void;
 }

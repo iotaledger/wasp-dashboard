@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { DeleteIcon } from "../../../assets";
-import { PeeringNodeStatusResponse, Action } from "../../../lib";
+import { Action } from "../../../lib";
+import { PeeringNode } from "../../../lib/classes/services/peersService";
 import { DeletePeerDialog, Tile } from "../../components";
 import { usePermissions } from "../../hooks";
 
 interface PeerTileProps {
     /**
      * Peer to show.
-     * @type {PeeringNodeStatusResponse}
+     * @type {PeeringNode}
      */
-    peer: PeeringNodeStatusResponse;
+    peer: PeeringNode;
 
     /**
      * Show a detailed list with actions.

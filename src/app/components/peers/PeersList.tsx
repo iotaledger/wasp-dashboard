@@ -1,14 +1,14 @@
 import "./PeerList.scss";
 import React from "react";
-import { PeeringNodeStatusResponse } from "../../../lib";
+import { PeeringNode } from "../../../lib/classes/services/peersService";
 import { PeerTile } from "./";
 
 interface PeersListProps {
     /**
      * List of peers to display
-     * @type {PeeringNodeStatusResponse[]}
+     * @type {PeeringNode[]}
      */
-    peers: PeeringNodeStatusResponse[];
+    peers: PeeringNode[];
 
     /**
      * Whether to show the detailed list of peers
