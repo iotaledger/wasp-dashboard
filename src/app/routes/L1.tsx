@@ -59,8 +59,12 @@ function L1() {
             .metrics()
             .getL1Metrics()
             .then(metrics => {
-                const chainMetricsArray = Object.entries(metrics as ChainMetrics | null[]).map(
-                    ([key, val]: [string, StandardMessage]) => {
+                const chainMetricsArray = Object.entries(metrics as ChainMetrics | null[])
+                    .filter(
+                        ([, val]: [string, StandardMessage]) =>
+                            val.timestamp !== undefined && val.messages !== undefined,
+                    )
+                    .map(([key, val]: [string, StandardMessage]) => {
                         const name = METRICS_NAMES[key];
                         const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
                         const totalMessages = val.messages ?? 0;
@@ -74,8 +78,7 @@ function L1() {
                             date,
                             lastMessage,
                         };
-                    },
-                );
+                    });
                 setl1Metrics(chainMetricsArray);
             })
             .catch(e => {

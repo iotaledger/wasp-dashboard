@@ -35,16 +35,19 @@ function L1Chain() {
             .metrics()
             .getChainMetrics({ chainID })
             .then(metrics => {
-                const chainMetricsArray = Object.entries(metrics as ChainMetrics | null[]).map(
-                    ([key, val]: [string, StandardMessage]) => {
+                const chainMetricsArray = Object.entries(metrics as ChainMetrics | null[])
+                    .filter(
+                        ([, val]: [string, StandardMessage]) =>
+                            val.timestamp !== undefined && val.messages !== undefined,
+                    )
+                    .map(([key, val]: [string, StandardMessage]) => {
                         const name = METRICS_NAMES[key];
                         const typeInOrOut = key.startsWith("in") ? "IN" : "OUT";
                         const totalMessages = val.messages ?? 0;
                         const lastTime = val.timestamp.valueOf() > 0 ? formatDate(val.timestamp) : "-";
                         const lastMessage = val.lastMessage ? JSON.stringify(val.lastMessage, null, 2) : "";
                         return { name, typeInOrOut, totalMessages, lastTime, lastMessage };
-                    },
-                );
+                    });
                 setChainL1Metrics(chainMetricsArray);
             })
             .catch(e => {
