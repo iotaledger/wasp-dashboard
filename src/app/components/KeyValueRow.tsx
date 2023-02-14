@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable unicorn/no-nested-ternary */
+import { Converter } from "@iota/util.js";
 import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -14,9 +15,10 @@ import { formatDate } from "../../lib/utils";
 interface KeyValueRowProps {
     keyText: string | ILink | undefined | null;
     value: string | number | boolean | ILink | Date | undefined | null;
+    showUTFStrings?: boolean;
 }
 
-const KeyValueRow: React.FC<KeyValueRowProps> = ({ keyText, value }) => {
+const KeyValueRow: React.FC<KeyValueRowProps> = ({ keyText, value, showUTFStrings }) => {
     const formattedDate = moment(value as string | Date, "\"YYYY-MM-DDTHH:mm:ss.000Z\"", true);
     const isValid = formattedDate.isValid();
     const valueWithoutQuotes = value?.toString().replace(/"/g, "");
@@ -24,7 +26,7 @@ const KeyValueRow: React.FC<KeyValueRowProps> = ({ keyText, value }) => {
     return (
         <div className="info-item">
             {typeof keyText === "string" ? (
-                <span className="key">{keyText}:</span>
+                <span className="key">{showUTFStrings ? `${Converter.hexToUtf8(keyText)}:` : `${keyText}:`}</span>
             ) : (
                 <Link to={keyText?.url!}>
                     <span className="key">{keyText?.text}:</span>
@@ -34,7 +36,11 @@ const KeyValueRow: React.FC<KeyValueRowProps> = ({ keyText, value }) => {
                 <span className="value">{isValid ? formatDate(value) : valueWithoutQuotes}</span>
             ) : typeof value === "boolean" ? (
                 <input type="checkbox" checked={Boolean(value)} disabled />
-            ) : typeof value === "string" || typeof value === "number" ? (
+            ) : typeof value === "string" ? (
+                <span className="value">
+                    {showUTFStrings ? `"${Converter.hexToUtf8(valueWithoutQuotes!)}"` : valueWithoutQuotes}
+                </span>
+            ) : typeof value === "number" ? (
                 <span className="value">{valueWithoutQuotes}</span>
             ) : (
                 <Link to={value?.url!}>
@@ -43,6 +49,10 @@ const KeyValueRow: React.FC<KeyValueRowProps> = ({ keyText, value }) => {
             )}
         </div>
     );
+};
+
+KeyValueRow.defaultProps = {
+    showUTFStrings: false,
 };
 
 export default KeyValueRow;

@@ -15,6 +15,8 @@ function ChainBlockExplorer() {
     const navigate = useNavigate();
     const [blockData, setBlockData] = useState<BlockData | null>(null);
     const [latestBlock, setLatestBlock] = useState<number>();
+    const [showUTFStrings, setShowUTFStrings] = useState<boolean>(false);
+
     const { chainID, blockID } = useParams();
 
     const blockIndex = Number(blockID);
@@ -142,11 +144,29 @@ function ChainBlockExplorer() {
                                                     </div>
                                                     <div className="main-info-item">
                                                         <h4>Parameters</h4>
+
+                                                        <div className="info-item">
+                                                            <span className="key">
+                                                                <label className="key" htmlFor="toggleHexString">
+                                                                    Show hex values as text
+                                                                </label>
+                                                            </span>
+                                                            <input
+                                                                id="toggleHexString"
+                                                                className="value"
+                                                                type="checkbox"
+                                                                checked={showUTFStrings}
+                                                                defaultChecked={showUTFStrings}
+                                                                onChange={() => setShowUTFStrings(!showUTFStrings)}
+                                                            />
+                                                        </div>
+
                                                         {params?.map(x => (
                                                             <KeyValueRow
+                                                                showUTFStrings={showUTFStrings}
                                                                 key={x.key}
                                                                 keyText={x.key}
-                                                                value={JSON.stringify(x.value)}
+                                                                value={x.value}
                                                             />
                                                         ))}
                                                     </div>
