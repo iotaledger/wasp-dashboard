@@ -37,7 +37,7 @@ export interface InfoResponse {
      * @type {string}
      * @memberof InfoResponse
      */
-    netID: string;
+    peeringURL: string;
     /**
      * The public key of the node (Hex)
      * @type {string}
@@ -58,7 +58,7 @@ export interface InfoResponse {
 export function instanceOfInfoResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "l1Params" in value;
-    isInstance = isInstance && "netID" in value;
+    isInstance = isInstance && "peeringURL" in value;
     isInstance = isInstance && "publicKey" in value;
     isInstance = isInstance && "version" in value;
 
@@ -76,7 +76,7 @@ export function InfoResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'l1Params': L1ParamsFromJSON(json['l1Params']),
-        'netID': json['netID'],
+        'peeringURL': json['peeringURL'],
         'publicKey': json['publicKey'],
         'version': json['version'],
     };
@@ -92,7 +92,7 @@ export function InfoResponseToJSON(value?: InfoResponse | null): any {
     return {
         
         'l1Params': L1ParamsToJSON(value.l1Params),
-        'netID': value.netID,
+        'peeringURL': value.peeringURL,
         'publicKey': value.publicKey,
         'version': value.version,
     };

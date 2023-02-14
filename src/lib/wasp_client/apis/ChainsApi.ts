@@ -46,7 +46,7 @@ export interface ActivateChainRequest {
 
 export interface AddAccessNodeRequest {
     chainID: string;
-    publicKey: string;
+    peer: string;
 }
 
 export interface AttachToWebsocketRequest {
@@ -85,7 +85,7 @@ export interface GetStateValueRequest {
 
 export interface RemoveAccessNodeRequest {
     chainID: string;
-    publicKey: string;
+    peer: string;
 }
 
 export interface SetChainRecordRequest {
@@ -139,8 +139,8 @@ export class ChainsApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling addAccessNode.');
         }
 
-        if (requestParameters.publicKey === null || requestParameters.publicKey === undefined) {
-            throw new runtime.RequiredError('publicKey','Required parameter requestParameters.publicKey was null or undefined when calling addAccessNode.');
+        if (requestParameters.peer === null || requestParameters.peer === undefined) {
+            throw new runtime.RequiredError('peer','Required parameter requestParameters.peer was null or undefined when calling addAccessNode.');
         }
 
         const queryParameters: any = {};
@@ -152,7 +152,7 @@ export class ChainsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/chains/{chainID}/access-node/{publicKey}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"publicKey"}}`, encodeURIComponent(String(requestParameters.publicKey))),
+            path: `/chains/{chainID}/access-node/{peer}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"peer"}}`, encodeURIComponent(String(requestParameters.peer))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -480,8 +480,8 @@ export class ChainsApi extends runtime.BaseAPI {
             throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling removeAccessNode.');
         }
 
-        if (requestParameters.publicKey === null || requestParameters.publicKey === undefined) {
-            throw new runtime.RequiredError('publicKey','Required parameter requestParameters.publicKey was null or undefined when calling removeAccessNode.');
+        if (requestParameters.peer === null || requestParameters.peer === undefined) {
+            throw new runtime.RequiredError('peer','Required parameter requestParameters.peer was null or undefined when calling removeAccessNode.');
         }
 
         const queryParameters: any = {};
@@ -493,7 +493,7 @@ export class ChainsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/chains/{chainID}/access-node/{publicKey}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"publicKey"}}`, encodeURIComponent(String(requestParameters.publicKey))),
+            path: `/chains/{chainID}/access-node/{peer}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"peer"}}`, encodeURIComponent(String(requestParameters.peer))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,

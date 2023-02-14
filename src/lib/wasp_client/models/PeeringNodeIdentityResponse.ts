@@ -26,11 +26,17 @@ export interface PeeringNodeIdentityResponse {
      */
     isTrusted: boolean;
     /**
-     * The NetID of the peer
+     * 
      * @type {string}
      * @memberof PeeringNodeIdentityResponse
      */
-    netId: string;
+    name: string;
+    /**
+     * The peering URL of the peer
+     * @type {string}
+     * @memberof PeeringNodeIdentityResponse
+     */
+    peeringURL: string;
     /**
      * The peers public key encoded in Hex
      * @type {string}
@@ -45,7 +51,8 @@ export interface PeeringNodeIdentityResponse {
 export function instanceOfPeeringNodeIdentityResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "isTrusted" in value;
-    isInstance = isInstance && "netId" in value;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "peeringURL" in value;
     isInstance = isInstance && "publicKey" in value;
 
     return isInstance;
@@ -62,7 +69,8 @@ export function PeeringNodeIdentityResponseFromJSONTyped(json: any, ignoreDiscri
     return {
         
         'isTrusted': json['isTrusted'],
-        'netId': json['netId'],
+        'name': json['name'],
+        'peeringURL': json['peeringURL'],
         'publicKey': json['publicKey'],
     };
 }
@@ -77,7 +85,8 @@ export function PeeringNodeIdentityResponseToJSON(value?: PeeringNodeIdentityRes
     return {
         
         'isTrusted': value.isTrusted,
-        'netId': value.netId,
+        'name': value.name,
+        'peeringURL': value.peeringURL,
         'publicKey': value.publicKey,
     };
 }

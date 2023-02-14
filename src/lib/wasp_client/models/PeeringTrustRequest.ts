@@ -20,11 +20,17 @@ import { exists, mapValues } from '../runtime';
  */
 export interface PeeringTrustRequest {
     /**
-     * The NetID of the peer
+     * 
      * @type {string}
      * @memberof PeeringTrustRequest
      */
-    netId: string;
+    name: string;
+    /**
+     * The peering URL of the peer
+     * @type {string}
+     * @memberof PeeringTrustRequest
+     */
+    peeringURL: string;
     /**
      * The peers public key encoded in Hex
      * @type {string}
@@ -38,7 +44,8 @@ export interface PeeringTrustRequest {
  */
 export function instanceOfPeeringTrustRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "netId" in value;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "peeringURL" in value;
     isInstance = isInstance && "publicKey" in value;
 
     return isInstance;
@@ -54,7 +61,8 @@ export function PeeringTrustRequestFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'netId': json['netId'],
+        'name': json['name'],
+        'peeringURL': json['peeringURL'],
         'publicKey': json['publicKey'],
     };
 }
@@ -68,7 +76,8 @@ export function PeeringTrustRequestToJSON(value?: PeeringTrustRequest | null): a
     }
     return {
         
-        'netId': value.netId,
+        'name': value.name,
+        'peeringURL': value.peeringURL,
         'publicKey': value.publicKey,
     };
 }
