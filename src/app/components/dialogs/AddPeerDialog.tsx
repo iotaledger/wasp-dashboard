@@ -113,7 +113,6 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose, onSuccess, onError }
                         disabled={isBusy}
                         onChange={onChange}
                     />
-                    {error && <p className="dialog-content-error">{error}</p>}
                 </div>
                 <div className="dialog-content-label">Node name</div>
                 <div className="dialog--value">
