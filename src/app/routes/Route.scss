@@ -151,3 +151,28 @@
   overflow: auto;
   max-height: 400px;
 }
+
+.main-info-item-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  h4 {
+    margin: 0 !important;
+  }
+  .toggle-container {
+    margin: 0;
+  }
+  .toggle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .toggle label {
+      color: var(--text-color-secondary);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+      padding: 0 5px;
+    }
+  }
+}

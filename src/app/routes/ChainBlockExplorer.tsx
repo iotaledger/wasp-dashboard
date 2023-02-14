@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./Route.scss";
 import { ServiceFactory } from "../../lib";
 import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
-import { Breadcrumb, InfoBox, KeyValueRow, Tile, ChainNavbar, BottomNavbar } from "../components";
+import { Breadcrumb, InfoBox, KeyValueRow, Tile, ChainNavbar, BottomNavbar, Toggle } from "../components";
 
 /**
  * ChainBlockExplorer panel.
@@ -143,24 +143,21 @@ function ChainBlockExplorer() {
                                                             )}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>Parameters</h4>
-
-                                                        <div className="info-item">
-                                                            <span className="key">
+                                                        <div className="main-info-item-header">
+                                                            <h4>Parameters</h4>
+                                                            <div className="toggle">
                                                                 <label className="key" htmlFor="toggleHexString">
-                                                                    Show hex values as text
+                                                                    Hex
                                                                 </label>
-                                                            </span>
-                                                            <input
-                                                                id="toggleHexString"
-                                                                className="value"
-                                                                type="checkbox"
-                                                                checked={showUTFStrings}
-                                                                defaultChecked={showUTFStrings}
-                                                                onChange={() => setShowUTFStrings(!showUTFStrings)}
-                                                            />
+                                                                <Toggle
+                                                                    active={showUTFStrings}
+                                                                    onToggle={() => setShowUTFStrings(!showUTFStrings)}
+                                                                />
+                                                                <label className="key" htmlFor="toggleHexString">
+                                                                    Text
+                                                                </label>
+                                                            </div>
                                                         </div>
-
                                                         {params?.map(x => (
                                                             <KeyValueRow
                                                                 showUTFStrings={showUTFStrings}
