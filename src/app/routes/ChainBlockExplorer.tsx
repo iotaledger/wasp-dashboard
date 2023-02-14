@@ -155,13 +155,14 @@ function ChainBlockExplorer() {
                                                         <div className="main-info-item-header">
                                                             <h4>Parameters</h4>
                                                             <Toggle
-                                                                active={showUTFStrings}
-                                                                onToggle={() => setShowUTFStrings(!showUTFStrings)}
+                                                                active={showHexAsText}
+                                                                onToggle={() => settingsService.toggleShowHexAsText()}
                                                                 leftLabel="Hex"
                                                                 rightLabel="Text"
                                                                 smaller
                                                             />
                                                         </div>
+
                                                         {params?.map(x => (
                                                             <KeyValueRow
                                                                 showUTFStrings={showHexAsText}
