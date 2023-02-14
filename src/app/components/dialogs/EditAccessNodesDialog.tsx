@@ -118,7 +118,10 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
                     return (
                         <div className="access-nodes-item" key={node.publicKey}>
                             <input id={node.publicKey} type="checkbox" checked={isChecked} onChange={onChecked} />
-                            <label htmlFor={node.publicKey}>{node.publicKey}</label>
+                            <label htmlFor={node.publicKey}>
+                                {node.peeringURL} <br />
+                                {node.publicKey}
+                            </label>
                         </div>
                     );
                 })}
