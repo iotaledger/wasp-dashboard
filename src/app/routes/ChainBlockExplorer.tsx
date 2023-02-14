@@ -110,7 +110,9 @@ function ChainBlockExplorer() {
                                             >
                                                 <div className="info-content">
                                                     <div className="main-info-item">
-                                                        <h4>info</h4>
+                                                        <div className="main-info-item-header">
+                                                            <h4>info</h4>
+                                                        </div>
                                                         {Object.entries(receipt)
                                                             .filter(([r]) => BLOCK_RECEIPTS_INFO_VALUES.has(r))
                                                             .map(([k, v]) => (
@@ -122,7 +124,9 @@ function ChainBlockExplorer() {
                                                             ))}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>Request</h4>
+                                                        <div className="main-info-item-header">
+                                                            <h4>Request</h4>
+                                                        </div>
                                                         {Object.entries(receipt.request ?? {})
                                                             .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
                                                             .map(([key, value]) =>
@@ -145,18 +149,13 @@ function ChainBlockExplorer() {
                                                     <div className="main-info-item">
                                                         <div className="main-info-item-header">
                                                             <h4>Parameters</h4>
-                                                            <div className="toggle">
-                                                                <label className="key" htmlFor="toggleHexString">
-                                                                    Hex
-                                                                </label>
-                                                                <Toggle
-                                                                    active={showUTFStrings}
-                                                                    onToggle={() => setShowUTFStrings(!showUTFStrings)}
-                                                                />
-                                                                <label className="key" htmlFor="toggleHexString">
-                                                                    Text
-                                                                </label>
-                                                            </div>
+                                                            <Toggle
+                                                                active={showUTFStrings}
+                                                                onToggle={() => setShowUTFStrings(!showUTFStrings)}
+                                                                leftLabel="Hex"
+                                                                rightLabel="Text"
+                                                                smaller
+                                                            />
                                                         </div>
                                                         {params?.map(x => (
                                                             <KeyValueRow
@@ -168,7 +167,9 @@ function ChainBlockExplorer() {
                                                         ))}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>Contracts</h4>
+                                                        <div className="main-info-item-header">
+                                                            <h4>Contracts</h4>
+                                                        </div>
                                                         {Object.entries(receipt.request?.callTarget ?? {}).map(
                                                             ([key, value]) => (
                                                                 <KeyValueRow
@@ -180,7 +181,9 @@ function ChainBlockExplorer() {
                                                         )}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>Native Tokens</h4>
+                                                        <div className="main-info-item-header">
+                                                            <h4>Native Tokens</h4>
+                                                        </div>
                                                         {Object.entries(
                                                             receipt.request?.allowance?.nativeTokens ?? {},
                                                         ).map(([key, value]) => (
@@ -192,7 +195,9 @@ function ChainBlockExplorer() {
                                                         ))}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>NFTs</h4>
+                                                        <div className="main-info-item-header">
+                                                            <h4>NFTs</h4>
+                                                        </div>
                                                         {Object.entries(receipt.request?.allowance?.nfts ?? {}).map(
                                                             ([key, value]) => (
                                                                 <KeyValueRow
