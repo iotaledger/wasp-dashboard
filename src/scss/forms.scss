@@ -54,9 +54,11 @@ input[type="checkbox"] {
     background-color: transparent;
     color: var(--text-color-primary);
     appearance: none;
+    cursor: pointer;
 
     &:disabled {
         opacity: 0.8;
+        pointer-events: none;
     }
 
     &:focus {
