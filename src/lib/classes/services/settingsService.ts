@@ -17,11 +17,17 @@ export class SettingsService {
     private _theme: string;
 
     /**
+     * Show Hex strings as UTF8 text.
+     */
+    private _showHexAsText: boolean;
+
+    /**
      * Create a new instance of SettingsService.
      */
     constructor() {
         this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
         this._theme = "light";
+        this._showHexAsText = false;
     }
 
     /**
@@ -29,8 +35,9 @@ export class SettingsService {
      */
     public initialize(): void {
         const theme = this._storageService.load<string>("theme");
-
         this.applyTheme(theme, false);
+
+        this._showHexAsText = this._storageService.load<boolean>("showHexAsText");
     }
 
     /**
@@ -53,6 +60,15 @@ export class SettingsService {
     }
 
     /**
+     * Toggle the show hex as text setting.
+     */
+    public toggleShowHexAsText() {
+        this._showHexAsText = !this._showHexAsText;
+        EventAggregator.publish("showHexAsText", this._showHexAsText);
+        this.save();
+    }
+
+    /**
      * Get the theme.
      * @returns The theme.
      */
@@ -60,10 +76,15 @@ export class SettingsService {
         return this._theme;
     }
 
+    public showHexAsText(): boolean {
+        return this._showHexAsText;
+    }
+
     /**
      * Save all the settings.
      */
     public save(): void {
         this._storageService.save("theme", this._theme);
+        this._storageService.save("showHexAsText", this._showHexAsText);
     }
 }

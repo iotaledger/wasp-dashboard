@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Route.scss";
-import { ServiceFactory } from "../../lib";
+import { EventAggregator, ServiceFactory, SettingsService } from "../../lib";
 import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
 import { Breadcrumb, InfoBox, KeyValueRow, Tile, ChainNavbar, BottomNavbar, Toggle } from "../components";
 
@@ -11,11 +11,12 @@ import { Breadcrumb, InfoBox, KeyValueRow, Tile, ChainNavbar, BottomNavbar, Togg
  */
 function ChainBlockExplorer() {
     const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
+    const settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
 
     const navigate = useNavigate();
     const [blockData, setBlockData] = useState<BlockData | null>(null);
     const [latestBlock, setLatestBlock] = useState<number>();
-    const [showUTFStrings, setShowUTFStrings] = useState<boolean>(false);
+    const [showHexAsText, setShowHexAsText] = useState<boolean>(settingsService.showHexAsText());
 
     const { chainID, blockID } = useParams();
 
@@ -32,6 +33,10 @@ function ChainBlockExplorer() {
         if (!chainID) {
             return;
         }
+
+        EventAggregator.subscribe("showHexAsText", "chain-block-explorer", (_showHexAsText: boolean) =>
+            setShowHexAsText(_showHexAsText),
+        );
 
         chainsService
             .getBlock(chainID, blockIndex)
@@ -159,7 +164,7 @@ function ChainBlockExplorer() {
                                                         </div>
                                                         {params?.map(x => (
                                                             <KeyValueRow
-                                                                showUTFStrings={showUTFStrings}
+                                                                showUTFStrings={showHexAsText}
                                                                 key={x.key}
                                                                 keyText={x.key}
                                                                 value={x.value}
