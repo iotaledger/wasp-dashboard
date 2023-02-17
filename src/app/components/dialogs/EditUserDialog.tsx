@@ -163,14 +163,12 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                     />
                     <div className="dialog-content-label">Permissions</div>
                     <div className="dialog-content-value">
-                        <div className="row middle">
-                            <Toggle
-                                disabled={editingMySelf}
-                                active={isWritePermissionEnabled}
-                                onToggle={setWritePermission}
-                            />
-                            <span className={`${editingMySelf ? "opacity-50" : ""} margin-l-t`}>Write</span>
-                        </div>
+                        <Toggle
+                            disabled={editingMySelf}
+                            active={isWritePermissionEnabled}
+                            onToggle={setWritePermission}
+                            rightLabel="Write"
+                        />
                     </div>
                     {error && <p className="dialog-content-error">{error}</p>}
                 </div>

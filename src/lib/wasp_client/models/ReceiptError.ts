@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ErrorParameter } from './ErrorParameter';
+import {
+    ErrorParameterFromJSON,
+    ErrorParameterFromJSONTyped,
+    ErrorParameterToJSON,
+} from './ErrorParameter';
+
 /**
  * 
  * @export
@@ -51,10 +58,10 @@ export interface ReceiptError {
     messageFormat: string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<ErrorParameter>}
      * @memberof ReceiptError
      */
-    parameters: Array<string>;
+    parameters?: Array<ErrorParameter>;
 }
 
 /**
@@ -67,7 +74,6 @@ export function instanceOfReceiptError(value: object): boolean {
     isInstance = isInstance && "errorId" in value;
     isInstance = isInstance && "message" in value;
     isInstance = isInstance && "messageFormat" in value;
-    isInstance = isInstance && "parameters" in value;
 
     return isInstance;
 }
@@ -87,7 +93,7 @@ export function ReceiptErrorFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'errorId': json['errorId'],
         'message': json['message'],
         'messageFormat': json['messageFormat'],
-        'parameters': json['parameters'],
+        'parameters': !exists(json, 'parameters') ? undefined : ((json['parameters'] as Array<any>).map(ErrorParameterFromJSON)),
     };
 }
 
@@ -105,7 +111,7 @@ export function ReceiptErrorToJSON(value?: ReceiptError | null): any {
         'errorId': value.errorId,
         'message': value.message,
         'messageFormat': value.messageFormat,
-        'parameters': value.parameters,
+        'parameters': value.parameters === undefined ? undefined : ((value.parameters as Array<any>).map(ErrorParameterToJSON)),
     };
 }
 

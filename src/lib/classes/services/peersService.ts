@@ -9,23 +9,27 @@ export interface PeeringNode {
      */
     isAlive?: boolean;
     /**
-     *
      * @type {boolean}
      * @memberof PeeringNodeStatusResponse
      */
     isTrusted: boolean;
     /**
-     * The NetID of the peer
      * @type {string}
      * @memberof PeeringNodeStatusResponse
      */
-    netId: string;
+    name: string;
     /**
      * The amount of users attached to the peer
      * @type {number}
      * @memberof PeeringNodeStatusResponse
      */
     numUsers?: number;
+    /**
+     * The peering URL of the peer
+     * @type {string}
+     * @memberof PeeringNodeStatusResponse
+     */
+    peeringURL: string;
     /**
      * The peers public key encoded in Hex
      * @type {string}

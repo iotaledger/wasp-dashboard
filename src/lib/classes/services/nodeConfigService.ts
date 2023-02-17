@@ -8,9 +8,9 @@ export class NodeConfigService {
     public static readonly ServiceName = "NodeConfigService";
 
     /**
-     * The network id.
+     * The peering url.
      */
-    private _networkId: string;
+    private _peeringUrl: string;
 
     /**
      * The version.
@@ -36,7 +36,7 @@ export class NodeConfigService {
      * Create a new instance of NodeConfigService.
      */
     constructor() {
-        this._networkId = "";
+        this._peeringUrl = "";
         this._bech32Hrp = "iota";
     }
 
@@ -44,14 +44,14 @@ export class NodeConfigService {
      * Initialise NodeConfigService.
      */
     public async initialize(): Promise<void> {
-        if (!this._networkId || !this._version || !this._publicKey || !this._l1Params) {
+        if (!this._peeringUrl || !this._version || !this._publicKey || !this._l1Params) {
             const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
 
             try {
                 const info = await waspClientService.node().getInfo();
 
-                if (info.netID) {
-                    this.setNetworkId(info.netID);
+                if (info.peeringURL) {
+                    this.setPeeringUrl(info.peeringURL);
                 }
                 if (info.version) {
                     this.setVersion(info.version);
@@ -72,8 +72,8 @@ export class NodeConfigService {
      * Get the network id.
      * @returns The network id.
      */
-    public getNetworkId(): string {
-        return this._networkId;
+    public getPeeringUrl(): string {
+        return this._peeringUrl;
     }
 
     /**
@@ -112,8 +112,8 @@ export class NodeConfigService {
      * Set the network id.
      * @param networkId The new network id.
      */
-    public setNetworkId(networkId: string): void {
-        this._networkId = networkId;
+    public setPeeringUrl(networkId: string): void {
+        this._peeringUrl = networkId;
     }
 
     /**

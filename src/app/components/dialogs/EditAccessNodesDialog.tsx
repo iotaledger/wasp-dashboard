@@ -43,23 +43,23 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
 
         // Add peer nodes as access nodes
         await Promise.all(
-            newNodes.map(async ({ publicKey }) => {
-                if (!publicKey) {
+            newNodes.map(async ({ name }) => {
+                if (!name) {
                     return;
                 }
 
-                await waspClientService.chains().addAccessNode({ chainID, publicKey });
+                await waspClientService.chains().addAccessNode({ chainID, peer: name });
             }),
         );
 
         // Remove peer nodes as access nodes
         await Promise.all(
-            removedNodes.map(async ({ publicKey }) => {
-                if (!publicKey) {
+            removedNodes.map(async ({ name }) => {
+                if (!name) {
                     return;
                 }
 
-                await waspClientService.chains().removeAccessNode({ chainID, publicKey });
+                await waspClientService.chains().removeAccessNode({ chainID, peer: name });
             }),
         );
     }
@@ -118,7 +118,10 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
                     return (
                         <div className="access-nodes-item" key={node.publicKey}>
                             <input id={node.publicKey} type="checkbox" checked={isChecked} onChange={onChecked} />
-                            <label htmlFor={node.publicKey}>{node.publicKey}</label>
+                            <label htmlFor={node.publicKey}>
+                                {node.peeringURL} <br />
+                                {node.publicKey}
+                            </label>
                         </div>
                     );
                 })}

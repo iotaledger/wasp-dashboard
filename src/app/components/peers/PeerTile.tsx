@@ -35,8 +35,12 @@ const PeerTile: React.FC<PeerTileProps> = ({ peer, detailed, enableDelete }) => 
         setShowDeleteDialog(false);
     }
 
+    const peerName = peer.name ? `(${peer.name})` : "";
+
     const primaryText = peer.publicKey;
-    const secondaryText = `${peer.netId} ${Number.isInteger(peer.numUsers) ? `- Users: ${peer.numUsers}` : ""}`;
+    const secondaryText = `${peerName} ${peer.peeringURL} 
+        ${Number.isInteger(peer.numUsers) ? `- Users: ${peer.numUsers}` : ""}`;
+
     const healthy = peer.isAlive;
 
     const actions = [

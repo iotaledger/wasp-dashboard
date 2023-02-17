@@ -4,12 +4,14 @@ import { ServiceFactory, PeeringTrustRequest, PeersService } from "../../../lib"
 
 const FORM_INITIAL_VALUES: IFormValues = {
     publicKey: "",
-    netID: "",
+    peeringUrl: "",
+    name: "",
 };
 
 interface IFormValues {
     publicKey: string;
-    netID: string;
+    peeringUrl: string;
+    name: string;
 }
 
 interface IAddPeerDialog {
@@ -37,7 +39,8 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose, onSuccess, onError }
             setIsBusy(true);
             const newPeer: PeeringTrustRequest = {
                 publicKey: formValues.publicKey,
-                netId: formValues.netID,
+                peeringURL: formValues.peeringUrl,
+                name: formValues.name,
             };
             const success = await peersService.trustPeer(newPeer);
             if (!success) {
@@ -75,7 +78,7 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose, onSuccess, onError }
                         type="button"
                         className="button button--primary"
                         onClick={handleAddPeer}
-                        disabled={isBusy || !formValues.publicKey || !formValues.netID}
+                        disabled={isBusy || !formValues.publicKey || !formValues.name || !formValues.peeringUrl}
                     >
                         Add
                     </button>
@@ -99,14 +102,26 @@ const AddPeerDialog: React.FC<IAddPeerDialog> = ({ onClose, onSuccess, onError }
                         onChange={onChange}
                     />
                 </div>
-                <div className="dialog-content-label">Network id</div>
+                <div className="dialog-content-label">Peering Url</div>
                 <div className="dialog--value">
                     <input
                         type="text"
                         className="input--stretch"
-                        placeholder="e.g. 127.0.0.1:15600"
-                        name="netID"
-                        value={formValues.netID}
+                        placeholder="e.g. peer-wasp-node.org:4000"
+                        name="peeringUrl"
+                        value={formValues.peeringUrl}
+                        disabled={isBusy}
+                        onChange={onChange}
+                    />
+                </div>
+                <div className="dialog-content-label">Node name</div>
+                <div className="dialog--value">
+                    <input
+                        type="text"
+                        className="input--stretch"
+                        placeholder="e.g. johndoe"
+                        name="name"
+                        value={formValues.name}
                         disabled={isBusy}
                         onChange={onChange}
                     />

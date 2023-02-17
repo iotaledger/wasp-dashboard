@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Route.scss";
-import { ServiceFactory } from "../../lib";
+import { EventAggregator, ServiceFactory, SettingsService } from "../../lib";
 import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
-import { Breadcrumb, InfoBox, KeyValueRow, Tile, ChainNavbar, BottomNavbar } from "../components";
+import { Breadcrumb, InfoBox, KeyValueRow, Tile, ChainNavbar, BottomNavbar, Toggle } from "../components";
 
 /**
  * ChainBlockExplorer panel.
@@ -11,10 +11,13 @@ import { Breadcrumb, InfoBox, KeyValueRow, Tile, ChainNavbar, BottomNavbar } fro
  */
 function ChainBlockExplorer() {
     const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
+    const settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
 
     const navigate = useNavigate();
     const [blockData, setBlockData] = useState<BlockData | null>(null);
     const [latestBlock, setLatestBlock] = useState<number>();
+    const [showHexAsText, setShowHexAsText] = useState<boolean>(settingsService.showHexAsText());
+
     const { chainID, blockID } = useParams();
 
     const blockIndex = Number(blockID);
@@ -30,6 +33,10 @@ function ChainBlockExplorer() {
         if (!chainID) {
             return;
         }
+
+        EventAggregator.subscribe("showHexAsText", "chain-block-explorer", (_showHexAsText: boolean) =>
+            setShowHexAsText(_showHexAsText),
+        );
 
         chainsService
             .getBlock(chainID, blockIndex)
@@ -108,7 +115,9 @@ function ChainBlockExplorer() {
                                             >
                                                 <div className="info-content">
                                                     <div className="main-info-item">
-                                                        <h4>info</h4>
+                                                        <div className="main-info-item-header">
+                                                            <h4>info</h4>
+                                                        </div>
                                                         {Object.entries(receipt)
                                                             .filter(([r]) => BLOCK_RECEIPTS_INFO_VALUES.has(r))
                                                             .map(([k, v]) => (
@@ -120,7 +129,9 @@ function ChainBlockExplorer() {
                                                             ))}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>Request</h4>
+                                                        <div className="main-info-item-header">
+                                                            <h4>Request</h4>
+                                                        </div>
                                                         {Object.entries(receipt.request ?? {})
                                                             .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
                                                             .map(([key, value]) =>
@@ -141,17 +152,30 @@ function ChainBlockExplorer() {
                                                             )}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>Parameters</h4>
+                                                        <div className="main-info-item-header">
+                                                            <h4>Parameters</h4>
+                                                            <Toggle
+                                                                active={showHexAsText}
+                                                                onToggle={() => settingsService.toggleShowHexAsText()}
+                                                                leftLabel="Hex"
+                                                                rightLabel="Text"
+                                                                smaller
+                                                            />
+                                                        </div>
+
                                                         {params?.map(x => (
                                                             <KeyValueRow
+                                                                showUTFStrings={showHexAsText}
                                                                 key={x.key}
                                                                 keyText={x.key}
-                                                                value={JSON.stringify(x.value)}
+                                                                value={x.value}
                                                             />
                                                         ))}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>Contracts</h4>
+                                                        <div className="main-info-item-header">
+                                                            <h4>Contracts</h4>
+                                                        </div>
                                                         {Object.entries(receipt.request?.callTarget ?? {}).map(
                                                             ([key, value]) => (
                                                                 <KeyValueRow
@@ -163,7 +187,9 @@ function ChainBlockExplorer() {
                                                         )}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>Native Tokens</h4>
+                                                        <div className="main-info-item-header">
+                                                            <h4>Native Tokens</h4>
+                                                        </div>
                                                         {Object.entries(
                                                             receipt.request?.allowance?.nativeTokens ?? {},
                                                         ).map(([key, value]) => (
@@ -175,7 +201,9 @@ function ChainBlockExplorer() {
                                                         ))}
                                                     </div>
                                                     <div className="main-info-item">
-                                                        <h4>NFTs</h4>
+                                                        <div className="main-info-item-header">
+                                                            <h4>NFTs</h4>
+                                                        </div>
                                                         {Object.entries(receipt.request?.allowance?.nfts ?? {}).map(
                                                             ([key, value]) => (
                                                                 <KeyValueRow

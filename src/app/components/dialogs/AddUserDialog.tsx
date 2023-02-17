@@ -133,10 +133,7 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
                 </div>
                 <div className="dialog-content-label">Permissions</div>
                 <div className="dialog-content-value">
-                    <div className="row middle">
-                        <Toggle active={isWritePermissionEnabled} onToggle={setWritePermission} />
-                        <span className="margin-l-t">Write</span>
-                    </div>
+                    <Toggle active={isWritePermissionEnabled} onToggle={setWritePermission} rightLabel="Write" />
                 </div>
                 {error && <p className="dialog-content-error">{error}</p>}
             </React.Fragment>

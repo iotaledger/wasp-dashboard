@@ -46,7 +46,7 @@ function Home() {
             if (authService.isLoggedIn()) {
                 try {
                     await nodeConfigService.initialize();
-                    setNetworkId(nodeConfigService.getNetworkId());
+                    setNetworkId(nodeConfigService.getPeeringUrl());
                     setVersion(nodeConfigService.getVersion());
                     setPublicKey(nodeConfigService.getPublicKey());
                 } catch (e) {
@@ -77,7 +77,7 @@ function Home() {
             nodeConfigService
                 .initialize()
                 .then(() => {
-                    setNetworkId(nodeConfigService.getNetworkId());
+                    setNetworkId(nodeConfigService.getPeeringUrl());
                     setVersion(nodeConfigService.getVersion());
                     setPublicKey(nodeConfigService.getPublicKey());
                 })

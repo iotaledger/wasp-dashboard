@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/AuthApi.ts
 apis/ChainsApi.ts
 apis/CorecontractsApi.ts
@@ -40,6 +39,7 @@ models/ControlAddressesResponse.ts
 models/DKSharesInfo.ts
 models/DKSharesPostRequest.ts
 models/ErrorMessageFormatResponse.ts
+models/ErrorParameter.ts
 models/EventsResponse.ts
 models/FoundryOutputResponse.ts
 models/GasFeePolicy.ts

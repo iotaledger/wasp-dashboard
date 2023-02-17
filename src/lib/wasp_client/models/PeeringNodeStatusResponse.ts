@@ -32,17 +32,23 @@ export interface PeeringNodeStatusResponse {
      */
     isTrusted: boolean;
     /**
-     * The NetID of the peer
+     * 
      * @type {string}
      * @memberof PeeringNodeStatusResponse
      */
-    netId: string;
+    name: string;
     /**
      * The amount of users attached to the peer
      * @type {number}
      * @memberof PeeringNodeStatusResponse
      */
     numUsers: number;
+    /**
+     * The peering URL of the peer
+     * @type {string}
+     * @memberof PeeringNodeStatusResponse
+     */
+    peeringURL: string;
     /**
      * The peers public key encoded in Hex
      * @type {string}
@@ -58,8 +64,9 @@ export function instanceOfPeeringNodeStatusResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "isAlive" in value;
     isInstance = isInstance && "isTrusted" in value;
-    isInstance = isInstance && "netId" in value;
+    isInstance = isInstance && "name" in value;
     isInstance = isInstance && "numUsers" in value;
+    isInstance = isInstance && "peeringURL" in value;
     isInstance = isInstance && "publicKey" in value;
 
     return isInstance;
@@ -77,8 +84,9 @@ export function PeeringNodeStatusResponseFromJSONTyped(json: any, ignoreDiscrimi
         
         'isAlive': json['isAlive'],
         'isTrusted': json['isTrusted'],
-        'netId': json['netId'],
+        'name': json['name'],
         'numUsers': json['numUsers'],
+        'peeringURL': json['peeringURL'],
         'publicKey': json['publicKey'],
     };
 }
@@ -94,8 +102,9 @@ export function PeeringNodeStatusResponseToJSON(value?: PeeringNodeStatusRespons
         
         'isAlive': value.isAlive,
         'isTrusted': value.isTrusted,
-        'netId': value.netId,
+        'name': value.name,
         'numUsers': value.numUsers,
+        'peeringURL': value.peeringURL,
         'publicKey': value.publicKey,
     };
 }
