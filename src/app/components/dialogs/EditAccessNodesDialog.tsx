@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dialog } from "..";
+import { Dialog, Tile } from "..";
 import { ServiceFactory, WaspClientService } from "../../../lib";
 import { PeeringNode } from "../../../lib/classes/services/peersService";
 
@@ -82,7 +82,6 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
         accessNodes.length === checkedNodes.length &&
         accessNodes.every((node, i) => node.publicKey === checkedNodes[i].publicKey)
     );
-
     return (
         <Dialog
             title="Edit access nodes"
@@ -118,10 +117,19 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
                     return (
                         <div className="access-nodes-item" key={node.publicKey}>
                             <input id={node.publicKey} type="checkbox" checked={isChecked} onChange={onChecked} />
-                            <label htmlFor={node.publicKey}>
-                                {node.peeringURL} <br />
-                                {node.publicKey}
-                            </label>
+                            <div
+                                className={`${isChecked ? "checked" : ""} access-nodes-item-box`}
+                                onClick={onChecked}
+                                onKeyDown={onChecked}
+                                role="button"
+                                tabIndex={0}
+                            >
+                                <Tile
+                                    displayHealth={node.isTrusted}
+                                    primaryText={node.publicKey}
+                                    secondaryText={`(${node.name}) ${node.peeringURL}`}
+                                />
+                            </div>
                         </div>
                     );
                 })}

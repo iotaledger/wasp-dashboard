@@ -8,28 +8,27 @@
 
   .access-nodes-item {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     width: 100%;
-    margin-bottom: 16px;
 
     &:hover {
       color: var(--text-color-secondary);
     }
 
     input {
-      margin-top: 2px;
-      margin-right: 6px;
-      cursor: pointer;
-
-      @include phone-down {
-        margin-top: 4px;
-      }
+      display: none;
     }
 
-    label {
+    .access-nodes-item-box {
       flex: 1;
       word-break: break-all;
       cursor: pointer;
+
+      &.checked {
+        .tile-content {
+          background: #108cff33;
+        }
+      }
     }
   }
 }
