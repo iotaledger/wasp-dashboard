@@ -1,16 +1,15 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import React, { SetStateAction, useMemo, useState } from "react";
-import zxcvbn from "zxcvbn";
 import {
     ServiceFactory,
     WaspClientService,
     ChangeUserPasswordRequest,
     User,
-    MIN_PASSWORD_STRENGTH,
     ChangeUserPermissionsRequest,
     UserPermission,
     AuthService,
 } from "../../../lib";
+import { validatePassword } from "../../../lib/utils";
 import { Dialog, PasswordInput, Toggle } from "../../components";
 
 enum PasswordValidation {
@@ -46,9 +45,9 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
                 return PasswordValidation.Empty;
             }
             if (confirmNewPassword === newPassword) {
-                const passwordStrength = zxcvbn(newPassword);
-                if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
-                    setError(passwordStrength.feedback.suggestions.join(" "));
+                const result = validatePassword(newPassword);
+                if (typeof result === "string") {
+                    setError(result);
                     return PasswordValidation.Error;
                 }
                 setError(null);
