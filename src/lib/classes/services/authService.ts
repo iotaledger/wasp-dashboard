@@ -1,10 +1,13 @@
-import moment, { Moment } from "moment";
+import dayjs, { Dayjs } from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
 import { Environment } from "../../../environment";
 import { ServiceFactory, WaspClientService } from "../../classes";
 import { decodeJWTPayload, getTokenExpiry } from "../../utils/jwt";
 import { FetchHelper } from "../helpers";
 import { EventAggregator } from "./eventAggregator";
 import { LocalStorageService } from "./localStorageService";
+
+dayjs.extend(isBetween);
 
 /**
  * Service to handle authentication.
@@ -117,11 +120,11 @@ export class AuthService {
             this.clearTokenExpiryInterval();
             const jwt = this._storageService.load<string>("dashboard-jwt");
             const expiryTimestamp = getTokenExpiry(jwt);
-            const expiryDate = moment(expiryTimestamp);
-            const refreshTokenDate = moment(expiryDate).subtract(1, "minutes");
+            const expiryDate = dayjs(expiryTimestamp);
+            const refreshTokenDate = dayjs(expiryDate).subtract(1, "minutes");
 
             this._tokenExpiryTimer = setInterval(async () => {
-                const now = moment();
+                const now = dayjs();
                 const isExpired = this.isJWTExpired(now, expiryDate);
                 const isValid = await this.isJWTValid();
                 if (isExpired || !isValid) {
@@ -141,7 +144,7 @@ export class AuthService {
      * @param expiryDate Expiry date
      * @returns If the JWT has expired or not
      */
-    public isJWTExpired(now: Moment, expiryDate: Moment): boolean {
+    public isJWTExpired(now: Dayjs, expiryDate: Dayjs): boolean {
         return now.isAfter(expiryDate);
     }
 

@@ -5,7 +5,7 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable unicorn/no-nested-ternary */
 import { Converter } from "@iota/util.js";
-import moment from "moment";
+import dayjs from "dayjs";
 import React from "react";
 import { Link } from "react-router-dom";
 import "./KeyValueRow.scss";
@@ -19,8 +19,7 @@ interface KeyValueRowProps {
 }
 
 const KeyValueRow: React.FC<KeyValueRowProps> = ({ keyText, value, showUTFStrings }) => {
-    const formattedDate = moment(value as string | Date, "\"YYYY-MM-DDTHH:mm:ss.000Z\"", true);
-    const isValid = formattedDate.isValid();
+    const isValid = dayjs(value as string | Date).isValid();
     const valueWithoutQuotes = value?.toString().replace(/"/g, "");
 
     return (
