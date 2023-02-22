@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
-import zxcvbn from "zxcvbn";
-import { ServiceFactory, AddUserRequest, WaspClientService, MIN_PASSWORD_STRENGTH, UserPermission } from "../../../lib";
+import { ServiceFactory, AddUserRequest, WaspClientService, UserPermission } from "../../../lib";
+import { validatePassword } from "../../../lib/utils";
 import { PasswordInput, Dialog, Toggle } from "../../components";
 
 const FORM_INITIAL_VALUES: IFormValues = {
@@ -71,9 +71,9 @@ const AddUserDialog: React.FC<IAddUserDialog> = ({ onClose, onSuccess, onError }
         if (formValues?.username?.length <= 0 || formValues?.password?.length <= 0) {
             return false;
         }
-        const passwordStrength = zxcvbn(formValues?.password);
-        if (passwordStrength.score < MIN_PASSWORD_STRENGTH) {
-            setError(passwordStrength.feedback.suggestions.join(" "));
+        const result = validatePassword(formValues.password);
+        if (typeof result === "string") {
+            setError(result);
             return false;
         }
         setError(null);
