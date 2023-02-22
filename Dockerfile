@@ -14,8 +14,8 @@ FROM nginx:1.23-alpine
 ENV WASP_API_URL http://localhost:9090
 ENV L1_API_URL http://localhost:14265
 
-COPY --from=build /app/build /usr/share/nginx/html/
-COPY --from=build /app/docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=dist /app/build /usr/share/nginx/html/
+COPY --from=dist /app/docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Default port exposure
 EXPOSE 80
