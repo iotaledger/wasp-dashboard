@@ -26,12 +26,9 @@
     },
     "scripts": {
         "start": "vite",
-        "start-bee": "cross-env PORT=9090 VITE_REACT_APP_BRAND_ID=bee vite",
         "lint": "eslint src --ext .tsx,.ts",
         "sass-lint": "stylelint ./src/**/*.scss --custom-syntax postcss-scss",
-        "build-internal": "vite build",
-        "build": "cross-env VITE_REACT_APP_BRAND_ID=wasp run-s lint sass-lint build-internal",
-        "build-bee": "cross-env VITE_REACT_APP_BRAND_ID=bee run-s lint sass-lint build-internal",
+        "build": "run-s lint sass-lint vite build",
         "prepare": "husky install",
         "format": "prettier --write \"./**/*.{tsx,ts,css}\" && eslint src --fix --ext .tsx,.ts && stylelint ./src/**/*.scss --fix --custom-syntax postcss-scss"
     },
@@ -51,7 +48,6 @@
         "@typescript-eslint/parser": "^5.46.1",
         "@vitejs/plugin-react": "^3.1.0",
         "buffer": "^6.0.3",
-        "cross-env": "^7.0.3",
         "eslint": "^8.29.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-import": "^2.26.0",

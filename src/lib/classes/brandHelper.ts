@@ -1,30 +1,21 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+import WaspBranding from "../../assets/wasp/brand.json";
 import { IBrandConfiguration } from "../interfaces";
 
 export class BrandHelper {
     /**
-     * The brand id from the environment.
-     */
-    private static readonly _brandId?: string = import.meta.env.VITE_REACT_APP_BRAND_ID;
-
-    /**
      * The brand configuration.
      */
-    private static _brandConfiguration: IBrandConfiguration;
+    private static readonly _brandConfiguration: IBrandConfiguration = WaspBranding;
 
     /**
      * Initialize the branding.
      * @returns The brand configuration.
      */
-    public static async initialize(): Promise<IBrandConfiguration | undefined> {
-        if (BrandHelper._brandId) {
-            BrandHelper._brandConfiguration = await import(`../../assets/${BrandHelper._brandId}/brand.json`);
-            document.title = `${BrandHelper._brandConfiguration.name} Dashboard`;
-
-            return BrandHelper._brandConfiguration;
-        }
-        return undefined;
+    public static async initialize(): Promise<IBrandConfiguration> {
+        document.title = `${BrandHelper._brandConfiguration.name} Dashboard`;
+        return BrandHelper._brandConfiguration;
     }
 
     /**
@@ -41,7 +32,7 @@ export class BrandHelper {
      * @returns The navigation panel logo.
      */
     public static async getLogoNavigation(theme: string): Promise<string> {
-        const logo = await import(`../../assets/${BrandHelper._brandId}/themes/${theme}/logo-navigation.svg`);
+        const logo = await import(`../../assets/wasp/themes/${theme}/logo-navigation.svg`);
         return logo.default;
     }
 
@@ -51,7 +42,7 @@ export class BrandHelper {
      * @returns The banner panel logo.
      */
     public static async getBanner(theme: string): Promise<string> {
-        const banner = await import(`../../assets/${BrandHelper._brandId}/themes/${theme}/banner.svg`);
+        const banner = await import(`../../assets/wasp/themes/${theme}/banner.svg`);
         return banner.default;
     }
 }

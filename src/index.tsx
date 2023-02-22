@@ -30,13 +30,9 @@ initServices()
         const container = document.querySelector("#root")!;
         const root = createRoot(container);
         root.render(
-            brandConfiguration ? (
-                <BrowserRouter basename={import.meta.env.BASE_URL}>
-                    <App />
-                </BrowserRouter>
-            ) : (
-                <div>REACT_APP_BRAND_ID is not set</div>
-            ),
+            <BrowserRouter basename={import.meta.env.BASE_URL}>
+                <App />
+            </BrowserRouter>,
         );
     })
     .catch(err => console.error(err));
