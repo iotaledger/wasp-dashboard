@@ -1,21 +1,16 @@
 import PasswordValidator from "password-validator";
 
 const schema = new PasswordValidator();
-schema
-    .is()
-    .min(6)
-    .is()
-    .max(100)
-    .has()
-    .lowercase()
-    .has()
-    .digits(1)
-    .has()
-    .not()
-    .spaces()
-    .is()
-    .not()
-    .oneOf(["Passw0rd", "Password123"]);
+schema.is().min(6)
+.is()
+.max(100)
+.has()
+.lowercase()
+.has()
+.digits(1)
+.is()
+.not()
+.oneOf(["Passw0rd", "Password123"]);
 
 /**
  * Validate the given password
