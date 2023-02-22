@@ -15,6 +15,7 @@
         "@iota/util.js": "1.8.6",
         "classnames": "^2.3.2",
         "dayjs": "^1.11.7",
+        "npm-run-all": "^4.1.5",
         "password-validator": "^5.3.0",
         "react": "^18.2.0",
         "react-content-loader": "^6.2.0",
@@ -28,7 +29,8 @@
         "start": "vite",
         "lint": "eslint src --ext .tsx,.ts",
         "sass-lint": "stylelint ./src/**/*.scss --custom-syntax postcss-scss",
-        "build": "run-s lint sass-lint vite build",
+        "build-internal": "vite build",
+        "build": "run-s lint sass-lint build-internal",
         "prepare": "husky install",
         "format": "prettier --write \"./**/*.{tsx,ts,css}\" && eslint src --fix --ext .tsx,.ts && stylelint ./src/**/*.scss --fix --custom-syntax postcss-scss"
     },
