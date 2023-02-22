@@ -6,7 +6,7 @@ export class BrandHelper {
     /**
      * The brand id from the environment.
      */
-    private static readonly _brandId?: string = process.env.REACT_APP_BRAND_ID;
+    private static readonly _brandId?: string = import.meta.env.VITE_REACT_APP_BRAND_ID;
 
     /**
      * The brand configuration.
@@ -17,9 +17,9 @@ export class BrandHelper {
      * Initialize the branding.
      * @returns The brand configuration.
      */
-    public static initialize(): IBrandConfiguration | undefined {
+    public static async initialize(): Promise<IBrandConfiguration | undefined> {
         if (BrandHelper._brandId) {
-            BrandHelper._brandConfiguration = require(`../../assets/${BrandHelper._brandId}/brand.json`);
+            BrandHelper._brandConfiguration = await import(`../../assets/${BrandHelper._brandId}/brand.json`);
             document.title = `${BrandHelper._brandConfiguration.name} Dashboard`;
 
             return BrandHelper._brandConfiguration;

@@ -20,6 +20,9 @@ import {
 } from "./lib/classes";
 import { ChainsService } from "./lib/classes/services/chainsService";
 import { IBrandConfiguration } from "./lib/interfaces";
+import "@fontsource/dm-sans/400.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/700.css";
 
 initServices()
     .then(brandConfiguration => {
@@ -28,7 +31,7 @@ initServices()
         const root = createRoot(container);
         root.render(
             brandConfiguration ? (
-                <BrowserRouter basename={process.env.PUBLIC_URL}>
+                <BrowserRouter basename={import.meta.env.BASE_URL}>
                     <App />
                 </BrowserRouter>
             ) : (
