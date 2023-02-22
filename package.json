@@ -28,7 +28,7 @@
         "lint": "eslint src --ext .tsx,.ts",
         "sass-lint": "stylelint ./src/**/*.scss --custom-syntax postcss-scss",
         "build-internal": "craco build",
-        "build": "cross-env REACT_APP_BRAND_ID=wasp run-s lint sass-lint  build-internal",
+        "build": "cross-env REACT_APP_BRAND_ID=wasp run-s lint sass-lint build-internal",
         "build-bee": "cross-env REACT_APP_BRAND_ID=bee run-s lint sass-lint build-internal",
         "test": "craco test",
         "eject": "react-scripts eject",
