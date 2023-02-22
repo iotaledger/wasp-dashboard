@@ -13,7 +13,7 @@ export class BrandHelper {
      * Initialize the branding.
      * @returns The brand configuration.
      */
-    public static async initialize(): Promise<IBrandConfiguration> {
+    public static initialize(): IBrandConfiguration {
         document.title = `${BrandHelper._brandConfiguration.name} Dashboard`;
         return BrandHelper._brandConfiguration;
     }
