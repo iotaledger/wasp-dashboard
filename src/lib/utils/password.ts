@@ -22,4 +22,5 @@ export function validatePassword(password: string): string | undefined {
     if (results.length > 0) {
         return results.map(r => r.message).join(" ");
     }
+    return undefined;
 }
