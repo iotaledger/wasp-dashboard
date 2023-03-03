@@ -10,15 +10,38 @@ import {
     WaspClientService,
     ServiceFactory,
     BlockInfoResponse,
+    Ratio32,
 } from "../../lib";
 import { ChainsService } from "../../lib/classes/services/chainsService";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
 import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile, ChainNavbar, LoadingTable, LoadingInfo } from "../components";
+import OrderedTable from "../components/OrderedTable";
 
 interface ConsensusMetric {
     status: string;
     triggerTime: Date;
+}
+
+type StringFormatter = (value: never) => string;
+
+const INFO_STRING_FORMATTERS: Record<string, StringFormatter> = {
+    gasPerToken: (value: Ratio32) => `${value.a}:${value.b}`,
+    evmGasRatio: (value: Ratio32) => `${value.a}:${value.b}`,
+};
+
+/**
+ * applies custom formatting for certain info values.
+ * @param key the objects key
+ * @param value the objects value
+ * @returns Either string or any other value
+ */
+function formatInfoValue(key: string, value: never): unknown {
+    if (INFO_STRING_FORMATTERS[key] !== undefined) {
+        return INFO_STRING_FORMATTERS[key](value);
+    }
+
+    return value;
 }
 
 /**
@@ -27,13 +50,22 @@ interface ConsensusMetric {
  * @param chainInfo Input chain info
  * @returns An array of key-value pairs
  */
-function transformInfoIntoArray(chainInfo: ChainInfoResponse) {
-    return Object.entries(chainInfo).flatMap(([key, val]: [string, string | Record<string, string>]) => {
-        if (typeof val === "object") {
-            return Object.entries(val);
+function transformInfoIntoArray(chainInfo: ChainInfoResponse): [string, unknown][] {
+    const entries = Object.entries(chainInfo);
+    const flatMap = entries.flatMap(([k, v]) => {
+        if (typeof v === "object") {
+            const nestedEntries = Object.entries(v as never);
+
+            return nestedEntries.map(([nestedKey, nestedValue]) => [
+                nestedKey,
+                formatInfoValue(nestedKey, nestedValue as never),
+            ]);
         }
-        return [[key, val]];
+
+        return [[k, formatInfoValue(k, v as never)]];
     });
+
+    return flatMap as [string, unknown][];
 }
 
 /**
@@ -171,7 +203,7 @@ function Chain() {
                                     {chainProperties
                                         .filter(([key]) => !INFO_SKIP_NAMES.has(key))
                                         .map(([key, val]) => (
-                                            <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val.toString()} />
+                                            <KeyValueRow key={key} keyText={INFO_NAMES[key]} value={val as never} />
                                         ))}
                                 </React.Fragment>
                             ) : (
@@ -200,7 +232,13 @@ function Chain() {
                         {chainBlobs === null ? (
                             <LoadingInfo />
                         ) : (chainBlobs?.length > 0 ? (
-                            <Table tHead={["Hash", "Size (bytes)"]} tBody={chainBlobs as unknown as ITableRow[]} />
+                            <OrderedTable
+                                tHead={[
+                                    { key: "hash", title: "Hash" },
+                                    { key: "size", title: "Size (bytes)" },
+                                ]}
+                                tBody={chainBlobs as unknown as ITableRow[]}
+                            />
                         ) : (
                             <Tile primaryText="No blobs found." />
                         ))}
@@ -222,9 +260,12 @@ function Chain() {
                                 </InfoBox>
                             ))}
                             {chainAssets?.nativeTokens && chainAssets?.nativeTokens?.length > 0 && (
-                                <Table
-                                    tHead={["ID", "Amount"]}
-                                    tBody={chainAssets.nativeTokens as unknown as ITableRow[]}
+                                <OrderedTable
+                                    tHead={[
+                                        { key: "id", title: "ID" },
+                                        { key: "amount", title: "Amount" },
+                                    ]}
+                                    tBody={chainAssets.nativeTokens.map(x => x) as unknown as ITableRow[]}
                                 />
                             )}
                         </InfoBox>
@@ -278,14 +319,16 @@ function Chain() {
     );
 }
 
-const INFO_SKIP_NAMES = new Set(["evmChainId"]);
+const INFO_SKIP_NAMES = new Set<string>(["evmChainId"]);
 
 const INFO_NAMES: Record<string, string> = {
     chainID: "Chain ID",
     chainOwnerId: "Owner ID",
     description: "Description",
+    evmChainId: "EVM Chain ID",
     gasFeeTokenId: "Gas fee token ID",
-    gasPerToken: "Gas per token",
+    gasPerToken: "WASM gas ratio",
+    evmGasRatio: "EVM gas ratio",
     validatorFeeShare: "Validator fee share",
     isActive: "Active",
     maxBlobSize: "Max blob size",
