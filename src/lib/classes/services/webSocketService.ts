@@ -1,6 +1,5 @@
 /* eslint-disable unicorn/prefer-add-event-listener, unicorn/prefer-node-protocol*/
 import { Converter, RandomHelper } from "@iota/util.js";
-import { Buffer } from "buffer";
 import { ServiceFactory, AuthService } from "../../../lib/classes";
 import { WebSocketTopic } from "../../../lib/enums/webSocket";
 import { IWebSocketMessage } from "../../../lib/interfaces";
@@ -221,7 +220,7 @@ export class WebSocketService {
                 view[1] = topicId;
 
                 if (jwt && requiresAuth) {
-                    view.set(Buffer.from(jwt), 2);
+                    view.set(Converter.utf8ToBytes(jwt), 2);
                 }
 
                 if (this._webSocket) {
