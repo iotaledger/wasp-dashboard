@@ -13,7 +13,7 @@ import {
     ServiceFactory,
     AuthService,
     EventAggregator,
-    MetricsService,
+    //  MetricsService,
     SettingsService,
     BrandHelper,
 } from "../lib/classes";
@@ -33,7 +33,7 @@ function App() {
 
     const settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
     const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
-    const metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
+    // const metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
     // const lastStatus = 0;
 
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(Boolean(authService.isLoggedIn()));
@@ -46,9 +46,9 @@ function App() {
     const alias = "";
     const lmi = "";
     const cmi = "";
-    let statusSubscription: string | undefined;
-    let syncStatusSubscription: string | undefined;
-    let publicNodeStatusSubscription: string | undefined;
+    // let statusSubscription: string | undefined;
+    // let syncStatusSubscription: string | undefined;
+    // let publicNodeStatusSubscription: string | undefined;
     let statusTimer: NodeJS.Timeout | undefined;
 
     /**
@@ -151,6 +151,7 @@ function App() {
             EventAggregator.unsubscribe("auth-state", "app");
             EventAggregator.unsubscribe("theme", "app");
 
+            /*
             if (statusSubscription) {
                 metricsService.unsubscribe(statusSubscription);
                 statusSubscription = undefined;
@@ -165,6 +166,7 @@ function App() {
                 metricsService.unsubscribe(publicNodeStatusSubscription);
                 publicNodeStatusSubscription = undefined;
             }
+            */
 
             if (statusTimer !== undefined) {
                 clearInterval(statusTimer);
