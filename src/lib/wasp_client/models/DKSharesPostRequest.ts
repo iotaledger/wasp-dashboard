@@ -20,7 +20,7 @@ import { exists, mapValues } from '../runtime';
  */
 export interface DKSharesPostRequest {
     /**
-     * 
+     * Names or hex encoded public keys of trusted peers to run DKG on.
      * @type {Array<string>}
      * @memberof DKSharesPostRequest
      */

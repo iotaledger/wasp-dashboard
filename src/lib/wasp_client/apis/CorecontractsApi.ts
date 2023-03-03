@@ -15,6 +15,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  AccountFoundriesResponse,
   AccountListResponse,
   AccountNFTsResponse,
   AccountNonceResponse,
@@ -39,6 +40,8 @@ import type {
   ValidationError,
 } from '../models';
 import {
+    AccountFoundriesResponseFromJSON,
+    AccountFoundriesResponseToJSON,
     AccountListResponseFromJSON,
     AccountListResponseToJSON,
     AccountNFTsResponseFromJSON,
@@ -86,6 +89,11 @@ import {
 } from '../models';
 
 export interface AccountsGetAccountBalanceRequest {
+    chainID: string;
+    agentID: string;
+}
+
+export interface AccountsGetAccountFoundriesRequest {
     chainID: string;
     agentID: string;
 }
@@ -236,10 +244,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/accounts/account/{agentID}/balance`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"agentID"}}`, encodeURIComponent(String(requestParameters.agentID))),
             method: 'GET',
@@ -259,6 +263,40 @@ export class CorecontractsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get all foundries owned by an account
+     */
+    async accountsGetAccountFoundriesRaw(requestParameters: AccountsGetAccountFoundriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AccountFoundriesResponse>> {
+        if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling accountsGetAccountFoundries.');
+        }
+
+        if (requestParameters.agentID === null || requestParameters.agentID === undefined) {
+            throw new runtime.RequiredError('agentID','Required parameter requestParameters.agentID was null or undefined when calling accountsGetAccountFoundries.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/chains/{chainID}/core/accounts/account/{agentID}/foundries`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"agentID"}}`, encodeURIComponent(String(requestParameters.agentID))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AccountFoundriesResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Get all foundries owned by an account
+     */
+    async accountsGetAccountFoundries(requestParameters: AccountsGetAccountFoundriesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AccountFoundriesResponse> {
+        const response = await this.accountsGetAccountFoundriesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get all NFT ids belonging to an account
      */
     async accountsGetAccountNFTIDsRaw(requestParameters: AccountsGetAccountNFTIDsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AccountNFTsResponse>> {
@@ -273,10 +311,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/accounts/account/{agentID}/nfts`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"agentID"}}`, encodeURIComponent(String(requestParameters.agentID))),
@@ -312,10 +346,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/accounts/account/{agentID}/nonce`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"agentID"}}`, encodeURIComponent(String(requestParameters.agentID))),
             method: 'GET',
@@ -345,10 +375,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/accounts`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
@@ -384,10 +410,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/accounts/foundry_output/{serialNumber}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"serialNumber"}}`, encodeURIComponent(String(requestParameters.serialNumber))),
             method: 'GET',
@@ -422,12 +444,8 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
-            path: `/chains/{chainID}/core/accounts/nftdata`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"nftID"}}`, encodeURIComponent(String(requestParameters.nftID))),
+            path: `/chains/{chainID}/core/accounts/nftdata/{nftID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"nftID"}}`, encodeURIComponent(String(requestParameters.nftID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -455,10 +473,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/accounts/token_registry`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
@@ -490,10 +504,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/accounts/total_assets`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'GET',
@@ -523,10 +533,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/blobs`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
@@ -561,10 +567,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/blobs/{blobHash}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"blobHash"}}`, encodeURIComponent(String(requestParameters.blobHash))),
@@ -604,10 +606,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/blobs/{blobHash}/data/{fieldKey}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"blobHash"}}`, encodeURIComponent(String(requestParameters.blobHash))).replace(`{${"fieldKey"}}`, encodeURIComponent(String(requestParameters.fieldKey))),
             method: 'GET',
@@ -642,10 +640,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/blocks/{blockIndex}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"blockIndex"}}`, encodeURIComponent(String(requestParameters.blockIndex))),
             method: 'GET',
@@ -675,10 +669,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/controladdresses`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
@@ -714,10 +704,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/events/block/{blockIndex}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"blockIndex"}}`, encodeURIComponent(String(requestParameters.blockIndex))),
             method: 'GET',
@@ -752,10 +738,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/events/contract/{contractHname}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"contractHname"}}`, encodeURIComponent(String(requestParameters.contractHname))),
             method: 'GET',
@@ -785,10 +767,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/events/block/latest`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
@@ -824,10 +802,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/events/request/{requestID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
             method: 'GET',
@@ -857,10 +831,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/blocks/latest`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
@@ -896,10 +866,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/blocks/{blockIndex}/requestids`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"blockIndex"}}`, encodeURIComponent(String(requestParameters.blockIndex))),
             method: 'GET',
@@ -929,10 +895,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/blocks/latest/requestids`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
@@ -968,10 +930,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/requests/{requestID}/is_processed`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
             method: 'GET',
@@ -1005,10 +963,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/requests/{requestID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
@@ -1044,10 +998,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/blocks/{blockIndex}/receipts`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"blockIndex"}}`, encodeURIComponent(String(requestParameters.blockIndex))),
             method: 'GET',
@@ -1077,10 +1027,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/blocklog/blocks/latest/receipts`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
@@ -1120,10 +1066,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/errors/{contractHname}/message/{errorID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"contractHname"}}`, encodeURIComponent(String(requestParameters.contractHname))).replace(`{${"errorID"}}`, encodeURIComponent(String(requestParameters.errorID))),
             method: 'GET',
@@ -1154,10 +1096,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/governance/allowedstatecontrollers`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
@@ -1191,10 +1129,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/core/governance/chaininfo`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'GET',
@@ -1226,10 +1160,6 @@ export class CorecontractsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/core/governance/chainowner`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),

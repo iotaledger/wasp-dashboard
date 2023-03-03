@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Ratio32 } from './Ratio32';
+import {
+    Ratio32FromJSON,
+    Ratio32FromJSONTyped,
+    Ratio32ToJSON,
+} from './Ratio32';
+
 /**
  * 
  * @export
@@ -20,17 +27,17 @@ import { exists, mapValues } from '../runtime';
  */
 export interface GasFeePolicy {
     /**
-     * The gas fee token id. Empty if base token.
-     * @type {string}
+     * 
+     * @type {Ratio32}
      * @memberof GasFeePolicy
      */
-    gasFeeTokenId: string;
+    evmGasRatio: Ratio32;
     /**
-     * The amount of gas per token. (uint64 as string)
-     * @type {string}
+     * 
+     * @type {Ratio32}
      * @memberof GasFeePolicy
      */
-    gasPerToken: string;
+    gasPerToken: Ratio32;
     /**
      * The validator fee share.
      * @type {number}
@@ -44,7 +51,7 @@ export interface GasFeePolicy {
  */
 export function instanceOfGasFeePolicy(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "gasFeeTokenId" in value;
+    isInstance = isInstance && "evmGasRatio" in value;
     isInstance = isInstance && "gasPerToken" in value;
     isInstance = isInstance && "validatorFeeShare" in value;
 
@@ -61,8 +68,8 @@ export function GasFeePolicyFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'gasFeeTokenId': json['gasFeeTokenId'],
-        'gasPerToken': json['gasPerToken'],
+        'evmGasRatio': Ratio32FromJSON(json['evmGasRatio']),
+        'gasPerToken': Ratio32FromJSON(json['gasPerToken']),
         'validatorFeeShare': json['validatorFeeShare'],
     };
 }
@@ -76,8 +83,8 @@ export function GasFeePolicyToJSON(value?: GasFeePolicy | null): any {
     }
     return {
         
-        'gasFeeTokenId': value.gasFeeTokenId,
-        'gasPerToken': value.gasPerToken,
+        'evmGasRatio': Ratio32ToJSON(value.evmGasRatio),
+        'gasPerToken': Ratio32ToJSON(value.gasPerToken),
         'validatorFeeShare': value.validatorFeeShare,
     };
 }
