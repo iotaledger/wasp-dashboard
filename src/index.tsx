@@ -19,30 +19,27 @@ import {
     BrandHelper,
 } from "./lib/classes";
 import { ChainsService } from "./lib/classes/services/chainsService";
-import { IBrandConfiguration } from "./lib/interfaces";
+import "@fontsource/dm-sans/400.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/700.css";
 
 initServices()
-    .then(brandConfiguration => {
+    .then(() => {
         /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
         const container = document.querySelector("#root")!;
         const root = createRoot(container);
         root.render(
-            brandConfiguration ? (
-                <BrowserRouter basename={process.env.PUBLIC_URL}>
-                    <App />
-                </BrowserRouter>
-            ) : (
-                <div>REACT_APP_BRAND_ID is not set</div>
-            ),
+            <BrowserRouter basename={import.meta.env.BASE_URL}>
+                <App />
+            </BrowserRouter>,
         );
     })
     .catch(err => console.error(err));
 
 /**
  * Initialise the services.
- * @returns The brand configuration.
  */
-async function initServices(): Promise<IBrandConfiguration | undefined> {
+async function initServices() {
     ServiceFactory.register(LocalStorageService.ServiceName, () => new LocalStorageService());
     ServiceFactory.register(WaspClientService.ServiceName, () => new WaspClientService());
 
@@ -85,5 +82,5 @@ async function initServices(): Promise<IBrandConfiguration | undefined> {
 
     settingsService.initialize();
 
-    return BrandHelper.initialize();
+    BrandHelper.initialize();
 }

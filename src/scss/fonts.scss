@@ -1,11 +1,7 @@
-/* stylelint-disable annotation-no-unknown */
-@use "./fonts/dm-sans" as *;
-@use "./fonts/ibm-plex-mono" as *;
-
 $font-sans: "DM Sans", sans-serif;
 $font-mono: "IBM Plex Mono", monospace;
 
-$rem-base-font: 16px !default;
+$rem-base-font: 16px;
 
 @mixin font-size($font-size, $line-height: 0) {
     font-size: $font-size;

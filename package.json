@@ -2,7 +2,7 @@
     "name": "wasp-dashboard",
     "description": "Dashboard for Nodes",
     "version": "2.0.0-rc.1",
-    "author": "Martyn Janes <martyn.janes@iota.org>",
+    "author": "IOTA Foundation <info@iota.org>",
     "repository": {
         "type": "git",
         "url": "https://github.com/iotaledger/wasp-dashboard"
@@ -10,7 +10,9 @@
     "homepage": "/wasp/dashboard",
     "license": "MIT",
     "dependencies": {
-        "@iota/iota.js": "^2.0.0-rc.1",
+        "@fontsource/dm-sans": "^4.5.9",
+        "@fontsource/ibm-plex-mono": "^4.5.13",
+        "@iota/util.js": "1.8.6",
         "classnames": "^2.3.2",
         "dayjs": "^1.11.7",
         "password-validator": "^5.3.0",
@@ -23,15 +25,11 @@
         "node": ">=14 <=18.15.1"
     },
     "scripts": {
-        "start": "cross-env PORT=9090 REACT_APP_BRAND_ID=wasp craco start",
-        "start-bee": "cross-env PORT=9090 REACT_APP_BRAND_ID=bee craco start",
+        "start": "vite",
         "lint": "eslint src --ext .tsx,.ts",
         "sass-lint": "stylelint ./src/**/*.scss --custom-syntax postcss-scss",
-        "build-internal": "craco build",
-        "build": "cross-env REACT_APP_BRAND_ID=wasp run-s lint sass-lint build-internal",
-        "build-bee": "cross-env REACT_APP_BRAND_ID=bee run-s lint sass-lint build-internal",
-        "test": "craco test",
-        "eject": "react-scripts eject",
+        "build-internal": "vite build",
+        "build": "run-s lint sass-lint build-internal",
         "prepare": "husky install",
         "format": "prettier --write \"./**/*.{tsx,ts,css}\" && eslint src --fix --ext .tsx,.ts && stylelint ./src/**/*.scss --fix --custom-syntax postcss-scss"
     },
@@ -42,7 +40,6 @@
         "not op_mini all"
     ],
     "devDependencies": {
-        "@craco/craco": "^7.0.0",
         "@types/classnames": "^2.3.1",
         "@types/node": "^18.11.15",
         "@types/react": "^18.0.26",
@@ -50,8 +47,7 @@
         "@types/react-router-dom": "^5.3.3",
         "@typescript-eslint/eslint-plugin": "^5.46.1",
         "@typescript-eslint/parser": "^5.46.1",
-        "buffer": "^6.0.3",
-        "cross-env": "^7.0.3",
+        "@vitejs/plugin-react": "^3.1.0",
         "eslint": "^8.29.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-import": "^2.26.0",
@@ -63,7 +59,6 @@
         "npm-run-all": "^4.1.5",
         "postcss-scss": "^4.0.6",
         "prettier": "^2.8.1",
-        "react-scripts": "^5.0.1",
         "sass": "^1.56.2",
         "stylelint": "^14.16.0",
         "stylelint-config-prettier": "^9.0.4",
@@ -73,7 +68,9 @@
         "stylelint-config-sass-guidelines": "^9.0.1",
         "stylelint-config-standard": "^29.0.0",
         "stylelint-scss": "^4.3.0",
-        "typescript": "^4.9.4"
+        "typescript": "^4.9.4",
+        "vite": "^4.1.4",
+        "vite-plugin-svgr": "^2.4.0"
     },
     "overrides": {
         "@svgr/webpack": "^6.3.1"
