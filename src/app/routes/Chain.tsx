@@ -46,6 +46,10 @@ const INFO_STRING_FORMATTERS: Record<string, StringFormatter> = {
  * @returns Either string or any other value
  */
 function formatInfoValue(key: string, value: never): unknown {
+    if (!value) {
+        return "-";
+    }
+
     if (INFO_STRING_FORMATTERS[key] !== undefined) {
         return INFO_STRING_FORMATTERS[key](value);
     }
