@@ -48,16 +48,9 @@ async function initServices() {
     await authService.initialize();
     ServiceFactory.register(AuthService.ServiceName, () => authService);
 
-    // const webSocketService = new WebSocketService();
-    // ServiceFactory.register(WebSocketService.ServiceName, () => webSocketService);
-
     const nodeConfigService = new NodeConfigService();
     await nodeConfigService.initialize();
     ServiceFactory.register(NodeConfigService.ServiceName, () => nodeConfigService);
-
-    // const metricsService = new MetricsService();
-    // ServiceFactory.register(MetricsService.ServiceName, () => metricsService);
-    // metricsService.initialize();
 
     const peersService = new PeersService();
     ServiceFactory.register(PeersService.ServiceName, () => peersService);
@@ -67,14 +60,9 @@ async function initServices() {
     ServiceFactory.register(ChainsService.ServiceName, () => chainsService);
     chainsService.initialize();
 
-    EventAggregator.subscribe("auth-state", "init", async () => {
-        // webSocketService.resubscribe();
-    });
-
     EventAggregator.subscribe("online", "init", async o => {
         if (o) {
             await nodeConfigService.initialize();
-            //    webSocketService.resubscribe();
         }
     });
 

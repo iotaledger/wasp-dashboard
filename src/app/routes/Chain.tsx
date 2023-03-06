@@ -15,8 +15,17 @@ import {
 import { ChainsService } from "../../lib/classes/services/chainsService";
 import { ITableRow } from "../../lib/interfaces";
 import { formatDate, formatEVMJSONRPCUrl } from "../../lib/utils";
-import { Breadcrumb, InfoBox, KeyValueRow, Table, Tile, ChainNavbar, LoadingTable, LoadingInfo } from "../components";
-import OrderedTable from "../components/OrderedTable";
+import {
+    Breadcrumb,
+    InfoBox,
+    KeyValueRow,
+    Table,
+    Tile,
+    ChainNavbar,
+    LoadingTable,
+    LoadingInfo,
+    OrderedTable,
+} from "../components";
 
 interface ConsensusMetric {
     status: string;
