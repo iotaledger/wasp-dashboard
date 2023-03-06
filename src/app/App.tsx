@@ -9,14 +9,7 @@ import { ReactComponent as PadlockUnlockedIcon } from "../assets/padlock-unlocke
 import { ReactComponent as PadlockIcon } from "../assets/padlock.svg";
 import { ReactComponent as SunIcon } from "../assets/sun.svg";
 import { ReactComponent as UsersIcon } from "../assets/users.svg";
-import {
-    ServiceFactory,
-    AuthService,
-    EventAggregator,
-    MetricsService,
-    SettingsService,
-    BrandHelper,
-} from "../lib/classes";
+import { ServiceFactory, AuthService, EventAggregator, SettingsService, BrandHelper } from "../lib/classes";
 import { isNodeOnline } from "../lib/utils";
 import { Breakpoint, DesktopMenu, MobileMenu, Spinner } from "./components";
 import RoutesSwitcher from "./routes/RoutesSwitcher";
@@ -33,22 +26,16 @@ function App() {
 
     const settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
     const authService = ServiceFactory.get<AuthService>(AuthService.ServiceName);
-    const metricsService = ServiceFactory.get<MetricsService>(MetricsService.ServiceName);
-    // const lastStatus = 0;
 
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(Boolean(authService.isLoggedIn()));
     const [theme, setTheme] = useState<string>(settingsService.getTheme());
     const [online, setOnline] = useState<boolean>(false);
     const [isNodeLoading, setIsNodeLoading] = useState<boolean>(false);
-    // const [syncHealth, setSyncHealth] = useState<boolean>(false);
-    // const [nodeHealth, setNodeHealth] = useState<boolean>(false);
 
     const alias = "";
     const lmi = "";
     const cmi = "";
-    let statusSubscription: string | undefined;
-    let syncStatusSubscription: string | undefined;
-    let publicNodeStatusSubscription: string | undefined;
+
     let statusTimer: NodeJS.Timeout | undefined;
 
     /**
@@ -91,80 +78,11 @@ function App() {
             setTheme(_theme);
         });
 
-        /*
-        statusSubscription = metricsService.subscribe<INodeStatus>(
-            WebSocketTopic.NodeStatus,
-            data => {
-                if (data && data.nodeAlias !== alias) {
-                    alias = data.nodeAlias;
-                    updateTitle();
-                }
-            },
-        );
-
-        syncStatusSubscription = metricsService.subscribe<ISyncStatus>(
-            WebSocketTopic.SyncStatus,
-            data => {
-                if (data) {
-                    const lmi = data.lmi ? data.lmi.toString() : "";
-                    const smi = data.cmi ? data.cmi.toString() : "";
-
-                    if (lmi !== lmi || smi !== cmi) {
-                        cmi = smi;
-                        lmi = lmi;
-                        updateTitle();
-                    }
-                }
-            },
-        );
-
-        publicNodeStatusSubscription = metricsService.subscribe<IPublicNodeStatus>(
-            WebSocketTopic.PublicNodeStatus,
-            data => {
-                if (data) {
-                    lastStatus = Date.now();
-                    if (!online) {
-                        EventAggregator.publish("online", true);
-                        setOnline(true);
-                    }
-                    if (data.isHealthy !== nodeHealth) {
-                        setNodeHealth(data.isHealthy);
-                    }
-                    if (data.isSynced !== syncHealth) {
-                        setSyncHealth(data.isSynced);
-                    }
-                }
-            },
-        );
-
-        statusTimer = setInterval(() => {
-            if (Date.now() - lastStatus > 30000 && online) {
-                setOnline(false);
-                EventAggregator.publish("online", false);
-            }
-        }, 1000);
-        */
-
         updateTitle();
 
         return () => {
             EventAggregator.unsubscribe("auth-state", "app");
             EventAggregator.unsubscribe("theme", "app");
-
-            if (statusSubscription) {
-                metricsService.unsubscribe(statusSubscription);
-                statusSubscription = undefined;
-            }
-
-            if (syncStatusSubscription) {
-                metricsService.unsubscribe(syncStatusSubscription);
-                syncStatusSubscription = undefined;
-            }
-
-            if (publicNodeStatusSubscription) {
-                metricsService.unsubscribe(publicNodeStatusSubscription);
-                publicNodeStatusSubscription = undefined;
-            }
 
             if (statusTimer !== undefined) {
                 clearInterval(statusTimer);

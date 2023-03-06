@@ -70,10 +70,6 @@ export class RequestsApi extends runtime.BaseAPI {
 
         headerParameters['Content-Type'] = 'application/json';
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/requests/callview`,
             method: 'POST',
@@ -110,10 +106,6 @@ export class RequestsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/receipts/{requestID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
             method: 'GET',
@@ -145,10 +137,6 @@ export class RequestsApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/requests/offledger`,
@@ -187,10 +175,6 @@ export class RequestsApi extends runtime.BaseAPI {
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/requests/{requestID}/wait`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),

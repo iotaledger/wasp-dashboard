@@ -5,7 +5,7 @@ import { WaspClientService, ServiceFactory } from "../../lib";
 import { Breadcrumb, Tile, ChainNavbar, Paginator, LoadingTile, InfoBox } from "../components";
 
 const SEARCH_ACCOUNT_PLACEHOLDER = "Account address";
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 20;
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 function searchFilter(item: string, search: string) {

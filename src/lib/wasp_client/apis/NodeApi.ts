@@ -50,7 +50,7 @@ import {
 } from '../models';
 
 export interface DistrustPeerRequest {
-    peeringTrustRequest: PeeringTrustRequest;
+    peer: string;
 }
 
 export interface GenerateDKSRequest {
@@ -78,26 +78,23 @@ export class NodeApi extends runtime.BaseAPI {
      * Distrust a peering node
      */
     async distrustPeerRaw(requestParameters: DistrustPeerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.peeringTrustRequest === null || requestParameters.peeringTrustRequest === undefined) {
-            throw new runtime.RequiredError('peeringTrustRequest','Required parameter requestParameters.peeringTrustRequest was null or undefined when calling distrustPeer.');
+        if (requestParameters.peer === null || requestParameters.peer === undefined) {
+            throw new runtime.RequiredError('peer','Required parameter requestParameters.peer was null or undefined when calling distrustPeer.');
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        headerParameters['Content-Type'] = 'application/json';
-
         if (this.configuration && this.configuration.apiKey) {
             headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
         }
 
         const response = await this.request({
-            path: `/node/peers/trusted`,
+            path: `/node/peers/trusted/{peer}`.replace(`{${"peer"}}`, encodeURIComponent(String(requestParameters.peer))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
-            body: PeeringTrustRequestToJSON(requestParameters.peeringTrustRequest),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -242,6 +239,31 @@ export class NodeApi extends runtime.BaseAPI {
     }
 
     /**
+     * Returns 200 if the node health is healthy.
+     */
+    async getHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/health`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns 200 if the node health is healthy.
+     */
+    async getHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getHealthRaw(initOverrides);
+    }
+
+    /**
      * Returns private information about this node.
      */
     async getInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InfoResponse>> {
@@ -338,10 +360,6 @@ export class NodeApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/node/version`,

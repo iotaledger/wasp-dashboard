@@ -1,12 +1,14 @@
 apis/AuthApi.ts
 apis/ChainsApi.ts
 apis/CorecontractsApi.ts
+apis/DefaultApi.ts
 apis/MetricsApi.ts
 apis/NodeApi.ts
 apis/RequestsApi.ts
 apis/UsersApi.ts
 apis/index.ts
 index.ts
+models/AccountFoundriesResponse.ts
 models/AccountListResponse.ts
 models/AccountNFTsResponse.ts
 models/AccountNonceResponse.ts
@@ -74,6 +76,7 @@ models/PeeringNodeStatusResponse.ts
 models/PeeringTrustRequest.ts
 models/ProtocolParameters.ts
 models/PublisherStateTransactionItem.ts
+models/Ratio32.ts
 models/ReceiptError.ts
 models/ReceiptResponse.ts
 models/RentStructure.ts

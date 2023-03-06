@@ -49,11 +49,11 @@ export interface AddAccessNodeRequest {
     peer: string;
 }
 
-export interface AttachToWebsocketRequest {
+export interface ChainsChainIDEvmGetRequest {
     chainID: string;
 }
 
-export interface ChainsChainIDEvmGetRequest {
+export interface ChainsChainIDEvmWsGetRequest {
     chainID: string;
 }
 
@@ -169,22 +169,19 @@ export class ChainsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Ethereum JSON-RPC
      */
-    async attachToWebsocketRaw(requestParameters: AttachToWebsocketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async chainsChainIDEvmGetRaw(requestParameters: ChainsChainIDEvmGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
-            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling attachToWebsocket.');
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling chainsChainIDEvmGet.');
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
-            path: `/chains/{chainID}/ws`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/chains/{chainID}/evm`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -194,41 +191,39 @@ export class ChainsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Ethereum JSON-RPC
      */
-    async attachToWebsocket(requestParameters: AttachToWebsocketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.attachToWebsocketRaw(requestParameters, initOverrides);
+    async chainsChainIDEvmGet(requestParameters: ChainsChainIDEvmGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.chainsChainIDEvmGetRaw(requestParameters, initOverrides);
     }
 
     /**
+     * Ethereum JSON-RPC (Websocket transport)
      */
-    async chainsChainIDEvmGetRaw(requestParameters: ChainsChainIDEvmGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+    async chainsChainIDEvmWsGetRaw(requestParameters: ChainsChainIDEvmWsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
-            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling chainsChainIDEvmGet.');
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling chainsChainIDEvmWsGet.');
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
-            path: `/chains/{chainID}/evm`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/chains/{chainID}/evm/ws`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.TextApiResponse(response) as any;
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
+     * Ethereum JSON-RPC (Websocket transport)
      */
-    async chainsChainIDEvmGet(requestParameters: ChainsChainIDEvmGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.chainsChainIDEvmGetRaw(requestParameters, initOverrides);
-        return await response.value();
+    async chainsChainIDEvmWsGet(requestParameters: ChainsChainIDEvmWsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.chainsChainIDEvmWsGetRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -412,10 +407,6 @@ export class ChainsApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
         const response = await this.request({
             path: `/chains/{chainID}/evm/tx/{txHash}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"txHash"}}`, encodeURIComponent(String(requestParameters.txHash))),
             method: 'GET',
@@ -449,10 +440,6 @@ export class ChainsApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
 
         const response = await this.request({
             path: `/chains/{chainID}/state/{stateKey}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"stateKey"}}`, encodeURIComponent(String(requestParameters.stateKey))),
