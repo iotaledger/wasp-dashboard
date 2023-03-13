@@ -36,7 +36,7 @@ export class FetchHelper {
         }
 
         try {
-            const res = await fetch(`${baseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`, {
+            const res = await fetch(`${baseUrl?.replace(/\/$/, "")}/${path.replace(/^\//, "")}`, {
                 method,
                 headers,
                 body: payload ? JSON.stringify(payload) : undefined,
@@ -98,7 +98,7 @@ export class FetchHelper {
         }
 
         try {
-            const res = await fetch(`${baseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`, {
+            const res = await fetch(`${baseUrl?.replace(/\/$/, "")}/${path.replace(/^\//, "")}`, {
                 method,
                 headers,
                 body: payload ? JSON.stringify(payload) : undefined,
