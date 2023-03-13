@@ -5,7 +5,7 @@ import React from "react";
 import { CopiableValue } from ".";
 import { Environment } from "../../environment";
 import { ITableRow } from "../../lib/interfaces";
-import { addTrailingSlash, truncateText } from "../../lib/utils";
+import { generateExplorerLink, truncateText } from "../../lib/utils";
 import "./OrderedTable.scss";
 
 interface TableHead {
@@ -18,17 +18,7 @@ interface OrderedTableProps {
     classNames?: string;
     tHead: TableHead[];
 }
-/**
- *
- * @param url
- * @returns
- */
-function generateExplorerLink(url: string): string {
-    const baseUrl = Environment.ExplorerUrl ?? "";
-    const trailingSlash = url.endsWith("/") ? "" : "/";
-    const explorerLink = `${addTrailingSlash(baseUrl)}search/${url}${trailingSlash}`;
-    return explorerLink;
-}
+
 // eslint-disable-next-line jsdoc/require-jsdoc
 function OrderedTable({ tBody, classNames, tHead }: OrderedTableProps) {
     return (

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import dayjs from "dayjs";
+import { Environment } from "../../environment";
 
 /**
  *
@@ -28,4 +29,17 @@ export function addTrailingSlash(url: string) {
         return url;
     }
     return `${url}/`;
+}
+
+/**
+ *
+ * @param url
+ * @returns
+ */
+export function generateExplorerLink(url: string): string {
+    const baseUrl = Environment.ExplorerUrl ?? "";
+    const trailingSlash = url.endsWith("/") ? "" : "/";
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const explorerLink = `${addTrailingSlash(baseUrl)}search/${url}${trailingSlash}`;
+    return explorerLink;
 }
