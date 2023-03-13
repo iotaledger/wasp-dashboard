@@ -1,42 +1,27 @@
 /* eslint-disable jsdoc/require-param */
 /* eslint-disable jsdoc/require-returns */
+import classNames from "classnames";
 import React, { useRef } from "react";
 import "./Tooltip.scss";
 
 interface TooltipProps {
-    tooltipContent: string | React.ReactNode;
     children: React.ReactNode;
+    message: string;
+    show: boolean;
 }
 
 /**
- * Component to display a tooltip on hover.
+ * Component to display a tooltip on click.
  */
-const Tooltip: React.FC<TooltipProps> = ({ children, tooltipContent }) => {
-    const tooltip = useRef<HTMLDivElement>(null);
-
-    const onEnter = () => {
-        if (tooltip?.current) {
-            tooltip.current.style.visibility = "visible";
-            tooltip.current.style.opacity = "1";
-        }
-    };
-
-    const onLeave = () => {
-        if (tooltip?.current) {
-            tooltip.current.style.visibility = "hidden";
-            tooltip.current.style.opacity = "0";
-        }
-    };
+const Tooltip: React.FC<TooltipProps> = ({ children, message, show }) => {
+    const parentRef = useRef<HTMLDivElement>(null);
 
     return (
-        <div className="tooltip">
-            <div className="tooltip-wrapper" ref={tooltip}>
-                <div className="tooltip-arrow" />
-                {tooltipContent}
+        <div className="tooltip" ref={parentRef}>
+            <div className={classNames("tooltip-wrapper", { show })}>
+                {show && <div className="tooltip-message">{message}</div>}
             </div>
-            <div className="tooltip-children" onMouseEnter={onEnter} onMouseLeave={onLeave}>
-                {children}
-            </div>
+            {children}
         </div>
     );
 };

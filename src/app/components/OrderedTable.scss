@@ -18,4 +18,13 @@
   table {
     width: 100%;
   }
+
+  .explorer-link {
+    color: var(--text-primary);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--accent-primary);
+    }
+  }
 }

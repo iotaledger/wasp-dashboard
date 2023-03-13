@@ -1,0 +1,27 @@
+.copiable-value-wrapper {
+  display: flex;
+  align-items: center;
+
+  .copiable-value-button {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    svg {
+      path {
+        stroke: var(--tooltip-background);
+      }
+    }
+
+    &:hover {
+      svg {
+        path {
+          stroke: var(--accent-primary);
+        }
+      }
+    }
+  }
+}
