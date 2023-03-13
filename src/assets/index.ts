@@ -9,3 +9,4 @@ export { ReactComponent as HealthGood } from "./health-good.svg";
 export { ReactComponent as HealthWarning } from "./health-warning.svg";
 export { ReactComponent as MenuIcon } from "./menu.svg";
 export { ReactComponent as AddIcon } from "./plus.svg";
+export { ReactComponent as CopyIcon } from "./copy.svg";

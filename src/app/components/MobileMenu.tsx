@@ -31,7 +31,7 @@ function MobileMenu(props: MenuProps) {
         EventAggregator.subscribe("theme", "navmenu", async (theme: string) => {
             setLogoSrc(await BrandHelper.getLogoNavigation(theme));
         });
-        console.log("isOpen:", isOpen);
+
         return () => {
             EventAggregator.unsubscribe("theme", "navmenu");
         };

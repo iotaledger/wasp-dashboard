@@ -2,7 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React from "react";
+import { CopiableValue } from ".";
+import { Environment } from "../../environment";
 import { ITableRow } from "../../lib/interfaces";
+import { generateExplorerLink, truncateText } from "../../lib/utils";
 import "./OrderedTable.scss";
 
 interface TableHead {
@@ -44,6 +47,23 @@ function OrderedTable({ tBody, classNames, tHead }: OrderedTableProps) {
                                             ) : (
                                                 <input type="checkbox" disabled />
                                             )
+                                        ) : typeof row[head.key] === "string" && row[head.key]?.length > 18 ? (
+                                            <CopiableValue value={row[head.key] as string}>
+                                                {Environment.ExplorerUrl ? (
+                                                    <a
+                                                        href={generateExplorerLink(row[head.key] as string)}
+                                                        className="explorer-link"
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                    >
+                                                        {truncateText(row[head.key] as string)}
+                                                    </a>
+                                                ) : (
+                                                    <React.Fragment>
+                                                        {truncateText(row[head.key] as string)}
+                                                    </React.Fragment>
+                                                )}
+                                            </CopiableValue>
                                         ) : (
                                             row[head.key]
                                         )}

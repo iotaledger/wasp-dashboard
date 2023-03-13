@@ -3,67 +3,29 @@
 
 .tooltip {
     display: flex;
-    position: relative;
+    align-items: center;
 
     .tooltip-wrapper {
-        visibility: hidden;
-        position: absolute;
-        z-index: 1;
-        top: 100%;
-        right: 0;
-        width: 300px;
-        margin-top: 10px;
-        margin-left: 20px;
-        padding: 12px;
-        transition: all 0.1s;
-        border-radius: 0.25rem;
+        position: relative;
+        transition: opacity 0.2s ease-in-out;
         opacity: 0;
-        background: var(--tooltip-background);
-        color: var(--tooltip-text);
-        font-family: $font-sans;
-        text-align: center;
-        word-break: keep-all;
-        white-space: nowrap;
-        white-space: break-spaces;
 
-        .tooltip-arrow {
+        &.show {
+            opacity: 1;
+        }
+
+        .tooltip-message {
+            display: flex;
             position: absolute;
-            top: -6px;
-            right: 150px;
-            width: 12px;
-            height: 12px;
-            transform: rotate(45deg);
-            background: var(--tooltip-background);
-        }
-
-        @include desktop-down {
-            display: none;
-        }
-
-        @include tablet-down {
-            display: none;
-        }
-
-        @include phone-down {
-            display: none;
-        }
-    }
-
-    .tooltip-children {
-        font-weight: 600;
-        white-space: nowrap;
-        cursor: pointer;
-
-        @include desktop-down {
-            cursor: text;
-        }
-
-        @include tablet-down {
-            cursor: text;
-        }
-
-        @include phone-down {
-            cursor: text;
+            top: -12px;
+            left: 0;
+            padding: 4px;
+            transform: translateY(-100%) ;
+            border: 1px solid var(--tooltip-background);
+            border-radius: 4px;
+            background-color: var(--tooltip-background);
+            color: var(--tooltip-text);
+            font-size: 12px;
         }
     }
 }
