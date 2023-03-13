@@ -1,5 +1,7 @@
 FROM node:18-alpine as build
+
 WORKDIR /app
+
 COPY package*.json /app/
 RUN npm install
 
@@ -17,6 +19,7 @@ COPY --from=build /app/docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Default port exposure
 EXPOSE 80
+
 # Copy .env file and shell script to container
 WORKDIR /usr/share/nginx/html
 
