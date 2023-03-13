@@ -88,10 +88,10 @@ export class AuthService {
         const jwt = this._storageService.load<string>("dashboard-jwt");
         this._jwt = jwt;
 
-        const isAuthRequred = await this.getAuthRequired();
-        this._storageService.save<boolean>("dashboard-auth-required", isAuthRequred);
+        const isAuthRequired = await this.getAuthRequired().catch(() => false);
+        this._storageService.save<boolean>("dashboard-auth-required", isAuthRequired);
 
-        if (isAuthRequred) {
+        if (isAuthRequired) {
             if (await this.isJWTValid()) {
                 this.validateTokenPeriodically();
             } else {
