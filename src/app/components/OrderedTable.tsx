@@ -3,8 +3,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React, { useState } from "react";
 import { CopyIcon } from "../../assets";
+import { Environment } from "../../environment";
 import { ITableRow } from "../../lib/interfaces";
-import { copyToClipboard, truncateText } from "../../lib/utils";
+import { addTrailingSlash, copyToClipboard, truncateText } from "../../lib/utils";
 import "./OrderedTable.scss";
 import Tooltip from "./Tooltip";
 
@@ -56,7 +57,23 @@ function OrderedTable({ tBody, classNames, tHead }: OrderedTableProps) {
                                             )
                                         ) : typeof row[head.key] === "string" && row[head.key]?.length > 18 ? (
                                             <div className="truncate-item-wrapper">
-                                                {truncateText(row[head.key] as string)}
+                                                {Environment.ExplorerUrl ? (
+                                                    <a
+                                                        href={`${addTrailingSlash(Environment.ExplorerUrl)}search/${
+                                                            row[head.key]
+                                                        }`}
+                                                        className="explorer-link"
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                    >
+                                                        {truncateText(row[head.key] as string)}
+                                                    </a>
+                                                ) : (
+                                                    <React.Fragment>
+                                                        {truncateText(row[head.key] as string)}
+                                                    </React.Fragment>
+                                                )}
+
                                                 <Tooltip message="Copied" show={showCopiedTooltip}>
                                                     <button
                                                         className="tooltip-button"

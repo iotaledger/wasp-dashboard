@@ -23,7 +23,18 @@
     display: flex;
     align-items: center;
 
+    .explorer-link {
+      color: var(--text-primary);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--accent-primary);
+      }
+    }
+
     .tooltip-button {
+      display: flex;
+      align-items: center;
       margin-left: 10px;
       border: none;
       background-color: transparent;
