@@ -46,7 +46,7 @@ function OrderedTable({ tBody, classNames, tHead }: OrderedTableProps) {
                         tBody?.map((row: ITableRow, bodyIndex: number) => (
                             <tr key={bodyIndex}>
                                 {tHead?.map((head: TableHead, index: number) => (
-                                    <td key={index} className="blue">
+                                    <td key={index}>
                                         {head.key === "lastMessage" ? (
                                             <pre>
                                                 <code>{row[head.key]}</code>
