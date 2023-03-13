@@ -18,6 +18,7 @@ export { default as IconButton } from "./IconButton";
 export { default as Toggle } from "./Toggle";
 export { default as Paginator } from "./Paginator";
 export { default as OrderedTable } from "./OrderedTable";
+export { default as CopiableValue } from "./CopiableValue";
 
 export * from "./loading";
 export * from "./dialogs";

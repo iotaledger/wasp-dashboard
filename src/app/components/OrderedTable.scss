@@ -19,40 +19,12 @@
     width: 100%;
   }
 
-  .truncate-item-wrapper {
-    display: flex;
-    align-items: center;
+  .explorer-link {
+    color: var(--text-primary);
+    text-decoration: none;
 
-    .explorer-link {
-      color: var(--text-primary);
-      text-decoration: none;
-
-      &:hover {
-        color: var(--accent-primary);
-      }
-    }
-
-    .tooltip-button {
-      display: flex;
-      align-items: center;
-      margin-left: 10px;
-      border: none;
-      background-color: transparent;
-      cursor: pointer;
-
-      svg {
-        path {
-          stroke: var(--tooltip-background);
-        }
-      }
-
-      &:hover {
-        svg {
-          path {
-            stroke: var(--accent-primary);
-          }
-        }
-      }
+    &:hover {
+      color: var(--accent-primary);
     }
   }
 }
