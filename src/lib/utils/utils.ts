@@ -13,3 +13,7 @@ export function formatDate(date?: Date | null): string {
     }
     return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
 }
+
+export const copyToClipboard = async (content: string): Promise<void> => navigator?.clipboard?.writeText(content);
+
+export const truncateText = (text: string) => (text.length > 10 ? `${text.slice(0, 4)}...${text.slice(-4)}` : text);

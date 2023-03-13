@@ -18,4 +18,30 @@
   table {
     width: 100%;
   }
+
+  .truncate-item-wrapper {
+    display: flex;
+    align-items: center;
+
+    .tooltip-button {
+      margin-left: 10px;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+
+      svg {
+        path {
+          stroke: var(--tooltip-background);
+        }
+      }
+
+      &:hover {
+        svg {
+          path {
+            stroke: var(--accent-primary);
+          }
+        }
+      }
+    }
+  }
 }
