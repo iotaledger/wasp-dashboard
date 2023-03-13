@@ -36,11 +36,8 @@ export function addTrailingSlash(url: string) {
  * @param hash The hash to generate the explorer link for.
  * @returns The link to the explorer.
  */
-export function generateExplorerLink(hash: string): string | null {
+export function generateExplorerLink(hash: string): string {
     const baseUrl = Environment.ExplorerUrl;
-    if (!baseUrl) {
-        return null;
-    }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const explorerLink = `${addTrailingSlash(baseUrl)}search/${hash}`;
     return explorerLink;
