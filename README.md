@@ -55,7 +55,7 @@ The dashboard is hot-reload enabled.
 
 If you want to run an official prebuilt version of the dashboard using docker, run the following command:
 
-`docker run -p 127.0.0.1:5173:5173 -e WASP_API_URL="http://localhost:9090" iotaledger/wasp-dashboard`
+`docker run -p 127.0.0.1:8080:80 -e WASP_API_URL="http://localhost:9090" iotaledger/wasp-dashboard`
 
 The `WASP_API_URL` might need to be changed depending on your setup.
 
