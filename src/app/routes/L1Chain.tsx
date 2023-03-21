@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
     ServiceFactory,
-    ChainMetrics,
+    ChainMessageMetrics,
     WaspClientService,
     METRICS_NAMES,
     ITableRow,
@@ -35,7 +35,7 @@ function L1Chain() {
             .metrics()
             .getChainMetrics({ chainID })
             .then(metrics => {
-                const chainMetricsArray = Object.entries(metrics as ChainMetrics | null[])
+                const chainMetricsArray = Object.entries(metrics as ChainMessageMetrics | null[])
                     .filter(
                         ([, val]: [string, StandardMessage]) =>
                             val.timestamp !== undefined && val.messages !== undefined,

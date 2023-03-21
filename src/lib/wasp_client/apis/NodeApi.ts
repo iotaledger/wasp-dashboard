@@ -91,7 +91,7 @@ export class NodeApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/node/peers/trusted/{peer}`.replace(`{${"peer"}}`, encodeURIComponent(String(requestParameters.peer))),
+            path: `/v1/node/peers/trusted/{peer}`.replace(`{${"peer"}}`, encodeURIComponent(String(requestParameters.peer))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -126,7 +126,7 @@ export class NodeApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/node/dks`,
+            path: `/v1/node/dks`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -157,7 +157,7 @@ export class NodeApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/node/peers`,
+            path: `/v1/node/peers`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -187,7 +187,7 @@ export class NodeApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/node/config`,
+            path: `/v1/node/config`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -221,7 +221,7 @@ export class NodeApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/node/dks/{sharedAddress}`.replace(`{${"sharedAddress"}}`, encodeURIComponent(String(requestParameters.sharedAddress))),
+            path: `/v1/node/dks/{sharedAddress}`.replace(`{${"sharedAddress"}}`, encodeURIComponent(String(requestParameters.sharedAddress))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -247,7 +247,7 @@ export class NodeApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/health`,
+            path: `/v1/health`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -276,7 +276,7 @@ export class NodeApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/node/info`,
+            path: `/v1/node/info`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -306,7 +306,7 @@ export class NodeApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/node/peers/identity`,
+            path: `/v1/node/peers/identity`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -336,7 +336,7 @@ export class NodeApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/node/peers/trusted`,
+            path: `/v1/node/peers/trusted`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -362,7 +362,7 @@ export class NodeApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/node/version`,
+            path: `/v1/node/version`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -398,7 +398,7 @@ export class NodeApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/node/owner/certificate`,
+            path: `/v1/node/owner/certificate`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -429,7 +429,7 @@ export class NodeApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/node/shutdown`,
+            path: `/v1/node/shutdown`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -464,7 +464,7 @@ export class NodeApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/node/peers/trusted`,
+            path: `/v1/node/peers/trusted`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

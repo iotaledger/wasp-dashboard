@@ -8,7 +8,7 @@ export async function isNodeOnline(): Promise<boolean> {
         if (Environment.WaspApiUrl.startsWith("##WASP")) {
             return false;
         }
-        const res = await fetch(`${Environment.WaspApiUrl}/node/version`);
+        const res = await fetch(`${Environment.WaspApiUrl}/v1/node/version`);
         return res.status === 200;
     } catch {
         return false;

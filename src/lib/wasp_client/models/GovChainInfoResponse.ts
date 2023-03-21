@@ -13,12 +13,18 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { GasFeePolicy } from './GasFeePolicy';
+import type { FeePolicy } from './FeePolicy';
 import {
-    GasFeePolicyFromJSON,
-    GasFeePolicyFromJSONTyped,
-    GasFeePolicyToJSON,
-} from './GasFeePolicy';
+    FeePolicyFromJSON,
+    FeePolicyFromJSONTyped,
+    FeePolicyToJSON,
+} from './FeePolicy';
+import type { Limits } from './Limits';
+import {
+    LimitsFromJSON,
+    LimitsFromJSONTyped,
+    LimitsToJSON,
+} from './Limits';
 
 /**
  * 
@@ -39,35 +45,23 @@ export interface GovChainInfoResponse {
      */
     chainOwnerId: string;
     /**
-     * The description of the chain.
+     * (base64) Optional extra metadata that is appended to the L1 AliasOutput
      * @type {string}
      * @memberof GovChainInfoResponse
      */
-    description: string;
+    customMetadata?: string;
     /**
      * 
-     * @type {GasFeePolicy}
+     * @type {FeePolicy}
      * @memberof GovChainInfoResponse
      */
-    gasFeePolicy: GasFeePolicy;
+    gasFeePolicy: FeePolicy;
     /**
-     * The maximum contract blob size.
-     * @type {number}
+     * 
+     * @type {Limits}
      * @memberof GovChainInfoResponse
      */
-    maxBlobSize: number;
-    /**
-     * The maximum event size.
-     * @type {number}
-     * @memberof GovChainInfoResponse
-     */
-    maxEventSize: number;
-    /**
-     * The maximum amount of events per request.
-     * @type {number}
-     * @memberof GovChainInfoResponse
-     */
-    maxEventsPerReq: number;
+    gasLimits: Limits;
 }
 
 /**
@@ -77,11 +71,8 @@ export function instanceOfGovChainInfoResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "chainID" in value;
     isInstance = isInstance && "chainOwnerId" in value;
-    isInstance = isInstance && "description" in value;
     isInstance = isInstance && "gasFeePolicy" in value;
-    isInstance = isInstance && "maxBlobSize" in value;
-    isInstance = isInstance && "maxEventSize" in value;
-    isInstance = isInstance && "maxEventsPerReq" in value;
+    isInstance = isInstance && "gasLimits" in value;
 
     return isInstance;
 }
@@ -98,11 +89,9 @@ export function GovChainInfoResponseFromJSONTyped(json: any, ignoreDiscriminator
         
         'chainID': json['chainID'],
         'chainOwnerId': json['chainOwnerId'],
-        'description': json['description'],
-        'gasFeePolicy': GasFeePolicyFromJSON(json['gasFeePolicy']),
-        'maxBlobSize': json['maxBlobSize'],
-        'maxEventSize': json['maxEventSize'],
-        'maxEventsPerReq': json['maxEventsPerReq'],
+        'customMetadata': !exists(json, 'customMetadata') ? undefined : json['customMetadata'],
+        'gasFeePolicy': FeePolicyFromJSON(json['gasFeePolicy']),
+        'gasLimits': LimitsFromJSON(json['gasLimits']),
     };
 }
 
@@ -117,11 +106,9 @@ export function GovChainInfoResponseToJSON(value?: GovChainInfoResponse | null):
         
         'chainID': value.chainID,
         'chainOwnerId': value.chainOwnerId,
-        'description': value.description,
-        'gasFeePolicy': GasFeePolicyToJSON(value.gasFeePolicy),
-        'maxBlobSize': value.maxBlobSize,
-        'maxEventSize': value.maxEventSize,
-        'maxEventsPerReq': value.maxEventsPerReq,
+        'customMetadata': value.customMetadata,
+        'gasFeePolicy': FeePolicyToJSON(value.gasFeePolicy),
+        'gasLimits': LimitsToJSON(value.gasLimits),
     };
 }
 

@@ -21,12 +21,6 @@ import { exists, mapValues } from '../runtime';
 export interface BlockInfoResponse {
     /**
      * 
-     * @type {string}
-     * @memberof BlockInfoResponse
-     */
-    anchorTransactionId: string;
-    /**
-     * 
      * @type {number}
      * @memberof BlockInfoResponse
      */
@@ -45,12 +39,6 @@ export interface BlockInfoResponse {
     gasFeeCharged: string;
     /**
      * 
-     * @type {string}
-     * @memberof BlockInfoResponse
-     */
-    l1CommitmentHash: string;
-    /**
-     * 
      * @type {number}
      * @memberof BlockInfoResponse
      */
@@ -66,7 +54,7 @@ export interface BlockInfoResponse {
      * @type {string}
      * @memberof BlockInfoResponse
      */
-    previousL1CommitmentHash: string;
+    previousAliasOutput: string;
     /**
      * 
      * @type {Date}
@@ -74,29 +62,11 @@ export interface BlockInfoResponse {
      */
     timestamp: Date;
     /**
-     * The total L2 base tokens (uint64 as string)
-     * @type {string}
-     * @memberof BlockInfoResponse
-     */
-    totalBaseTokensInL2Accounts: string;
-    /**
      * 
      * @type {number}
      * @memberof BlockInfoResponse
      */
     totalRequests: number;
-    /**
-     * The total storage deposit (uint64 as string)
-     * @type {string}
-     * @memberof BlockInfoResponse
-     */
-    totalStorageDeposit: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BlockInfoResponse
-     */
-    transactionSubEssenceHash: string;
 }
 
 /**
@@ -104,19 +74,14 @@ export interface BlockInfoResponse {
  */
 export function instanceOfBlockInfoResponse(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "anchorTransactionId" in value;
     isInstance = isInstance && "blockIndex" in value;
     isInstance = isInstance && "gasBurned" in value;
     isInstance = isInstance && "gasFeeCharged" in value;
-    isInstance = isInstance && "l1CommitmentHash" in value;
     isInstance = isInstance && "numOffLedgerRequests" in value;
     isInstance = isInstance && "numSuccessfulRequests" in value;
-    isInstance = isInstance && "previousL1CommitmentHash" in value;
+    isInstance = isInstance && "previousAliasOutput" in value;
     isInstance = isInstance && "timestamp" in value;
-    isInstance = isInstance && "totalBaseTokensInL2Accounts" in value;
     isInstance = isInstance && "totalRequests" in value;
-    isInstance = isInstance && "totalStorageDeposit" in value;
-    isInstance = isInstance && "transactionSubEssenceHash" in value;
 
     return isInstance;
 }
@@ -131,19 +96,14 @@ export function BlockInfoResponseFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'anchorTransactionId': json['anchorTransactionId'],
         'blockIndex': json['blockIndex'],
         'gasBurned': json['gasBurned'],
         'gasFeeCharged': json['gasFeeCharged'],
-        'l1CommitmentHash': json['l1CommitmentHash'],
         'numOffLedgerRequests': json['numOffLedgerRequests'],
         'numSuccessfulRequests': json['numSuccessfulRequests'],
-        'previousL1CommitmentHash': json['previousL1CommitmentHash'],
+        'previousAliasOutput': json['previousAliasOutput'],
         'timestamp': (new Date(json['timestamp'])),
-        'totalBaseTokensInL2Accounts': json['totalBaseTokensInL2Accounts'],
         'totalRequests': json['totalRequests'],
-        'totalStorageDeposit': json['totalStorageDeposit'],
-        'transactionSubEssenceHash': json['transactionSubEssenceHash'],
     };
 }
 
@@ -156,19 +116,14 @@ export function BlockInfoResponseToJSON(value?: BlockInfoResponse | null): any {
     }
     return {
         
-        'anchorTransactionId': value.anchorTransactionId,
         'blockIndex': value.blockIndex,
         'gasBurned': value.gasBurned,
         'gasFeeCharged': value.gasFeeCharged,
-        'l1CommitmentHash': value.l1CommitmentHash,
         'numOffLedgerRequests': value.numOffLedgerRequests,
         'numSuccessfulRequests': value.numSuccessfulRequests,
-        'previousL1CommitmentHash': value.previousL1CommitmentHash,
+        'previousAliasOutput': value.previousAliasOutput,
         'timestamp': (value.timestamp.toISOString()),
-        'totalBaseTokensInL2Accounts': value.totalBaseTokensInL2Accounts,
         'totalRequests': value.totalRequests,
-        'totalStorageDeposit': value.totalStorageDeposit,
-        'transactionSubEssenceHash': value.transactionSubEssenceHash,
     };
 }
 

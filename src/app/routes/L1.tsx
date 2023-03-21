@@ -3,7 +3,7 @@ import {
     ServiceFactory,
     NodeConfigService,
     ChainInfoResponse,
-    ChainMetrics,
+    NodeMessageMetrics,
     L1Params,
     WaspClientService,
     METRICS_NAMES,
@@ -21,7 +21,7 @@ import { KeyValueRow, InfoBox, Table, Tile, LoadingTile, LoadingInfo, LoadingTab
 function L1() {
     const [l1Params, setL1Params] = useState<L1Params | null>(null);
     const [chains, setChains] = useState<ChainInfoResponse[] | null>(null);
-    const [l1Metrics, setl1Metrics] = useState<ChainMetrics | null | ITableRow[]>(null);
+    const [l1Metrics, setl1Metrics] = useState<NodeMessageMetrics | null | ITableRow[]>(null);
 
     React.useEffect(() => {
         const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
@@ -59,7 +59,7 @@ function L1() {
             .metrics()
             .getL1Metrics()
             .then(metrics => {
-                const chainMetricsArray = Object.entries(metrics as ChainMetrics | null[])
+                const chainMetricsArray = Object.entries(metrics as NodeMessageMetrics | null[])
                     .filter(
                         ([, val]: [string, StandardMessage]) =>
                             val.timestamp !== undefined && val.messages !== undefined,

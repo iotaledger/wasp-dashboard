@@ -29,7 +29,7 @@ models/BurnLog.ts
 models/BurnRecord.ts
 models/CallTarget.ts
 models/ChainInfoResponse.ts
-models/ChainMetrics.ts
+models/ChainMessageMetrics.ts
 models/ChainRecord.ts
 models/CommitteeInfoResponse.ts
 models/CommitteeNode.ts
@@ -43,8 +43,8 @@ models/DKSharesPostRequest.ts
 models/ErrorMessageFormatResponse.ts
 models/ErrorParameter.ts
 models/EventsResponse.ts
+models/FeePolicy.ts
 models/FoundryOutputResponse.ts
-models/GasFeePolicy.ts
 models/GovAllowedStateControllerAddressesResponse.ts
 models/GovChainInfoResponse.ts
 models/GovChainOwnerResponse.ts
@@ -57,6 +57,7 @@ models/InterfaceMetricItem.ts
 models/Item.ts
 models/JSONDict.ts
 models/L1Params.ts
+models/Limits.ts
 models/LoginRequest.ts
 models/LoginResponse.ts
 models/MilestoneInfo.ts
@@ -64,6 +65,7 @@ models/MilestoneMetricItem.ts
 models/NFTDataResponse.ts
 models/NativeToken.ts
 models/NativeTokenIDRegistryResponse.ts
+models/NodeMessageMetrics.ts
 models/NodeOwnerCertificateRequest.ts
 models/NodeOwnerCertificateResponse.ts
 models/OffLedgerRequest.ts
