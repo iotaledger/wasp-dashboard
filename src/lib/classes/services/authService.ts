@@ -63,17 +63,20 @@ export class AuthService {
     }
 
     public async getAuthRequired(): Promise<boolean> {
-        const response = await FetchHelper.json<
-            null,
-            {
-                scheme?: string;
+        try {
+            const response = await FetchHelper.json<
+                null,
+                {
+                    scheme?: string;
+                }
+            >(Environment.WaspApiUrl, "/auth/info", "get");
+
+            if (response.scheme === "jwt") {
+                return true;
             }
-        >(Environment.WaspApiUrl, "/auth/info", "get");
-
-        if (response.scheme === "jwt") {
-            return true;
+        } catch (error) {
+            console.error(error);
         }
-
         return false;
     }
 
@@ -88,10 +91,10 @@ export class AuthService {
         const jwt = this._storageService.load<string>("dashboard-jwt");
         this._jwt = jwt;
 
-        const isAuthRequred = await this.getAuthRequired();
-        this._storageService.save<boolean>("dashboard-auth-required", isAuthRequred);
+        const isAuthRequired = await this.getAuthRequired().catch(() => false);
+        this._storageService.save<boolean>("dashboard-auth-required", isAuthRequired);
 
-        if (isAuthRequred) {
+        if (isAuthRequired) {
             if (await this.isJWTValid()) {
                 this.validateTokenPeriodically();
             } else {

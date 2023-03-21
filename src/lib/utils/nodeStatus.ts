@@ -5,6 +5,9 @@ import { Environment } from "../../environment";
  */
 export async function isNodeOnline(): Promise<boolean> {
     try {
+        if (Environment.WaspApiUrl.startsWith("##WASP")) {
+            return false;
+        }
         const res = await fetch(`${Environment.WaspApiUrl}/node/version`);
         return res.status === 200;
     } catch {
