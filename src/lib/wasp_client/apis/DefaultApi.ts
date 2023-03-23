@@ -21,15 +21,40 @@ import * as runtime from '../runtime';
 export class DefaultApi extends runtime.BaseAPI {
 
     /**
-     * The websocket connection service
+     * Returns 200 if the node is healthy.
      */
-    async wsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async getHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/ws`,
+            path: `/health`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Returns 200 if the node is healthy.
+     */
+    async getHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.getHealthRaw(initOverrides);
+    }
+
+    /**
+     * The websocket connection service
+     */
+    async v1WsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/v1/ws`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -41,8 +66,8 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * The websocket connection service
      */
-    async wsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.wsGetRaw(initOverrides);
+    async v1WsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.v1WsGetRaw(initOverrides);
     }
 
 }
