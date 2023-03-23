@@ -33,7 +33,7 @@ function L1Chain() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .metrics()
-            .getChainMetrics({ chainID })
+            .getChainMessageMetrics({ chainID })
             .then(metrics => {
                 const chainMetricsArray = Object.entries(metrics as ChainMessageMetrics | null[])
                     .filter(

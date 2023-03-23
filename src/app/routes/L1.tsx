@@ -57,7 +57,7 @@ function L1() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .metrics()
-            .getL1Metrics()
+            .getNodeMessageMetrics()
             .then(metrics => {
                 const chainMetricsArray = Object.entries(metrics as NodeMessageMetrics | null[])
                     .filter(

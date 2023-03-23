@@ -1117,7 +1117,7 @@ export class CorecontractsApi extends runtime.BaseAPI {
     }
 
     /**
-     * If you are using the common API functions, you most likely rather want to use \'/chains/:chainID\' to get information about a chain.
+     * If you are using the common API functions, you most likely rather want to use \'/v1/chains/:chainID\' to get information about a chain.
      * Get the chain info
      */
     async governanceGetChainInfoRaw(requestParameters: GovernanceGetChainInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GovChainInfoResponse>> {
@@ -1140,7 +1140,7 @@ export class CorecontractsApi extends runtime.BaseAPI {
     }
 
     /**
-     * If you are using the common API functions, you most likely rather want to use \'/chains/:chainID\' to get information about a chain.
+     * If you are using the common API functions, you most likely rather want to use \'/v1/chains/:chainID\' to get information about a chain.
      * Get the chain info
      */
     async governanceGetChainInfo(requestParameters: GovernanceGetChainInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GovChainInfoResponse> {

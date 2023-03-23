@@ -239,31 +239,6 @@ export class NodeApi extends runtime.BaseAPI {
     }
 
     /**
-     * Returns 200 if the node health is healthy.
-     */
-    async getHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/v1/health`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Returns 200 if the node health is healthy.
-     */
-    async getHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.getHealthRaw(initOverrides);
-    }
-
-    /**
      * Returns private information about this node.
      */
     async getInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InfoResponse>> {

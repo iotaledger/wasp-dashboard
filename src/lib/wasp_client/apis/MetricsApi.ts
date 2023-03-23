@@ -34,7 +34,7 @@ import {
     ValidationErrorToJSON,
 } from '../models';
 
-export interface GetChainMetricsRequest {
+export interface GetChainMessageMetricsRequest {
     chainID: string;
 }
 
@@ -52,11 +52,11 @@ export interface GetChainWorkflowMetricsRequest {
 export class MetricsApi extends runtime.BaseAPI {
 
     /**
-     * Get chain specific metrics.
+     * Get chain specific message metrics.
      */
-    async getChainMetricsRaw(requestParameters: GetChainMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChainMessageMetrics>> {
+    async getChainMessageMetricsRaw(requestParameters: GetChainMessageMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChainMessageMetrics>> {
         if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
-            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling getChainMetrics.');
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling getChainMessageMetrics.');
         }
 
         const queryParameters: any = {};
@@ -68,7 +68,7 @@ export class MetricsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/v1/metrics/chain/{chainID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/v1/metrics/chain/{chainID}/messages`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -78,10 +78,10 @@ export class MetricsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get chain specific metrics.
+     * Get chain specific message metrics.
      */
-    async getChainMetrics(requestParameters: GetChainMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChainMessageMetrics> {
-        const response = await this.getChainMetricsRaw(requestParameters, initOverrides);
+    async getChainMessageMetrics(requestParameters: GetChainMessageMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChainMessageMetrics> {
+        const response = await this.getChainMessageMetricsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -154,9 +154,9 @@ export class MetricsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get accumulated metrics.
+     * Get accumulated message metrics.
      */
-    async getL1MetricsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NodeMessageMetrics>> {
+    async getNodeMessageMetricsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NodeMessageMetrics>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -166,7 +166,7 @@ export class MetricsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/v1/metrics/l1`,
+            path: `/v1/metrics/node/messages`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -176,10 +176,10 @@ export class MetricsApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get accumulated metrics.
+     * Get accumulated message metrics.
      */
-    async getL1Metrics(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NodeMessageMetrics> {
-        const response = await this.getL1MetricsRaw(initOverrides);
+    async getNodeMessageMetrics(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NodeMessageMetrics> {
+        const response = await this.getNodeMessageMetricsRaw(initOverrides);
         return await response.value();
     }
 
