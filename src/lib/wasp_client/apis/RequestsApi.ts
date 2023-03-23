@@ -71,7 +71,7 @@ export class RequestsApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/requests/callview`,
+            path: `/v1/requests/callview`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -107,7 +107,7 @@ export class RequestsApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/chains/{chainID}/receipts/{requestID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
+            path: `/v1/chains/{chainID}/receipts/{requestID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -139,7 +139,7 @@ export class RequestsApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/requests/offledger`,
+            path: `/v1/requests/offledger`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -177,7 +177,7 @@ export class RequestsApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/chains/{chainID}/requests/{requestID}/wait`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
+            path: `/v1/chains/{chainID}/requests/{requestID}/wait`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"requestID"}}`, encodeURIComponent(String(requestParameters.requestID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

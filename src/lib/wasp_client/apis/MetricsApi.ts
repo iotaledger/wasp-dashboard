@@ -15,18 +15,21 @@
 
 import * as runtime from '../runtime';
 import type {
-  ChainMetrics,
+  ChainMessageMetrics,
   ConsensusPipeMetrics,
   ConsensusWorkflowMetrics,
+  NodeMessageMetrics,
   ValidationError,
 } from '../models';
 import {
-    ChainMetricsFromJSON,
-    ChainMetricsToJSON,
+    ChainMessageMetricsFromJSON,
+    ChainMessageMetricsToJSON,
     ConsensusPipeMetricsFromJSON,
     ConsensusPipeMetricsToJSON,
     ConsensusWorkflowMetricsFromJSON,
     ConsensusWorkflowMetricsToJSON,
+    NodeMessageMetricsFromJSON,
+    NodeMessageMetricsToJSON,
     ValidationErrorFromJSON,
     ValidationErrorToJSON,
 } from '../models';
@@ -51,7 +54,7 @@ export class MetricsApi extends runtime.BaseAPI {
     /**
      * Get chain specific metrics.
      */
-    async getChainMetricsRaw(requestParameters: GetChainMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChainMetrics>> {
+    async getChainMetricsRaw(requestParameters: GetChainMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChainMessageMetrics>> {
         if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
             throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling getChainMetrics.');
         }
@@ -65,19 +68,19 @@ export class MetricsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/metrics/chain/{chainID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/v1/metrics/chain/{chainID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ChainMetricsFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ChainMessageMetricsFromJSON(jsonValue));
     }
 
     /**
      * Get chain specific metrics.
      */
-    async getChainMetrics(requestParameters: GetChainMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChainMetrics> {
+    async getChainMetrics(requestParameters: GetChainMetricsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChainMessageMetrics> {
         const response = await this.getChainMetricsRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -99,7 +102,7 @@ export class MetricsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/metrics/chain/{chainID}/pipe`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/v1/metrics/chain/{chainID}/pipe`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -133,7 +136,7 @@ export class MetricsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/metrics/chain/{chainID}/workflow`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/v1/metrics/chain/{chainID}/workflow`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -153,7 +156,7 @@ export class MetricsApi extends runtime.BaseAPI {
     /**
      * Get accumulated metrics.
      */
-    async getL1MetricsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChainMetrics>> {
+    async getL1MetricsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NodeMessageMetrics>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -163,19 +166,19 @@ export class MetricsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/metrics/l1`,
+            path: `/v1/metrics/l1`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ChainMetricsFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => NodeMessageMetricsFromJSON(jsonValue));
     }
 
     /**
      * Get accumulated metrics.
      */
-    async getL1Metrics(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChainMetrics> {
+    async getL1Metrics(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NodeMessageMetrics> {
         const response = await this.getL1MetricsRaw(initOverrides);
         return await response.value();
     }

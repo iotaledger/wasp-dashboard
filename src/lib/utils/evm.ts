@@ -6,5 +6,5 @@ import { Environment } from "../../environment";
  * @returns The formatted URL.
  */
 export function formatEVMJSONRPCUrl(chainID: string): string {
-    return `${Environment.WaspApiUrl}/chains/${chainID}/evm`;
+    return `${Environment.WaspApiUrl}/v1/chains/${chainID}/evm`;
 }

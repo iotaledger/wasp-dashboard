@@ -37,12 +37,6 @@ import {
     InterfaceMetricItemFromJSONTyped,
     InterfaceMetricItemToJSON,
 } from './InterfaceMetricItem';
-import type { MilestoneMetricItem } from './MilestoneMetricItem';
-import {
-    MilestoneMetricItemFromJSON,
-    MilestoneMetricItemFromJSONTyped,
-    MilestoneMetricItemToJSON,
-} from './MilestoneMetricItem';
 import type { OnLedgerRequestMetricItem } from './OnLedgerRequestMetricItem';
 import {
     OnLedgerRequestMetricItemFromJSON,
@@ -83,90 +77,77 @@ import {
 /**
  * 
  * @export
- * @interface ChainMetrics
+ * @interface ChainMessageMetrics
  */
-export interface ChainMetrics {
+export interface ChainMessageMetrics {
     /**
      * 
      * @type {AliasOutputMetricItem}
-     * @memberof ChainMetrics
+     * @memberof ChainMessageMetrics
      */
     inAliasOutput: AliasOutputMetricItem;
     /**
      * 
-     * @type {MilestoneMetricItem}
-     * @memberof ChainMetrics
-     */
-    inMilestone: MilestoneMetricItem;
-    /**
-     * 
      * @type {OnLedgerRequestMetricItem}
-     * @memberof ChainMetrics
+     * @memberof ChainMessageMetrics
      */
     inOnLedgerRequest: OnLedgerRequestMetricItem;
     /**
      * 
      * @type {InOutputMetricItem}
-     * @memberof ChainMetrics
+     * @memberof ChainMessageMetrics
      */
     inOutput: InOutputMetricItem;
     /**
      * 
      * @type {InStateOutputMetricItem}
-     * @memberof ChainMetrics
+     * @memberof ChainMessageMetrics
      */
     inStateOutput: InStateOutputMetricItem;
     /**
      * 
      * @type {TxInclusionStateMsgMetricItem}
-     * @memberof ChainMetrics
+     * @memberof ChainMessageMetrics
      */
     inTxInclusionState: TxInclusionStateMsgMetricItem;
     /**
      * 
      * @type {TransactionMetricItem}
-     * @memberof ChainMetrics
+     * @memberof ChainMessageMetrics
      */
     outPublishGovernanceTransaction: TransactionMetricItem;
     /**
      * 
      * @type {PublisherStateTransactionItem}
-     * @memberof ChainMetrics
+     * @memberof ChainMessageMetrics
      */
     outPublisherStateTransaction: PublisherStateTransactionItem;
     /**
      * 
      * @type {InterfaceMetricItem}
-     * @memberof ChainMetrics
+     * @memberof ChainMessageMetrics
      */
     outPullLatestOutput: InterfaceMetricItem;
     /**
      * 
      * @type {UTXOInputMetricItem}
-     * @memberof ChainMetrics
+     * @memberof ChainMessageMetrics
      */
     outPullOutputByID: UTXOInputMetricItem;
     /**
      * 
      * @type {TransactionIDMetricItem}
-     * @memberof ChainMetrics
+     * @memberof ChainMessageMetrics
      */
     outPullTxInclusionState: TransactionIDMetricItem;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ChainMetrics
-     */
-    registeredChainIDs: Array<string>;
 }
 
 /**
- * Check if a given object implements the ChainMetrics interface.
+ * Check if a given object implements the ChainMessageMetrics interface.
  */
-export function instanceOfChainMetrics(value: object): boolean {
+export function instanceOfChainMessageMetrics(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "inAliasOutput" in value;
-    isInstance = isInstance && "inMilestone" in value;
     isInstance = isInstance && "inOnLedgerRequest" in value;
     isInstance = isInstance && "inOutput" in value;
     isInstance = isInstance && "inStateOutput" in value;
@@ -176,23 +157,21 @@ export function instanceOfChainMetrics(value: object): boolean {
     isInstance = isInstance && "outPullLatestOutput" in value;
     isInstance = isInstance && "outPullOutputByID" in value;
     isInstance = isInstance && "outPullTxInclusionState" in value;
-    isInstance = isInstance && "registeredChainIDs" in value;
 
     return isInstance;
 }
 
-export function ChainMetricsFromJSON(json: any): ChainMetrics {
-    return ChainMetricsFromJSONTyped(json, false);
+export function ChainMessageMetricsFromJSON(json: any): ChainMessageMetrics {
+    return ChainMessageMetricsFromJSONTyped(json, false);
 }
 
-export function ChainMetricsFromJSONTyped(json: any, ignoreDiscriminator: boolean): ChainMetrics {
+export function ChainMessageMetricsFromJSONTyped(json: any, ignoreDiscriminator: boolean): ChainMessageMetrics {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'inAliasOutput': AliasOutputMetricItemFromJSON(json['inAliasOutput']),
-        'inMilestone': MilestoneMetricItemFromJSON(json['inMilestone']),
         'inOnLedgerRequest': OnLedgerRequestMetricItemFromJSON(json['inOnLedgerRequest']),
         'inOutput': InOutputMetricItemFromJSON(json['inOutput']),
         'inStateOutput': InStateOutputMetricItemFromJSON(json['inStateOutput']),
@@ -202,11 +181,10 @@ export function ChainMetricsFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'outPullLatestOutput': InterfaceMetricItemFromJSON(json['outPullLatestOutput']),
         'outPullOutputByID': UTXOInputMetricItemFromJSON(json['outPullOutputByID']),
         'outPullTxInclusionState': TransactionIDMetricItemFromJSON(json['outPullTxInclusionState']),
-        'registeredChainIDs': json['registeredChainIDs'],
     };
 }
 
-export function ChainMetricsToJSON(value?: ChainMetrics | null): any {
+export function ChainMessageMetricsToJSON(value?: ChainMessageMetrics | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -216,7 +194,6 @@ export function ChainMetricsToJSON(value?: ChainMetrics | null): any {
     return {
         
         'inAliasOutput': AliasOutputMetricItemToJSON(value.inAliasOutput),
-        'inMilestone': MilestoneMetricItemToJSON(value.inMilestone),
         'inOnLedgerRequest': OnLedgerRequestMetricItemToJSON(value.inOnLedgerRequest),
         'inOutput': InOutputMetricItemToJSON(value.inOutput),
         'inStateOutput': InStateOutputMetricItemToJSON(value.inStateOutput),
@@ -226,7 +203,6 @@ export function ChainMetricsToJSON(value?: ChainMetrics | null): any {
         'outPullLatestOutput': InterfaceMetricItemToJSON(value.outPullLatestOutput),
         'outPullOutputByID': UTXOInputMetricItemToJSON(value.outPullOutputByID),
         'outPullTxInclusionState': TransactionIDMetricItemToJSON(value.outPullTxInclusionState),
-        'registeredChainIDs': value.registeredChainIDs,
     };
 }
 

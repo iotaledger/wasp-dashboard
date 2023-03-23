@@ -68,7 +68,6 @@ function transformInfoIntoArray(chainInfo: ChainInfoResponse): [string, unknown]
     const flatMap = entries.flatMap(([k, v]) => {
         if (typeof v === "object") {
             const nestedEntries = Object.entries(v as never);
-
             return nestedEntries.map(([nestedKey, nestedValue]) => [
                 nestedKey,
                 formatInfoValue(nestedKey, nestedValue as never),
@@ -347,6 +346,11 @@ const INFO_NAMES: Record<string, string> = {
     maxBlobSize: "Max blob size",
     maxEventSize: "Max events size",
     maxEventsPerReq: "Max events per req",
+    maxGasExternalViewCall: "Max Gas (External view call)",
+    maxGasPerBlock: "Max Gas (Block)",
+    maxGasPerRequest: "Max Gas (Request)",
+    minGasPerRequest: "Min Gas (Request)",
+    customMetadata: "Custom metadata",
 };
 
 const METRICS_NAMES: Record<string, string> = {

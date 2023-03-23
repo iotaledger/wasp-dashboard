@@ -80,7 +80,7 @@ export class UsersApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/users`,
+            path: `/v1/users`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -120,7 +120,7 @@ export class UsersApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/users/{username}/password`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            path: `/v1/users/{username}/password`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -160,7 +160,7 @@ export class UsersApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/users/{username}/permissions`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            path: `/v1/users/{username}/permissions`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -194,7 +194,7 @@ export class UsersApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/users/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            path: `/v1/users/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -227,7 +227,7 @@ export class UsersApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/users/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
+            path: `/v1/users/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -257,7 +257,7 @@ export class UsersApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/users`,
+            path: `/v1/users`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

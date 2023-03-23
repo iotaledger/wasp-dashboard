@@ -13,12 +13,18 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { GasFeePolicy } from './GasFeePolicy';
+import type { FeePolicy } from './FeePolicy';
 import {
-    GasFeePolicyFromJSON,
-    GasFeePolicyFromJSONTyped,
-    GasFeePolicyToJSON,
-} from './GasFeePolicy';
+    FeePolicyFromJSON,
+    FeePolicyFromJSONTyped,
+    FeePolicyToJSON,
+} from './FeePolicy';
+import type { Limits } from './Limits';
+import {
+    LimitsFromJSON,
+    LimitsFromJSONTyped,
+    LimitsToJSON,
+} from './Limits';
 
 /**
  * 
@@ -39,11 +45,11 @@ export interface ChainInfoResponse {
      */
     chainOwnerId: string;
     /**
-     * The description of the chain.
+     * (base64) Optional extra metadata that is appended to the L1 AliasOutput
      * @type {string}
      * @memberof ChainInfoResponse
      */
-    description: string;
+    customMetadata?: string;
     /**
      * The EVM chain ID
      * @type {number}
@@ -52,34 +58,22 @@ export interface ChainInfoResponse {
     evmChainId: number;
     /**
      * 
-     * @type {GasFeePolicy}
+     * @type {FeePolicy}
      * @memberof ChainInfoResponse
      */
-    gasFeePolicy?: GasFeePolicy;
+    gasFeePolicy: FeePolicy;
+    /**
+     * 
+     * @type {Limits}
+     * @memberof ChainInfoResponse
+     */
+    gasLimits: Limits;
     /**
      * Whether or not the chain is active.
      * @type {boolean}
      * @memberof ChainInfoResponse
      */
     isActive: boolean;
-    /**
-     * The maximum contract blob size.
-     * @type {number}
-     * @memberof ChainInfoResponse
-     */
-    maxBlobSize: number;
-    /**
-     * The maximum event size.
-     * @type {number}
-     * @memberof ChainInfoResponse
-     */
-    maxEventSize: number;
-    /**
-     * The maximum amount of events per request.
-     * @type {number}
-     * @memberof ChainInfoResponse
-     */
-    maxEventsPerReq: number;
 }
 
 /**
@@ -89,12 +83,10 @@ export function instanceOfChainInfoResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "chainID" in value;
     isInstance = isInstance && "chainOwnerId" in value;
-    isInstance = isInstance && "description" in value;
     isInstance = isInstance && "evmChainId" in value;
+    isInstance = isInstance && "gasFeePolicy" in value;
+    isInstance = isInstance && "gasLimits" in value;
     isInstance = isInstance && "isActive" in value;
-    isInstance = isInstance && "maxBlobSize" in value;
-    isInstance = isInstance && "maxEventSize" in value;
-    isInstance = isInstance && "maxEventsPerReq" in value;
 
     return isInstance;
 }
@@ -111,13 +103,11 @@ export function ChainInfoResponseFromJSONTyped(json: any, ignoreDiscriminator: b
         
         'chainID': json['chainID'],
         'chainOwnerId': json['chainOwnerId'],
-        'description': json['description'],
+        'customMetadata': !exists(json, 'customMetadata') ? undefined : json['customMetadata'],
         'evmChainId': json['evmChainId'],
-        'gasFeePolicy': !exists(json, 'gasFeePolicy') ? undefined : GasFeePolicyFromJSON(json['gasFeePolicy']),
+        'gasFeePolicy': FeePolicyFromJSON(json['gasFeePolicy']),
+        'gasLimits': LimitsFromJSON(json['gasLimits']),
         'isActive': json['isActive'],
-        'maxBlobSize': json['maxBlobSize'],
-        'maxEventSize': json['maxEventSize'],
-        'maxEventsPerReq': json['maxEventsPerReq'],
     };
 }
 
@@ -132,13 +122,11 @@ export function ChainInfoResponseToJSON(value?: ChainInfoResponse | null): any {
         
         'chainID': value.chainID,
         'chainOwnerId': value.chainOwnerId,
-        'description': value.description,
+        'customMetadata': value.customMetadata,
         'evmChainId': value.evmChainId,
-        'gasFeePolicy': GasFeePolicyToJSON(value.gasFeePolicy),
+        'gasFeePolicy': FeePolicyToJSON(value.gasFeePolicy),
+        'gasLimits': LimitsToJSON(value.gasLimits),
         'isActive': value.isActive,
-        'maxBlobSize': value.maxBlobSize,
-        'maxEventSize': value.maxEventSize,
-        'maxEventsPerReq': value.maxEventsPerReq,
     };
 }
 

@@ -49,14 +49,6 @@ export interface AddAccessNodeRequest {
     peer: string;
 }
 
-export interface ChainsChainIDEvmGetRequest {
-    chainID: string;
-}
-
-export interface ChainsChainIDEvmWsGetRequest {
-    chainID: string;
-}
-
 export interface DeactivateChainRequest {
     chainID: string;
 }
@@ -93,6 +85,14 @@ export interface SetChainRecordRequest {
     chainRecord: ChainRecord;
 }
 
+export interface V1ChainsChainIDEvmGetRequest {
+    chainID: string;
+}
+
+export interface V1ChainsChainIDEvmWsGetRequest {
+    chainID: string;
+}
+
 /**
  * 
  */
@@ -115,7 +115,7 @@ export class ChainsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/chains/{chainID}/activate`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/v1/chains/{chainID}/activate`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -152,7 +152,7 @@ export class ChainsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/chains/{chainID}/access-node/{peer}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"peer"}}`, encodeURIComponent(String(requestParameters.peer))),
+            path: `/v1/chains/{chainID}/access-node/{peer}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"peer"}}`, encodeURIComponent(String(requestParameters.peer))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -166,64 +166,6 @@ export class ChainsApi extends runtime.BaseAPI {
      */
     async addAccessNode(requestParameters: AddAccessNodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.addAccessNodeRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Ethereum JSON-RPC
-     */
-    async chainsChainIDEvmGetRaw(requestParameters: ChainsChainIDEvmGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
-            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling chainsChainIDEvmGet.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/chains/{chainID}/evm`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Ethereum JSON-RPC
-     */
-    async chainsChainIDEvmGet(requestParameters: ChainsChainIDEvmGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.chainsChainIDEvmGetRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Ethereum JSON-RPC (Websocket transport)
-     */
-    async chainsChainIDEvmWsGetRaw(requestParameters: ChainsChainIDEvmWsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
-            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling chainsChainIDEvmWsGet.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/chains/{chainID}/evm/ws`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Ethereum JSON-RPC (Websocket transport)
-     */
-    async chainsChainIDEvmWsGet(requestParameters: ChainsChainIDEvmWsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.chainsChainIDEvmWsGetRaw(requestParameters, initOverrides);
     }
 
     /**
@@ -243,7 +185,7 @@ export class ChainsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/chains/{chainID}/deactivate`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/v1/chains/{chainID}/deactivate`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -276,7 +218,7 @@ export class ChainsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/chains/{chainID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/v1/chains/{chainID}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -306,7 +248,7 @@ export class ChainsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/chains`,
+            path: `/v1/chains`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -340,7 +282,7 @@ export class ChainsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/chains/{chainID}/committee`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/v1/chains/{chainID}/committee`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -374,7 +316,7 @@ export class ChainsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/chains/{chainID}/contracts`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/v1/chains/{chainID}/contracts`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -408,7 +350,7 @@ export class ChainsApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/chains/{chainID}/evm/tx/{txHash}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"txHash"}}`, encodeURIComponent(String(requestParameters.txHash))),
+            path: `/v1/chains/{chainID}/evm/tx/{txHash}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"txHash"}}`, encodeURIComponent(String(requestParameters.txHash))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -442,7 +384,7 @@ export class ChainsApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/chains/{chainID}/state/{stateKey}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"stateKey"}}`, encodeURIComponent(String(requestParameters.stateKey))),
+            path: `/v1/chains/{chainID}/state/{stateKey}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"stateKey"}}`, encodeURIComponent(String(requestParameters.stateKey))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -480,7 +422,7 @@ export class ChainsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/chains/{chainID}/access-node/{peer}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"peer"}}`, encodeURIComponent(String(requestParameters.peer))),
+            path: `/v1/chains/{chainID}/access-node/{peer}`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))).replace(`{${"peer"}}`, encodeURIComponent(String(requestParameters.peer))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -519,7 +461,7 @@ export class ChainsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/chains/{chainID}/chainrecord`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            path: `/v1/chains/{chainID}/chainrecord`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -534,6 +476,64 @@ export class ChainsApi extends runtime.BaseAPI {
      */
     async setChainRecord(requestParameters: SetChainRecordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.setChainRecordRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Ethereum JSON-RPC
+     */
+    async v1ChainsChainIDEvmGetRaw(requestParameters: V1ChainsChainIDEvmGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling v1ChainsChainIDEvmGet.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/v1/chains/{chainID}/evm`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Ethereum JSON-RPC
+     */
+    async v1ChainsChainIDEvmGet(requestParameters: V1ChainsChainIDEvmGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.v1ChainsChainIDEvmGetRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Ethereum JSON-RPC (Websocket transport)
+     */
+    async v1ChainsChainIDEvmWsGetRaw(requestParameters: V1ChainsChainIDEvmWsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.chainID === null || requestParameters.chainID === undefined) {
+            throw new runtime.RequiredError('chainID','Required parameter requestParameters.chainID was null or undefined when calling v1ChainsChainIDEvmWsGet.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/v1/chains/{chainID}/evm/ws`.replace(`{${"chainID"}}`, encodeURIComponent(String(requestParameters.chainID))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Ethereum JSON-RPC (Websocket transport)
+     */
+    async v1ChainsChainIDEvmWsGet(requestParameters: V1ChainsChainIDEvmWsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.v1ChainsChainIDEvmWsGetRaw(requestParameters, initOverrides);
     }
 
 }

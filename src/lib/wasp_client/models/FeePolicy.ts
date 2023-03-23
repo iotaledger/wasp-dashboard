@@ -23,33 +23,33 @@ import {
 /**
  * 
  * @export
- * @interface GasFeePolicy
+ * @interface FeePolicy
  */
-export interface GasFeePolicy {
+export interface FeePolicy {
     /**
      * 
      * @type {Ratio32}
-     * @memberof GasFeePolicy
+     * @memberof FeePolicy
      */
     evmGasRatio: Ratio32;
     /**
      * 
      * @type {Ratio32}
-     * @memberof GasFeePolicy
+     * @memberof FeePolicy
      */
     gasPerToken: Ratio32;
     /**
      * The validator fee share.
      * @type {number}
-     * @memberof GasFeePolicy
+     * @memberof FeePolicy
      */
     validatorFeeShare: number;
 }
 
 /**
- * Check if a given object implements the GasFeePolicy interface.
+ * Check if a given object implements the FeePolicy interface.
  */
-export function instanceOfGasFeePolicy(value: object): boolean {
+export function instanceOfFeePolicy(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "evmGasRatio" in value;
     isInstance = isInstance && "gasPerToken" in value;
@@ -58,11 +58,11 @@ export function instanceOfGasFeePolicy(value: object): boolean {
     return isInstance;
 }
 
-export function GasFeePolicyFromJSON(json: any): GasFeePolicy {
-    return GasFeePolicyFromJSONTyped(json, false);
+export function FeePolicyFromJSON(json: any): FeePolicy {
+    return FeePolicyFromJSONTyped(json, false);
 }
 
-export function GasFeePolicyFromJSONTyped(json: any, ignoreDiscriminator: boolean): GasFeePolicy {
+export function FeePolicyFromJSONTyped(json: any, ignoreDiscriminator: boolean): FeePolicy {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -74,7 +74,7 @@ export function GasFeePolicyFromJSONTyped(json: any, ignoreDiscriminator: boolea
     };
 }
 
-export function GasFeePolicyToJSON(value?: GasFeePolicy | null): any {
+export function FeePolicyToJSON(value?: FeePolicy | null): any {
     if (value === undefined) {
         return undefined;
     }
