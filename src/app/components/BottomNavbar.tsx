@@ -20,8 +20,6 @@ export interface BottomNavbarProps {
  * @param param0.nextButton Next button options
  * @param param0.lastButton Last button options
  * @param param0.pagesOptions Selector options
- * @param param0.location Current location
- * @param param0.selectorChanged Selector changed event handler
  * @param param0.navUrl Navigation url
  * @returns The node to render.
  */
