@@ -55,15 +55,26 @@ export default function BottomNavbar({
                     icon={<ChevronLeftIcon />}
                     iconFirst
                 />
-                <div className="select-wrapper row middle range-wrapper">
+                <div className="row middle range-wrapper">
                     {selectorOptions.length > 0 && (
-                        <select value={location} onChange={e => selectorChanged(`${navUrl}/${e.target.value}`)}>
-                            {selectorOptions?.map(option => (
-                                <option key={option} value={option} className="padding-t">
-                                    {option}
-                                </option>
-                            ))}
-                        </select>
+                        <React.Fragment>
+                            <button
+                                type="button"
+                                className="button-bottom-nav"
+                                onClick={() => selectorChanged(`${navUrl}/${selectorOptions[0]}`)}
+                            >
+                                {selectorOptions[0]}
+                            </button>
+                            <span> ... </span>
+                            <button
+                                type="button"
+                                className="button-bottom-nav"
+                                onClick={() =>
+                                    selectorChanged(`${navUrl}/${selectorOptions[selectorOptions.length - 1]}`)}
+                            >
+                                {selectorOptions[selectorOptions.length - 1]}
+                            </button>
+                        </React.Fragment>
                     )}
                 </div>
                 <NavLink navUrl={navUrl} button={nextButton} label="Next" icon={<ChevronRightIcon />} />
