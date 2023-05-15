@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "./Route.scss";
 import { EventAggregator, ServiceFactory, SettingsService } from "../../lib";
 import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
@@ -13,7 +13,6 @@ function ChainBlockExplorer() {
     const chainsService = ServiceFactory.get<ChainsService>(ChainsService.ServiceName);
     const settingsService = ServiceFactory.get<SettingsService>(SettingsService.ServiceName);
 
-    const navigate = useNavigate();
     const [blockData, setBlockData] = useState<BlockData | null>(null);
     const [latestBlock, setLatestBlock] = useState<number>();
     const [showHexAsText, setShowHexAsText] = useState<boolean>(settingsService.showHexAsText());
@@ -249,10 +248,8 @@ function ChainBlockExplorer() {
                                     enabled: latestBlock !== blockIndex,
                                     value: latestBlock?.toString(),
                                 }}
-                                selectorOptions={latestBlock ? createBlocksRange(latestBlock) : []}
-                                selectorChanged={navigate}
+                                pagesOptions={latestBlock ? createBlocksRange(latestBlock) : []}
                                 navUrl={`/chains/${chainID}/blocks/`}
-                                location={blockIndex.toString()}
                             />
                         </div>
                     </React.Fragment>
