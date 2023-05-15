@@ -127,7 +127,7 @@ function App() {
             label: "Logout",
             icon: <PadlockUnlockedIcon />,
             function: () => authService.logout(),
-            hidden: !isLoggedIn,
+            hidden: !isLoggedIn || !authService.isAuthRequired(),
         },
     ];
 
