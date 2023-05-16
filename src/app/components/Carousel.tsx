@@ -38,7 +38,7 @@ function Carousel({ children, title }: CarouselProps) {
                     </button>
                 </div>
             </div>
-            <div className="carousel-content">{(children as JSX.Element[])[activeIndex]}</div>
+            <div>{(children as JSX.Element[])[activeIndex]}</div>
         </div>
     );
 }
