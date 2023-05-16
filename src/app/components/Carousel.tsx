@@ -17,6 +17,9 @@ interface CarouselProps {
 function Carousel({ children, title }: CarouselProps) {
     const [activeIndex, setActiveIndex] = useState(0);
 
+    const handleFirst = () => {
+        setActiveIndex(0);
+    };
     const handlePrev = () => {
         setActiveIndex(prevIndex => (prevIndex === 0 ? (children as JSX.Element[]).length - 1 : prevIndex - 1));
     };
@@ -25,18 +28,41 @@ function Carousel({ children, title }: CarouselProps) {
         setActiveIndex(prevIndex => (prevIndex === (children as JSX.Element[]).length - 1 ? 0 : prevIndex + 1));
     };
 
+    const handleLast = () => {
+        setActiveIndex((children as JSX.Element[]).length - 1);
+    };
+
     return (
         <div>
-            <div className="carousel-header">
+            <div className="carousel-header margin-b-t">
                 {title && <h2>{title}</h2>}
-                <div>
-                    <button type="button" onClick={handlePrev}>
-                        <ChevronLeftIcon />
-                    </button>
-                    <button type="button" onClick={handleNext}>
-                        <ChevronRightIcon />
-                    </button>
-                </div>
+                {(children as JSX.Element[]).length > 0 && (
+                    <div className="carousel-controls">
+                        <small>Total: {(children as JSX.Element[]).length}</small>
+                        <button type="button" onClick={handleFirst} disabled={activeIndex === 0}>
+                            <ChevronLeftIcon />
+                            <ChevronLeftIcon />
+                        </button>
+                        <button type="button" onClick={handlePrev} disabled={activeIndex === 0}>
+                            <ChevronLeftIcon />
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleNext}
+                            disabled={activeIndex === (children as JSX.Element[]).length - 1}
+                        >
+                            <ChevronRightIcon />
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleLast}
+                            disabled={activeIndex === (children as JSX.Element[]).length - 1}
+                        >
+                            <ChevronRightIcon />
+                            <ChevronRightIcon />
+                        </button>
+                    </div>
+                )}
             </div>
             <div>{(children as JSX.Element[])[activeIndex]}</div>
         </div>

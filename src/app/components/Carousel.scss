@@ -3,28 +3,41 @@
 @use "../../scss/media-queries" as *;
 @use "../../scss/variables" as *;
 
-
-
 .carousel-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  button {
-    padding: 8px;
-    border: none;
-    background: transparent;
-    color: var(--text-color-secondary);
-    font-family: $font-sans;
-    font-size: 16px;
-    cursor: pointer;
+  .carousel-controls {
+    display: flex;
+    align-items: center;
 
-    &:hover {
-      color: var(--text-color-primary);
+    small {
+      margin-right: 8px;
+      color: var(--text-color-secondary);
     }
+    
+    button {
+      padding: 8px;
+      border: none;
+      background: transparent;
+      color: var(--text-color-secondary);
+      font-family: $font-sans;
+      font-size: 16px;
+      cursor: pointer;
 
-    @include tablet-down {
-      font-size: 12px;
+      &:hover {
+        color: var(--text-color-primary);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      @include tablet-down {
+        font-size: 12px;
+      }
     }
   }
 }

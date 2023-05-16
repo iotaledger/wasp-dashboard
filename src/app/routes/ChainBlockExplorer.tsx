@@ -116,7 +116,7 @@ function ChainBlockExplorer() {
                             <div className="content">
                                 {blockData?.requests?.length === 0 ? (
                                     <React.Fragment>
-                                        <div className="middle row margin-b-t">
+                                        <div className="middle row">
                                             <h2>Requests</h2>
                                         </div>
                                         <div className="card coll fill">
