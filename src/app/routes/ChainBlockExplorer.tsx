@@ -1,11 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable react/no-unused-prop-types */
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Route.scss";
-import { FixedSizeList } from "react-window";
 import { EventAggregator, ServiceFactory, SettingsService } from "../../lib";
 import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
-import { Breadcrumb, InfoBox, KeyValueRow, Tile, ChainNavbar, BottomNavbar, Toggle, Spinner } from "../components";
+import {
+    Breadcrumb,
+    InfoBox,
+    KeyValueRow,
+    Tile,
+    ChainNavbar,
+    BottomNavbar,
+    Toggle,
+    Spinner,
+    Carousel,
+} from "../components";
 
 /**
  * ChainBlockExplorer panel.
@@ -102,145 +112,136 @@ function ChainBlockExplorer() {
                                     ))}
                                 </InfoBox>
                             </div>
-                            <div className="middle row">
-                                <h2>Requests</h2>
-                            </div>
+
                             <div className="content">
                                 {blockData?.requests?.length === 0 ? (
-                                    <div className="card coll fill">
-                                        <div className="summary">
-                                            <Tile primaryText="No requests found." />
+                                    <React.Fragment>
+                                        <div className="middle row margin-b-t">
+                                            <h2>Requests</h2>
                                         </div>
-                                    </div>
+                                        <div className="card coll fill">
+                                            <div className="summary">
+                                                <Tile primaryText="No requests found." />
+                                            </div>
+                                        </div>
+                                    </React.Fragment>
                                 ) : (
-                                    <FixedSizeList
-                                        height={490}
-                                        itemCount={blockData?.requests?.length ?? 0}
-                                        itemSize={200}
-                                        width="100%"
-                                        className="margin-b-s"
-                                    >
-                                        {({ index }: { index: number }) => {
-                                            // use the render prop to render each item in the list
-                                            const receipt = blockData?.requests[index];
+                                    <Carousel title="Requests">
+                                        {blockData?.requests?.map(receipt => {
                                             const params = receipt?.request?.params?.items;
                                             return (
-                                                <div>
-                                                    <InfoBox
-                                                        key={receipt?.request?.requestId}
-                                                        title={`REQUEST #${receipt?.requestIndex}`}
-                                                    >
-                                                        <div className="info-content">
-                                                            <div className="main-info-item">
-                                                                <div className="main-info-item-header">
-                                                                    <h4>info</h4>
-                                                                </div>
-                                                                {receipt &&
-                                                                    Object.entries(receipt)
-                                                                        .filter(([r]) =>
-                                                                            BLOCK_RECEIPTS_INFO_VALUES.has(r),
-                                                                        )
-                                                                        .map(([k, v]) => (
-                                                                            <KeyValueRow
-                                                                                key={k}
-                                                                                keyText={BLOCK_REQUEST_NAMES[k]}
-                                                                                value={JSON.stringify(v)}
-                                                                            />
-                                                                        ))}
+                                                <InfoBox
+                                                    key={receipt?.request?.requestId}
+                                                    title={`REQUEST #${receipt?.requestIndex}`}
+                                                >
+                                                    <div className="info-content">
+                                                        <div className="main-info-item">
+                                                            <div className="main-info-item-header">
+                                                                <h4>info</h4>
                                                             </div>
-                                                            <div className="main-info-item">
-                                                                <div className="main-info-item-header">
-                                                                    <h4>Request</h4>
-                                                                </div>
-                                                                {Object.entries(receipt?.request ?? {})
-                                                                    .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
-                                                                    .map(([key, value]) =>
-                                                                        (typeof value === "boolean" ||
-                                                                        typeof value === "string" ? (
-                                                                            <KeyValueRow
-                                                                                key={key}
-                                                                                keyText={key}
-                                                                                value={value}
-                                                                            />
-                                                                        ) : (
-                                                                            <KeyValueRow
-                                                                                key={key}
-                                                                                keyText={key}
-                                                                                value={JSON.stringify(value)}
-                                                                            />
-                                                                        )),
-                                                                    )}
+                                                            {receipt &&
+                                                                Object.entries(receipt)
+                                                                    .filter(([r]) => BLOCK_RECEIPTS_INFO_VALUES.has(r))
+                                                                    .map(([k, v]) => (
+                                                                        <KeyValueRow
+                                                                            key={k}
+                                                                            keyText={BLOCK_REQUEST_NAMES[k]}
+                                                                            value={JSON.stringify(v)}
+                                                                        />
+                                                                    ))}
+                                                        </div>
+                                                        <div className="main-info-item">
+                                                            <div className="main-info-item-header">
+                                                                <h4>Request</h4>
                                                             </div>
-                                                            <div className="main-info-item">
-                                                                <div className="main-info-item-header">
-                                                                    <h4>Parameters</h4>
-                                                                    <Toggle
-                                                                        active={showHexAsText}
-                                                                        onToggle={() =>
-                                                                            settingsService.toggleShowHexAsText()}
-                                                                        leftLabel="Hex"
-                                                                        rightLabel="Text"
-                                                                        smaller
-                                                                    />
-                                                                </div>
-
-                                                                {params?.map(x => (
-                                                                    <KeyValueRow
-                                                                        showUTFStrings={showHexAsText}
-                                                                        key={x.key}
-                                                                        keyText={x.key}
-                                                                        value={x.value}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                            <div className="main-info-item">
-                                                                <div className="main-info-item-header">
-                                                                    <h4>Contracts</h4>
-                                                                </div>
-                                                                {Object.entries(receipt?.request?.callTarget ?? {}).map(
-                                                                    ([key, value]) => (
+                                                            {Object.entries(receipt?.request ?? {})
+                                                                .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
+                                                                .map(([key, value]) =>
+                                                                    (typeof value === "boolean" ||
+                                                                    typeof value === "string" ? (
+                                                                        <KeyValueRow
+                                                                            key={key}
+                                                                            keyText={key}
+                                                                            value={value}
+                                                                        />
+                                                                    ) : (
                                                                         <KeyValueRow
                                                                             key={key}
                                                                             keyText={key}
                                                                             value={JSON.stringify(value)}
                                                                         />
-                                                                    ),
+                                                                    )),
                                                                 )}
-                                                            </div>
-                                                            <div className="main-info-item">
-                                                                <div className="main-info-item-header">
-                                                                    <h4>Native Tokens</h4>
-                                                                </div>
-                                                                {Object.entries(
-                                                                    receipt?.request?.allowance?.nativeTokens ?? {},
-                                                                ).map(([key, value]) => (
-                                                                    <KeyValueRow
-                                                                        key={key}
-                                                                        keyText={key}
-                                                                        value={JSON.stringify(value)}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                            <div className="main-info-item">
-                                                                <div className="main-info-item-header">
-                                                                    <h4>NFTs</h4>
-                                                                </div>
-                                                                {Object.entries(
-                                                                    receipt?.request?.allowance?.nfts ?? {},
-                                                                ).map(([key, value]) => (
-                                                                    <KeyValueRow
-                                                                        key={key}
-                                                                        keyText={key}
-                                                                        value={JSON.stringify(value)}
-                                                                    />
-                                                                ))}
-                                                            </div>
                                                         </div>
-                                                    </InfoBox>
-                                                </div>
+                                                        <div className="main-info-item">
+                                                            <div className="main-info-item-header">
+                                                                <h4>Parameters</h4>
+                                                                <Toggle
+                                                                    active={showHexAsText}
+                                                                    onToggle={() =>
+                                                                        settingsService.toggleShowHexAsText()}
+                                                                    leftLabel="Hex"
+                                                                    rightLabel="Text"
+                                                                    smaller
+                                                                />
+                                                            </div>
+
+                                                            {params?.map(x => (
+                                                                <KeyValueRow
+                                                                    showUTFStrings={showHexAsText}
+                                                                    key={x.key}
+                                                                    keyText={x.key}
+                                                                    value={x.value}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                        <div className="main-info-item">
+                                                            <div className="main-info-item-header">
+                                                                <h4>Contracts</h4>
+                                                            </div>
+                                                            {Object.entries(receipt?.request?.callTarget ?? {}).map(
+                                                                ([key, value]) => (
+                                                                    <KeyValueRow
+                                                                        key={key}
+                                                                        keyText={key}
+                                                                        value={JSON.stringify(value)}
+                                                                    />
+                                                                ),
+                                                            )}
+                                                        </div>
+                                                        <div className="main-info-item">
+                                                            <div className="main-info-item-header">
+                                                                <h4>Native Tokens</h4>
+                                                            </div>
+                                                            {Object.entries(
+                                                                receipt?.request?.allowance?.nativeTokens ?? {},
+                                                            ).map(([key, value]) => (
+                                                                <KeyValueRow
+                                                                    key={key}
+                                                                    keyText={key}
+                                                                    value={JSON.stringify(value)}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                        <div className="main-info-item">
+                                                            <div className="main-info-item-header">
+                                                                <h4>NFTs</h4>
+                                                            </div>
+                                                            {Object.entries(
+                                                                receipt?.request?.allowance?.nfts ?? {},
+                                                            ).map(([key, value]) => (
+                                                                <KeyValueRow
+                                                                    key={key}
+                                                                    keyText={key}
+                                                                    value={JSON.stringify(value)}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </InfoBox>
                                             );
-                                        }}
-                                    </FixedSizeList>
+                                        })}
+                                    </Carousel>
                                 )}
                             </div>
                             <div className="middle row">
