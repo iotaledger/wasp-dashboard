@@ -50,7 +50,12 @@ export default function ChainNavbar({ chainID, block }: ChainNavbarProps) {
                 extraMatchingRoutes={[`${chainURL}/accounts/`, `${chainURL}/account/`]}
             />
             <Tab to={`${chainURL}/nodes`} label="Nodes" />
-            <Tab to={`${chainURL}/blocks/${latestBlock}`} label="Block explorer" exact={true} />
+            <Tab
+                to={`${chainURL}/blocks/${latestBlock}`}
+                label="Block explorer"
+                exact={true}
+                extraMatchingRoutes={[`${chainURL}/blocks/`]}
+            />
         </TabGroup>
     );
 }
