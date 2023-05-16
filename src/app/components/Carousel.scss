@@ -1,0 +1,30 @@
+@use "../../scss/card" as *;
+@use "../../scss/fonts" as *;
+@use "../../scss/media-queries" as *;
+@use "../../scss/variables" as *;
+
+
+
+.carousel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  button {
+    padding: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-color-secondary);
+    font-family: $font-sans;
+    font-size: 16px;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-color-primary);
+    }
+
+    @include tablet-down {
+      font-size: 12px;
+    }
+  }
+}
