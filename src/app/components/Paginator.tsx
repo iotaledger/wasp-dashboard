@@ -96,6 +96,7 @@ export default function Paginator<T>({
                 }}
                 navUrl={navUrl}
                 pagesOptions={pagesOptions}
+                currentPage={numericPage}
             />
         </React.Fragment>
     );
