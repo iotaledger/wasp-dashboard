@@ -95,9 +95,7 @@ export default function Paginator<T>({
                     value: last?.toString(),
                 }}
                 navUrl={navUrl}
-                location={numericPage.toString()}
-                selectorOptions={pagesOptions}
-                selectorChanged={navigate}
+                pagesOptions={pagesOptions}
             />
         </React.Fragment>
     );

@@ -45,9 +45,29 @@
     margin-bottom: 16px;
 
     .range-wrapper {
-      select {
-        padding: 0 12px;
-        height: 30px;
+      span {
+        margin: 0 6px;
+        color: var(--text-color-secondary);
+        @include tablet-down {
+          margin: 0 3px;
+        }
+      }
+
+      .button-bottom-nav {
+        border: none;
+        background: transparent;
+        color: var(--text-color-secondary);
+        font-family: $font-sans;
+        font-size: 16px;
+        cursor: pointer;
+
+        &:hover {
+          color: var(--text-color-primary);
+        }
+
+        @include tablet-down {
+          font-size: 12px;
+        }
       }
     }
   }
