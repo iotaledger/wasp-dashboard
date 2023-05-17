@@ -274,6 +274,9 @@ function ChainBlockExplorer() {
                             }}
                             pagesOptions={latestBlock ? createBlocksRange(latestBlock) : []}
                             navUrl={`/chains/${chainID}/blocks/`}
+                            currentPage={blockIndex}
+                            previousCurrentPage={previousBlock}
+                            nextPreviousPage={nextBlock}
                         />
                     </div>
                 ) : (
