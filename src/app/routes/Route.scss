@@ -48,8 +48,16 @@
       span {
         margin: 0 6px;
         color: var(--text-color-secondary);
+
         @include tablet-down {
           margin: 0 3px;
+        }
+
+        &.active {
+          color: var(--text-color-primary);
+          @include tablet-down {
+            font-size: 12px;
+          }
         }
       }
 
