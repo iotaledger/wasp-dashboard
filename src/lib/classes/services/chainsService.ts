@@ -15,7 +15,7 @@ export interface ChainData {
 
 export interface BlockCachedData {
     id: number;
-    blockIndex: number;
+    block: BlockData;
 }
 
 export interface ChainCachedData {
@@ -136,17 +136,20 @@ export class ChainsService {
 
         this._cachedChains[chainID].blocks[blockIndex] = block;
 
-        this.cacheBlocksChain(chainID, blockIndex); // Cache the block
+        this.cacheBlocksChain(chainID, blockIndex, block); // Cache the block
         // this.save();
 
         return block;
     }
 
-    private cacheBlocksChain(chainID: string, blockIndex: number) {
+    private cacheBlocksChain(chainID: string, blockIndex: number, block: BlockData) {
         const cachedChainData = this._cachedBlocksOfChain[chainID] ?? { blocks: [] };
 
         // Check if the block already exists
-        const existingBlockIndex = cachedChainData.blocks.findIndex(block => block.blockIndex === blockIndex);
+        const existingBlockIndex = cachedChainData.blocks.findIndex(
+            // eslint-disable-next-line @typescript-eslint/no-shadow
+            block => block.id === blockIndex,
+        );
 
         // If it exists, remove it
         if (existingBlockIndex !== -1) {
@@ -156,7 +159,7 @@ export class ChainsService {
         // Add the block to the cache
         const blockCachedData: BlockCachedData = {
             id: blockIndex,
-            blockIndex,
+            block,
         };
 
         cachedChainData.blocks.push(blockCachedData);
@@ -168,7 +171,7 @@ export class ChainsService {
             let maxDifference = Number.NEGATIVE_INFINITY;
             let indexToRemove = -1;
             for (let i = 0; i < maxLength; i++) {
-                const difference = Math.abs(blockIndex - cachedChainData.blocks[i].blockIndex);
+                const difference = Math.abs(blockIndex - cachedChainData.blocks[i].id);
                 if (difference > maxDifference) {
                     maxDifference = difference;
                     indexToRemove = i;
