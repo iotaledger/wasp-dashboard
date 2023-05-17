@@ -18,8 +18,8 @@ export class LocalStorageService {
                 if (json) {
                     obj = JSON.parse(json);
                 }
-            } catch {
-                // Nothing to do
+            } catch (e) {
+                console.error(e);
             }
         }
 
@@ -36,8 +36,8 @@ export class LocalStorageService {
             try {
                 const json = JSON.stringify(item);
                 window.localStorage.setItem(key, json);
-            } catch {
-                // Nothing to do
+            } catch (e) {
+                console.error(e);
             }
         }
     }
@@ -50,8 +50,8 @@ export class LocalStorageService {
         if (window.localStorage) {
             try {
                 window.localStorage.removeItem(key);
-            } catch {
-                // Nothing to do
+            } catch (e) {
+                console.error(e);
             }
         }
     }
@@ -78,8 +78,8 @@ export class LocalStorageService {
                 } else {
                     window.localStorage.clear();
                 }
-            } catch {
-                // Nothing to do
+            } catch (e) {
+                console.error(e);
             }
         }
     }
