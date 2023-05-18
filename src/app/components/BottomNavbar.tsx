@@ -10,6 +10,9 @@ export interface BottomNavbarProps {
     nextButton: NavLinkButton;
     lastButton: NavLinkButton;
     pagesOptions: string[];
+    currentPage: number;
+    previousCurrentPage?: number;
+    nextPreviousPage?: number;
 }
 
 /**
@@ -21,6 +24,9 @@ export interface BottomNavbarProps {
  * @param param0.lastButton Last button options
  * @param param0.pagesOptions Selector options
  * @param param0.navUrl Navigation url
+ * @param param0.currentPage Current page
+ * @param param0.nextPreviousPage Next previous page
+ * @param param0.previousCurrentPage Previous current page
  * @returns The node to render.
  */
 export default function BottomNavbar({
@@ -30,6 +36,9 @@ export default function BottomNavbar({
     lastButton,
     pagesOptions,
     navUrl,
+    currentPage,
+    previousCurrentPage,
+    nextPreviousPage,
 }: BottomNavbarProps) {
     return (
         <div className="card fill">
@@ -40,14 +49,42 @@ export default function BottomNavbar({
                     label="Previous"
                     icon={<ChevronLeftIcon />}
                     iconFirst
+                    hasIcon
                 />
                 <div className="row middle range-wrapper">
-                    <NavLink navUrl={navUrl} button={firstButton} label={pagesOptions[0]} />
-                    <span>. . .</span>
-                    <NavLink navUrl={navUrl} button={lastButton} label={pagesOptions[pagesOptions.length - 1]} />
+                    {currentPage !== 0 && (
+                        <NavLink iconFirst navUrl={navUrl} button={firstButton} label={pagesOptions[0]} />
+                    )}
+                    {currentPage > 1 && previousCurrentPage && (
+                        <React.Fragment>
+                            <span>...</span>
+                            <NavLink
+                                navUrl={navUrl}
+                                button={previousButton}
+                                label={pagesOptions[previousCurrentPage]}
+                            />
+                        </React.Fragment>
+                    )}
+                    <span className="active">{currentPage}</span>
+                    {currentPage < pagesOptions.length - 2 && nextPreviousPage && (
+                        <React.Fragment>
+                            {nextPreviousPage && (
+                                <NavLink navUrl={navUrl} button={nextButton} label={pagesOptions[nextPreviousPage]} />
+                            )}
+                            <span>...</span>
+                        </React.Fragment>
+                    )}
+                    {currentPage !== pagesOptions.length - 1 && (
+                        <NavLink navUrl={navUrl} button={lastButton} label={pagesOptions[pagesOptions.length - 1]} />
+                    )}
                 </div>
-                <NavLink navUrl={navUrl} button={nextButton} label="Next" icon={<ChevronRightIcon />} />
+                <NavLink navUrl={navUrl} button={nextButton} label="Next" icon={<ChevronRightIcon />} hasIcon />
             </div>
         </div>
     );
 }
+
+BottomNavbar.defaultProps = {
+    nextPreviousPage: undefined,
+    previousCurrentPage: undefined,
+};

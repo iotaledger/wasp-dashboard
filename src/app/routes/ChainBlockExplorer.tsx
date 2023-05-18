@@ -1,9 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable react/no-unused-prop-types */
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Route.scss";
 import { EventAggregator, ServiceFactory, SettingsService } from "../../lib";
 import { BlockData, ChainsService } from "../../lib/classes/services/chainsService";
-import { Breadcrumb, InfoBox, KeyValueRow, Tile, ChainNavbar, BottomNavbar, Toggle } from "../components";
+import {
+    Breadcrumb,
+    InfoBox,
+    KeyValueRow,
+    Tile,
+    ChainNavbar,
+    BottomNavbar,
+    Toggle,
+    Spinner,
+    Carousel,
+} from "../components";
 
 /**
  * ChainBlockExplorer panel.
@@ -16,7 +28,7 @@ function ChainBlockExplorer() {
     const [blockData, setBlockData] = useState<BlockData | null>(null);
     const [latestBlock, setLatestBlock] = useState<number>();
     const [showHexAsText, setShowHexAsText] = useState<boolean>(settingsService.showHexAsText());
-
+    const [isLoadingBlocks, setIsLoadingBlocks] = useState<boolean>(true);
     const { chainID, blockID } = useParams();
 
     const blockIndex = Number(blockID);
@@ -47,7 +59,8 @@ function ChainBlockExplorer() {
             .catch(e => {
                 console.error(e);
                 setBlockData(null);
-            });
+            })
+            .finally(() => setIsLoadingBlocks(false));
 
         chainsService
             .getLatestBlock(chainID)
@@ -77,39 +90,48 @@ function ChainBlockExplorer() {
         <div className="main">
             <div className="main-wrapper">
                 <Breadcrumb breadcrumbs={chainBreadcrumbs} />
-                {info ? (
-                    <React.Fragment>
+                <div className="middle row">
+                    <h2 className="l1-details-title">Chain {chainID}</h2>
+                </div>
+                <div className="content">
+                    <ChainNavbar chainID={chainID} block={blockIndex} />
+                </div>
+                {isLoadingBlocks ? (
+                    <div className="middle row">
+                        <Spinner />
+                    </div>
+                ) : (info ? (
+                    <div className="content">
                         <div className="middle row">
-                            <h2 className="l1-details-title">Chain {chainID}</h2>
+                            <h2>Block {blockID}</h2>
                         </div>
                         <div className="content">
-                            <ChainNavbar chainID={chainID} block={blockIndex} />
-                            <div className="middle row">
-                                <h2>Block {blockID}</h2>
-                            </div>
-                            <div className="content">
-                                <InfoBox title="Info">
-                                    {info?.map(([k, v]) => (
-                                        <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={v} />
-                                    ))}
-                                </InfoBox>
-                            </div>
-                            <div className="middle row">
-                                <h2>Requests</h2>
-                            </div>
-                            <div className="content">
-                                {blockData?.requests?.length === 0 ? (
+                            <InfoBox title="Info">
+                                {info?.map(([k, v]) => (
+                                    <KeyValueRow key={k} keyText={BLOCK_DATA_NAMES[k]} value={v} />
+                                ))}
+                            </InfoBox>
+                        </div>
+
+                        <div className="content">
+                            {blockData?.requests?.length === 0 ? (
+                                <React.Fragment>
+                                    <div className="middle row">
+                                        <h2>Requests</h2>
+                                    </div>
                                     <div className="card coll fill">
                                         <div className="summary">
                                             <Tile primaryText="No requests found." />
                                         </div>
                                     </div>
-                                ) : (
-                                    blockData?.requests.map((receipt, index) => {
+                                </React.Fragment>
+                            ) : (
+                                <Carousel title="Requests">
+                                    {blockData?.requests?.map(receipt => {
                                         const params = receipt?.request?.params?.items;
                                         return (
                                             <InfoBox
-                                                key={receipt.request?.requestId}
+                                                key={receipt?.request?.requestId}
                                                 title={`REQUEST #${receipt?.requestIndex}`}
                                             >
                                                 <div className="info-content">
@@ -117,21 +139,22 @@ function ChainBlockExplorer() {
                                                         <div className="main-info-item-header">
                                                             <h4>info</h4>
                                                         </div>
-                                                        {Object.entries(receipt)
-                                                            .filter(([r]) => BLOCK_RECEIPTS_INFO_VALUES.has(r))
-                                                            .map(([k, v]) => (
-                                                                <KeyValueRow
-                                                                    key={k}
-                                                                    keyText={BLOCK_REQUEST_NAMES[k]}
-                                                                    value={JSON.stringify(v)}
-                                                                />
-                                                            ))}
+                                                        {receipt &&
+                                                            Object.entries(receipt)
+                                                                .filter(([r]) => BLOCK_RECEIPTS_INFO_VALUES.has(r))
+                                                                .map(([k, v]) => (
+                                                                    <KeyValueRow
+                                                                        key={k}
+                                                                        keyText={BLOCK_REQUEST_NAMES[k]}
+                                                                        value={JSON.stringify(v)}
+                                                                    />
+                                                                ))}
                                                     </div>
                                                     <div className="main-info-item">
                                                         <div className="main-info-item-header">
                                                             <h4>Request</h4>
                                                         </div>
-                                                        {Object.entries(receipt.request ?? {})
+                                                        {Object.entries(receipt?.request ?? {})
                                                             .filter(([r]) => BLOCK_REQUESTS_INFO_VALUES.has(r))
                                                             .map(([key, value]) =>
                                                                 (typeof value === "boolean" ||
@@ -175,7 +198,7 @@ function ChainBlockExplorer() {
                                                         <div className="main-info-item-header">
                                                             <h4>Contracts</h4>
                                                         </div>
-                                                        {Object.entries(receipt.request?.callTarget ?? {}).map(
+                                                        {Object.entries(receipt?.request?.callTarget ?? {}).map(
                                                             ([key, value]) => (
                                                                 <KeyValueRow
                                                                     key={key}
@@ -190,7 +213,7 @@ function ChainBlockExplorer() {
                                                             <h4>Native Tokens</h4>
                                                         </div>
                                                         {Object.entries(
-                                                            receipt.request?.allowance?.nativeTokens ?? {},
+                                                            receipt?.request?.allowance?.nativeTokens ?? {},
                                                         ).map(([key, value]) => (
                                                             <KeyValueRow
                                                                 key={key}
@@ -203,7 +226,7 @@ function ChainBlockExplorer() {
                                                         <div className="main-info-item-header">
                                                             <h4>NFTs</h4>
                                                         </div>
-                                                        {Object.entries(receipt.request?.allowance?.nfts ?? {}).map(
+                                                        {Object.entries(receipt?.request?.allowance?.nfts ?? {}).map(
                                                             ([key, value]) => (
                                                                 <KeyValueRow
                                                                     key={key}
@@ -216,46 +239,49 @@ function ChainBlockExplorer() {
                                                 </div>
                                             </InfoBox>
                                         );
-                                    })
-                                )}
-                            </div>
-                            <div className="middle row">
-                                <h2>Events</h2>
-                            </div>
-                            <div className="content">
-                                <InfoBox>
-                                    {blockData?.events?.length === 0 ? (
-                                        <Tile primaryText="No events found." />
-                                    ) : (
-                                        blockData?.events?.map(event => <Tile key={event} primaryText={event} />)
-                                    )}
-                                </InfoBox>
-                            </div>
-                            <BottomNavbar
-                                firstButton={{
-                                    enabled: blockIndex > 0,
-                                    value: "0",
-                                }}
-                                previousButton={{
-                                    enabled: previousBlock >= 0,
-                                    value: previousBlock.toString(),
-                                }}
-                                nextButton={{
-                                    enabled: Number.isInteger(nextBlock),
-                                    value: nextBlock?.toString(),
-                                }}
-                                lastButton={{
-                                    enabled: latestBlock !== blockIndex,
-                                    value: latestBlock?.toString(),
-                                }}
-                                pagesOptions={latestBlock ? createBlocksRange(latestBlock) : []}
-                                navUrl={`/chains/${chainID}/blocks/`}
-                            />
+                                    })}
+                                </Carousel>
+                            )}
                         </div>
-                    </React.Fragment>
+                        <div className="middle row">
+                            <h2>Events</h2>
+                        </div>
+                        <div className="content">
+                            <InfoBox>
+                                {blockData?.events?.length === 0 ? (
+                                    <Tile primaryText="No events found." />
+                                ) : (
+                                    blockData?.events?.map(event => <Tile key={event} primaryText={event} />)
+                                )}
+                            </InfoBox>
+                        </div>
+                        <BottomNavbar
+                            firstButton={{
+                                enabled: blockIndex > 0,
+                                value: "0",
+                            }}
+                            previousButton={{
+                                enabled: previousBlock >= 0,
+                                value: previousBlock.toString(),
+                            }}
+                            nextButton={{
+                                enabled: Number.isInteger(nextBlock),
+                                value: nextBlock?.toString(),
+                            }}
+                            lastButton={{
+                                enabled: latestBlock !== blockIndex,
+                                value: latestBlock?.toString(),
+                            }}
+                            pagesOptions={latestBlock ? createBlocksRange(latestBlock) : []}
+                            navUrl={`/chains/${chainID}/blocks/`}
+                            currentPage={blockIndex}
+                            previousCurrentPage={previousBlock}
+                            nextPreviousPage={nextBlock}
+                        />
+                    </div>
                 ) : (
                     <Tile primaryText="Block not found" />
-                )}
+                ))}
             </div>
         </div>
     );

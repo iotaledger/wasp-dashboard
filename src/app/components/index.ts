@@ -19,6 +19,7 @@ export { default as Toggle } from "./Toggle";
 export { default as Paginator } from "./Paginator";
 export { default as OrderedTable } from "./OrderedTable";
 export { default as CopiableValue } from "./CopiableValue";
+export { default as Carousel } from "./Carousel";
 
 export * from "./loading";
 export * from "./dialogs";
