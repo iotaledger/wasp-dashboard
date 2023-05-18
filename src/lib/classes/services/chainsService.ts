@@ -190,5 +190,8 @@ export class ChainsService {
 
     private saveCachedBlocks() {
         this._storageService.save("chain with blocks", this._cachedBlocksOfChain);
+        if (this.cacheBlocksChain !== undefined) {
+            this._storageService.remove("chains");
+        }
     }
 }
