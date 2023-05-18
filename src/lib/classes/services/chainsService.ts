@@ -137,7 +137,6 @@ export class ChainsService {
         this._cachedChains[chainID].blocks[blockIndex] = block;
 
         this.cacheBlocksChain(chainID, blockIndex, block); // Cache the block
-        // this.save();
 
         return block;
     }
