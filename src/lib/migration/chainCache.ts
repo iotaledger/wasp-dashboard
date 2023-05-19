@@ -1,15 +1,14 @@
 import { ServiceFactory, LocalStorageService } from "../classes";
 import { BlockData, ChainData } from "../classes/services/chainsService";
 
-const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
-const cachedVersion = storageService.load<number>("version");
-
 const CURRENT_CACHE_VERSION = 1;
 
 /**
  *
  */
 export function checkAndMigrateCache() {
+    const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
+    const cachedVersion = storageService.load<number>("version");
     if (!cachedVersion) {
         storageService.save("version", 0);
     }
@@ -35,6 +34,7 @@ function migrateCache(previousVersion: number | null) {
  *
  */
 function migrateFromVersion0() {
+    const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
     const catchedChains = storageService.load<Record<string, ChainData>>("chains");
     if (catchedChains) {
         const chainID = Object.keys(catchedChains)[0];
@@ -54,6 +54,7 @@ function migrateFromVersion0() {
  * @param block
  */
 function cacheChainBlock(chainID: string, block: BlockData) {
+    const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
     const cachedChains: Record<string, ChainData> = storageService.load("chains");
     const cachedChainData = cachedChains[chainID] ?? { blocks: [] };
 
