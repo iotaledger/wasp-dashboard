@@ -5,4 +5,3 @@ export * from "./interfaces";
 export * from "./enums";
 export * from "./utils";
 export * from "./wasp_client";
-export * from "./migration";
