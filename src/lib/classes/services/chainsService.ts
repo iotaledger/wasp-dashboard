@@ -1,6 +1,6 @@
 import { WaspClientService, ServiceFactory, LocalStorageService } from "../../classes";
-import { checkAndMigrateCache } from "../../migration";
 import { BlockInfoResponse, BlockInfoResponseFromJSON, RequestReceiptResponse } from "../../wasp_client";
+import { checkAndMigrateCache } from "../migration";
 
 // Information about a Block
 export interface BlockData {
@@ -11,7 +11,16 @@ export interface BlockData {
 
 // Information about a Chain
 export interface ChainData {
-    blocks: BlockData[];
+    blocks: BlockData[] | BlockCachedData[];
+}
+
+export interface BlockCachedData {
+    id: number;
+    block: BlockData;
+}
+
+export interface ChainCachedData {
+    blocks: BlockCachedData[];
 }
 
 /**
@@ -35,10 +44,16 @@ export class ChainsService {
      */
     private _cachedChains: Record<string, ChainData>;
 
+    /**
+     * Saved version.
+     */
+    private _cachedVersion: number;
+
     constructor() {
         this._waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
         this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
         this._cachedChains = this._storageService.load("chains") ?? {};
+        this._cachedVersion = this._storageService.load("version") ?? 0;
     }
 
     /**
@@ -46,6 +61,7 @@ export class ChainsService {
      */
     public initialize(): void {
         this._cachedChains = this._storageService.load("chains") ?? {};
+        this._cachedVersion = this._storageService.load("version") ?? 0;
     }
 
     /**
@@ -73,7 +89,7 @@ export class ChainsService {
         // Return the block if it's cached
         const savedChain = this._cachedChains[chainID];
         if (savedChain) {
-            const savedBlock = savedChain.blocks[blockIndex];
+            const savedBlock = savedChain.blocks[blockIndex] as BlockData;
             if (savedBlock?.info && savedBlock?.events && savedBlock?.requests) {
                 return {
                     ...savedBlock,
@@ -122,12 +138,67 @@ export class ChainsService {
 
         this._cachedChains[chainID].blocks[blockIndex] = block;
 
-        checkAndMigrateCache();
-        this.save();
+        if (this._cachedVersion < 1 || !this._cachedVersion) {
+            checkAndMigrateCache();
+        } else {
+            this.cacheChainBlock(chainID, block); // Cache the block
+        }
+
+        // Save the updated cached blocks
         return block;
     }
 
-    public save() {
+    /**
+     * Save the cached chains.
+     */
+    public save(): void {
         this._storageService.save("chains", this._cachedChains);
+    }
+
+    private cacheChainBlock(chainID: string, block: BlockData) {
+        const cachedChainData = this._cachedChains[chainID] as ChainCachedData;
+
+        cachedChainData.blocks = cachedChainData.blocks.filter(blockData => "id" in blockData);
+        // Check if the block already exists
+        const existingBlockIndex = cachedChainData?.blocks?.findIndex(
+            // eslint-disable-next-line @typescript-eslint/no-shadow
+            block => block?.id === block?.block?.info?.blockIndex,
+        );
+
+        // If it exists, remove it
+        if (existingBlockIndex !== -1) {
+            cachedChainData.blocks.splice(existingBlockIndex, 1);
+        }
+
+        // Add the block to the cache
+        const blockCachedData = {
+            id: block.info?.blockIndex,
+            block,
+        } as BlockCachedData;
+
+        cachedChainData.blocks.push(blockCachedData);
+
+        // Limit the number of blocks in cache
+        const maxLength = 100;
+        if (cachedChainData.blocks.length > maxLength) {
+            // Find the block that is the furthest away from the current block
+            let maxDifference = Number.NEGATIVE_INFINITY;
+            let indexToRemove = -1;
+            for (let i = 0; i < maxLength; i++) {
+                if (block?.info?.blockIndex) {
+                    const difference = Math.abs(block?.info?.blockIndex - cachedChainData.blocks[i].id);
+                    if (difference > maxDifference) {
+                        maxDifference = difference;
+                        indexToRemove = i;
+                    }
+                }
+                if (indexToRemove !== -1) {
+                    cachedChainData.blocks.splice(indexToRemove, 1);
+                }
+            }
+        }
+        // Save the updated cached blocks
+        this._cachedChains[chainID] = cachedChainData;
+        this.save();
     }
 }
