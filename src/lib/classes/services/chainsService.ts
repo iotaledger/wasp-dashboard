@@ -22,6 +22,8 @@ export interface ChainCachedData {
     blocks: BlockCachedData[];
 }
 
+const CURRENT_VERSION = 1;
+
 /**
  * Class to manage chains.
  */
@@ -43,23 +45,18 @@ export class ChainsService {
      */
     private _cachedChains: Record<string, ChainData>;
 
-    /**
-     * Saved cached blocks.
-     */
-    private _cachedBlocksOfChain: Record<string, ChainCachedData>;
-
     constructor() {
         this._waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
         this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
         this._cachedChains = this._storageService.load("chains") ?? {};
-        this._cachedBlocksOfChain = this._storageService.load("chain with blocks") ?? {};
+        this.checkVersionAndMigrateCachedChain();
     }
 
     /**
      * Method to initialize the service.
      */
     public initialize(): void {
-        this._cachedBlocksOfChain = this._storageService.load("chain with blocks") ?? {};
+        this._cachedChains = this._storageService.load("chain with blocks") ?? {};
     }
 
     /**
@@ -136,61 +133,72 @@ export class ChainsService {
 
         this._cachedChains[chainID].blocks[blockIndex] = block;
 
-        this.cacheBlocksChain(chainID, blockIndex, block); // Cache the block
+        this.cacheChainBlock(chainID, block); // Cache the block
 
         return block;
     }
 
-    private cacheBlocksChain(chainID: string, blockIndex: number, block: BlockData) {
-        const cachedChainData = this._cachedBlocksOfChain[chainID] ?? { blocks: [] };
-
-        // Check if the block already exists
-        const existingBlockIndex = cachedChainData.blocks.findIndex(
-            // eslint-disable-next-line @typescript-eslint/no-shadow
-            block => block.id === blockIndex,
-        );
-
-        // If it exists, remove it
-        if (existingBlockIndex !== -1) {
-            cachedChainData.blocks.splice(existingBlockIndex, 1);
-        }
-
-        // Add the block to the cache
-        const blockCachedData: BlockCachedData = {
-            id: blockIndex,
-            block,
-        };
-
-        cachedChainData.blocks.push(blockCachedData);
-
-        // Limit the number of blocks in cache
-        const maxLength = 100;
-        if (cachedChainData.blocks.length > maxLength) {
-            // Find the block that is the furthest away from the current block
-            let maxDifference = Number.NEGATIVE_INFINITY;
-            let indexToRemove = -1;
-            for (let i = 0; i < maxLength; i++) {
-                const difference = Math.abs(blockIndex - cachedChainData.blocks[i].id);
-                if (difference > maxDifference) {
-                    maxDifference = difference;
-                    indexToRemove = i;
-                }
-            }
-            if (indexToRemove !== -1) {
-                cachedChainData.blocks.splice(indexToRemove, 1);
-            }
-        }
-        // Save the updated cached blocks
-        this._cachedBlocksOfChain[chainID] = cachedChainData;
-
-        // Save the updated cached blocks
-        this.saveCachedBlocks();
+    /**
+     * Save the cached chains.
+     */
+    public save(): void {
+        this._storageService.save("chains", this._cachedChains);
     }
 
-    private saveCachedBlocks() {
-        this._storageService.save("chain with blocks", this._cachedBlocksOfChain);
-        if (this.cacheBlocksChain !== undefined) {
-            this._storageService.remove("chains");
+    private cacheChainBlock(chainID: string, block: BlockData) {
+        const cachedChainData = this._cachedChains[chainID] ?? { blocks: [] };
+
+        cachedChainData.blocks = cachedChainData.blocks?.filter(b => b !== undefined && b !== null);
+
+        // Add the new block only if it exists
+        if (cachedChainData.blocks?.find(b => b?.info?.blockIndex === block?.info?.blockIndex)) {
+            // Limit the number of blocks in cache
+            const maxLength = 4;
+            if (cachedChainData.blocks.length > maxLength) {
+                // Find the block that is the furthest away from the current block
+                let maxDifference = Number.NEGATIVE_INFINITY;
+                let indexToRemove = -1;
+                const currentBlock = block?.info?.blockIndex as number;
+
+                for (const [index, otherBlock] of cachedChainData.blocks.entries()) {
+                    const difference = Math.abs(currentBlock - (otherBlock?.info?.blockIndex as number));
+                    if (difference > maxDifference) {
+                        maxDifference = difference;
+                        indexToRemove = index;
+                    }
+                }
+                if (indexToRemove !== -1) {
+                    cachedChainData.blocks.splice(indexToRemove, 1);
+                }
+            }
+        } else {
+            cachedChainData.blocks.push(block);
+        }
+
+        // Save the updated cached blocks
+        this._cachedChains[chainID] = cachedChainData;
+        // Save the updated cached blocks
+        this.save();
+    }
+
+    private checkVersionAndMigrateCachedChain() {
+        const version = this._storageService.load("version"); // Get the current version
+        if (!version) {
+            // Perform migration from no version to version 1
+            for (const chainID in this._cachedChains) {
+                // eslint-disable-next-line no-prototype-builtins
+                if (this._cachedChains?.hasOwnProperty(chainID)) {
+                    const oldChainData = this._cachedChains[chainID] as unknown as BlockData[];
+                    const newChainData: ChainData = {
+                        blocks: oldChainData,
+                    };
+                    this._cachedChains[chainID] = newChainData;
+                }
+            }
+            // Save the current version
+            this._storageService.save("version", CURRENT_VERSION);
+            // Save the updated cached chains
+            this.save();
         }
     }
 }
