@@ -56,7 +56,7 @@ export class ChainsService {
      * Method to initialize the service.
      */
     public initialize(): void {
-        this._cachedChains = this._storageService.load("chain with blocks") ?? {};
+        this._cachedChains = this._storageService.load("chains") ?? {};
     }
 
     /**
@@ -184,7 +184,7 @@ export class ChainsService {
     private checkVersionAndMigrateCachedChain() {
         const version = this._storageService.load("version"); // Get the current version
         if (!version) {
-            // Perform migration from no version to version 1
+            // Migrate from no version to version 1
             for (const chainID in this._cachedChains) {
                 // eslint-disable-next-line no-prototype-builtins
                 if (this._cachedChains?.hasOwnProperty(chainID)) {
