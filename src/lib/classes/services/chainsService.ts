@@ -114,7 +114,7 @@ export class ChainsService {
                 .catch(console.error),
         ]);
         this._cachedChains[chainID].blocks[blockIndex] = block;
-        this.cacheBlockChain(chainID, block);
+        this.cacheChainBlock(chainID, block);
         this.save();
         return block;
     }
@@ -126,7 +126,7 @@ export class ChainsService {
         this._storageService.save("chains", this._cachedChains);
     }
 
-    private cacheBlockChain(chainID: string, block: BlockData) {
+    private cacheChainBlock(chainID: string, block: BlockData) {
         const MAX_CACHED_BLOCKS = 20;
         if (this._cachedChains[chainID].blocks.length >= MAX_CACHED_BLOCKS) {
             this._cachedChains[chainID].blocks.shift();
