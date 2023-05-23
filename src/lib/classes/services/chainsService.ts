@@ -153,7 +153,7 @@ export class ChainsService {
         // Add the new block only if it exists
         if (cachedChainData.blocks?.find(b => b?.info?.blockIndex === block?.info?.blockIndex)) {
             // Limit the number of blocks in cache
-            const maxLength = 4;
+            const maxLength = 100;
             cachedChainData.blocks = cachedChainData.blocks
                 .filter(b => b?.info?.blockIndex !== block?.info?.blockIndex)
                 .slice(1, maxLength);
