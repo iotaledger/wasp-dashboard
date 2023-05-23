@@ -1,3 +1,4 @@
+import { checkAndMigrate } from "../../migration";
 /**
  * Class to use local storage.
  */
@@ -14,7 +15,9 @@ export class LocalStorageService {
         if (window.localStorage) {
             try {
                 const json = window.localStorage.getItem(key);
-
+                if (key !== "persisted data version" && json === null) {
+                    checkAndMigrate();
+                }
                 if (json) {
                     obj = JSON.parse(json);
                 }
@@ -22,7 +25,6 @@ export class LocalStorageService {
                 console.error(e);
             }
         }
-
         return obj as T;
     }
 
