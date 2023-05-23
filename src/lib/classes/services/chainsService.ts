@@ -147,7 +147,7 @@ export class ChainsService {
             const maxLength = 100;
             cachedChainData.blocks = cachedChainData.blocks
                 .filter(b => b?.info?.blockIndex !== block?.info?.blockIndex)
-                .slice(1, maxLength);
+                .splice(0, maxLength);
 
             cachedChainData.blocks.push(block);
         }
