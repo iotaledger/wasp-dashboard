@@ -13,15 +13,6 @@ export interface ChainData {
     blocks: BlockData[];
 }
 
-export interface BlockCachedData {
-    id: number;
-    block: BlockData;
-}
-
-export interface ChainCachedData {
-    blocks: BlockCachedData[];
-}
-
 const CURRENT_VERSION = 1;
 
 /**
