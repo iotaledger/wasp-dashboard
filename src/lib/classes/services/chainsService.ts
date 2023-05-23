@@ -148,30 +148,16 @@ export class ChainsService {
     private cacheChainBlock(chainID: string, block: BlockData) {
         const cachedChainData = this._cachedChains[chainID] ?? { blocks: [] };
 
-        cachedChainData.blocks = cachedChainData.blocks?.filter(b => b !== undefined && b !== null);
+        cachedChainData.blocks?.filter(b => b !== undefined && b !== null);
 
         // Add the new block only if it exists
         if (cachedChainData.blocks?.find(b => b?.info?.blockIndex === block?.info?.blockIndex)) {
             // Limit the number of blocks in cache
             const maxLength = 4;
-            if (cachedChainData.blocks.length > maxLength) {
-                // Find the block that is the furthest away from the current block
-                let maxDifference = Number.NEGATIVE_INFINITY;
-                let indexToRemove = -1;
-                const currentBlock = block?.info?.blockIndex as number;
+            cachedChainData.blocks = cachedChainData.blocks
+                .filter(b => b?.info?.blockIndex !== block?.info?.blockIndex)
+                .slice(1, maxLength);
 
-                for (const [index, otherBlock] of cachedChainData.blocks.entries()) {
-                    const difference = Math.abs(currentBlock - (otherBlock?.info?.blockIndex as number));
-                    if (difference > maxDifference) {
-                        maxDifference = difference;
-                        indexToRemove = index;
-                    }
-                }
-                if (indexToRemove !== -1) {
-                    cachedChainData.blocks.splice(indexToRemove, 1);
-                }
-            }
-        } else {
             cachedChainData.blocks.push(block);
         }
 
