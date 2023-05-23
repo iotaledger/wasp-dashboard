@@ -1,19 +1,15 @@
 import { WaspClientService, ServiceFactory, LocalStorageService } from "../../classes";
 import { BlockInfoResponse, BlockInfoResponseFromJSON, RequestReceiptResponse } from "../../wasp_client";
-
 // Information about a Block
 export interface BlockData {
     info?: BlockInfoResponse;
     requests: RequestReceiptResponse[];
     events?: string[];
 }
-
 // Information about a Chain
 export interface ChainData {
     blocks: BlockData[];
 }
-
-const CURRENT_VERSION = 1;
 
 /**
  * Class to manage chains.
@@ -40,7 +36,6 @@ export class ChainsService {
         this._waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
         this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
         this._cachedChains = this._storageService.load("chains") ?? {};
-        this.checkVersionAndMigrateCachedChain();
     }
 
     /**
@@ -61,7 +56,6 @@ export class ChainsService {
             .blocklogGetLatestBlockInfo({ chainID })
             .then(newBlockInfo => newBlockInfo)
             .catch(() => null);
-
         return blockInfo;
     }
 
@@ -88,11 +82,9 @@ export class ChainsService {
                 blocks: [],
             };
         }
-
         const block: BlockData = {
             requests: [],
         };
-
         // Otherwise fecth it and cache it for the next time
         await Promise.all([
             this._waspClientService
@@ -121,61 +113,27 @@ export class ChainsService {
                 })
                 .catch(console.error),
         ]);
-
         this._cachedChains[chainID].blocks[blockIndex] = block;
-
-        this.cacheChainBlock(chainID, block); // Cache the block
-
+        this.cacheBlockChain(chainID, block);
+        this.save();
         return block;
     }
 
     /**
-     * Save the cached chains.
+     * Persist the cached blocks
      */
-    public save(): void {
+    public save() {
         this._storageService.save("chains", this._cachedChains);
     }
 
-    private cacheChainBlock(chainID: string, block: BlockData) {
-        const cachedChainData = this._cachedChains[chainID] ?? { blocks: [] };
-
-        cachedChainData.blocks?.filter(b => b !== undefined && b !== null);
-
-        // Add the new block only if it exists
-        if (cachedChainData.blocks?.find(b => b?.info?.blockIndex === block?.info?.blockIndex)) {
-            // Limit the number of blocks in cache
-            const maxLength = 100;
-            cachedChainData.blocks = cachedChainData.blocks
-                .filter(b => b?.info?.blockIndex !== block?.info?.blockIndex)
-                .splice(0, maxLength);
-
-            cachedChainData.blocks.push(block);
+    private cacheBlockChain(chainID: string, block: BlockData) {
+        const MAX_CACHED_BLOCKS = 20;
+        if (this._cachedChains[chainID].blocks.length >= MAX_CACHED_BLOCKS) {
+            this._cachedChains[chainID].blocks.shift();
         }
-
-        // Save the updated cached blocks
-        this._cachedChains[chainID] = cachedChainData;
-        // Save the updated cached blocks
-        this.save();
-    }
-
-    private checkVersionAndMigrateCachedChain() {
-        const version = this._storageService.load("version"); // Get the current version
-        if (!version) {
-            // Migrate from no version to version 1
-            for (const chainID in this._cachedChains) {
-                // eslint-disable-next-line no-prototype-builtins
-                if (this._cachedChains?.hasOwnProperty(chainID)) {
-                    const oldChainData = this._cachedChains[chainID] as unknown as BlockData[];
-                    const newChainData: ChainData = {
-                        blocks: oldChainData,
-                    };
-                    this._cachedChains[chainID] = newChainData;
-                }
-            }
-            // Save the current version
-            this._storageService.save("version", CURRENT_VERSION);
-            // Save the updated cached chains
-            this.save();
-        }
+        this._cachedChains[chainID].blocks = this._cachedChains[chainID].blocks
+            .filter(b => b !== undefined && b !== null)
+            .slice(-MAX_CACHED_BLOCKS + 1);
+        this._cachedChains[chainID].blocks.push(block);
     }
 }
