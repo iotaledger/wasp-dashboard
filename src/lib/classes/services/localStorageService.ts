@@ -1,13 +1,8 @@
-import { checkAndMigrate } from "../../migration";
 /**
  * Class to use local storage.
  */
 export class LocalStorageService {
     public static readonly ServiceName = "LocalStorageService";
-
-    constructor() {
-        this.init();
-    }
 
     /**
      * Load an item from local storage.
@@ -85,9 +80,5 @@ export class LocalStorageService {
                 console.error(e);
             }
         }
-    }
-
-    private init(): void {
-        checkAndMigrate();
     }
 }

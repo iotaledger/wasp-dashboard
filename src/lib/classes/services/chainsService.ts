@@ -71,7 +71,7 @@ export class ChainsService {
         // Return the block if it's cached
         const savedChain = this._cachedChains[chainID];
         if (savedChain) {
-            const savedBlock = savedChain.blocks[blockIndex];
+            const savedBlock = savedChain.blocks.find(block => block.info?.blockIndex === blockIndex);
             if (savedBlock?.info && savedBlock?.events && savedBlock?.requests) {
                 return {
                     ...savedBlock,
@@ -127,20 +127,19 @@ export class ChainsService {
     }
 
     private cacheChainBlock(chainID: string, block: BlockData) {
-        // FIFO: First in --> First out
-        // [1, 2, 3] ---> [2, 3, 4]
         let cachedChainBlocks = this._cachedChains[chainID]?.blocks ?? [];
         const blockAlreadyCached = cachedChainBlocks?.find(
             _block => _block.info?.blockIndex === block.info?.blockIndex,
         );
 
         if (!blockAlreadyCached) {
-            // prepare the space for the new block & remove duplicates
-            cachedChainBlocks = cachedChainBlocks
-                .filter(b => b !== undefined && b !== null)
-                .slice(-MAX_CACHED_BLOCKS + 1);
-            console.log("cached blocks", cachedChainBlocks.length, cachedChainBlocks);
+            cachedChainBlocks = cachedChainBlocks.filter(b => b !== undefined && b !== null);
+            // if the max size is reached, remove as many blocks as needed to add the new one
+            if (cachedChainBlocks.length >= MAX_CACHED_BLOCKS) {
+                cachedChainBlocks.splice(0, cachedChainBlocks.length - MAX_CACHED_BLOCKS + 1);
+            }
             cachedChainBlocks.push(block);
+            this._cachedChains[chainID].blocks = cachedChainBlocks;
             this.save();
         }
     }

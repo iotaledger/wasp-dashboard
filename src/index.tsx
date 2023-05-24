@@ -20,9 +20,11 @@ import { ChainsService } from "./lib/classes/services/chainsService";
 import "@fontsource/dm-sans/400.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/700.css";
+import { checkAndMigrate } from "./lib/utils";
 
 initServices()
     .then(() => {
+        checkAndMigrate();
         /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
         const container = document.querySelector("#root")!;
         const root = createRoot(container);

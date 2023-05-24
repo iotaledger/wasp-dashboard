@@ -3,15 +3,17 @@ import { ChainData } from "../classes/services/chainsService";
 import { MAX_CACHED_BLOCKS } from "../constants";
 import { LocalStorageKey } from "../enums";
 
+let storageService: LocalStorageService;
+
 interface Migration {
     version: number;
-    migrate: () => void;
+    migrateFunction: () => void;
 }
 
-const migrations: Migration[] = [
+const MIGRATIONS: Migration[] = [
     {
         version: 2,
-        migrate: migrateToVersion2,
+        migrateFunction: migrateToVersion2,
     },
 ];
 
@@ -20,8 +22,17 @@ const CURRENT_PERSISTED_DATA_VERSION = 2;
 /**
  *
  */
+function initStorageService(): void {
+    storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
+}
+
+/**
+ *
+ */
 export function checkAndMigrate(): void {
-    const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
+    if (!storageService) {
+        initStorageService();
+    }
     const version = storageService.load(LocalStorageKey.PersistedDataVersion) ?? 1; // Get the current version
     const shouldMigratePersistedChains = version < CURRENT_PERSISTED_DATA_VERSION;
     if (shouldMigratePersistedChains) {
@@ -32,10 +43,12 @@ export function checkAndMigrate(): void {
  *
  */
 function migrateEachVersion(): void {
-    const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
+    if (!storageService) {
+        initStorageService();
+    }
     let version: number = storageService.load(LocalStorageKey.PersistedDataVersion) ?? 1; // Get the current version
     for (CURRENT_PERSISTED_DATA_VERSION; version < CURRENT_PERSISTED_DATA_VERSION; version++) {
-        migrations.find(migration => migration.version === version)?.migrate();
+        MIGRATIONS.find(migration => migration.version === version)?.migrateFunction();
         storageService.save(LocalStorageKey.PersistedDataVersion, version + 1);
     }
 }
@@ -44,7 +57,9 @@ function migrateEachVersion(): void {
  *
  */
 function migrateToVersion2(): void {
-    const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
+    if (!storageService) {
+        initStorageService();
+    }
     const chains: Record<string, ChainData> = storageService.load(LocalStorageKey.Chains) ?? {};
 
     if (chains && Object.keys(chains).length > 0) {
