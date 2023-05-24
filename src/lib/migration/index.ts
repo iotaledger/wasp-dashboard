@@ -1,1 +1,1 @@
-export * from "./chainCache";
+export * from "./persistedDataVersion";

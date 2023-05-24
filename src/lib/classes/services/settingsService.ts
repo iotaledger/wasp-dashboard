@@ -38,7 +38,7 @@ export class SettingsService {
         const theme = this._storageService.load<string>(LocalStorageKey.Theme);
         this.applyTheme(theme, false);
 
-        this._showHexAsText = this._storageService.load<boolean>(LocalStorageKey.ShowHexAsText);
+        this._showHexAsText = this._storageService.load<boolean>(LocalStorageKey.ShowHexAsText) ?? false;
     }
 
     /**

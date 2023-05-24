@@ -9,7 +9,7 @@ const CURRENT_PERSISTED_DATA_VERSION = 2;
  */
 export function checkAndMigrate(): void {
     const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
-    const version = storageService.load("persisted-data-version") ?? 1; // Get the current version
+    const version = storageService.load(LocalStorageKey.PersistedDataVersion) ?? 1; // Get the current version
     const shouldMigratePersistedChains = version < CURRENT_PERSISTED_DATA_VERSION;
     if (shouldMigratePersistedChains) {
         migrateEachVersion();
@@ -20,22 +20,23 @@ export function checkAndMigrate(): void {
  */
 function migrateEachVersion(): void {
     const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
-    let version: number = storageService.load("persisted-data-version") ?? 1; // Get the current version
+    let version: number = storageService.load(LocalStorageKey.PersistedDataVersion) ?? 1; // Get the current version
     for (CURRENT_PERSISTED_DATA_VERSION; version < CURRENT_PERSISTED_DATA_VERSION; version++) {
         migratePersistedChains(version + 1);
-        storageService.save("persisted-data-version", version + 1);
+        storageService.save(LocalStorageKey.PersistedDataVersion, version + 1);
     }
 }
+
 /**
  *
  * @param migrationVersion
  */
 function migratePersistedChains(migrationVersion: number): void {
     const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
-    const chains: Record<string, ChainData> = storageService.load(LocalStorageKey.Chains);
+    const chains: Record<string, ChainData> = storageService.load(LocalStorageKey.Chains) ?? {};
     switch (migrationVersion) {
         case 2: {
-            if (chains) {
+            if (chains && Object.keys(chains).length > 0) {
                 const chainID = Object.keys(chains)[0];
                 const blocks = [...chains[chainID].blocks].filter(block => block !== undefined && block !== null);
                 chains[chainID].blocks =
