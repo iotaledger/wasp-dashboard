@@ -129,12 +129,10 @@ export class ChainsService {
     }
 
     private cacheChainBlock(chainID: string, block: BlockData) {
-        if (this._cachedChains[chainID].blocks.length >= MAX_CACHED_BLOCKS) {
-            this._cachedChains[chainID].blocks.shift();
-        }
         this._cachedChains[chainID].blocks = this._cachedChains[chainID].blocks
             .filter(b => b !== undefined && b !== null)
             .slice(-MAX_CACHED_BLOCKS + 1);
+
         this._cachedChains[chainID].blocks.push(block);
     }
 }
