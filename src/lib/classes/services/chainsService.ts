@@ -115,9 +115,7 @@ export class ChainsService {
                 })
                 .catch(console.error),
         ]);
-        this._cachedChains[chainID].blocks[blockIndex] = block;
         this.cacheChainBlock(chainID, block);
-        this.save();
         return block;
     }
 
@@ -129,10 +127,21 @@ export class ChainsService {
     }
 
     private cacheChainBlock(chainID: string, block: BlockData) {
-        this._cachedChains[chainID].blocks = this._cachedChains[chainID].blocks
-            .filter(b => b !== undefined && b !== null)
-            .slice(-MAX_CACHED_BLOCKS + 1);
+        // FIFO: First in --> First out
+        // [1, 2, 3] ---> [2, 3, 4]
+        let cachedChainBlocks = this._cachedChains[chainID]?.blocks ?? [];
+        const blockAlreadyCached = cachedChainBlocks?.find(
+            _block => _block.info?.blockIndex === block.info?.blockIndex,
+        );
 
-        this._cachedChains[chainID].blocks.push(block);
+        if (!blockAlreadyCached) {
+            // prepare the space for the new block & remove duplicates
+            cachedChainBlocks = cachedChainBlocks
+                .filter(b => b !== undefined && b !== null)
+                .slice(-MAX_CACHED_BLOCKS + 1);
+            console.log("cached blocks", cachedChainBlocks.length, cachedChainBlocks);
+            cachedChainBlocks.push(block);
+            this.save();
+        }
     }
 }
