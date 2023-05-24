@@ -1,4 +1,6 @@
 import { WaspClientService, ServiceFactory, LocalStorageService } from "../../classes";
+import { MAX_CACHED_BLOCKS } from "../../constants";
+import { LocalStorageKey } from "../../enums";
 import { BlockInfoResponse, BlockInfoResponseFromJSON, RequestReceiptResponse } from "../../wasp_client";
 // Information about a Block
 export interface BlockData {
@@ -35,14 +37,14 @@ export class ChainsService {
     constructor() {
         this._waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
         this._storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
-        this._cachedChains = this._storageService.load("chains") ?? {};
+        this._cachedChains = this._storageService.load(LocalStorageKey.Chains) ?? {};
     }
 
     /**
      * Method to initialize the service.
      */
     public initialize(): void {
-        this._cachedChains = this._storageService.load("chains") ?? {};
+        this._cachedChains = this._storageService.load(LocalStorageKey.Chains) ?? {};
     }
 
     /**
@@ -123,11 +125,10 @@ export class ChainsService {
      * Persist the cached blocks
      */
     public save() {
-        this._storageService.save("chains", this._cachedChains);
+        this._storageService.save(LocalStorageKey.Chains, this._cachedChains);
     }
 
     private cacheChainBlock(chainID: string, block: BlockData) {
-        const MAX_CACHED_BLOCKS = 20;
         if (this._cachedChains[chainID].blocks.length >= MAX_CACHED_BLOCKS) {
             this._cachedChains[chainID].blocks.shift();
         }

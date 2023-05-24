@@ -2,6 +2,7 @@ import dayjs, { Dayjs } from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import { Environment } from "../../../environment";
 import { ServiceFactory, WaspClientService } from "../../classes";
+import { LocalStorageKey } from "../../enums";
 import { decodeJWTPayload, getTokenExpiry } from "../../utils/jwt";
 import { FetchHelper } from "../helpers";
 import { EventAggregator } from "./eventAggregator";
@@ -81,7 +82,7 @@ export class AuthService {
     }
 
     public isAuthRequired(): boolean {
-        return this._storageService.load<boolean>("dashboard-auth-required");
+        return this._storageService.load<boolean>(LocalStorageKey.DashboardAuthRequired);
     }
 
     /**
@@ -92,7 +93,7 @@ export class AuthService {
         this._jwt = jwt;
 
         const isAuthRequired = await this.getAuthRequired().catch(() => false);
-        this._storageService.save<boolean>("dashboard-auth-required", isAuthRequired);
+        this._storageService.save<boolean>(LocalStorageKey.DashboardAuthRequired, isAuthRequired);
 
         if (isAuthRequired) {
             if (await this.isJWTValid()) {
