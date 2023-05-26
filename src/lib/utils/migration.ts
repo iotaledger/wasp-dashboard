@@ -61,9 +61,10 @@ function migrateToVersion2(): void {
         const blocks = [...chains[chainID].blocks].filter(Boolean);
         chains[chainID].blocks = blocks.length > MAX_CACHED_BLOCKS ? blocks.splice(0, MAX_CACHED_BLOCKS) : blocks;
     }
+    storageService.save(LocalStorageKey.Chains, chains);
+
     if (ShowHexAsText) {
         storageService.remove("showHexAsText");
         storageService.save(LocalStorageKey.ShowHexAsText, ShowHexAsText);
     }
-    storageService.save(LocalStorageKey.Chains, chains);
 }
