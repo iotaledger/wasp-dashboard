@@ -5,17 +5,10 @@ import { LocalStorageKey } from "../enums";
 
 let storageService: LocalStorageService;
 
-interface Migration {
-    version: number;
-    migrateFunction: () => void;
-}
-
-const MIGRATIONS: Migration[] = [
-    {
-        version: 1,
-        migrateFunction: migrateToVersion2,
-    },
-];
+type Migration = () => void;
+const MIGRATIONS: Record<number, Migration> = {
+    1: migrateToVersion2,
+};
 
 const CURRENT_PERSISTED_DATA_VERSION = 2;
 
@@ -48,7 +41,7 @@ function migrateEachVersion(): void {
     }
     let version: number = storageService.load(LocalStorageKey.PersistedDataVersion) ?? 1; // Get the current version
     for (CURRENT_PERSISTED_DATA_VERSION; version < CURRENT_PERSISTED_DATA_VERSION; version++) {
-        MIGRATIONS.find(migration => migration.version === version)?.migrateFunction();
+        MIGRATIONS[version]?.();
         storageService.save(LocalStorageKey.PersistedDataVersion, version + 1);
     }
 }
@@ -64,7 +57,7 @@ function migrateToVersion2(): void {
 
     if (chains && Object.keys(chains).length > 0) {
         const chainID = Object.keys(chains)[0];
-        const blocks = [...chains[chainID].blocks].filter(block => block !== undefined && block !== null);
+        const blocks = [...chains[chainID].blocks].filter(Boolean);
         chains[chainID].blocks = blocks.length > MAX_CACHED_BLOCKS ? blocks.splice(0, MAX_CACHED_BLOCKS) : blocks;
     }
     storageService.save(LocalStorageKey.Chains, chains);

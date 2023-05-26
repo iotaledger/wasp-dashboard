@@ -133,7 +133,7 @@ export class ChainsService {
         );
 
         if (!blockAlreadyCached) {
-            cachedChainBlocks = cachedChainBlocks.filter(b => b !== undefined && b !== null);
+            cachedChainBlocks = cachedChainBlocks.filter(Boolean);
             // if the max size is reached, remove as many blocks as needed to add the new one
             if (cachedChainBlocks.length >= MAX_CACHED_BLOCKS) {
                 cachedChainBlocks.splice(0, cachedChainBlocks.length - MAX_CACHED_BLOCKS + 1);
