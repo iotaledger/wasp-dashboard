@@ -54,7 +54,7 @@ function migrateToVersion2(): void {
         initStorageService();
     }
     const chains: Record<string, ChainData> = storageService.load(LocalStorageKey.Chains) ?? {};
-    const ShowHexAsText = storageService.load("showHexAsText");
+    const ShowHexAsText = storageService.load("showHexAsText") ?? false;
 
     if (chains && Object.keys(chains).length > 0) {
         const chainID = Object.keys(chains)[0];
