@@ -41,8 +41,12 @@ function migrateEachVersion(): void {
     }
     let version: number = storageService.load(LocalStorageKey.PersistedDataVersion) ?? 1; // Get the current version
     for (CURRENT_PERSISTED_DATA_VERSION; version < CURRENT_PERSISTED_DATA_VERSION; version++) {
-        MIGRATIONS[version]?.();
-        storageService.save(LocalStorageKey.PersistedDataVersion, version + 1);
+        try {
+            MIGRATIONS[version]();
+            storageService.save(LocalStorageKey.PersistedDataVersion, version + 1);
+        } catch (error) {
+            throw new Error(`Migration failed from version ${version} to ${version + 1}`, error as Error);
+        }
     }
 }
 
