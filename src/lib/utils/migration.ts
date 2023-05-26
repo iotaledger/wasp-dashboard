@@ -12,7 +12,7 @@ interface Migration {
 
 const MIGRATIONS: Migration[] = [
     {
-        version: 2,
+        version: 1,
         migrateFunction: migrateToVersion2,
     },
 ];
