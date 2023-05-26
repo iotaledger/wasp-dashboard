@@ -54,11 +54,16 @@ function migrateToVersion2(): void {
         initStorageService();
     }
     const chains: Record<string, ChainData> = storageService.load(LocalStorageKey.Chains) ?? {};
+    const ShowHexAsText = storageService.load("showHexAsText");
 
     if (chains && Object.keys(chains).length > 0) {
         const chainID = Object.keys(chains)[0];
         const blocks = [...chains[chainID].blocks].filter(Boolean);
         chains[chainID].blocks = blocks.length > MAX_CACHED_BLOCKS ? blocks.splice(0, MAX_CACHED_BLOCKS) : blocks;
+    }
+    if (ShowHexAsText) {
+        storageService.remove("showHexAsText");
+        storageService.save(LocalStorageKey.ShowHexAsText, ShowHexAsText);
     }
     storageService.save(LocalStorageKey.Chains, chains);
 }
