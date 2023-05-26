@@ -44,8 +44,9 @@ function migrateEachVersion(): void {
         try {
             MIGRATIONS[version]();
             storageService.save(LocalStorageKey.PersistedDataVersion, version + 1);
-        } catch (error) {
-            throw new Error(`Migration failed from version ${version} to ${version + 1}`, error as Error);
+        } catch {
+            storageService.remove(LocalStorageKey.ShowHexAsText);
+            storageService.remove(LocalStorageKey.Chains);
         }
     }
 }
