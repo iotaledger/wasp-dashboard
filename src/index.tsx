@@ -24,7 +24,6 @@ import { checkAndMigrate } from "./lib/utils";
 
 initServices()
     .then(() => {
-        checkAndMigrate();
         /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
         const container = document.querySelector("#root")!;
         const root = createRoot(container);
@@ -42,6 +41,8 @@ initServices()
 async function initServices() {
     ServiceFactory.register(LocalStorageService.ServiceName, () => new LocalStorageService());
     ServiceFactory.register(WaspClientService.ServiceName, () => new WaspClientService());
+
+    checkAndMigrate();
 
     const settingsService = new SettingsService();
     ServiceFactory.register(SettingsService.ServiceName, () => settingsService);
