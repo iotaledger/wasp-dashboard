@@ -63,7 +63,6 @@ function migrateToVersion2(): void {
             chains[chainID].blocks = blocks.length > MAX_CACHED_BLOCKS ? blocks.splice(0, MAX_CACHED_BLOCKS) : blocks;
         }
         storageService.save(LocalStorageKey.Chains, chains);
-        throw new Error("Migrate chains");
     } catch {
         storageService.remove(LocalStorageKey.Chains);
     }
