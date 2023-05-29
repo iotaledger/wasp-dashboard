@@ -20,6 +20,7 @@ import { ChainsService } from "./lib/classes/services/chainsService";
 import "@fontsource/dm-sans/400.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/700.css";
+import { checkAndMigrate } from "./lib/utils";
 
 initServices()
     .then(() => {
@@ -40,6 +41,8 @@ initServices()
 async function initServices() {
     ServiceFactory.register(LocalStorageService.ServiceName, () => new LocalStorageService());
     ServiceFactory.register(WaspClientService.ServiceName, () => new WaspClientService());
+
+    checkAndMigrate();
 
     const settingsService = new SettingsService();
     ServiceFactory.register(SettingsService.ServiceName, () => settingsService);

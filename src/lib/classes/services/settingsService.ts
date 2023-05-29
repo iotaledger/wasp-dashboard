@@ -1,4 +1,5 @@
 import { EventAggregator, LocalStorageService, ServiceFactory } from "../../classes";
+import { LocalStorageKey } from "../../enums";
 
 /**
  * Class to use for storing settings.
@@ -34,10 +35,10 @@ export class SettingsService {
      * Initialize the theme.
      */
     public initialize(): void {
-        const theme = this._storageService.load<string>("theme");
+        const theme = this._storageService.load<string>(LocalStorageKey.Theme);
         this.applyTheme(theme, false);
 
-        this._showHexAsText = this._storageService.load<boolean>("showHexAsText");
+        this._showHexAsText = this._storageService.load<boolean>(LocalStorageKey.ShowHexAsText) ?? false;
     }
 
     /**
@@ -84,7 +85,7 @@ export class SettingsService {
      * Save all the settings.
      */
     public save(): void {
-        this._storageService.save("theme", this._theme);
-        this._storageService.save("showHexAsText", this._showHexAsText);
+        this._storageService.save(LocalStorageKey.Theme, this._theme);
+        this._storageService.save(LocalStorageKey.ShowHexAsText, this._showHexAsText);
     }
 }
