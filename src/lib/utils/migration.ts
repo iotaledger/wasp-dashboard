@@ -41,13 +41,8 @@ function migrateEachVersion(): void {
     }
     let version: number = storageService.load(LocalStorageKey.PersistedDataVersion) ?? 1; // Get the current version
     for (CURRENT_PERSISTED_DATA_VERSION; version < CURRENT_PERSISTED_DATA_VERSION; version++) {
-        try {
-            MIGRATIONS[version]();
-            storageService.save(LocalStorageKey.PersistedDataVersion, version + 1);
-        } catch {
-            storageService.remove(LocalStorageKey.ShowHexAsText);
-            storageService.remove(LocalStorageKey.Chains);
-        }
+        MIGRATIONS[version]();
+        storageService.save(LocalStorageKey.PersistedDataVersion, version + 1);
     }
 }
 
@@ -58,18 +53,28 @@ function migrateToVersion2(): void {
     if (!storageService) {
         initStorageService();
     }
+
+    // Migrate chains
     const chains: Record<string, ChainData> = storageService.load(LocalStorageKey.Chains) ?? {};
-    const ShowHexAsText = storageService.load("showHexAsText") ?? false;
-
-    if (chains && Object.keys(chains).length > 0) {
-        const chainID = Object.keys(chains)[0];
-        const blocks = [...chains[chainID].blocks].filter(Boolean);
-        chains[chainID].blocks = blocks.length > MAX_CACHED_BLOCKS ? blocks.splice(0, MAX_CACHED_BLOCKS) : blocks;
+    try {
+        if (chains && Object.keys(chains).length > 0) {
+            const chainID = Object.keys(chains)[0];
+            const blocks = [...chains[chainID].blocks].filter(Boolean);
+            chains[chainID].blocks = blocks.length > MAX_CACHED_BLOCKS ? blocks.splice(0, MAX_CACHED_BLOCKS) : blocks;
+        }
+        storageService.save(LocalStorageKey.Chains, chains);
+        throw new Error("Migrate chains");
+    } catch {
+        storageService.remove(LocalStorageKey.Chains);
     }
-    storageService.save(LocalStorageKey.Chains, chains);
 
-    if (ShowHexAsText) {
+    // Migrate showHexAsText
+    try {
+        const showHexAsTextValue = storageService.load("showHexAsText");
+        storageService.save(LocalStorageKey.ShowHexAsText, showHexAsTextValue ?? false);
+    } catch {
+        // do nothing
+    } finally {
         storageService.remove("showHexAsText");
-        storageService.save(LocalStorageKey.ShowHexAsText, ShowHexAsText);
     }
 }
