@@ -64,7 +64,7 @@ function Contract() {
                     <InfoBox title="Info">
                         {contractInfo &&
                             Object.entries(contractInfo).map(([key, val]) => (
-                                <KeyValueRow key={key} keyText={key} value={val.toString()} />
+                                <KeyValueRow key={key} keyText={key} value={val?.toString()} />
                             ))}
                     </InfoBox>
                 </div>
