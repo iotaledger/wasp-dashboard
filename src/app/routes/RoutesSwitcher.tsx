@@ -4,6 +4,7 @@ import Account from "./Account";
 import Chain from "./Chain";
 import ChainAccounts from "./ChainAccounts";
 import ChainBlockExplorer from "./ChainBlockExplorer";
+import ChainMempool from "./ChainMempool";
 import ChainNodes from "./ChainNodes";
 import Configuration from "./Configuration";
 import Contract from "./Contract";
@@ -35,6 +36,7 @@ function RoutesSwitcher({ isLoggedIn }: { isLoggedIn: boolean }): JSX.Element {
                     <Route path="/chains/:chainID/contract/:contractHName" element={<Contract />} key="contract" />
                     <Route path="/chains/:chainID/blocks/:blockID" element={<ChainBlockExplorer />} key="chain-block" />
                     <Route path="/chains/:chainID/nodes" element={<ChainNodes />} key="chain-nodes" />
+                    <Route path="/chains/:chainID/mempool" element={<ChainMempool />} key="chain-mempool" />
                     <Route path="/chains/:chainID/accounts/:page" element={<ChainAccounts />} key="chain-accounts" />
                     <Route path="/chains/:chainID" element={<Chain />} key="chain" />
                     <Route path="/configuration" element={<Configuration />} key="configuration" />

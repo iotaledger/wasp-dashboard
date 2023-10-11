@@ -48,7 +48,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
                     return;
                 }
 
-                await waspClientService.chains().addAccessNode({ chainID, peer: name });
+                await waspClientService.chains().addAccessNode(chainID, name);
             }),
         );
 
@@ -59,7 +59,7 @@ const EditAccessNodesDialog: React.FC<IEditAccessNodesDialog> = ({
                     return;
                 }
 
-                await waspClientService.chains().removeAccessNode({ chainID, peer: name });
+                await waspClientService.chains().removeAccessNode(chainID, name);
             }),
         );
     }

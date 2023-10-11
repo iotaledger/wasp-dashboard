@@ -7,7 +7,8 @@ import {
     RequestsApi,
     MetricsApi,
     CorecontractsApi,
-    Configuration,
+    createConfiguration,
+    ServerConfiguration,
 } from "../../wasp_client";
 /**
  * Class to manage the wasp API.
@@ -30,9 +31,11 @@ export class WaspClientService {
 
     public initialize() {
         const storageService = ServiceFactory.get<LocalStorageService>(LocalStorageService.ServiceName);
-        const config: Configuration = new Configuration({
-            apiKey: storageService.load("dashboard-jwt"),
-            basePath: Environment.WaspApiUrl,
+        const config = createConfiguration({
+            baseServer: new ServerConfiguration(Environment.WaspApiUrl, {}),
+            authMethods: {
+                Authorization: storageService.load("dashboard-jwt"),
+            },
         });
 
         this._apiClients = {

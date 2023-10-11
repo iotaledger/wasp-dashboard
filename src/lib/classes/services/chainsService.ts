@@ -1,12 +1,12 @@
 import { WaspClientService, ServiceFactory, LocalStorageService } from "../../classes";
 import { MAX_CACHED_BLOCKS } from "../../constants";
 import { LocalStorageKey } from "../../enums";
-import { BlockInfoResponse, BlockInfoResponseFromJSON, RequestReceiptResponse } from "../../wasp_client";
+import { BlockInfoResponse, EventJSON, ReceiptResponse } from "../../wasp_client";
 // Information about a Block
 export interface BlockData {
     info?: BlockInfoResponse;
-    requests: RequestReceiptResponse[];
-    events?: string[];
+    receipts: ReceiptResponse[];
+    events?: EventJSON[];
 }
 // Information about a Chain
 export interface ChainData {
@@ -55,7 +55,7 @@ export class ChainsService {
     public async getLatestBlock(chainID: string): Promise<BlockInfoResponse | null> {
         const blockInfo = await this._waspClientService
             .corecontracts()
-            .blocklogGetLatestBlockInfo({ chainID })
+            .blocklogGetLatestBlockInfo(chainID)
             .then(newBlockInfo => newBlockInfo)
             .catch(() => null);
         return blockInfo;
@@ -72,11 +72,10 @@ export class ChainsService {
         const savedChain = this._cachedChains[chainID];
         if (savedChain) {
             const savedBlock = savedChain.blocks.find(block => block.info?.blockIndex === blockIndex);
-            if (savedBlock?.info && savedBlock?.events && savedBlock?.requests) {
+            if (savedBlock?.info && savedBlock?.events && savedBlock?.receipts) {
                 return {
                     ...savedBlock,
-                    // eslint-disable-next-line new-cap
-                    info: BlockInfoResponseFromJSON(savedBlock.info),
+                    info: savedBlock.info,
                 };
             }
         } else {
@@ -85,20 +84,20 @@ export class ChainsService {
             };
         }
         const block: BlockData = {
-            requests: [],
+            receipts: [],
         };
         // Otherwise fecth it and cache it for the next time
         await Promise.all([
             this._waspClientService
                 .corecontracts()
-                .blocklogGetBlockInfo({ chainID, blockIndex })
+                .blocklogGetBlockInfo(chainID, blockIndex)
                 .then(newBlockInfo => {
                     block.info = newBlockInfo;
                 })
                 .catch(console.error),
             this._waspClientService
                 .corecontracts()
-                .blocklogGetEventsOfBlock({ chainID, blockIndex })
+                .blocklogGetEventsOfBlock(chainID, blockIndex)
                 .then(events => {
                     if (events.events) {
                         block.events = events.events;
@@ -107,11 +106,9 @@ export class ChainsService {
                 .catch(console.error),
             this._waspClientService
                 .corecontracts()
-                .blocklogGetRequestReceiptsOfBlock({ chainID, blockIndex })
+                .blocklogGetRequestReceiptsOfBlock(chainID, blockIndex)
                 .then(async newBlockReceipts => {
-                    if (newBlockReceipts.receipts) {
-                        block.requests = newBlockReceipts.receipts;
-                    }
+                    block.receipts = newBlockReceipts;
                 })
                 .catch(console.error),
         ]);

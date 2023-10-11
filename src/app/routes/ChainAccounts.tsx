@@ -38,7 +38,7 @@ function ChainAccounts() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .corecontracts()
-            .accountsGetAccounts({ chainID })
+            .accountsGetAccounts(chainID)
             .then(newAccounts => {
                 if (newAccounts.accounts) {
                     setChainAccounts(newAccounts.accounts);

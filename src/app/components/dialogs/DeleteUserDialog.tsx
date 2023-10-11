@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Dialog } from "../";
-import { DeleteUserRequest, User, WaspClientService, ServiceFactory } from "../../../lib";
+import { User, WaspClientService, ServiceFactory } from "../../../lib";
 
 interface IDeleteUserDialog {
     onClose: () => void;
@@ -21,7 +21,7 @@ const DeleteUserDialog: React.FC<IDeleteUserDialog> = ({ onClose, user, onSucces
         setError(null);
         try {
             const waspClientService = ServiceFactory.get<WaspClientService>(WaspClientService.ServiceName);
-            await waspClientService.users().deleteUser(user as DeleteUserRequest);
+            await waspClientService.users().deleteUser(user.username);
             if (onSuccess && typeof onSuccess === "function") {
                 onSuccess();
             }

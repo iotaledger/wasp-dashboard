@@ -22,8 +22,8 @@ export const truncateText = (text: string, charsStart: number = 6, charsEnd: num
 
 /**
  *
- * @param url
- * @returns The url with a trailing slash.
+ * @param url A given URL
+ * @returns The URL with a trailing slash.
  */
 export function addTrailingSlash(url: string) {
     if (url.endsWith("/")) {

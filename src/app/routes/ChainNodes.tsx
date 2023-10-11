@@ -76,7 +76,7 @@ function ChainNodes() {
 
         await waspClientService
             .chains()
-            .getCommitteeInfo({ chainID })
+            .getCommitteeInfo(chainID)
             .then(newCommitteeInfo => {
                 setChainCommitteeInfo(newCommitteeInfo);
             })
