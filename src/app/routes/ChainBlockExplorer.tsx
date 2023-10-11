@@ -114,7 +114,7 @@ function ChainBlockExplorer() {
                         </div>
 
                         <div className="content">
-                            {blockData?.requests?.length === 0 ? (
+                            {blockData?.receipts?.length === 0 ? (
                                 <React.Fragment>
                                     <div className="middle row">
                                         <h2>Requests</h2>
@@ -127,7 +127,7 @@ function ChainBlockExplorer() {
                                 </React.Fragment>
                             ) : (
                                 <Carousel title="Requests">
-                                    {blockData?.requests?.map(receipt => {
+                                    {blockData?.receipts?.map(receipt => {
                                         const params = receipt?.request?.params?.items;
                                         return (
                                             <InfoBox
@@ -251,7 +251,16 @@ function ChainBlockExplorer() {
                                 {blockData?.events?.length === 0 ? (
                                     <Tile primaryText="No events found." />
                                 ) : (
-                                    blockData?.events?.map(event => <Tile key={event} primaryText={event} />)
+                                    blockData?.events?.map((event, i) => (
+                                        <Tile
+                                            key={i}
+                                            primaryText={`${new Date(
+                                                event.timestamp,
+                                            ).toISOString()} ${event.contractID.toString()} ${event.topic} - ${
+                                                event.payload
+                                            }`} // eslint-disable-line max-len
+                                        />
+                                    ))
                                 )}
                             </InfoBox>
                         </div>

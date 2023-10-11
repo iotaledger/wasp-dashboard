@@ -56,6 +56,7 @@ export default function ChainNavbar({ chainID, block }: ChainNavbarProps) {
                 exact={true}
                 extraMatchingRoutes={[`${chainURL}/blocks/`]}
             />
+            <Tab to={`${chainURL}/mempool`} label="Mempool" />
         </TabGroup>
     );
 }

@@ -30,7 +30,7 @@ function Contract() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .chains()
-            .getContracts({ chainID })
+            .getContracts(chainID)
             .then(contracts => {
                 const contract = contracts.find(c => c.hName?.toString() === contractHName);
                 if (contract) {
@@ -44,7 +44,7 @@ function Contract() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .corecontracts()
-            .blocklogGetEventsOfContract({ chainID, contractHname: contractHName })
+            .blocklogGetEventsOfContract(chainID, contractHName)
             .then(events => {
                 setContractEvents(events);
             })
@@ -76,7 +76,14 @@ function Contract() {
                         {contractEvents?.events?.length === 0 ? (
                             <Tile primaryText="No events found" />
                         ) : (
-                            contractEvents?.events?.map(event => <Tile key={event} primaryText={event} />)
+                            contractEvents?.events?.map((event, i) => (
+                                <Tile
+                                    key={i}
+                                    primaryText={`${new Date(
+                                        event.timestamp,
+                                    ).toISOString()} ${event.contractID.toString()} ${event.topic} - ${event.payload}`} // eslint-disable-line max-len
+                                />
+                            ))
                         )}
                     </InfoBox>
                 </div>

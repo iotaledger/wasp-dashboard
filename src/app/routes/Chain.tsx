@@ -114,7 +114,7 @@ function Chain() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .chains()
-            .getChainInfo({ chainID })
+            .getChainInfo(chainID)
             .then(newChainInfo => {
                 setChainInfo(newChainInfo);
             })
@@ -125,7 +125,7 @@ function Chain() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .chains()
-            .getContracts({ chainID })
+            .getContracts(chainID)
             .then(newChainContracts => {
                 setChainContracts(newChainContracts);
             })
@@ -136,7 +136,7 @@ function Chain() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .corecontracts()
-            .accountsGetTotalAssets({ chainID })
+            .accountsGetTotalAssets(chainID)
             .then(newTotalAssets => {
                 setChainAssets(newTotalAssets);
             })
@@ -147,7 +147,7 @@ function Chain() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .corecontracts()
-            .blobsGetAllBlobs({ chainID })
+            .blobsGetAllBlobs(chainID)
             .then(newBlobs => {
                 if (newBlobs.blobs) {
                     setChainBlobs(newBlobs.blobs);
@@ -172,7 +172,7 @@ function Chain() {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         waspClientService
             .metrics()
-            .getChainWorkflowMetrics({ chainID })
+            .getChainWorkflowMetrics(chainID)
             .then(data => {
                 const newConsensusMetrics = data as unknown as Record<string, string>;
                 const metrics: Record<string, ConsensusMetric> = {};
@@ -227,11 +227,11 @@ function Chain() {
                                 <LoadingInfo large />
                             ) : (chainContracts?.length > 0 ? (
                                 <React.Fragment>
-                                    {chainContracts.map(({ name, hName, description, programHash }) => (
+                                    {chainContracts.map(({ name, hName, programHash }) => (
                                         <KeyValueRow
                                             key={name}
                                             keyText={{ text: name, url: `/chains/${chainID}/contract/${hName}` }}
-                                            value={description}
+                                            value={programHash}
                                         />
                                     ))}
                                 </React.Fragment>
@@ -316,7 +316,7 @@ function Chain() {
                     <InfoBox title="Consensus metrics">
                         {chainConsensusMetrics === null ? (
                             <LoadingTable large />
-                        ) : (chainConsensusMetrics?.length > 0 ? (
+                        ) : (chainConsensusMetrics ? (
                             <Table
                                 tHead={["Flag name", "Status", "Trigger time"]}
                                 tBody={chainConsensusMetrics as ITableRow[]}

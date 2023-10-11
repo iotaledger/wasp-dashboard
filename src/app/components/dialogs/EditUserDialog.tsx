@@ -1,14 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
 import React, { SetStateAction, useMemo, useState } from "react";
-import {
-    ServiceFactory,
-    WaspClientService,
-    ChangeUserPasswordRequest,
-    User,
-    ChangeUserPermissionsRequest,
-    UserPermission,
-    AuthService,
-} from "../../../lib";
+import { ServiceFactory, WaspClientService, User, UserPermission, AuthService } from "../../../lib";
 import { validatePassword } from "../../../lib/utils";
 import { Dialog, PasswordInput, Toggle } from "../../components";
 
@@ -86,18 +78,12 @@ const EditUserDialog: React.FC<IEditUserDialog> = ({ onClose, user, onSuccess, o
             await Promise.all([
                 // Update the password if has changed and is valid
                 passwordValidation === PasswordValidation.Valid
-                    ? waspClientService.users().changeUserPassword({
-                          ...user,
-                          updateUserPasswordRequest: { password: confirmNewPassword },
-                      } as ChangeUserPasswordRequest)
+                    ? waspClientService.users().changeUserPassword(user.username, { password: confirmNewPassword })
                     : Promise.resolve(),
 
                 // Update the permissions if have changed
                 permissionsAreValid
-                    ? waspClientService.users().changeUserPermissions({
-                          ...user,
-                          updateUserPermissionsRequest: { permissions: permissions ?? [] },
-                      } as ChangeUserPermissionsRequest)
+                    ? waspClientService.users().changeUserPermissions(user.username, { permissions: permissions ?? [] })
                     : Promise.resolve(),
             ]);
 
